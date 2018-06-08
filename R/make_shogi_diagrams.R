@@ -1,3 +1,4 @@
+library("grid")
 suppressPackageStartupMessages(library("piecepack"))
 
 cfg_orthodox <- read_configuration("--file=configurations/orthodox1.json")
