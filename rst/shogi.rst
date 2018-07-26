@@ -37,7 +37,7 @@ If you are playing with two standard piecepacks then each player should take:
 * two '4' coin faces
 * nine coin backs
 
-Arrange them as follows:
+Arrange them as in Figure 1.
 
 .. figure:: diagrams/shogi_traditional.pdf
    :alt: Initial Shogi layout
@@ -63,7 +63,7 @@ take:
 * nine black coin backs
 * one red coin analogue for every black coin taken (these will be subbed in later to indicate that a piece has been promoted)
 
-Arrange them as follows:
+Arrange them as in Figure 2.
 
 .. figure:: diagrams/shogi_chess.pdf
    :alt: Initial Shogi layout
@@ -79,6 +79,8 @@ a (non-King) piece is indicated by orienting the piece towards the opposite side
 
 The pieces
 ----------
+
+As a mnenomic aid we use piecepack pawns as "Kings" and the piecepack ranks were straightforwardly mapped to FIDE chess ranks (i.e. n,a,2,3,4,5 mapped to ♟,♞,♝,♜,♛,♚) and then as much as feasible those FIDE chess pieces were mapped to shogi chess pieces that move "similarly".  
 
 .. list-table:: Shogi Pieces
    :header-rows: 1
@@ -283,7 +285,6 @@ The pieces
        :height: 0.50in
 .. |cpp| replace:: |cpp1| |cpp2| |cpp3| |cpp4| |cpp5| |cpp6|
 
-As a mnenomic aid we use piecepack pawns as "Kings" and the piecepack ranks were straightforwardly mapped to FIDE chess ranks (i.e. n,a,2,3,4,5 mapped to ♟,♞,♝,♜,♛,♚) and then as much as feasible those FIDE chess pieces were mapped to shogi chess pieces that move "similarly".  
 
 King 
 ~~~~
