@@ -1,7 +1,11 @@
 Trevor's piecepack rules source code
 ====================================
 
-NB. this repo just contains miscellaneous source code.  Compiled pdf's are hosted at the `Piecepack Wiki <http://www.ludism.org/ppwiki/TrevorLDavis>`_.
+.. image:: http://www.repostatus.org/badges/latest/wip.svg
+   :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
+   :target: http://www.repostatus.org/#wip
+
+NB. Currently this repo just contains miscellaneous source code.  Compiled pdf's are hosted at the `Piecepack Wiki <http://www.ludism.org/ppwiki/TrevorLDavis>`_.
 
 Dependencies
 ------------
