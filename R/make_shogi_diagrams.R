@@ -1,5 +1,5 @@
 library("grid")
-suppressPackageStartupMessages(library("piecepack"))
+suppressPackageStartupMessages(library("piecepackr"))
 
 cfg_orthodox <- read_configuration("--file=configurations/orthodox1.json")
 cfg_chess5 <- read_configuration("--file=configurations/chess5.json")
