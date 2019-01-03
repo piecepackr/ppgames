@@ -11,8 +11,7 @@ try(dev.off())
 cfg <- list(suit_symbols="🌞,🌜,👑,⚜,꩜",
          suit_symbols_scale="0.6,0.7,0.75,0.9,0.9",
         # suit_symbols_scale.tile_face="1.0,1.1,1.1,1.4,0.9",
-        # suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
-        suit_symbols_font="Quivira,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+        suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
         suit_colors="#D55E00,#000000,#F0E442,#0072B2,#009E73",
         background_colors="#000000,#D55E00,#0072B2,#F0E442,white" 
         # ps_r.tile_face=sqrt(0.25^2 + 0.25^2), ps_theta.tile_face=-45,
