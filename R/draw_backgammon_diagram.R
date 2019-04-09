@@ -67,7 +67,8 @@ draw_backgammon_board <- function(cfg) {
     draw_component("die_face", cfg, 3, 2, x=inch(6.5-0.5), y=inch(y_bot+1.5))
     draw_component("die_face", cfg, 2, 2, x=inch(6.5+0.5), y=inch(y_bot+1.5), angle=180)
 }
-# dev.new(width=28, height=5)
-svg("tmp/backgammon.svg", width = 25, height=5)
+# dev.new(width=25, height=5)
+# inkscape -z -e images/backgammon.png -w 1200 -h 240 images/backgammon.svg 
+svg("images/backgammon.svg", width = 25, height=5)
 draw_backgammon_board(cfg)
 dev.off()
