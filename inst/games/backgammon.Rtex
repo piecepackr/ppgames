@@ -1,0 +1,42 @@
+\section{Backgammon}
+
+%% begin.rcode opts, echo=FALSE
+% set_knitr_opts(game)
+%% end.rcode
+
+\begin{description}
+\item[Players] 2
+\item[Length] 5-60 minutes
+\item[Equipment Required] one standard piecepack
+\item[Designer] Traditional, adapted by Trevor L Davis
+\item[Version] 1.1
+\item[Version Date] 2019-05-01
+\item[License] CC BY-SA 4.0
+\end{description}
+
+\subsection{Description}
+
+Backgammon is one of the oldest known board games. Like other classic board games like checkers and chess it is also possible to play with a single piecepack. Although not required some players will appreciate extra tokens (each player needs 15 tokens), a doubling cube, 2-4 standard dice, and/or 1-2 dice cups. 
+
+\subsection{Setup}
+
+Have each other sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits). For a traditional U-shaped setup have each player place the tiles face up in a row in front of them, alternating suits to mimick the alternating color scheme of a traditional backgammon board. Place a gap in the middle of the tiles (so there are six tiles to the left and six to the right) to represent the backgammon "bar" of a traditional backgammon board. Each tile will henceforth be called a "point" because on a traditional backgammon board it is shaped like a point. Each points holds between 0-15 tokens of a single player.
+
+Each player needs 15 tokens. If just using one standard piecepack give each player twelve coins (face down), two pawns, and one die. Place their tokens in the appropriate point according to the rules of backgammon.
+
+If playing backgammon for stakes with the doubling cube rule and you don't have a doubling cube or an extra die then the two die tokens will also have to represent the doubling cube. In such case the token dice should be initially placed with nulls facing. Whenever someone changes the stakes change the die face of the player who has the power to double next to the number of times the stakes has been doubled so far (i.e. an ace face means stakes have been doubled once, 2 means stakes have been doubled twice, etc.). If necessary the other players die face should be changed back to nulls. In such a fashion it is possible to tell from the two token dice how much the stakes have been doubled and who has the power to next double the stakes. Of course if you have an actual doubling cube use that instead or if you have an extra die use it exclusively as a doubling cube using the ``each number represents number of times stakes have been doubled'' system.
+
+The other two dice are rolled as ``normal'' dice (i.e. ace = 1, nulls = 6). A player's turn ends when they pick up the dice and hand them to the other player. Serious backgammon players usually use dice cups to reduce the possibility of cheating. 
+
+%% begin.rcode starting-diagram, fig.width=25.2, fig.height=5.04, out.width="1\\linewidth", out.height=".2\\linewidth", fig.cap="Backgammon starting diagram", echo=FALSE
+%    pmap_piece(df_backgammon(), cfg=cfg, default.units="in",
+%               vp=viewport(width=inch(25), height=inch(5)))
+%% end.rcode
+
+\subsection{Rules}
+
+Project Gutenberg (Public Domain): \url{https://www.gutenberg.org/files/39445/39445-h/39445-h.htm#page271}
+
+Wikipedia (CC-BY-SA): \url{https://en.wikipedia.org/wiki/Backgammon}
+
+BGG Page: \url{https://boardgamegeek.com/boardgame/2397/backgammon}

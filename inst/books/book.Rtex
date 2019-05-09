@@ -1,0 +1,18 @@
+\documentclass{report}
+
+\usepackage{hyperref}
+
+\begin{document}
+\title{Piecepack Game Rules}
+\author{Trevor L Davis}
+\maketitle
+\tableofcontents
+
+\part{Game Hints}
+
+\input{backgammon}
+\input{tablut}
+
+\end{document}
+
+
