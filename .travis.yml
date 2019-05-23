@@ -25,5 +25,5 @@ addons:
     apt:
        packages:
             - lmodern
-            - texlive-latex-recommended
+            - texlive-math-extra
             - texlive-xetex
