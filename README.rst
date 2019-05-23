@@ -1,5 +1,16 @@
 ppgames: Piecepack game diagrams and rules
 ==========================================
+.. image:: https://travis-ci.org/trevorld/ppgames.png?branch=master
+    :target: https://travis-ci.org/trevorld/ppgames
+    :alt: Build Status
+
+.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/ppgames?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/trevorld/ppgames
+    :alt: AppVeyor Build Status
+
+.. image:: https://img.shields.io/codecov/c/github/trevorld/ppgames/master.svg
+    :target: https://codecov.io/github/trevorld/ppgames?branch=master
+    :alt: Coverage Status
 
 .. image:: http://www.repostatus.org/badges/latest/wip.svg
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
