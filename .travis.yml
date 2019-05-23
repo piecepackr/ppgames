@@ -21,3 +21,7 @@ notifications:
     on_failure: change
 after_success:
     - Rscript -e 'covr::codecov()'
+addons:
+    apt:
+       packages:
+            - texlive-xetex
