@@ -5,6 +5,7 @@ on.exit(unlink(dir))
 dir.create(dir)
 test_that("game rules work as expected", {
     skip_if(Sys.which("pandoc") == "", "Doesn't have pandoc binary")
+    skip_if(Sys.which("xelatex") == "", "Doesn't have xelatex binary")
 
     save_ruleset("backgammon", gk, dir)
     expect_true(file.exists(file.path(dir, "backgammon.pdf")))
