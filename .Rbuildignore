@@ -1,1 +1,11 @@
+LICENSE.md
 images/
+README.rst
+Rakefile
+diagrams
+noto.style
+*.pdf
+others/
+pdf/
+rule_ideas.rst
+tmp/

@@ -1,0 +1,37 @@
+\section{Ultima Chess}
+
+%% begin.rcode opts, echo=FALSE
+% set_knitr_opts(game)
+%% end.rcode
+
+\begin{description}
+\item[Players] 2
+\item[Length] 30-180 minutes
+\item[Equipment Required] one standard piecepack
+\item[Designer] Traditional, adapted by Trevor L Davis
+\item[Version] 1.0
+\item[Version Date] 2019-05-18
+\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
+\end{description}
+
+\subsection{Description}
+
+Ultima chess is chess variant invented by Robert Abbot and published in Recreational Mathematics Magazine in August 1962 under the name Baroque chess.
+
+\subsection{Setup}
+
+Ultima chess is played on a 8 by 8 board made with 16 tile backs.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:ultima-chess-starting-diagram} making sure to rotate the dice so that each player has one ``3'' facing forward for their ``Coordinator'' piece and one ``3'' facing rearward for their ``Immobilizer'' piece.
+
+%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Ultima chess starting diagram", echo=FALSE
+% cfg <- gk$get_piecepacks(1)[[1]]
+% pmap_piece(df_ultima_chess(cfg), cfg=cfg, default.units="in")
+%% end.rcode
+
+\subsection{External Links}
+
+\begin{description}
+\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/25343/ultima}
+\item[The Chess Variants Pages] \url{https://www.chessvariants.com/other.dir/ultima.html}
+\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Baroque_chess}
+
+\end{description}

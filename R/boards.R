@@ -20,6 +20,7 @@ even <- function(x) { x %% 2 == 0 }
 #' @param gp An object of class ‘gpar’, typically the output from a call
 #'        to the function ‘gpar’.  This is basically a list of
 #'        graphical parameter settings.
+#' @param default.units A string indicating the default \code{grid} units to use.
 #' @param draw A logical value indicating whether graphics output should be produced.
 #' @param vp A \code{grid} viewport object (or NULL).
 #' 
@@ -27,6 +28,7 @@ even <- function(x) { x %% 2 == 0 }
 #' @name boards
 NULL
 
+#' @rdname boards
 #' @export
 grid.board_rect_cells <- function(nrows=8, ncols=8, x0=1, y0=1, 
 				  default.units="inches", 
@@ -46,6 +48,7 @@ grid.board_rect_cells <- function(nrows=8, ncols=8, x0=1, y0=1,
     invisible(grob)
 }
 
+#' @rdname boards
 #' @export
 grid.board_rect_points <- function(nrows=8, ncols=8, x0=1, y0=1, 
 				  default.units="inches", 
@@ -65,6 +68,7 @@ cycle_elements <- function(x, n=1) {
     }
 }
 
+#' @rdname boards
 #' @export
 grid.board_rect_tiles <- function(nrows=8, ncols=8, x0=1, y0=1, max_tiles=24,
 				cfg=pp_cfg(), envir=NULL,
@@ -74,6 +78,7 @@ grid.board_rect_tiles <- function(nrows=8, ncols=8, x0=1, y0=1, max_tiles=24,
 	       draw=draw, name=name, gp=gp, vp=vp)
 }
 
+#' @rdname boards
 #' @export
 df_rect_board_tiles <- function(nrows=8, ncols=8, x0=1, y0=1, max_tiles=24) {
     if (can_use_squares(nrows, ncols, max_tiles)) {

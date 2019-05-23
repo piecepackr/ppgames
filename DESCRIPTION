@@ -14,14 +14,14 @@ Imports:
     dplyr,
     grid,
     grDevices,
-    gtools,
     knitr,
     piecepackr,
+    R6,
     tibble,
     tools
 Suggests:
     covr,
     testthat,
     vdiffr
-SystemRequirements: pandoc, xelatex, various fonts
+SystemRequirements: pandoc, xelatex
 RoxygenNote: 6.1.1

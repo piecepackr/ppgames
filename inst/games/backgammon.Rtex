@@ -11,7 +11,7 @@
 \item[Designer] Traditional, adapted by Trevor L Davis
 \item[Version] 1.1
 \item[Version Date] 2019-05-01
-\item[License] CC BY-SA 4.0
+\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
 \end{description}
 
 \subsection{Description}
@@ -29,14 +29,14 @@ If playing backgammon for stakes with the doubling cube rule and you don't have 
 The other two dice are rolled as ``normal'' dice (i.e. ace = 1, nulls = 6). A player's turn ends when they pick up the dice and hand them to the other player. Serious backgammon players usually use dice cups to reduce the possibility of cheating. 
 
 %% begin.rcode starting-diagram, fig.width=25.2, fig.height=5.04, out.width="1\\linewidth", out.height=".2\\linewidth", fig.cap="Backgammon starting diagram", echo=FALSE
-%    pmap_piece(df_backgammon(), cfg=cfg, default.units="in",
-%               vp=viewport(width=inch(25), height=inch(5)))
+% cfg <- gk$get_piecepacks(1)[[1]]
+% pmap_piece(df_backgammon(), cfg=cfg, default.units="in")
 %% end.rcode
 
-\subsection{Rules}
+\subsection{External Links}
 
-Project Gutenberg (Public Domain): \url{https://www.gutenberg.org/files/39445/39445-h/39445-h.htm#page271}
-
-Wikipedia (CC-BY-SA): \url{https://en.wikipedia.org/wiki/Backgammon}
-
-BGG Page: \url{https://boardgamegeek.com/boardgame/2397/backgammon}
+\begin{description}
+\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/2397/backgammon}
+\item[Cyningstan] \url{http://www.cyningstan.com/game/400/backgammon}
+\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Backgammon}
+\end{description}

@@ -1,0 +1,36 @@
+\section{(American) Checkers}
+
+%% begin.rcode opts, echo=FALSE
+% set_knitr_opts(game)
+%% end.rcode
+
+\begin{description}
+\item[Players] 2
+\item[Length] 30 minutes
+\item[Equipment Required] one standard piecepack
+\item[Designer] Traditional, adapted by Mark A. Biggar
+\item[Version] 1.1
+\item[Version Date] 2019-05-18
+\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
+\end{description}
+
+\subsection{Description}
+
+Checkers (aka Draughts) is a classic two-player board game.  The English/American version is straightforwardly adapted to the piecepack.
+
+\subsection{Setup}
+
+American checkers is played on an 8-by-8 board made with the backs of 16 tiles.  Have each other sit across from each other and give each player all the coins of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:american-checkers-starting-diagram}.  King promotion is the same as in traditional checkers: place another ``coin`` on top.
+
+%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) checkers starting diagram", echo=FALSE
+% cfg <- gk$get_piecepacks(1)[[1]]
+% pmap_piece(df_american_checkers(cfg), cfg=cfg, default.units="in")
+%% end.rcode
+
+\subsection{External Links}
+
+\begin{description}
+\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/2083/checkers}
+\item[Cyningstan] \url{http://www.cyningstan.com/game/399/draughts}
+\item[Wikipedia] \url{https://en.wikipedia.org/wiki/English_draughts}
+\end{description}

@@ -2,7 +2,27 @@
 % Please edit documentation in R/boards.R
 \name{boards}
 \alias{boards}
+\alias{grid.board_rect_cells}
+\alias{grid.board_rect_points}
+\alias{grid.board_rect_tiles}
+\alias{df_rect_board_tiles}
 \title{Various game boards}
+\usage{
+grid.board_rect_cells(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
+  default.units = "inches", draw = TRUE, name = NULL, gp = gpar(),
+  vp = NULL)
+
+grid.board_rect_points(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
+  default.units = "inches", draw = TRUE, name = NULL, gp = gpar(),
+  vp = NULL)
+
+grid.board_rect_tiles(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
+  max_tiles = 24, cfg = pp_cfg(), envir = NULL, draw = TRUE,
+  name = NULL, gp = NULL, vp = NULL)
+
+df_rect_board_tiles(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
+  max_tiles = 24)
+}
 \arguments{
 \item{nrows}{Number of rows in game board}
 
@@ -12,13 +32,9 @@
 
 \item{y0}{Y coordinate for the center of the first cell/point}
 
-\item{max_tiles}{Maximum number of tiles that can be used}
+\item{default.units}{A string indicating the default \code{grid} units to use.}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
-a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
-
-\item{envir}{Environment (or named list) containing configuration list(s).}
+\item{draw}{A logical value indicating whether graphics output should be produced.}
 
 \item{name}{A character identifier (for grid)}
 
@@ -26,9 +42,15 @@ or a character vector of \code{pp_cfg} objects}
 to the function ‘gpar’.  This is basically a list of
 graphical parameter settings.}
 
-\item{draw}{A logical value indicating whether graphics output should be produced.}
-
 \item{vp}{A \code{grid} viewport object (or NULL).}
+
+\item{max_tiles}{Maximum number of tiles that can be used}
+
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
+a list of \code{pp_cfg} objects,
+or a character vector of \code{pp_cfg} objects}
+
+\item{envir}{Environment (or named list) containing configuration list(s).}
 }
 \description{
 \code{grid.board_rect_tiles} draws a rectangular board using the back of piecepack tiles, 

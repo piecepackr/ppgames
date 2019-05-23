@@ -2,19 +2,52 @@
 % Please edit documentation in R/game_starts.R
 \name{df_game}
 \alias{df_game}
+\alias{df_four_field_kono}
+\alias{df_nine_mens_morris}
+\alias{df_american_checkers}
 \alias{df_backgammon}
-\alias{df_tablut}
+\alias{df_chaturaji}
 \alias{df_cribbage_board}
+\alias{textGrob_cribbage_board}
+\alias{df_fide_chess}
+\alias{df_ultima_chess}
+\alias{df_alice_chess}
+\alias{df_four_seasons_chess}
+\alias{df_shogi}
+\alias{df_tablut}
+\alias{df_xiangqi}
 \title{Data frames of starting diagrams for various games}
 \usage{
-df_backgammon()
+df_four_field_kono(cfg1 = pp_cfg())
 
-df_tablut(cfg = pp_cfg())
+df_nine_mens_morris(cfg1 = pp_cfg())
 
-df_cribbage_board()
+df_american_checkers(cfg1 = pp_cfg())
+
+df_backgammon(cfg1 = pp_cfg())
+
+df_chaturaji(cfg1 = pp_cfg())
+
+df_cribbage_board(cfg1 = pp_cfg())
+
+textGrob_cribbage_board(cfg1 = pp_cfg())
+
+df_fide_chess(cfg1 = pp_cfg())
+
+df_ultima_chess(cfg1 = pp_cfg())
+
+df_alice_chess(cfg1 = pp_cfg())
+
+df_four_seasons_chess(cfg1 = pp_cfg())
+
+df_shogi(cfg1 = pp_cfg(), cfg2 = cfg1)
+
+df_tablut(cfg1 = pp_cfg())
+
+df_xiangqi(cfg1 = pp_cfg())
 }
 \arguments{
-\item{cfg}{A \code{pp_cfg} configuration list object}
+\item{cfg1}{A \code{pp_cfg} configuration list object}
 
 \item{cfg2}{A \code{pp_cfg} configuration list object}
 }

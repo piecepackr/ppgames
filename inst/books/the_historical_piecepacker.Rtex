@@ -1,0 +1,96 @@
+\documentclass{report}
+%\documentclass{book}
+
+\usepackage[colorlinks]{hyperref}
+\usepackage{fancyhdr}
+
+% Add Copyright Page
+\def\secondpage{\clearpage\null\vfill
+\pagestyle{empty}
+\begin{minipage}[b]{0.9\textwidth}
+\footnotesize\raggedright
+\setlength{\parskip}{0.5\baselineskip}
+Copyright \copyright 2016--2019 Trevor L Davis\par
+Some Rights Reserved.\par
+This collective work is released under a \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
+\end{minipage}
+\vspace*{2\baselineskip}
+\cleardoublepage
+\rfoot{\thepage}}
+\makeatletter
+\g@addto@macro{\maketitle}{\secondpage}
+\makeatother
+
+% Manage depth of TOC
+\setcounter{tocdepth}{1}
+
+\begin{document}
+%\frontmatter
+\title{The Historical Piecepacker}
+\author{Trevor L Davis}
+\maketitle
+\tableofcontents
+\listoffigures
+\listoftables
+
+%\mainmatter
+
+\part{Making Various Boards}
+
+\chapter{Making Traditional Board Game Accessories}
+
+\include{cribbage}
+
+\part{Game Rules}
+
+\chapter{Traditional Board Games}
+
+\include{four-field-kono}
+
+\part{Game Hints}
+
+\chapter{Chess Variants}
+
+The large variety of boards that can be created with piecepack tiles and the large number of differentiable pieces makes a piecepack a good tool to play a wide variety of chess variants.  One can reduce the difficulty in remembering which piecepack piece corresponds to which chess (variant) piece if you mentally link the six piecepack ranks to the six FIDE chess ranks and if necessary you mentally link the six FIDE chess ranks to their counterparts in other chess variants.  See Table \ref{tab:chess-ranks} for the natural links between piecepack ranks and chess ranks.
+
+\begin{table}[ht!]
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+Piecepack & (FIDE) Chess & Shatranj & Xiangqi \\
+\hline
+\hline
+Null & Pawn & Soldier & Soldier \\
+\hline
+Ace & Knight & Horse & Horse \\
+\hline
+Two & Bishop & Elephant & Elephant \\
+\hline
+Three & Rook & Chariot & Chariot \\
+\hline
+Four & Queen & Ferz & Advisor \\
+\hline
+Five & King & King & General \\
+\hline
+\end{tabular}
+\caption{The natural links between piecepack ranks and chess ranks}\label{tab:chess-ranks}
+\end{center}
+\end{table}
+
+\include{fide-chess}
+\include{alice-chess}
+\include{chaturaji}
+\include{four-seasons-chess}
+\include{ultima-chess}
+\include{xiangqi}
+
+\chapter{Morris aka Merels Games}
+\include{nine-mens-morris}
+\include{twelve-mens-morris}
+
+\chapter{Other Traditional Games}
+\include{backgammon}
+\include{american-checkers}
+\include{tablut}
+
+\end{document}

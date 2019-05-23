@@ -1,17 +1,35 @@
-Trevor's piecepack rules source code
-====================================
+ppgames: Piecepack game diagrams and rules
+==========================================
 
 .. image:: http://www.repostatus.org/badges/latest/wip.svg
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-NB. Currently this repo just contains miscellaneous source code.  Compiled pdf's are hosted at the `Piecepack Wiki <http://www.ludism.org/ppwiki/TrevorLDavis>`_.
+``ppgames`` is an R_ package designed to make piecepack_ game diagrams, rulesets, and rulebooks.
 
-Dependencies
+.. _piecepack: http://www.ludism.org/ppwiki/HomePage
+.. _piecepackr: https://github.com/trevorld/piecepackr
+.. _R: https://www.r-project.org/
+
+Installation
 ------------
 
-1) `Piecepack Graphics R Package <http://www.ludism.org/ppwiki/PiecepackRPackage>`_ installed (and all dependencies installed) plus the project git cloned and all the demo images built (i.e. have ran ``rake all``).  There should be a symbolic link ``configurations`` linking with the ``configurations`` subdirectory in that (cloned) project directory and a symbolic link called ``images/pdf`` linking to the ``pdf/components`` subdirectory in that (cloned) project directory.
-2) ``rake``, ``rst2pdf``, ``pandoc``, ``texlive-xetex``, etc. in order to compile the reStructuredText into pretty pdfs.
+To install the ``ppgames`` R package use the following commands in R_:
+
+.. code:: r
+
+   install.packages("remotes")
+   remotes::install_github("trevorld/piecepackr")
+   remotes::install_github("trevorld/ppgames")
+
+If you want to make rulebooks you'll need ``xelatex`` and if you want to make rulesets you'll need a recent version of ``pandoc``.  The following instructions should work on Ubuntu:
+
+.. code:: bash
+
+    sudo apt install texlive-xetex
+    sudo apt install cabal-install
+    cabal update # add $HOME/.cabal/bin to $PATH
+    cabal install pandoc
 
 License
 -------

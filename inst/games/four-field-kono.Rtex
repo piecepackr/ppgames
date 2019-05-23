@@ -1,0 +1,46 @@
+\section{Four Field Kono}
+
+%% begin.rcode opts, echo=FALSE
+% set_knitr_opts(game)
+%% end.rcode
+
+\begin{description}
+\item[Players] 2
+\item[Length] 15 minutes
+\item[Equipment Required] one standard piecepack
+\item[Designer] Traditional, adapted by Michael Schoessow
+\item[Author] Michael Schoessow and Trevor L Davis
+\item[Version] 1.1
+\item[Version Date] 2019-05-18
+% Public Domain and/or CC0
+\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
+\end{description}
+
+\subsection{Description}
+
+Four-Field Kono is a traditional Korean 2-player game. 
+
+\subsection{Setup}
+
+Four-Field Kono is played on a 4 by 4 board made with four tile backs.  Have each player sit across from each other and give each player eight of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) which they each use to populate the half of the board closest to them so that all squares are occupied at the beginning of the game.  Figure \ref{fig:four-field-kono-starting-diagram} shows the recommended setup.
+
+\subsection{Rules}
+
+A player wins by capturing seven of the other player’s coins or by depriving the other player of a move.
+One player goes first,\footnote{Such as the player owning coins of the highest suit.} after which players alternate turns, moving one of their pieces each
+turn. All movements are orthogonal. Captures are made by jumping over a friendly piece
+to land on and capture an enemy piece just beyond. Non-capturing moves consist of
+moving one space onto an empty square.
+
+%% begin.rcode starting-diagram, fig.width=5, fig.height=5, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Four Field Kono starting diagram", echo=FALSE
+% cfg <- gk$get_piecepacks(1)[[1]]
+% pmap_piece(df_four_field_kono(cfg), cfg=cfg, default.units="in")
+%% end.rcode
+
+\subsection{External Links}
+
+\begin{description}
+\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/20560/four-field-kono}
+\item[Cyningstan] \url{http://www.cyningstan.com/game/205/four-field-kono}
+\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Four_Field_Kono}
+\end{description}
