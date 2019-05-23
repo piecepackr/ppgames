@@ -4,8 +4,10 @@ README.rst
 Rakefile
 diagrams
 noto.style
-*.pdf
 others/
 pdf/
 rule_ideas.rst
 tmp/
+.*.pdf
+.appveyor.yml
+.travis.yml
