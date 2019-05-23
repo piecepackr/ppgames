@@ -24,4 +24,5 @@ after_success:
 addons:
     apt:
        packages:
+            - lmodern
             - texlive-xetex
