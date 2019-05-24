@@ -1,11 +1,8 @@
 LICENSE.md
-images/
 README.rst
 Rakefile
-diagrams
 noto.style
 others/
-pdf/
 rule_ideas.rst
 tmp/
 .*.pdf
