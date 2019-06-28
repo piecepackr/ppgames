@@ -51,6 +51,7 @@ set_knitr_opts <- function(name) {
 #' @export
 save_ruleset <- function(game, gk=game_kit(), output_dir=getwd(), quietly=TRUE) {
 
+    force(output_dir)
     wd <- getwd()
     on.exit(setwd(wd))
     setwd(tempdir())
