@@ -31,13 +31,25 @@ df_four_field_kono <- function(cfg1=pp_cfg()) {
 #' @rdname df_game
 #' @export
 df_nine_mens_morris <- function(cfg1=pp_cfg()) {
-    tibble(piece_side="tile_face",
+    df <- tibble(piece_side="tile_face",
            suit=rep(1:4, each=6),
            rank=rep(1:6, 4),
            x=c(7,1,7,3,7,5,     13,13,11,11,9,9,
                7,13,7,11,7,9,   1,1,3,3,5,5),
            y=c(13,13,11,11,9,9,   7,13,7,11,7,9,
                1,1,3,3,5,5,       7,1,7,3,7,5))
+    if (cfg1$has_matchsticks) {
+        df_m <- tibble(piece_side="matchstick_face",
+                       suit=rep(1:4, each=6),
+                       rank=4, 
+                       x=c(1,1,3,3,5,5, 9,9,11,11,13,13,
+                           9,9,11,11,13,13, 1,1,3,3,5,5),
+                       y=c(9,11,9,13,13,11, 11,13,13,9,11,9,
+                           3,1,1,5,5,3, 3,5,5,1,1,3),
+                       angle=rep(rep(c(0,90,90,0,90,0,0,90),each=3)))
+        df <- bind_rows(df, df_m)
+    }
+    df
 }
 
 #' @rdname df_game
