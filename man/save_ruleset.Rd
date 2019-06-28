@@ -8,7 +8,7 @@
 save_ruleset(game, gk = game_kit(), output_dir = getwd(),
   quietly = TRUE)
 
-save_rulebook(book = "the_historical_piecepacker", gk = game_kit(),
+save_rulebook(book = "the-historical-piecepacker", gk = game_kit(),
   output_dir = getwd(), quietly = TRUE)
 }
 \arguments{

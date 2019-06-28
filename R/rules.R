@@ -77,7 +77,7 @@ save_ruleset <- function(game, gk=game_kit(), output_dir=getwd(), quietly=TRUE) 
 #' @rdname save_ruleset
 #' @param quietly Whether to hide xelatex output.
 #' @export
-save_rulebook <- function(book="the_historical_piecepacker", gk=game_kit(), output_dir=getwd(), quietly=TRUE) {
+save_rulebook <- function(book="the-historical-piecepacker", gk=game_kit(), output_dir=getwd(), quietly=TRUE) {
 
     output_dir <- normalizePath(output_dir)
 

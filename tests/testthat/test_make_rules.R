@@ -15,6 +15,6 @@ test_that("game rules work as expected", {
 test_that("game books work as expected", {
     skip_if(Sys.which("xelatex") == "", "Doesn't have xelatex binary")
 
-    save_rulebook("the_historical_piecepacker", gk, dir)
-    expect_true(file.exists(file.path(dir, "the_historical_piecepacker.pdf")))
+    save_rulebook("the-historical-piecepacker", gk, dir)
+    expect_true(file.exists(file.path(dir, "the-historical-piecepacker.pdf")))
 })
