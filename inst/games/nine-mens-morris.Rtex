@@ -8,9 +8,9 @@
 \item[Players] 2
 \item[Length] 10-180 minutes
 \item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Trevor L Davis
-\item[Version] 1.0
-\item[Version Date] 2019-05-18
+\item[Designer] Traditional, adapted by Dan Burkey and Trevor L Davis
+\item[Version] 1.1
+\item[Version Date] 2019-06-29
 \item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
 \end{description}
 
@@ -20,7 +20,7 @@ Nine Men's Morris is an ancient game that used to be very popular.
 
 \subsection{Setup}
 
-Figure \ref{fig:nine-mens-morris-starting-diagram} shows the recommended setup of the board.  Give each player nine of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits).  Before a player is reduced to three pieces there moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-possible-moves} shows the moves of the pieces.
+Figure \ref{fig:nine-mens-morris-starting-diagram} shows the recommended setup of the board.  Give each player nine of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits).  Before a player is reduced to three pieces there moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-possible-moves} shows the moves of the pieces.  If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} use them to connect tiles where orthogonal moves are possible.
 
 %% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Nine Men's Morris starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]

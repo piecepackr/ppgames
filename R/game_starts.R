@@ -206,9 +206,9 @@ df_ultima_chess <- function(cfg1=pp_cfg()) {
                     suit=(1:8+1) %% 2 + 1, x=1:8, y=7, angle=180)
     df_p2 <- tibble(piece_side="coin_back",
                     suit=1:8 %% 2 + 3, x=1:8, y=2)
-    df_r <- tibble(piece_side="die_face", suit=1:4, rank=4,
-                   x=c(1,8,8,1), y=c(8,8,1,1), angle=c(-90,90,-90,90))
-    df_n <- tibble(piece_side="coin_face", rank=2,
+    df_r <- tibble(piece_side="coin_face", suit=1:4, rank=c(1,4,4,1),
+                   x=c(1,8,8,1), y=c(8,8,1,1), angle=c(180,180,0,0))
+    df_n <- tibble(piece_side="die_face", suit=1:4, rank=2,
                    x=c(2,7,7,2), y=c(8,8,1,1), angle=c(180,180,0,0))
     df_b <- tibble(piece_side="pawn_face", suit=1:4, 
                    x=c(3,6,6,3), y=c(8,8,1,1), angle=c(180,180,0,0))
@@ -222,8 +222,9 @@ df_ultima_chess <- function(cfg1=pp_cfg()) {
 #' @rdname df_game
 #' @export
 df_alice_chess <- function(cfg1=pp_cfg()) {
-    df_t1 <- df_rect_board_tiles(8, 8, max_tiles=9)
-    df_t2 <- df_rect_board_tiles(8, 8, max_tiles=9, x0=11)
+    max_tiles <- floor(cfg1$n_suits * cfg1$n_ranks / 2)
+    df_t1 <- df_rect_board_tiles(8, 8, max_tiles=max_tiles)
+    df_t2 <- df_rect_board_tiles(8, 8, max_tiles=max_tiles, x0=11)
     df_p <- df_fide_chess_pieces(cfg1)
     bind_rows(df_t1, df_t2, df_p)
 }
