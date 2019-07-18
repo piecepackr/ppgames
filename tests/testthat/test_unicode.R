@@ -6,6 +6,8 @@ test_that("dimensions", {
     expect_equal(yrange(df), c(0.5, 4.5))
 })
 test_that("text diagrams", {
+    string <- "\u2600\u20dd\u2503\u263d\u20dd\u2502"
+    expect_output(cat(string), string)
     expect_output(cat_piece(df_fide_chess()),
                   "\u2600\u20dd\u2503\u263d\u20dd\u2502")
     expect_output(cat_piece(df_xiangqi()), 
