@@ -6,6 +6,8 @@ test_that("dimensions", {
     expect_equal(yrange(df), c(0.5, 4.5))
 })
 test_that("text diagrams", {
-    expect_output(cat_piece(df_fide_chess()), "☀⃝┃☽⃝│")
-    expect_output(cat_piece(df_xiangqi()), "♛⃝━╋━⸸⃝")
+    expect_output(cat_piece(df_fide_chess()),
+                  "\u2600\u20dd\u2503\u263d\u20dd\u2502")
+    expect_output(cat_piece(df_xiangqi()), 
+                  "\u265b\u20dd\u2501\u254b\u2501\u2e38\u20dd")
 })
