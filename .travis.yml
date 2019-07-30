@@ -24,6 +24,7 @@ after_success:
 addons:
     apt:
        packages:
+            - libmagick++-dev
             - lmodern
             - texlive-math-extra
             - texlive-xetex
