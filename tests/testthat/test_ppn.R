@@ -1,26 +1,38 @@
+library("piecepackr")
+library("vdiffr")
 context("test ppn")
-g1 <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
-g2 <- read_ppn(system.file("extdata/ex2.ppn", package="ppgames"))
-g3 <- read_ppn(system.file("extdata/ex3.ppn", package="ppgames"))
-g4 <- read_ppn(system.file("extdata/ex4.ppn", package="ppgames"))
+ppn1 <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
+ppn2 <- read_ppn(system.file("extdata/ex2.ppn", package="ppgames"))
+ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package="ppgames"))
+ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package="ppgames"))
+g1 <- ppn1[[1]]
+g2 <- ppn2[[1]]
+g3a <- ppn3[[1]]
+g3b <- ppn3[[2]]
+g4 <- ppn4[[1]]
+cfg <- pp_cfg()
+pp <- function(df) { function() { pmap_piece(df, cfg=cfg, default.units="in") } }
 test_that("parsing ppn files works as expected", {
-    expect_equal(g1[[1]]$metadata$Event, "Example Tic-Tac-Toe Game")
-    expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1[[1]]$movetext)))
-    expect_equal(g1[[1]]$moves[["setup."]], "t@b2")
-    expect_equal(g1[[1]]$moves[["1..."]], "M@a2")
-    expect_equal(g1[[1]]$comments[["1..."]], "? (1... M@a1)")
+    expect_equal(g1$metadata$Event, "Example Tic-Tac-Toe Game")
+    expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
+    expect_equal(g1$moves[["setup."]], "t@b2")
+    expect_equal(g1$moves[["1..."]], "M@a2")
+    expect_equal(g1$comments[["1..."]], "? (1... M@a1)")
+    df1 <- tail(g1$dfs, 1)[[1]]
+    expect_doppelganger("tic-tac-toe", pp(df1))
 
-    expect_equal(g2[[1]]$metadata$Event, "Example 2 PPN")
-    expect_equal(g2[[1]]$movetext, "0. t@b4 cA@c3")
+    expect_equal(g2$metadata$Event, "Example Four Field Kono")
+    df2 <- tail(g2$dfs, 1)[[1]]
+    expect_doppelganger("four-field-kono", pp(df2))
 
-    expect_equal(g3[[1]]$metadata$Event, "Example 3 Game A")
-    expect_equal(g3[[1]]$movetext, "0. t@b4 cA@c3")
+    expect_equal(g3a$metadata$Event, "Example 3 Game A")
+    expect_equal(g3a$movetext, "0. t@b4 cA@c3")
 
-    expect_equal(g3[[2]]$metadata$Event, "Example 3 Game B")
-    expect_equal(g3[[2]]$movetext, "0. t@b4 cA@c3")
+    expect_equal(g3b$metadata$Event, "Example 3 Game B")
+    expect_equal(g3b$movetext, "0. t@b4 cA@c3")
 
-    expect_equal(g4[[1]]$metadata, list())
-    expect_equal(g4[[1]]$movetext, "0. c5@b3 t@(2.5,2.5)")
+    expect_equal(g4$metadata, list())
+    expect_equal(g4$movetext, "0. c5@b3 t@(2.5,2.5)")
 })
 
 test_that("parsing simplified piece notation works as expected", {

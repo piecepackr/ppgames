@@ -284,6 +284,12 @@ process_move <- function(df, text) {
         df
     } else if (grepl("@", text)) {
         process_at_move(df, text)
+    } else if (grepl("'", text)) {
+        process_apostrophe_move(df, text)
+    } else if (grepl("*", text)) {
+        process_asterisk_move(df, text)
+    } else if (grepl("-", text)) {
+        process_hyphen_move(df, text)
     } else {
         stop(paste("Don't know how to handle move", text))
     }
@@ -301,6 +307,36 @@ process_at_move <- function(df, text) {
     #### get index for piece restriction
     index <- nrow(df)
     insert_df(df, df_piece, index)
+}
+
+aef <- function(x,y) { isTRUE(all.equal(x,y)) }
+process_apostrophe_move <- function(df, text) {
+    coords <- gsub("'", "", text)
+    index <- get_index_from_coords(df, coords)
+    df[-index,]
+}
+get_index_from_coords <- function(df, coords) {
+    xy <- get_xy(coords)
+    indices <- sapply(df$x, aef, xy[1]) & sapply(df$y, aef, xy[2])
+    #### get index for piece restriction
+    index <- tail(which(indices), 1)
+    index
+}
+
+process_hyphen_move <- function(df, text) {
+    cc <- stringr::str_split(text, "-")[[1]]
+    index <- get_index_from_coords(df, cc[1])
+    new_xy <- get_xy(cc[2])
+    df[index,"x"] <- new_xy[1]
+    df[index,"y"] <- new_xy[2]
+    df
+}
+
+process_asterisk_move <- function(df, text) {
+    cc <- stringr::str_split(text, "\\*")[[1]]
+    df <- process_apostrophe_move(df, paste0(cc[2], "'"))
+    df <- process_hyphen_move(df, gsub("\\*", "-", text))
+    df
 }
 
 # Insert `df2` into `df1` after `index`

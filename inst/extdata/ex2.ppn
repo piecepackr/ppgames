@@ -1,3 +1,6 @@
-Event: Example 2 PPN
+Event: Example Four Field Kono
 
-0. t@b4 cA@c3
+setup. t@(1.5,1.5) t@(1.5,3.5) t@(3.5,1.5) t@(3.5,3.5)
+       Sv@a4 Sv@b4 Mv@c4 Mv@d4 Sv@a3 Sv@b3 Mv@c3 Mv@d3
+       A@a2 A@b2 C@c2 C@d2 A@a1 A@b1 C@c1 C@d1
+1. b1*b3
