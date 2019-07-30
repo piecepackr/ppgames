@@ -13,7 +13,6 @@ g4 <- ppn4[[1]]
 cfg <- pp_cfg()
 pp <- function(df) { function() { pmap_piece(df, cfg=cfg, default.units="in") } }
 test_that("parsing ppn files works as expected", {
-    expect_equal(g1$metadata$Event, "Example Tic-Tac-Toe Game")
     expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
     expect_equal(g1$moves[["setup."]], "t@b2")
     expect_equal(g1$moves[["1..."]], "M@a2")
@@ -21,12 +20,12 @@ test_that("parsing ppn files works as expected", {
     df1 <- tail(g1$dfs, 1)[[1]]
     expect_doppelganger("tic-tac-toe", pp(df1))
 
-    expect_equal(g2$metadata$Event, "Example Four Field Kono")
     df2 <- tail(g2$dfs, 1)[[1]]
     expect_doppelganger("four-field-kono", pp(df2))
 
-    expect_equal(g3a$metadata$Event, "Example 3 Game A")
-    expect_equal(g3a$movetext, "0. t@b4 cA@c3")
+    df3a <- tail(g3a$dfs, 1)[[1]]
+    expect_equal(g3a$metadata$GameType, "Ultima")
+    expect_doppelganger("ultima-chess", pp(df3a))
 
     expect_equal(g3b$metadata$Event, "Example 3 Game B")
     expect_equal(g3b$movetext, "0. t@b4 cA@c3")

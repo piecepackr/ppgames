@@ -200,7 +200,7 @@ df_fide_chess <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-df_ultima_chess <- function(cfg1=pp_cfg()) {
+df_ultima <- function(cfg1=pp_cfg()) {
     df_t <- df_rect_board_tiles(8, 8)
     df_p1 <- tibble(piece_side="coin_back",
                     suit=(1:8+1) %% 2 + 1, x=1:8, y=7, angle=180)
@@ -218,6 +218,10 @@ df_ultima_chess <- function(cfg1=pp_cfg()) {
                    x=5, y=c(8,1), angle=c(180,0))
     bind_rows(df_t, df_p1, df_p2, df_r, df_n, df_b, df_q, df_k)
 }
+
+#' @rdname df_game
+#' @export
+df_baroque_chess <- df_ultima
 
 #' @rdname df_game
 #' @export

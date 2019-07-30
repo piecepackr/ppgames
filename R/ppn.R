@@ -4,6 +4,7 @@
 #' @param file Filename
 #' @param parse Logical of whether to parse the moves in the ppn file
 #' @return A list, for each game in the file a list containing info about the game
+#' @export
 read_ppn <- function(file, parse=TRUE) {
     list_ppns <- parse_ppn_file(file)
     lapply(list_ppns, parse_ppn_game, parse=parse)
@@ -17,9 +18,11 @@ read_ppn <- function(file, parse=TRUE) {
 #' Animate a ppn game
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
 #' @param file Filename to save animation
+#' @param annotate If \code{TRUE} annotate the plot
 #' @param ... Arguments to \code{pmap_piece}
 #' @return Nothing, as a side effect saves an animation of ppn game
-animate_game <- function(game, file, ...) {
+#' @export
+animate_game <- function(game, file="animation.gif", annotate=TRUE, ...) {
     xranges <- lapply(game$dfs, xrange)
     # xmin <- min(sapply(xranges, function(x) x[1]), na.rm=TRUE)
     xmax <- max(sapply(xranges, function(x) x[2]), na.rm=TRUE)
@@ -36,6 +39,7 @@ animate_game <- function(game, file, ...) {
     plot_fn <- function(df, ...) {
         grid::grid.newpage()
         pmap_piece(df, default.units="in", ...)
+        if (annotate) { annotate_plot(xmax, ymax) }
     }
     animation::saveGIF({lapply(game$dfs, plot_fn, ...)}, movie.name=file,
         ani.height=height, ani.width=width, ani.res=res, ani.dev="png", ani.type="png")
@@ -48,25 +52,29 @@ animate_game <- function(game, file, ...) {
 #'
 #' Plot game move
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
-#' @param move Which move to plot game state (will use \code{game$dfs[[move]]}).  
-#'             If \code{NULL} will plot the game state after the last move.
-#' @param file Filename to save graphic to.  If \dev{NULL} open new graphics device.
+#' @param file Filename to save graphic to unless \dev{NULL} in which 
+#'        case it opens a new graphics device.
+#' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})  
+#'             unless \code{NULL} in which case will plot the game state after the last move.
+#' @param annotate If \code{TRUE} annotate the plot
 #' @param bg Background color (\code{"transparent")} for transparent
 #' @param res For bitmap image formats the resolution 
 #' @param ... Arguments to \code{pmap_piece}
 #' @return Nothing, as a side effect saves a graphic
-plot_move <- function(game, move=NULL, file=NULL,  bg="white", res=72, ...) {
+#' @export
+plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72) {
     if (is.null(move)) {
         df <- tail(game$dfs, 1)[[1]]
     } else {
         df <- game$dfs[[move]]
     }
-    width <- xrange(df)[2] + 0.5
-    height <- yrange(df)[2] + 0.5
+    xmax <- xrange(df)[2]
+    width <- xmax + 0.5
+    ymax <- yrange(df)[2]
+    height <- ymax + 0.5
 
     if (is.null(file)) {
         dev.new(width=width, height=height, unit="in", noRstudioGD=TRUE)
-        pmap_piece(df, default.units="in", ...)
     } else {
         format <- tools::file_ext(file)
         switch(format,
@@ -77,17 +85,26 @@ plot_move <- function(game, move=NULL, file=NULL,  bg="white", res=72, ...) {
                ps = cairo_ps(file, width, height, bg=bg),
                svg = svg(file, width, height, bg=bg),
                tiff = tiff(file, width, height, "in", res=res, bg=bg))
-        pmap_piece(df, default.units="in", ...)
-        dev.off()
     }
+    pmap_piece(df, default.units="in", ...)
+    if (annotate) { annotate_plot(xmax, ymax) }
+    if (!is.null(file)) { dev.off() }
     invisible(NULL)
 }
 
-#' Parse ppn files
-#'
-#' Parses ppn file 
-#' @param file Filename 
-#' @return A list, each element is a character vector containing the text of the PPN games within that file
+annotate_plot <- function(xmax, ymax) {
+        gp <- gpar(fontsize=14)
+        x_indices <- seq(floor(xmax))
+        grid.text(letters[x_indices], x=x_indices, y=0.25, default.units="in", gp=gp)
+        y_indices <- seq(floor(ymax))
+        grid.text(as.character(y_indices), x=0.25, y=y_indices, default.units="in", gp=gp)
+}
+
+# Parse ppn files
+#
+# Parses ppn file 
+# @param file Filename 
+# @return A list, each element is a character vector containing the text of the PPN games within that file
 parse_ppn_file <- function(file) {
     text <- readLines(file)
     game_starts <- grep("^-{3}", text)
@@ -102,12 +119,12 @@ parse_ppn_file <- function(file) {
     contents
 }
 
-#' Parse ppn game
-#'
-#' Parses (single) ppn game text to get Metadata and Movetext
-#' @param text Character vector of ppn game text
-#' @return A list with a named list element named \code{Metadata} 
-#'         and character vector element named \code{Movetext}
+# Parse ppn game
+#
+# Parses (single) ppn game text to get Metadata and Movetext
+# @param text Character vector of ppn game text
+# @return A list with a named list element named \code{Metadata} 
+#         and character vector element named \code{Movetext}
 parse_ppn_game <- function(text, parse=TRUE) {
     yaml_end <- grep("^\\.{3}", text)
     if (length(yaml_end) == 0) {
@@ -122,23 +139,36 @@ parse_ppn_game <- function(text, parse=TRUE) {
     }
     game_list <- list(metadata=metadata, movetext=movetext)
     if (parse) {
-        #### Get starting df
-        df <- tibble::tibble()
+        df <- get_starting_df(metadata)
         move_list <- parse_moves(movetext, df=df)
         game_list <- c(game_list, move_list)
     }
     game_list
 }
 
+get_starting_df <- function(metadata) {
+    game_type <- metadata$GameType
+    if (!is.null(game_type)) {
+        game_type <- stringr::str_squish(game_type)
+        game_type <- tolower(game_type)
+        game_type <- gsub("'", "", game_type)
+        game_type <- gsub(" ", "_", game_type)
+        #### Get function from passed in list?
+        fn <- get(paste0("df_", game_type))
+        fn()
+    } else {
+        tibble::tibble()
+    }
+}
 
-#' Parse Movetext by Move number
-#'
-#' Parse Movetext by Move number
-#' @param text Character vector of Movetext
-#' @param df Data frame containing starting state (inferred from Metadata)
-#' @return A list with element \code{moves} containing 
-#'     named list (by move number) of move text and element \code{comments}
-#'     containing named list (by move number) of comments
+# Parse Movetext by Move number
+#
+# Parse Movetext by Move number
+# @param text Character vector of Movetext
+# @param df Data frame containing starting state (inferred from Metadata)
+# @return A list with element \code{moves} containing 
+#     named list (by move number) of move text and element \code{comments}
+#     containing named list (by move number) of comments
 parse_moves <- function(text, df=tibble::tibble()) {
     #### Convert # comments into braces?
     text <- stringr::str_squish(paste(text, collapse=" "))
@@ -175,13 +205,13 @@ parse_moves <- function(text, df=tibble::tibble()) {
     list(moves=moves, comments=comments, dfs=dfs)
 }
 
-ctoken <- "\\{[^}]*\\}+?"
+comment_token <- "\\{[^}]*\\}+?"
 extract_comments <- function(text) {
-    text <- paste(stringr::str_extract_all(text, ctoken)[[1]], collapse=" ")
+    text <- paste(stringr::str_extract_all(text, comment_token)[[1]], collapse=" ")
     stringr::str_squish(stringr::str_remove_all(text, "\\{|\\}"))
 }
 remove_comments <- function(text) {
-    stringr::str_squish(stringr::str_remove_all(text, ctoken))
+    stringr::str_squish(stringr::str_remove_all(text, comment_token))
 }
 
 parse_simplified_piece <- function(text) {
@@ -286,10 +316,10 @@ process_move <- function(df, text) {
         process_at_move(df, text)
     } else if (grepl("'", text)) {
         process_apostrophe_move(df, text)
-    } else if (grepl("*", text)) {
-        process_asterisk_move(df, text)
     } else if (grepl("-", text)) {
         process_hyphen_move(df, text)
+    } else if (stringr::str_detect(text, colon_token)) {
+        process_colon_move(df, text)
     } else {
         stop(paste("Don't know how to handle move", text))
     }
@@ -332,10 +362,11 @@ process_hyphen_move <- function(df, text) {
     df
 }
 
-process_asterisk_move <- function(df, text) {
-    cc <- stringr::str_split(text, "\\*")[[1]]
+colon_token <- ":(?![^\\[]*])"
+process_colon_move <- function(df, text) {
+    cc <- stringr::str_split(text, colon_token)[[1]]
     df <- process_apostrophe_move(df, paste0(cc[2], "'"))
-    df <- process_hyphen_move(df, gsub("\\*", "-", text))
+    df <- process_hyphen_move(df, paste(cc[1], cc[2], sep="-"))
     df
 }
 

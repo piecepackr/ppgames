@@ -10,7 +10,8 @@
 \alias{df_cribbage_board}
 \alias{textGrob_cribbage_board}
 \alias{df_fide_chess}
-\alias{df_ultima_chess}
+\alias{df_ultima}
+\alias{df_baroque_chess}
 \alias{df_alice_chess}
 \alias{df_four_seasons_chess}
 \alias{df_shogi}
@@ -34,7 +35,9 @@ textGrob_cribbage_board(cfg1 = pp_cfg())
 
 df_fide_chess(cfg1 = pp_cfg())
 
-df_ultima_chess(cfg1 = pp_cfg())
+df_ultima(cfg1 = pp_cfg())
+
+df_baroque_chess(cfg1 = pp_cfg())
 
 df_alice_chess(cfg1 = pp_cfg())
 
