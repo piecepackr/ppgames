@@ -10,7 +10,7 @@ plot_move(game, file = NULL, move = NULL, annotate = TRUE, ...,
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
-\item{file}{Filename to save graphic to unless \dev{NULL} in which 
+\item{file}{Filename to save graphic to unless \code{NULL} in which 
 case it opens a new graphics device.}
 
 \item{move}{Which move to plot game state (after the move, will use \code{game$dfs[[move]]})

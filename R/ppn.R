@@ -52,7 +52,7 @@ animate_game <- function(game, file="animation.gif", annotate=TRUE, ...) {
 #'
 #' Plot game move
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
-#' @param file Filename to save graphic to unless \dev{NULL} in which 
+#' @param file Filename to save graphic to unless \code{NULL} in which 
 #'        case it opens a new graphics device.
 #' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})  
 #'             unless \code{NULL} in which case will plot the game state after the last move.
