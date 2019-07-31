@@ -314,8 +314,8 @@ process_move <- function(df, text) {
         df
     } else if (grepl("@", text)) {
         process_at_move(df, text)
-    } else if (grepl("'", text)) {
-        process_apostrophe_move(df, text)
+    } else if (grepl("\\*", text)) {
+        process_asterisk_move(df, text)
     } else if (grepl("-", text)) {
         process_hyphen_move(df, text)
     } else if (stringr::str_detect(text, colon_token)) {
@@ -340,8 +340,8 @@ process_at_move <- function(df, text) {
 }
 
 aef <- function(x,y) { isTRUE(all.equal(x,y)) }
-process_apostrophe_move <- function(df, text) {
-    coords <- gsub("'", "", text)
+process_asterisk_move <- function(df, text) {
+    coords <- gsub("\\*", "", text)
     index <- get_index_from_coords(df, coords)
     df[-index,]
 }
@@ -365,7 +365,7 @@ process_hyphen_move <- function(df, text) {
 colon_token <- ":(?![^\\[]*])"
 process_colon_move <- function(df, text) {
     cc <- stringr::str_split(text, colon_token)[[1]]
-    df <- process_apostrophe_move(df, paste0(cc[2], "'"))
+    df <- process_asterisk_move(df, paste0("*", cc[2]))
     df <- process_hyphen_move(df, paste(cc[1], cc[2], sep="-"))
     df
 }
@@ -402,6 +402,7 @@ get_y <- function(coords) {
 }
 
 process_moveline <- function(df, text) {
+    text <- stringr::str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
     moves <- stringr::str_split(text, "[[:blank:]]+")[[1]]
     for(move in moves) {
         df <- process_move(df, move)
