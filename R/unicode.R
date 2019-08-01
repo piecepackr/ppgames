@@ -32,6 +32,16 @@ cat_piece <- function(df, ...) {
     invisible(NULL)
 }
 
+#' @rdname cat_piece
+#' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
+#' @param move Which move to cat game state (after the move, will use \code{game$dfs[[move]]})  
+#'             unless \code{NULL} in which case will cat the game state after the last move.
+#' @export
+cat_move <- function(game, move=NULL, ...) {
+    df <- get_df_from_move(game, move)
+    cat_piece(df, ...)
+}
+
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle) {
     switch(piece_side, 
            coin_back = add_coin_back(cm, suit, x, y, angle),

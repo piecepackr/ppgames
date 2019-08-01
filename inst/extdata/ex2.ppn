@@ -1,3 +1,8 @@
 GameType: Four Field Kono
 
-1. b1:b3
+1. b1:b3 1... d3:b3 2. c1:c3 2... a3:c3 3. c2-c1 3... b4:b2 4. a1-b1 4... b3:b1
+5. d1:b1 5... c3-c2 6. a2-a3 6... b2:d2 7. a3-b3 7... c4-c3 8. c1-d1 8... d4-d3
+9. b1-b2 9... d2:b2 10. b3-a3 10... b2-b1 {Player 1's loss is assured with the
+ separation of their two remaining pieces and they should resign in a real game}
+11. a3-a2 11... b1-c1 12. d1-d2 12... c1-d1 13. a2-a3 13... a4-b4
+14. a3-a4 14... b4-c4 15. a4-b4 15... c4-d4 16. b4-a4 16... d4:d2 {Player 2 wins}

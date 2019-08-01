@@ -2,14 +2,22 @@
 % Please edit documentation in R/unicode.R
 \name{cat_piece}
 \alias{cat_piece}
+\alias{cat_move}
 \title{Generate plaintext piecepack diagrams}
 \usage{
 cat_piece(df, ...)
+
+cat_move(game, move = NULL, ...)
 }
 \arguments{
 \item{df}{Data frame containing piece info.}
 
 \item{...}{Passed to \code{cat}}
+
+\item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
+
+\item{move}{Which move to cat game state (after the move, will use \code{game$dfs[[move]]})
+unless \code{NULL} in which case will cat the game state after the last move.}
 }
 \value{
 None (invisible \code{NULL})

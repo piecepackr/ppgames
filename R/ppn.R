@@ -48,6 +48,14 @@ animate_game <- function(game, file="animation.gif", annotate=TRUE, ...) {
 
 #### Option to generate postcard?
 
+get_df_from_move <- function(game, move=NULL) {
+    if (is.null(move)) {
+        tail(game$dfs, 1)[[1]]
+    } else {
+        game$dfs[[move]]
+    }
+}
+
 #' Plot game move
 #'
 #' Plot game move
@@ -63,11 +71,7 @@ animate_game <- function(game, file="animation.gif", annotate=TRUE, ...) {
 #' @return Nothing, as a side effect saves a graphic
 #' @export
 plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72) {
-    if (is.null(move)) {
-        df <- tail(game$dfs, 1)[[1]]
-    } else {
-        df <- game$dfs[[move]]
-    }
+    df <- get_df_from_move(game, move)
     xmax <- xrange(df)[2]
     width <- xmax + 0.5
     ymax <- yrange(df)[2]
@@ -173,9 +177,9 @@ parse_moves <- function(text, df=tibble::tibble()) {
     #### Convert # comments into braces?
     text <- stringr::str_squish(paste(text, collapse=" "))
     # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
-    # (?![[:digit:]]) is a negative lookahead assertion to not capture floating numbers
-    token <- "[[:alnum:]_]+\\.+(?![[:digit:]])(?![^\\{]*\\})"
-    locations <- stringr::str_locate_all(text, token)[[1]]
+    # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
+    move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_]+\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
+    locations <- stringr::str_locate_all(text, move_number_token)[[1]]
     nr <- nrow(locations)
     moves_raw <- list()
     if (nr == 0) {
@@ -205,7 +209,7 @@ parse_moves <- function(text, df=tibble::tibble()) {
     list(moves=moves, comments=comments, dfs=dfs)
 }
 
-comment_token <- "\\{[^}]*\\}+?"
+comment_token <- "(?<![[:alnum:][:punct:]])\\{[^}]*\\}(?![[:alnum:][:punct:]])"
 extract_comments <- function(text) {
     text <- paste(stringr::str_extract_all(text, comment_token)[[1]], collapse=" ")
     stringr::str_squish(stringr::str_remove_all(text, "\\{|\\}"))
@@ -359,7 +363,7 @@ process_hyphen_move <- function(df, text) {
     new_xy <- get_xy(cc[2])
     df[index,"x"] <- new_xy[1]
     df[index,"y"] <- new_xy[2]
-    df
+    insert_df(df[-index,], df[index,])
 }
 
 colon_token <- ":(?![^\\[]*])"
