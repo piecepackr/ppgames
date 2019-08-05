@@ -4,7 +4,8 @@
 \alias{animate_game}
 \title{Animate a ppn game}
 \usage{
-animate_game(game, file = "animation.gif", annotate = TRUE, ...)
+animate_game(game, file = "animation.gif", annotate = TRUE, ...,
+  cfg = pp_cfg(), envir = list(piecepack = cfg))
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
@@ -14,6 +15,10 @@ animate_game(game, file = "animation.gif", annotate = TRUE, ...)
 \item{annotate}{If \code{TRUE} annotate the plot}
 
 \item{...}{Arguments to \code{pmap_piece}}
+
+\item{cfg}{A piecepackr configuration list}
+
+\item{envir}{Environment (or named list) of piecepackr configuration lists}
 }
 \value{
 Nothing, as a side effect saves an animation of ppn game

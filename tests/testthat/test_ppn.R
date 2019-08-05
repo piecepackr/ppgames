@@ -10,8 +10,10 @@ g2 <- ppn2[[1]]
 g3a <- ppn3[[1]]
 g3b <- ppn3[[2]]
 g4 <- ppn4[[1]]
-cfg <- pp_cfg()
-pp <- function(df) { function() { pmap_piece(df, cfg=cfg, default.units="in") } }
+pp <- function(df) { function() { 
+    pmap_piece(df, envir=list(piecepack=pp_cfg()), default.units="in") 
+    }
+}
 test_that("parsing ppn files works as expected", {
     expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
     expect_equal(g1$moves[["setup."]], "t@b2")
@@ -25,7 +27,7 @@ test_that("parsing ppn files works as expected", {
 
     df3a <- tail(g3a$dfs, 1)[[1]]
     expect_equal(g3a$metadata$GameType, "Ultima")
-    expect_doppelganger("ultima-chess", pp(df3a))
+    # expect_doppelganger("ultima-chess", pp(df3a))
 
     expect_equal(g3b$metadata$Event, "Example 3 Game B")
     expect_equal(g3b$movetext, "0. t@b4 cA@c3")
@@ -55,6 +57,9 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(c5$rank, 6)
     expect_equal(c5$angle, 180)
     expect_equal(c5$piece_side, "coin_face")
+    cn <- parse_simplified_piece("n")
+    cn2 <- parse_simplified_piece("0")
+    expect_equal(cn, cn2)
     pM <- parse_simplified_piece("pMb")
     expect_equal(pM$suit, 2)
     expect_true(is.na(pM$rank))

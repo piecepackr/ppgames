@@ -4,6 +4,7 @@
 #' @param file Filename
 #' @param parse Logical of whether to parse the moves in the ppn file
 #' @return A list, for each game in the file a list containing info about the game
+#' @import stringr
 #' @export
 read_ppn <- function(file, parse=TRUE) {
     list_ppns <- parse_ppn_file(file)
@@ -20,9 +21,12 @@ read_ppn <- function(file, parse=TRUE) {
 #' @param file Filename to save animation
 #' @param annotate If \code{TRUE} annotate the plot
 #' @param ... Arguments to \code{pmap_piece}
+#' @param cfg A piecepackr configuration list
+#' @param envir Environment (or named list) of piecepackr configuration lists
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
-animate_game <- function(game, file="animation.gif", annotate=TRUE, ...) {
+animate_game <- function(game, file="animation.gif", annotate=TRUE, ..., 
+                         cfg=pp_cfg(), envir=list(piecepack=cfg)) {
     xranges <- lapply(game$dfs, xrange)
     # xmin <- min(sapply(xranges, function(x) x[1]), na.rm=TRUE)
     xmax <- max(sapply(xranges, function(x) x[2]), na.rm=TRUE)
@@ -38,7 +42,7 @@ animate_game <- function(game, file="animation.gif", annotate=TRUE, ...) {
     width <- res * (xmax+0.5) 
     plot_fn <- function(df, ...) {
         grid::grid.newpage()
-        pmap_piece(df, default.units="in", ...)
+        pmap_piece(df, default.units="in", ..., envir=envir)
         if (annotate) { annotate_plot(xmax, ymax) }
     }
     animation::saveGIF({lapply(game$dfs, plot_fn, ...)}, movie.name=file,
@@ -68,9 +72,12 @@ get_df_from_move <- function(game, move=NULL) {
 #' @param bg Background color (\code{"transparent")} for transparent
 #' @param res For bitmap image formats the resolution 
 #' @param ... Arguments to \code{pmap_piece}
+#' @param cfg A piecepackr configuration list
+#' @param envir Environment (or named list) of piecepackr configuration lists
 #' @return Nothing, as a side effect saves a graphic
 #' @export
-plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72) {
+plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72, 
+                      cfg=pp_cfg(), envir=list(piecepack=cfg)) {
     df <- get_df_from_move(game, move)
     xmax <- xrange(df)[2]
     width <- xmax + 0.5
@@ -153,17 +160,23 @@ parse_ppn_game <- function(text, parse=TRUE) {
 get_starting_df <- function(metadata) {
     game_type <- metadata$GameType
     if (!is.null(game_type)) {
-        game_type <- stringr::str_squish(game_type)
+        game_type <- str_squish(game_type)
         game_type <- tolower(game_type)
         game_type <- gsub("'", "", game_type)
         game_type <- gsub(" ", "_", game_type)
         #### Get function from passed in list?
         fn <- get(paste0("df_", game_type))
-        fn()
+        df <- fn()
+        df <- tibble::rowid_to_column(df, "id")
+        if(is.null(df[["cfg"]])) { df$cfg <- "piecepack" }
+        df
     } else {
-        tibble::tibble()
+        starting_df
     }
 }
+
+starting_df <- tibble::tibble(id=integer(0), piece_side=character(0), suit=numeric(0), rank=numeric(0),
+                              cfg=character(0), x=numeric(0), y=numeric(0))
 
 # Parse Movetext by Move number
 #
@@ -173,13 +186,14 @@ get_starting_df <- function(metadata) {
 # @return A list with element \code{moves} containing 
 #     named list (by move number) of move text and element \code{comments}
 #     containing named list (by move number) of comments
-parse_moves <- function(text, df=tibble::tibble()) {
+parse_moves <- function(text, df=NULL) {
+    if(is.null(df)) { df <- starting_df } 
     #### Convert # comments into braces?
-    text <- stringr::str_squish(paste(text, collapse=" "))
+    text <- str_squish(paste(text, collapse=" "))
     # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
     # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
     move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_]+\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
-    locations <- stringr::str_locate_all(text, move_number_token)[[1]]
+    locations <- str_locate_all(text, move_number_token)[[1]]
     nr <- nrow(locations)
     moves_raw <- list()
     if (nr == 0) {
@@ -187,18 +201,18 @@ parse_moves <- function(text, df=tibble::tibble()) {
     } else {
         i1 <- locations[1,1] 
         if (i1 > 1) {
-            moves_raw[[1]] <- stringr::str_sub(text, 1, i1-2)
+            moves_raw[[1]] <- str_sub(text, 1, i1-2)
         } 
         for (ii in seq(nr)) {
             is <- locations[ii,1]
             ie <- locations[ii,2]
-            movenumber <- stringr::str_sub(text, is, ie)
+            movenumber <- str_sub(text, is, ie)
             is <- locations[ii,2]+2
             if(ii < nr) 
                 ie <- locations[ii+1,1]-2
             else
-                ie <- stringr::str_count(text)
-            moves_raw[[movenumber]] <- stringr::str_sub(text, is, ie) 
+                ie <- str_count(text)
+            moves_raw[[movenumber]] <- str_sub(text, is, ie) 
         }
     }
     moves <- lapply(moves_raw, remove_comments)
@@ -211,11 +225,11 @@ parse_moves <- function(text, df=tibble::tibble()) {
 
 comment_token <- "(?<![[:alnum:][:punct:]])\\{[^}]*\\}(?![[:alnum:][:punct:]])"
 extract_comments <- function(text) {
-    text <- paste(stringr::str_extract_all(text, comment_token)[[1]], collapse=" ")
-    stringr::str_squish(stringr::str_remove_all(text, "\\{|\\}"))
+    text <- paste(str_extract_all(text, comment_token)[[1]], collapse=" ")
+    str_squish(str_remove_all(text, "\\{|\\}"))
 }
 remove_comments <- function(text) {
-    stringr::str_squish(stringr::str_remove_all(text, comment_token))
+    str_squish(str_remove_all(text, comment_token))
 }
 
 parse_simplified_piece <- function(text) {
@@ -223,7 +237,7 @@ parse_simplified_piece <- function(text) {
     rank <- get_simplified_rank(text)
     angle <- get_simplified_angle(text)
     ps <- get_simplified_ps(text, suit, rank)
-    tibble(piece_side=ps, suit=suit, rank=rank, angle=angle)
+    tibble(piece_side=ps, suit=suit, rank=rank, angle=angle, cfg="piecepack")
 }
 get_simplified_suit <- function(text) {
     if (grepl("S", text)) {
@@ -243,14 +257,8 @@ get_simplified_rank <- function(text) {
         1
     } else if (grepl("a", text)) {
         2
-    } else if (grepl("2", text)) {
-        3
-    } else if (grepl("3", text)) {
-        4
-    } else if (grepl("4", text)) {
-        5
-    } else if (grepl("5", text)) {
-        6
+    } else if (grepl("[[:digit:]]", text)) {
+        as.numeric(str_extract(text, "[[:digit:]]")) + 1
     } else {
         NA_integer_
     }
@@ -301,16 +309,16 @@ get_simplified_ps <- function(text, suit, rank) {
 }
 
 get_algebraic_x <- function(text) {
-    ss <- stringr::str_extract(text, "[[:lower:]]+")   
-    ndigits <- stringr::str_count(ss)
+    ss <- str_extract(text, "[[:lower:]]+")   
+    ndigits <- str_count(ss)
     int <- 0
     for (ii in rev(seq(ndigits))) {
-        int <- int + 26^(ii-1) * match(stringr::str_sub(ss, ii, ii), letters)
+        int <- int + 26^(ii-1) * match(str_sub(ss, ii, ii), letters)
     }
     int
 }
 get_algebraic_y <- function(text) {
-    as.numeric(stringr::str_extract(text, "[[:digit:]]+"))
+    as.numeric(str_extract(text, "[[:digit:]]+"))
 }
 
 process_move <- function(df, text) {
@@ -322,7 +330,9 @@ process_move <- function(df, text) {
         process_asterisk_move(df, text)
     } else if (grepl("-", text)) {
         process_hyphen_move(df, text)
-    } else if (stringr::str_detect(text, colon_token)) {
+    } else if (grepl("=", text)) {
+        process_equal_move(df, text)
+    } else if (str_detect(text, colon_token)) {
         process_colon_move(df, text)
     } else {
         stop(paste("Don't know how to handle move", text))
@@ -330,7 +340,7 @@ process_move <- function(df, text) {
 }
 
 process_at_move <- function(df, text) {
-    pc <- stringr::str_split(text, "@")[[1]]
+    pc <- str_split(text, "@")[[1]]
     piece <- pc[1]
     coords <- pc[2]
     #### handle complicated piece and coords
@@ -338,6 +348,7 @@ process_at_move <- function(df, text) {
     xy <- get_xy(coords)
     df_piece$x <- xy[1]
     df_piece$y <- xy[2]
+    df_piece$id <- nrow(df)+1
     #### get index for piece restriction
     index <- nrow(df)
     insert_df(df, df_piece, index)
@@ -351,14 +362,16 @@ process_asterisk_move <- function(df, text) {
 }
 get_index_from_coords <- function(df, coords) {
     xy <- get_xy(coords)
-    indices <- sapply(df$x, aef, xy[1]) & sapply(df$y, aef, xy[2])
+    indices <- as.logical(sapply(df$x, aef, xy[1])) & 
+               as.logical(sapply(df$y, aef, xy[2]))
     #### get index for piece restriction
     index <- tail(which(indices), 1)
+    if (length(index) < 1) { stop(paste("Can't identify piece(s) from", coords)) }
     index
 }
 
 process_hyphen_move <- function(df, text) {
-    cc <- stringr::str_split(text, "-")[[1]]
+    cc <- str_split(text, "-")[[1]]
     index <- get_index_from_coords(df, cc[1])
     new_xy <- get_xy(cc[2])
     df[index,"x"] <- new_xy[1]
@@ -366,9 +379,22 @@ process_hyphen_move <- function(df, text) {
     insert_df(df[-index,], df[index,])
 }
 
+process_equal_move <- function(df, text) {
+    cp <- str_split(text, "=")[[1]]
+    coords <- cp[1]
+    piece <- cp[2]
+    index <- get_index_from_coords(df, coords)
+    df_piece <- parse_simplified_piece(piece)
+    df[index, "piece_side"] <- df_piece$piece_side
+    df[index, "suit"] <- df_piece$suit
+    df[index, "rank"] <- df_piece$rank
+    df[index, "angle"] <- df_piece$angle
+    df
+}
+
 colon_token <- ":(?![^\\[]*])"
 process_colon_move <- function(df, text) {
-    cc <- stringr::str_split(text, colon_token)[[1]]
+    cc <- str_split(text, colon_token)[[1]]
     df <- process_asterisk_move(df, paste0("*", cc[2]))
     df <- process_hyphen_move(df, paste(cc[1], cc[2], sep="-"))
     df
@@ -406,8 +432,8 @@ get_y <- function(coords) {
 }
 
 process_moveline <- function(df, text) {
-    text <- stringr::str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
-    moves <- stringr::str_split(text, "[[:blank:]]+")[[1]]
+    text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
+    moves <- str_split(text, "[[:blank:]]+")[[1]]
     for(move in moves) {
         df <- process_move(df, move)
     }

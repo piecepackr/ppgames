@@ -5,7 +5,8 @@
 \title{Plot game move}
 \usage{
 plot_move(game, file = NULL, move = NULL, annotate = TRUE, ...,
-  bg = "white", res = 72)
+  bg = "white", res = 72, cfg = pp_cfg(), envir = list(piecepack =
+  cfg))
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
@@ -23,6 +24,10 @@ unless \code{NULL} in which case will plot the game state after the last move.}
 \item{bg}{Background color (\code{"transparent")} for transparent}
 
 \item{res}{For bitmap image formats the resolution}
+
+\item{cfg}{A piecepackr configuration list}
+
+\item{envir}{Environment (or named list) of piecepackr configuration lists}
 }
 \value{
 Nothing, as a side effect saves a graphic
