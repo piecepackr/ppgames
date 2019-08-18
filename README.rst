@@ -30,6 +30,7 @@ To install the ``ppgames`` R package use the following commands in R_:
 .. code:: r
 
    install.packages("remotes")
+   remotes::install_github("trevorld/bracer")
    remotes::install_github("trevorld/piecepackr")
    remotes::install_github("trevorld/ppgames")
 

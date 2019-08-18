@@ -54,7 +54,7 @@ animate_game <- function(game, file="animation.gif", annotate=TRUE, ...,
 
 get_df_from_move <- function(game, move=NULL) {
     if (is.null(move)) {
-        tail(game$dfs, 1)[[1]]
+        utils::tail(game$dfs, 1)[[1]]
     } else {
         game$dfs[[move]]
     }
@@ -75,6 +75,7 @@ get_df_from_move <- function(game, move=NULL) {
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
 #' @return Nothing, as a side effect saves a graphic
+#' @import grDevices
 #' @export
 plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72, 
                       cfg=pp_cfg(), envir=list(piecepack=cfg)) {
@@ -365,7 +366,7 @@ get_index_from_coords <- function(df, coords) {
     indices <- as.logical(sapply(df$x, aef, xy[1])) & 
                as.logical(sapply(df$y, aef, xy[2]))
     #### get index for piece restriction
-    index <- tail(which(indices), 1)
+    index <- utils::tail(which(indices), 1)
     if (length(index) < 1) { stop(paste("Can't identify piece(s) from", coords)) }
     index
 }
@@ -432,8 +433,9 @@ get_y <- function(coords) {
 }
 
 process_moveline <- function(df, text) {
+    text <- bracer::expand_braces(text)
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
-    moves <- str_split(text, "[[:blank:]]+")[[1]]
+    moves <- c(str_split(text, "[[:blank:]]+"), recursive=TRUE)
     for(move in moves) {
         df <- process_move(df, move)
     }

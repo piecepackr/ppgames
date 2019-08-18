@@ -14,7 +14,9 @@ sudo: false
 latex: false
 warnings_are_errors: true
 cran: https://cran.rstudio.com
-r_github_packages: trevorld/piecepackr
+r_github_packages: 
+    - trevorld/bracer
+    - trevorld/piecepackr
 notifications:
   email:
     on_success: change
