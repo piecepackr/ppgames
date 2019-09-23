@@ -5,6 +5,7 @@ ppn1 <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
 ppn2 <- read_ppn(system.file("extdata/ex2.ppn", package="ppgames"))
 ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package="ppgames"))
 ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package="ppgames"))
+ppn5 <- read_ppn(system.file("extdata/ex5.ppn", package="ppgames"))
 g1 <- ppn1[[1]]
 g2 <- ppn2[[1]]
 g3a <- ppn3[[1]]
@@ -65,6 +66,18 @@ test_that("parsing simplified piece notation works as expected", {
     expect_true(is.na(pM$rank))
     expect_equal(pM$angle, 0)
     expect_equal(pM$piece_side, "pawn_back")
+    pt <- parse_simplified_piece("▲S")
+    expect_equal(pt$piece_side, "pyramid_top")
+    pl <- parse_simplified_piece("▲Sl")
+    expect_equal(pl$piece_side, "pyramid_left")
+    pr <- parse_simplified_piece("▲Sr")
+    expect_equal(pr$piece_side, "pyramid_right")
+    mM <- parse_simplified_piece("mM")
+    expect_equal(mM$piece_side, "matchstick_face")
+    sM <- parse_simplified_piece("sM")
+    expect_equal(sM$piece_side, "saucer_back")
+    s <- parse_simplified_piece("s")
+    expect_equal(s$piece_side, "saucer_face")
 })
 
 test_that("parsing algebraic coordinates works as expected", {

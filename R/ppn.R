@@ -98,7 +98,7 @@ plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white
                svg = svg(file, width, height, bg=bg),
                tiff = tiff(file, width, height, "in", res=res, bg=bg))
     }
-    pmap_piece(df, default.units="in", ...)
+    pmap_piece(df, default.units="in", ..., envir=envir)
     if (annotate) { annotate_plot(xmax, ymax) }
     if (!is.null(file)) { dev.off() }
     invisible(NULL)
@@ -144,7 +144,11 @@ parse_ppn_game <- function(text, parse=TRUE) {
     }
     if (length(yaml_end) > 0) {
         metadata <- yaml::yaml.load(text[1:yaml_end[1]])
-        movetext <- text[(yaml_end[1]+1):length(text)]
+        if (yaml_end[1]<length(text)) {
+            movetext <- text[(yaml_end[1]+1):length(text)]
+        } else {
+            movetext <- character()
+        }
     } else {
         metadata <- list()
         movetext <- text
@@ -157,27 +161,35 @@ parse_ppn_game <- function(text, parse=TRUE) {
     }
     game_list
 }
+starting_df <- tibble::tibble(id=integer(0), piece_side=character(0), suit=numeric(0), rank=numeric(0),
+                              cfg=character(0), x=numeric(0), y=numeric(0))
 
 get_starting_df <- function(metadata) {
     game_type <- metadata$GameType
-    if (!is.null(game_type)) {
-        game_type <- str_squish(game_type)
-        game_type <- tolower(game_type)
-        game_type <- gsub("'", "", game_type)
-        game_type <- gsub(" ", "_", game_type)
-        #### Get function from passed in list?
-        fn <- get(paste0("df_", game_type))
-        df <- fn()
-        df <- tibble::rowid_to_column(df, "id")
-        if(is.null(df[["cfg"]])) { df$cfg <- "piecepack" }
-        df
+    if (is.character(game_type)) {
+        get_starting_df_from_name(game_type)
+    } else if (is.list(game_type)) {
+        names(game_type) <- tolower(names(game_type))
+        i_name = which("name" %in% names(game_type))
+        get_starting_df_from_name(game_type[["name"]], game_type[-i_name])
     } else {
         starting_df
     }
 }
 
-starting_df <- tibble::tibble(id=integer(0), piece_side=character(0), suit=numeric(0), rank=numeric(0),
-                              cfg=character(0), x=numeric(0), y=numeric(0))
+get_starting_df_from_name <- function(game_name, .l=list()) {
+    game_name <- str_squish(game_name)
+    game_name <- tolower(game_name)
+    game_name <- gsub("'", "", game_name)
+    game_name <- gsub(" ", "_", game_name)
+    #### Get function from passed in list?
+    fn <- get(paste0("df_", game_name))
+    df <- do.call(fn, .l)
+    df <- tibble::rowid_to_column(df, "id")
+    if(is.null(df[["cfg"]])) { df$cfg <- "piecepack" }
+    df
+
+}
 
 # Parse Movetext by Move number
 #
@@ -190,35 +202,41 @@ starting_df <- tibble::tibble(id=integer(0), piece_side=character(0), suit=numer
 parse_moves <- function(text, df=NULL) {
     if(is.null(df)) { df <- starting_df } 
     #### Convert # comments into braces?
-    text <- str_squish(paste(text, collapse=" "))
-    # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
-    # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
-    move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_]+\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
-    locations <- str_locate_all(text, move_number_token)[[1]]
-    nr <- nrow(locations)
-    moves_raw <- list()
-    if (nr == 0) {
-        moves_raw[[1]] <- text
-    } else {
-        i1 <- locations[1,1] 
-        if (i1 > 1) {
-            moves_raw[[1]] <- str_sub(text, 1, i1-2)
-        } 
-        for (ii in seq(nr)) {
-            is <- locations[ii,1]
-            ie <- locations[ii,2]
-            movenumber <- str_sub(text, is, ie)
-            is <- locations[ii,2]+2
-            if(ii < nr) 
-                ie <- locations[ii+1,1]-2
-            else
-                ie <- str_count(text)
-            moves_raw[[movenumber]] <- str_sub(text, is, ie) 
+    if(length(text)>0) { 
+        text <- str_squish(paste(text, collapse=" "))
+        # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
+        # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
+        move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_]+\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
+        locations <- str_locate_all(text, move_number_token)[[1]]
+        nr <- nrow(locations)
+        moves_raw <- list()
+        if (nr == 0) {
+            moves_raw[[1]] <- text
+        } else {
+            i1 <- locations[1,1] 
+            if (i1 > 1) {
+                moves_raw[[1]] <- str_sub(text, 1, i1-2)
+            } 
+            for (ii in seq(nr)) {
+                is <- locations[ii,1]
+                ie <- locations[ii,2]
+                movenumber <- str_sub(text, is, ie)
+                is <- locations[ii,2]+2
+                if(ii < nr) 
+                    ie <- locations[ii+1,1]-2
+                else
+                    ie <- str_count(text)
+                moves_raw[[movenumber]] <- str_sub(text, is, ie) 
+            }
         }
+        moves <- lapply(moves_raw, remove_comments)
+        comments <- lapply(moves_raw, extract_comments)
+        dfs <- process_moves(df, moves)
+    } else {
+        moves <- NULL
+        comments <- NULL
+        dfs <- list(SetupFn.=df)
     }
-    moves <- lapply(moves_raw, remove_comments)
-    comments <- lapply(moves_raw, extract_comments)
-    dfs <- process_moves(df, moves)
     moves <- c(list(SetupFn.=""), moves)
     comments <- c(list(SetupFn.=""), comments)
     list(moves=moves, comments=comments, dfs=dfs)
@@ -284,6 +302,12 @@ get_simplified_piece <- function(text, suit, rank) {
         "die"
     } else if (grepl("p", text)) {
         "pawn"
+    } else if (grepl("m", text)) {
+        "matchstick"
+    } else if (grepl("s", text)) {
+        "saucer"
+    } else if (grepl("\u25b2", text)) {
+        "pyramid"
     } else {
         if(!is.na(suit) && !is.na(rank)) {
             "tile"
@@ -300,10 +324,16 @@ get_simplified_ps <- function(text, suit, rank) {
         "face"
     } else if (grepl("b", text)) {
         "back"
+    } else if (grepl("l", text)) {
+        "left"
+    } else if (grepl("r", text)) {
+        "right"
     } else {
         switch(piece,
                tile = ifelse(is.na(suit) || is.na(rank), "back", "face"),
                coin = ifelse(is.na(suit), "face", "back"),
+               saucer = ifelse(is.na(suit), "face", "back"),
+               pyramid = "top",
                "face")
     }
     paste(piece, side, sep="_")
