@@ -53,6 +53,8 @@ df_xiangqi(cfg1 = pp_cfg())
 \item{cfg1}{A \code{pp_cfg} configuration list object}
 
 \item{cfg2}{A \code{pp_cfg} configuration list object}
+
+\item{seed}{Seed that determines setup, either an integer or \code{NULL}}
 }
 \description{
 \code{tibble} data frames of starting diagrams for various games.

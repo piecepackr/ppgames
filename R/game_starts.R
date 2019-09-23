@@ -11,6 +11,7 @@
 #'
 #' @param cfg1 A \code{pp_cfg} configuration list object
 #' @param cfg2 A \code{pp_cfg} configuration list object
+#' @param seed Seed that determines setup, either an integer or \code{NULL}
 #' @rdname df_game
 #' @importFrom dplyr bind_rows
 #' @name df_game
@@ -26,6 +27,21 @@ df_four_field_kono <- function(cfg1=pp_cfg()) {
                    y=rep(c(4,3,4,3,2,1,2,1), each=2),
                    angle=rep(c(180,0), each=8))
     bind_rows(df_t, df_c)
+}
+
+df_fujisan <- function(seed=NULL) {
+    set.seed(seed)
+    df_t <- tibble(piece_side="tile_back", y=1.5,
+                   x=1.5+c(seq(1,11,2),seq(2,10,2),seq(3,9,2),4,6,8,5,7,5,7,6,6))
+    df_p <- tibble(piece_side="pawn_face", x=c(1,14,14,1), y=c(2,2,1,1), suit=1:4)
+    suit <- (0:23%%4)+1
+    df_c <- tibble(piece_side="coin_face", x=rep(13:2, 2), y=rep(1:2, each=12),
+                   suit=suit, rank=rep(1:6,4))
+    df_c[which(suit==1),"rank"] <- sample(1:6)
+    df_c[which(suit==2),"rank"] <- sample(1:6)
+    df_c[which(suit==3),"rank"] <- sample(1:6)
+    df_c[which(suit==4),"rank"] <- sample(1:6)
+    bind_rows(df_t, df_c, df_p)
 }
 
 #' @rdname df_game

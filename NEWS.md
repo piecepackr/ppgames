@@ -8,6 +8,8 @@ New features
   Thanks James Vipond for some Unicode character suggestions.
 * Added prototype "Portable Piecepack Notation utilities" ``read_ppn``, ``animate_game``,
   and ``plot_game`` (closes #11).
+* Starting board generators for specific games:
+    - ``df_fujisan`` 
 
 Breaking changes
 ----------------
@@ -21,7 +23,7 @@ ppgames 0.1.0
 * Flexible rectangular starting board generators:
     - ``df_rect_board_tiles`` and ``grid.board_rect_tiles``
     - ``grid.board_rect_cells``and ``grid.board_rect_points``
-* Starting board generators for specific games
+* Starting board generators for specific games:
     - ``df_four_field_kono``
     - ``df_nine_mens_morris``
     - ``df_american_checkers``
