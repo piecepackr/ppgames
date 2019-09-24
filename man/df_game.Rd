@@ -3,6 +3,7 @@
 \name{df_game}
 \alias{df_game}
 \alias{df_four_field_kono}
+\alias{df_fujisan}
 \alias{df_nine_mens_morris}
 \alias{df_american_checkers}
 \alias{df_backgammon}
@@ -20,6 +21,8 @@
 \title{Data frames of starting diagrams for various games}
 \usage{
 df_four_field_kono(cfg1 = pp_cfg())
+
+df_fujisan(seed = NULL)
 
 df_nine_mens_morris(cfg1 = pp_cfg())
 
@@ -52,9 +55,9 @@ df_xiangqi(cfg1 = pp_cfg())
 \arguments{
 \item{cfg1}{A \code{pp_cfg} configuration list object}
 
-\item{cfg2}{A \code{pp_cfg} configuration list object}
-
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}
+
+\item{cfg2}{A \code{pp_cfg} configuration list object}
 }
 \description{
 \code{tibble} data frames of starting diagrams for various games.
