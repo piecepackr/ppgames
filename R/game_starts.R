@@ -29,6 +29,8 @@ df_four_field_kono <- function(cfg1=pp_cfg()) {
     bind_rows(df_t, df_c)
 }
 
+#' @rdname df_game
+#' @export
 df_fujisan <- function(seed=NULL) {
     set.seed(seed)
     df_t <- tibble(piece_side="tile_back", y=1.5,

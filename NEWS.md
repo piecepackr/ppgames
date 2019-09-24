@@ -7,7 +7,7 @@ New features
 * Added Unicode plaintext piecepack diagram generating function ``cat_piece``.
   Thanks James Vipond for some Unicode character suggestions.
 * Added prototype "Portable Piecepack Notation utilities" ``read_ppn``, ``animate_game``,
-  and ``plot_game`` (closes #11).
+  ``plot_move``, and ``cat_move`` (closes #11).
 * Starting board generators for specific games:
     - ``df_fujisan`` 
 
