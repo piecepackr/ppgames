@@ -4,6 +4,7 @@ Rakefile
 noto.style
 others/
 rule_ideas.rst
+raw-data/
 tmp/
 .*.pdf
 .appveyor.yml
