@@ -22,7 +22,7 @@
 \usage{
 df_four_field_kono(cfg1 = pp_cfg())
 
-df_fujisan(seed = NULL, coins = NULL)
+df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
 df_nine_mens_morris(cfg1 = pp_cfg())
 
@@ -58,6 +58,8 @@ df_xiangqi(cfg1 = pp_cfg())
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}
 
 \item{coins}{String of coin layout}
+
+\item{dice}{String of dice layout}
 
 \item{cfg2}{A \code{pp_cfg} configuration list object}
 }
