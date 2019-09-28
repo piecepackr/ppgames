@@ -29,32 +29,6 @@ df_four_field_kono <- function(cfg1=pp_cfg()) {
     bind_rows(df_t, df_c)
 }
 
-random_fujisan_coins <- function(...) {
-    coins <- integer(24)
-    coins[which(1:24 %% 4 == 0)] <- sample(0:5)
-    coins[which(1:24 %% 4 == 1)] <- sample(0:5)
-    coins[which(1:24 %% 4 == 2)] <- sample(0:5)
-    coins[which(1:24 %% 4 == 3)] <- sample(0:5)
-    coins <- matrix(coins, nrow=2, byrow=TRUE)
-    coins
-}
-first_move_needs_dice <- function(coins) {
-    !((1 %in% coins[,c(1,12)]) || (2 %in% coins[,c(2,11)]) || (3 %in% coins[,c(3,10)]) || (4 %in% coins[,c(4,9)]) || (5 %in% coins[,c(5,8)]))
-}
-random_dice <- function(...) {
-    sample(0:5, 4, replace=TRUE)
-}
-process_coins <- function(coins) {
-    if (is.character(coins)) {
-        coins <- gsub("[[:space:]]", "", coins)
-        coins <- gsub("[[:punct:]]", "", coins)
-        coins <- gsub("n", "0", coins)
-        coins <- gsub("a", "1", coins)
-        coins <- as.integer(str_split(coins, "")[[1]])
-    }
-    coins
-}
-
 #' @rdname df_game
 #' @param coins String of coin layout
 #' @param dice String of dice layout
@@ -71,12 +45,11 @@ df_fujisan <- function(seed=NULL, coins=NULL, dice=NULL) {
     if (is.vector(coins)) {
         coins <- matrix(coins, nrow=2, byrow=TRUE)   
     }
-    coins <- coins + 1
     df_t <- tibble(piece_side="tile_back", y=1.5,
                    x=1.5+c(seq(1,11,2),seq(2,10,2),seq(3,9,2),4,6,8,5,7,5,7,6,6))
     suit <- rev((0:23%%4)+1)
     df_c <- tibble(piece_side="coin_face", x=rep(2:13, 2), y=rep(1:2, each=12),
-                   suit=suit, rank=c(coins[2,], coins[1,]))
+                   suit=suit, rank=c(coins[2,], coins[1,])+1)
     df_p <- tibble(piece_side="pawn_face", x=c(1,14,14,1), y=c(2,2,1,1), suit=1:4)
     if (first_move_needs_dice(coins)) {
         if(is.null(dice)) {

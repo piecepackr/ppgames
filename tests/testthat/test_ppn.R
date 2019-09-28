@@ -5,7 +5,6 @@ ppn1 <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
 ppn2 <- read_ppn(system.file("extdata/ex2.ppn", package="ppgames"))
 ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package="ppgames"))
 ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package="ppgames"))
-ppn5 <- read_ppn(system.file("extdata/ex5.ppn", package="ppgames"))
 g1 <- ppn1[[1]]
 g2 <- ppn2[[1]]
 g3a <- ppn3[[1]]

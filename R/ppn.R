@@ -181,6 +181,7 @@ get_starting_df_from_name <- function(game_name, .l=list()) {
     game_name <- str_squish(game_name)
     game_name <- tolower(game_name)
     game_name <- gsub("'", "", game_name)
+    game_name <- gsub("-", "", game_name)
     game_name <- gsub(" ", "_", game_name)
     #### Get function from passed in list?
     fn <- get(paste0("df_", game_name))
