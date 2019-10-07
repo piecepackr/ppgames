@@ -10,6 +10,7 @@ New features
   ``plot_move``, and ``cat_move`` (#11).
 * Starting board generators for specific games:
     - ``df_fujisan`` (#24)
+    - ``df_everest``
 * Fuji-san solver ``solve_fujisan`` (#22).
 
 Breaking changes

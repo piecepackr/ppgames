@@ -16,7 +16,7 @@ ppgames: Piecepack game diagrams and rules
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-``ppgames`` is an R_ package designed to make piecepack_ game diagrams, rulesets, and rulebooks.
+``ppgames`` is an R_ package with functions that help generate piecepack_ game graphics, rulesets, and books as well as functions to parse "Portable Piecepack Notation" files and a Fuji-san solver.
 
 .. _piecepack: http://www.ludism.org/ppwiki/HomePage
 .. _piecepackr: https://github.com/trevorld/piecepackr
@@ -88,3 +88,7 @@ This package provides a prototype `Portable Piecepack Notation <https://trevorld
     plot_move(game)
     cat_move(game)
 
+Game Solvers
+------------
+
+This package provides a Fuji-san solver ``solve_fujisan`` which can compute the shortest solution (if it exists) to a given Fuji-san puzzle and output the PPN text to record/visualize the solution.
