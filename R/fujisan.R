@@ -138,6 +138,25 @@ path2movetext <- function(p) {
     }
     movetext
 }
+path2counter_intuitive <- function(p) {
+    if (length(p) == 0) { return(NA_integer_) }
+    p <- stringr::str_split(p, "_")
+    p <- lapply(p, n2alg)
+    n_counter_intuitive <- 0
+    for (ii in seq(length(p)-1)) {
+        b <- p[[ii]]
+        a <- p[[ii+1]]
+        i <- intersect(b, a)
+        bl <- alg2level(b[!(b %in% i)])
+        al <- alg2level(a[!(a %in% i)])
+        if (al < bl) { n_counter_intuitive <- n_counter_intuitive + 1 }
+    }
+    n_counter_intuitive
+}
+alg2level <- function(alg) {
+    file <- substr(alg, 1, 1)
+    switch(file, a=0, b=1, c=2, d=3, e=4, f=5, g=6, h=6, i=5, j=4, k=3, l=2, m=1, n=0)
+}
 
 coins2string <- function(coins, sep="/") {
     coins <- c(coins[1,], coins[2,])
@@ -234,7 +253,8 @@ solve_fujisan <- function(coins = random_fujisan_coins(), dice = random_dice()) 
     }
     if (!first_move_needs_dice(coins)) dice <- NA_integer_
     sol <- list(shortest_distance=d, shortest_path=p, coins=coins, dice=dice,
-         coin_string=coins2string(coins), dice_string=dice2string(dice))
+         coin_string=coins2string(coins), dice_string=dice2string(dice),
+         n_counter_intuitive=path2counter_intuitive(p))
     sol$ppn <- sol2ppn(sol)
     sol
 }
