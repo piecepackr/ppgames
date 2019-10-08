@@ -5,12 +5,15 @@
 \alias{cat_move}
 \title{Generate plaintext piecepack diagrams}
 \usage{
-cat_piece(df, ...)
+cat_piece(df, color = NULL, ...)
 
 cat_move(game, move = NULL, ...)
 }
 \arguments{
 \item{df}{Data frame containing piece info.}
+
+\item{color}{How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
+will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
 
 \item{...}{Passed to \code{cat}}
 
