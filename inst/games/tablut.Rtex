@@ -25,7 +25,7 @@ The game is played by two players one of which controls 16 ``attackers'' and oth
 %% begin.rcode starting-diagram, fig.width=10, fig.height=10, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Tablut starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]
 % df <- df_tablut()
-% pmap_piece(df, cfg=cfg, default.units="in")
+% pmap_piece(df_tablut(cfg), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
 %% end.rcode
 
 \subsection{Rules}
