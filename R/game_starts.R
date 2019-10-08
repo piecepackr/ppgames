@@ -45,6 +45,58 @@ df_four_field_kono <- function(cfg1=pp_cfg()) {
 }
 
 #' @rdname df_game
+#' @export
+df_cell_management <- function(seed=NULL) {
+    old_seed <- .Random.seed
+    on.exit(.Random.seed <- old_seed)
+    set.seed(seed)
+
+    # hexagon distances
+    #    between closest vertices: 2
+    #    between vertex to opposite vertix: 4
+    #    between vertex to vertex 2 away: 2*sqrt(3)
+    x0 <- 5.5 
+    y0 <- 4.5+sqrt(3) 
+    # Sun and Crown tiles
+    theta <- seq(30, 330, by=60)
+    r <- sqrt(3) + 1
+    xt <- x0 + to_x(theta, r)
+    yt <- y0 + to_y(theta, r)
+    df_t <- tibble(piece_side="tile_face", suit=1, rank=sample.int(6), 
+                   x=xt, y=yt, angle=theta-90)
+    df_t[sample.int(6,3), "suit"] <- 3
+
+    # Moon tiles and Coins
+    last_played <- 1
+    moon_ranks <- c(sample.int(5)+1, 1)
+    df_tm <- tibble(piece_side="tile_face", suit=2, rank=moon_ranks, x=NA, y=NA, angle=NA)
+    df_c <- tibble(piece_side="coin_face", rank=rep(NA, 12), x=NA, y=NA, angle=NA)
+    for (ii in seq(along=moon_ranks)) {
+        angle <- as.numeric(df_t[which(df_t$rank == last_played), "angle"])
+        theta <- angle+90
+        xt <- x0 + to_x(theta, sqrt(3) + 3)
+        yt <- y0 + to_y(theta, sqrt(3) + 3)
+        last_played <- moon_ranks[ii]
+
+        df_tm[ii, "angle"] <- angle
+        df_tm[ii, "x"] <- xt
+        df_tm[ii, "y"] <- yt
+
+        is <- c(2*ii-1,2*ii)
+        xc <- xt + to_x(theta+c(-135,135), 0.5*sqrt(2))
+        yc <- yt + to_y(theta+c(-135,135), 0.5*sqrt(2))
+        df_c[is, "angle"] <- angle
+        df_c[is, "x"] <- xc
+        df_c[is, "y"] <- yc
+        df_c[is, "rank"] <- moon_ranks[ii]
+    }
+    # Guards
+    df_p <- tibble(piece_side="pawn_face", suit=1:2, x=x0+c(4,5), y=y0)
+
+    bind_rows(df_t, df_tm, df_c, df_p)
+}
+
+#' @rdname df_game
 #' @param coins String of coin layout
 #' @param dice String of dice layout
 #' @export

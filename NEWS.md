@@ -9,8 +9,9 @@ New features
 * Added prototype "Portable Piecepack Notation utilities" ``read_ppn``, ``animate_game``,
   ``plot_move``, and ``cat_move`` (#11).
 * Starting board generators for specific games:
-    - ``df_fujisan`` (#24)
+    - ``df_cell_management``
     - ``df_everest``
+    - ``df_fujisan`` (#24)
 * Fuji-san solver ``solve_fujisan`` (#22).
 
 Breaking changes

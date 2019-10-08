@@ -4,6 +4,7 @@
 \alias{df_game}
 \alias{df_everest}
 \alias{df_four_field_kono}
+\alias{df_cell_management}
 \alias{df_fujisan}
 \alias{df_nine_mens_morris}
 \alias{df_american_checkers}
@@ -24,6 +25,8 @@
 df_everest()
 
 df_four_field_kono(cfg1 = pp_cfg())
+
+df_cell_management(seed = NULL)
 
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
