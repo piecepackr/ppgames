@@ -24,8 +24,9 @@ cat_piece <- function(df, color=NULL, ...) {
     if (!("suit" %in% nn)) df$suit <- NA
     if (!("angle" %in% nn)) df$angle <- NA
     df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
-    nc <- 2*xrange_heuristic(df)[2]+1
-    nr <- 2*yrange_heuristic(df)[2]+1
+    lr <- range_heuristic(df)
+    nc <- 2*lr$xmax+1
+    nr <- 2*lr$ymax+1
     cm <- list(char=matrix(" ", nrow=nr, ncol=nc),
                bg=matrix("white", nrow=nr, ncol=nc),
                fg=matrix("black", nrow=nr, ncol=nc))

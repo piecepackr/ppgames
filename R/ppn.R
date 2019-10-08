@@ -27,25 +27,25 @@ read_ppn <- function(file, parse=TRUE) {
 #' @export
 animate_game <- function(game, file="animation.gif", annotate=TRUE, ..., 
                          cfg=pp_cfg(), envir=list(piecepack=cfg)) {
-    xranges <- lapply(game$dfs, xrange)
-    # xmin <- min(sapply(xranges, function(x) x[1]), na.rm=TRUE)
-    xmax <- max(sapply(xranges, function(x) x[2]), na.rm=TRUE)
-    yranges <- lapply(game$dfs, yrange)
-    # ymin <- min(sapply(yranges, function(y) y[1]), na.rm=TRUE)
-    ymax <- max(sapply(yranges, function(y) y[2]), na.rm=TRUE)
+    dfs <- game$dfs
+
+    ranges <- lapply(dfs, range_true, cfg=cfg, envir=envir, ...)
+    xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm=TRUE)
+    ymax_op <- max(sapply(ranges, function(y) y$ymax_op), na.rm=TRUE)
+    xmax <- max(sapply(ranges, function(x) x$xmax), na.rm=TRUE)
+    ymax <- max(sapply(ranges, function(y) y$ymax), na.rm=TRUE)
     #### Adjust if xmin under 0
-    #### Adjust for oblique projection
     #### Add grid and comment annotations
     m <- max(xmax, ymax) + 0.5
     res <- round(600 / m, 0)
-    height <- res * (ymax+0.5)
-    width <- res * (xmax+0.5) 
+    height <- res * (ymax_op+0.5)
+    width <- res * (xmax_op+0.5) 
     plot_fn <- function(df, ...) {
         grid::grid.newpage()
         pmap_piece(df, default.units="in", ..., envir=envir)
         if (annotate) { annotate_plot(xmax, ymax) }
     }
-    animation::saveGIF({lapply(game$dfs, plot_fn, ...)}, movie.name=file,
+    animation::saveGIF({lapply(dfs, plot_fn, ...)}, movie.name=file,
         ani.height=height, ani.width=width, ani.res=res, ani.dev="png", ani.type="png")
     invisible(NULL)
 }
@@ -80,10 +80,9 @@ get_df_from_move <- function(game, move=NULL) {
 plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72, 
                       cfg=pp_cfg(), envir=list(piecepack=cfg)) {
     df <- get_df_from_move(game, move)
-    xmax <- xrange(df)[2]
-    width <- xmax + 0.5
-    ymax <- yrange(df)[2]
-    height <- ymax + 0.5
+    dfr <- range_true(df, cfg=cfg, envir=envir, ...)
+    width <- dfr$xmax_op + 0.5
+    height <- dfr$ymax_op + 0.5
 
     if (is.null(file)) {
         dev.new(width=width, height=height, unit="in", noRstudioGD=TRUE)
@@ -99,7 +98,7 @@ plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white
                tiff = tiff(file, width, height, "in", res=res, bg=bg))
     }
     pmap_piece(df, default.units="in", ..., envir=envir)
-    if (annotate) { annotate_plot(xmax, ymax) }
+    if (annotate) { annotate_plot(dfr$xmax, dfr$ymax) }
     if (!is.null(file)) { dev.off() }
     invisible(NULL)
 }
