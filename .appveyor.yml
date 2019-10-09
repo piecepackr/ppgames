@@ -22,7 +22,6 @@ environment:
     - R_VERSION: release
 
 build_script:
-  - travis-tool.sh install_github trevorld/bracer
   - travis-tool.sh install_github trevorld/piecepackr
   - travis-tool.sh install_deps
 
