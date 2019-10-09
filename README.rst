@@ -54,6 +54,8 @@ This package provides some prototype configurable rulesets and one work-in-progr
 
 .. code:: r
 
+    library("piecepackr")
+    library("ppgames")
     cfg <- pp_cfg() # replace with your favoured configuration
     gk <- game_kit(cfgs=list(cfg=cfg))
     save_ruleset("nine-mens-morris", gk=gk)
@@ -68,6 +70,22 @@ Starting Boards
 ---------------
 
 This package provides several starting boards in the data frame format accepted by ``piecepackr::pmap_piece`` and ``cat_piece`` that can also be used to setup games in the PPN format.  See the file ``NEWS.md`` for the complete list or look up the ``starting_boards`` man page in the package documentation.  It also contains some arbitrary rectangular board constructors that can be used to setup a variety of rectangular boards: ``df_rect_board_tiles`` as well as ``grid.board_rect_tiles`` and (to generate non-piecepack rectangular boards) ``grid.board_rect_cells`` and ``grid.board_rect_points``.
+
+.. code:: r
+
+    cfg <- pp_cfg(list(suit_text="🌞,🌜,👑,⚜,꩜",
+         suit_cex="0.6,0.7,0.75,0.9,0.9",
+        suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+        suit_color="darkred,black,darkgreen,darkblue,black",
+        border_lex=4, border_color="black", mat_width.tile_back=0.05, mat_color="white",
+        invert_colors.suited = TRUE, edge_color.coin="tan", edge_color.tile="tan",
+        shape.pawn="convex6", depth.pawn=1.0, height.pawn=0.75, width.pawn=0.75, dm_text.pawn=""
+    ))
+    pmap_piece(df_tablut(cfg), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
+
+.. image:: https://www.trevorldavis.com/piecepackr/share/rules/tablut.png
+    :alt: Diagram for a game of Tablut
+    :align: center
 
 Plaintext Unicode Piecepack Diagrams
 ------------------------------------
