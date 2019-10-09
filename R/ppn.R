@@ -104,7 +104,7 @@ plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white
 }
 
 annotate_plot <- function(xmax, ymax) {
-        gp <- gpar(fontsize=14)
+        gp <- gpar(fontsize=18, fontface="bold")
         x_indices <- seq(floor(xmax))
         grid.text(letters[x_indices], x=x_indices, y=0.25, default.units="in", gp=gp)
         y_indices <- seq(floor(ymax))
