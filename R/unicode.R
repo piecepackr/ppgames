@@ -120,6 +120,7 @@ add_pawn_back <- function(cm, suit, x, y, angle) {
     cm
 }
 add_tile_back <- function(cm, x, y) {
+    cm$fg[y+-2:2,x+-2:2] <- "black"
     # gridlines
     cm$char[y,x] <- "\u254b" # "\u256c"
     cm$char[y,x+c(-1,1)] <- "\u2501" # "\u2550"
@@ -129,15 +130,12 @@ add_tile_back <- function(cm, x, y) {
     cm <- add_box_edge(cm, x, y-2, c(2,1,NA,1)) # b
     cm <- add_box_edge(cm, x+2, y, c(1,NA,1,2)) # r
     cm <- add_box_edge(cm, x-2, y, c(1,2,1,NA)) # l
-    # cm[y,x-2] <- "\u251d" # "\u255e" # l
-    # cm[y,x+2] <- "\u2525" # "\u2561" # r
-    # cm[y+2,x] <- "\u2530" # "\u2565" # t
-    # cm[y-2,x] <- "\u2538" # "\u2568" # b
     # border line
     cm <- add_tile_border(cm, x, y)
     cm
 }
 add_tile_face <- function(cm, suit, rank, x, y, angle) {
+    cm$fg[y+-2:2,x+-2:2] <- "black"
     # rank symbol
     rs <- switch(rank, rss[1], rss[2], rss[3], rss[4], rss[5], rss[6])
     rs <- rotate(rs, angle)
