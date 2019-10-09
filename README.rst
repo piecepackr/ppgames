@@ -50,7 +50,9 @@ Unless otherwise specified everything in this repo is licensed under the `CC BY-
 Rulebooks and Rulesets
 ----------------------
 
-This package provides some prototype configurable rulesets and one work-in-progress rulebook.  One can use ``save_ruleset`` and ``save_rulebook`` to generate them::
+This package provides some prototype configurable rulesets and one work-in-progress rulebook.  One can use ``save_ruleset`` and ``save_rulebook`` to generate them:
+
+.. code:: r
 
     cfg <- pp_cfg() # replace with your favoured configuration
     gk <- game_kit(cfgs=list(cfg=cfg))
@@ -70,16 +72,31 @@ This package provides several starting boards in the data frame format accepted 
 Plaintext Unicode Piecepack Diagrams
 ------------------------------------
 
-This package provides a prototype plaintext Unicode diagram generator.  One can use ``cat_piece`` to print out diagrams to the terminal using the same ``data.frame`` input accepted by ``piecepackr::pmap_piece`` or one can use ``cat_move`` to print out diagrams using the parsed PPN games provided by ``read_ppn``::
+This package provides a prototype plaintext Unicode diagram generator.  One can use ``cat_piece`` to print out diagrams to the terminal using the same ``data.frame`` input accepted by ``piecepackr::pmap_piece`` or one can use ``cat_move`` to print out diagrams using the parsed PPN games provided by ``read_ppn``:
+
+.. code:: r
 
     cat_piece(df_fide_chess())
+
+.. image:: https://trevorldavis.com/share/piecepack/unicode_piecepack_alt_5.png
+    :alt: Unicode text diagram for Chess
+    :align: center
+
+.. code:: r
+
     cat_piece(df_xiangqi())
+
+.. image:: https://trevorldavis.com/share/piecepack/unicode_xiangqi.png
+    :alt: Unicode text diagram for Xiangqi
+    :align: center
 
 
 Portable Piecepack Notation
 ---------------------------
 
-This package provides a prototype `Portable Piecepack Notation <https://trevorldavis.com/piecepackr/portable-piecepack-notation.html>`_ parser.  One can use ``read_ppn`` to parse a PPN file and use ``animate_game``, ``plot_move``, and ``cat_move`` to visualize the moves in a parsed game::
+This package provides a prototype `Portable Piecepack Notation <https://trevorldavis.com/piecepackr/portable-piecepack-notation.html>`_ parser.  One can use ``read_ppn`` to parse a PPN file and use ``animate_game``, ``plot_move``, and ``cat_move`` to visualize the moves in a parsed game:
+
+.. code:: r
 
     ppn <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
     game <- ppn[[1]]
@@ -91,3 +108,27 @@ Game Solvers
 ------------
 
 This package provides a Fuji-san solver ``solve_fujisan`` which can compute the shortest solution (if it exists) to a given Fuji-san puzzle and output the PPN text to record/visualize the solution.
+
+.. code:: r
+
+    puzzle2 <- matrix(c(4,4,4,5,2,0,2,4,0,3,1,1,
+                        1,2,5,3,3,5,3,2,5,1,0,0), nrow=2, byrow=TRUE)
+    s2 <- solve_fujisan(coins=puzzle2)
+    game <- read_ppn(textConnection(s2$ppn))[[1]]
+
+    dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
+                          invert_colors.suited=TRUE, border_color="black", border_lex=2)
+    piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+                        suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+                        suit_cex="0.6,0.7,0.75,0.9,0.9")
+    traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
+    cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=0.375, 
+                       dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
+                       edge_color.coin="tan", edge_color.tile="tan")
+    cfg <- pp_cfg(c(piecepack_suits, dark_colorscheme, traditional_ranks, cfg3d))
+
+    animate_game(game, op_scale=1, op_angle=90, trans=op_transform, cfg=cfg, file="fujisan.gif")
+
+.. image:: https://www.trevorldavis.com/piecepackr/images/knitr/fujisan.gif
+    :alt: Animation of a Fuji-san game
+    :align: center
