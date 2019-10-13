@@ -1,4 +1,4 @@
-\section{Ultima Chess}
+\section{Ultima}
 
 %% begin.rcode opts, echo=FALSE
 % set_knitr_opts(game)
@@ -16,15 +16,15 @@
 
 \subsection{Description}
 
-Ultima chess is chess variant invented by Robert Abbot and published in Recreational Mathematics Magazine in August 1962 under the name Baroque chess.
+Ultima is chess variant invented by Robert Abbot and published in Recreational Mathematics Magazine in August 1962 under the name Baroque chess.
 
 \subsection{Setup}
 
-Ultima chess is played on a 8 by 8 board made with 16 tile backs.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:ultima-chess-starting-diagram}.
+Ultima is played on a 8 by 8 board made with 16 tile backs.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:ultima-chess-starting-diagram}.
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Ultima chess starting diagram", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Ultima starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_ultima_chess(cfg), cfg=cfg, default.units="in")
+% pmap_piece(df_ultima(cfg), cfg=cfg, default.units="in")
 %% end.rcode
 
 \subsection{External Links}
