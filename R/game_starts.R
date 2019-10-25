@@ -157,6 +157,10 @@ df_nine_mens_morris <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
+df_twelve_mens_morris <- df_nine_mens_morris
+
+#' @rdname df_game
+#' @export
 df_american_checkers <- function(cfg1=pp_cfg()) {
     df_t <- df_rect_board_tiles(8,8)
     df_c <- tibble(piece_side="coin_back", suit=rep(1:4, each=6),

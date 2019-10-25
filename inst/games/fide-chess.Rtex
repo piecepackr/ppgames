@@ -20,7 +20,7 @@
 
 \subsection{Setup}
 
-FIDE chess is played on an 8-by-8 board made with the backs of 16 tiles.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:fide-chess-starting-diagram} making sure that the two ``4`` coins used as pawns are placed in the left column so they can be easily found if necessary for queen promotion.
+FIDE chess is played on an 8-by-8 board made with the backs of 16 tiles.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:fide-chess-starting-diagram} making sure that the two ``4'' coins used as pawns are placed in the left column so they can be easily found if necessary for queen promotion.
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(FIDE) chess starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]
