@@ -7,6 +7,7 @@
 \alias{df_cell_management}
 \alias{df_fujisan}
 \alias{df_nine_mens_morris}
+\alias{df_twelve_mens_morris}
 \alias{df_american_checkers}
 \alias{df_backgammon}
 \alias{df_chaturaji}
@@ -31,6 +32,8 @@ df_cell_management(seed = NULL)
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
 df_nine_mens_morris(cfg1 = pp_cfg())
+
+df_twelve_mens_morris(cfg1 = pp_cfg())
 
 df_american_checkers(cfg1 = pp_cfg())
 
