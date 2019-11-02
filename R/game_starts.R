@@ -47,8 +47,6 @@ df_four_field_kono <- function(cfg1=pp_cfg()) {
 #' @rdname df_game
 #' @export
 df_cell_management <- function(seed=NULL) {
-    old_seed <- .Random.seed
-    on.exit(.Random.seed <- old_seed)
     set.seed(seed)
 
     # hexagon distances
@@ -101,8 +99,6 @@ df_cell_management <- function(seed=NULL) {
 #' @param dice String of dice layout
 #' @export
 df_fujisan <- function(seed=NULL, coins=NULL, dice=NULL) {
-    old_seed <- .Random.seed
-    on.exit(.Random.seed <- old_seed)
     set.seed(seed)
     if(is.null(coins)) {
         coins <- random_fujisan_coins()
