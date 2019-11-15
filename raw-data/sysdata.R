@@ -31,28 +31,32 @@ r270[[" "]] <- " "
 r90[["\u2600"]] <- "\u2600" # Suns
 r90[["\u2609"]] <- "\u2609"
 r90[["\u263c"]] <- "\u263c"
+r90[["\u25d0"]] <- "\u25d2" # Moons
 r90[["\u2665"]] <- "\u2765" # Rotated Black Heart
 r90[["\u2764"]] <- "\u2765"
 
-r180[["\u2600"]] <- "\u2600" ## Suns
+r180[["\u2600"]] <- "\u2600" # Suns
 r180[["\u2609"]] <- "\u2609"
 r180[["\u263c"]] <- "\u263c"
 r180[["\u263e"]] <- "\u263d" 
-r180[["\u263d"]] <- "\u263e" ## Moons
+r180[["\u263d"]] <- "\u263e" ## Moons 
+r180[["\u25d0"]] <- "\u25d1"
 r180[["\u2641"]] <- "\u2640" ## Crowns (Earth)
-r180[["\u2640"]] <- "\u2641" ## Crowns (Venus)
+r180[["\u2640"]] <- "\u2641" #         (Venus)
+r180[["\u0238"]] <- "\u0239" #         Small Letter db Digraph
 r180[["\u2020"]] <- "\u2e38" ## Swords (Dagger)
-r180[["\u2e38"]] <- "\u2020" ## Turned Dagger
-r180[["\u2021"]] <- "\u2021" ## Double Dagger
-r180[["\u2641"]] <- "\u2640" # Venus/Earth
+r180[["\u2e38"]] <- "\u2020" ##        Turned Dagger
+r180[["\u2021"]] <- "\u2021" ##        Double Dagger
 r180[["\u2666"]] <- "\u2666" # Diamond Suits (Black)
-r180[["\u2662"]] <- "\u2662" # (White)
+r180[["\u2662"]] <- "\u2662" #               (White)
 r180[["\u260a"]] <- "\u260b" # Ascending/Descending nodes
 r180[["\u260b"]] <- "\u260a" # Ascending/Descending nodes
+r180[["\u0ed1"]] <- "\u0ed2" ## Spirals (Lao Digit One)
 
 r270[["\u2600"]] <- "\u2600" # Suns
 r270[["\u2609"]] <- "\u2609"
 r270[["\u263c"]] <- "\u263c"
+r270[["\u25d0"]] <- "\u25d3" # Moons
 
 ## Chess symbols 
 

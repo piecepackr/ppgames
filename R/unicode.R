@@ -81,6 +81,7 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle) {
 
 # sss <- c("\u2665","\u2660","\u2663","\u2666","\u263c")
 # sss <- c("\u2600","\u263e","\u2641","\u2e38"," ")
+# Moons U+263E or U+25D0
 sss <- c("\u2600","\u263e","\u265b","\u2e38"," ")
 rss <- c("n", "a", "2", "3", "4", "5")
 fg_colors <- c("darkred", "black", "darkgreen", "darkblue", "black")
