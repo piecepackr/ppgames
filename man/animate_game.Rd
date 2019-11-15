@@ -4,8 +4,14 @@
 \alias{animate_game}
 \title{Animate a ppn game}
 \usage{
-animate_game(game, file = "animation.gif", annotate = TRUE, ...,
-  cfg = pp_cfg(), envir = list(piecepack = cfg))
+animate_game(
+  game,
+  file = "animation.gif",
+  annotate = TRUE,
+  ...,
+  cfg = pp_cfg(),
+  envir = list(piecepack = cfg)
+)
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}

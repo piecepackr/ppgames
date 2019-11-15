@@ -8,20 +8,45 @@
 \alias{df_rect_board_tiles}
 \title{Various game boards}
 \usage{
-grid.board_rect_cells(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
-  default.units = "inches", draw = TRUE, name = NULL, gp = gpar(),
-  vp = NULL)
+grid.board_rect_cells(
+  nrows = 8,
+  ncols = 8,
+  x0 = 1,
+  y0 = 1,
+  default.units = "inches",
+  draw = TRUE,
+  name = NULL,
+  gp = gpar(),
+  vp = NULL
+)
 
-grid.board_rect_points(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
-  default.units = "inches", draw = TRUE, name = NULL, gp = gpar(),
-  vp = NULL)
+grid.board_rect_points(
+  nrows = 8,
+  ncols = 8,
+  x0 = 1,
+  y0 = 1,
+  default.units = "inches",
+  draw = TRUE,
+  name = NULL,
+  gp = gpar(),
+  vp = NULL
+)
 
-grid.board_rect_tiles(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
-  max_tiles = 24, cfg = pp_cfg(), envir = NULL, draw = TRUE,
-  name = NULL, gp = NULL, vp = NULL)
+grid.board_rect_tiles(
+  nrows = 8,
+  ncols = 8,
+  x0 = 1,
+  y0 = 1,
+  max_tiles = 24,
+  cfg = pp_cfg(),
+  envir = NULL,
+  draw = TRUE,
+  name = NULL,
+  gp = NULL,
+  vp = NULL
+)
 
-df_rect_board_tiles(nrows = 8, ncols = 8, x0 = 1, y0 = 1,
-  max_tiles = 24)
+df_rect_board_tiles(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles = 24)
 }
 \arguments{
 \item{nrows}{Number of rows in game board}

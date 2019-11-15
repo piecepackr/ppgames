@@ -5,11 +5,14 @@
 \alias{save_rulebook}
 \title{Save ruleset and/or rulebook}
 \usage{
-save_ruleset(game, gk = game_kit(), output_dir = getwd(),
-  quietly = TRUE)
+save_ruleset(game, gk = game_kit(), output_dir = getwd(), quietly = TRUE)
 
-save_rulebook(book = "the-historical-piecepacker", gk = game_kit(),
-  output_dir = getwd(), quietly = TRUE)
+save_rulebook(
+  book = "the-historical-piecepacker",
+  gk = game_kit(),
+  output_dir = getwd(),
+  quietly = TRUE
+)
 }
 \arguments{
 \item{game}{Game name}

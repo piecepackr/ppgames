@@ -4,9 +4,17 @@
 \alias{plot_move}
 \title{Plot game move}
 \usage{
-plot_move(game, file = NULL, move = NULL, annotate = TRUE, ...,
-  bg = "white", res = 72, cfg = pp_cfg(), envir = list(piecepack =
-  cfg))
+plot_move(
+  game,
+  file = NULL,
+  move = NULL,
+  annotate = TRUE,
+  ...,
+  bg = "white",
+  res = 72,
+  cfg = pp_cfg(),
+  envir = list(piecepack = cfg)
+)
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
