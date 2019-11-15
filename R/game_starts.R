@@ -9,9 +9,13 @@
 #' \code{tibble} data frames of starting diagrams for various games.
 #'   data frame output can usually be plotted with \code{pmap_piece(df, cfg=cfg, default.units="in")}.
 #'
-#' @param cfg1 A \code{pp_cfg} configuration list object
-#' @param cfg2 A \code{pp_cfg} configuration list object
 #' @param seed Seed that determines setup, either an integer or \code{NULL}
+#' @param cfg2 A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)
+#' @param has_matchsticks Has matchsticks
+#' @param has_subpack Has a piecepack subpack
+#' @param die_width Width of dice
+#' @param max_tiles Maximum number of (piecepack) tiles available to build boards
+#' @param suit_colors Character vector of the suit colors
 #' @rdname df_game
 #' @importFrom dplyr bind_rows
 #' @name df_game
@@ -34,7 +38,7 @@ df_everest <- function() {
 
 #' @rdname df_game
 #' @export
-df_four_field_kono <- function(cfg1=pp_cfg()) {
+df_four_field_kono <- function() {
     df_t <- df_rect_board_tiles(4,4)
     df_c <- tibble(piece_side="coin_back",
                    suit=rep(1:4, each=4), 
@@ -129,7 +133,7 @@ df_fujisan <- function(seed=NULL, coins=NULL, dice=NULL) {
 
 #' @rdname df_game
 #' @export
-df_nine_mens_morris <- function(cfg1=pp_cfg()) {
+df_nine_mens_morris <- function(has_matchsticks=FALSE) {
     df <- tibble(piece_side="tile_face",
            suit=rep(1:4, each=6),
            rank=rep(1:6, 4),
@@ -137,7 +141,7 @@ df_nine_mens_morris <- function(cfg1=pp_cfg()) {
                7,13,7,11,7,9,   1,1,3,3,5,5),
            y=c(13,13,11,11,9,9,   7,13,7,11,7,9,
                1,1,3,3,5,5,       7,1,7,3,7,5))
-    if (cfg1$has_matchsticks) {
+    if (has_matchsticks) {
         df_m <- tibble(piece_side="matchstick_face",
                        suit=rep(1:4, each=6),
                        rank=4, 
@@ -157,7 +161,7 @@ df_twelve_mens_morris <- df_nine_mens_morris
 
 #' @rdname df_game
 #' @export
-df_american_checkers <- function(cfg1=pp_cfg()) {
+df_american_checkers <- function() {
     df_t <- df_rect_board_tiles(8,8)
     df_c <- tibble(piece_side="coin_back", suit=rep(1:4, each=6),
                    x=c(1,3,2,4,1,3,  5,7,6,8,5,7,
@@ -169,7 +173,7 @@ df_american_checkers <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-df_backgammon <- function(cfg1=pp_cfg()) {
+df_backgammon <- function() {
     y_top <- 4
     y_bot <- 1
     x_1 <- 25-2+1
@@ -230,7 +234,7 @@ df_backgammon <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-df_chaturaji <- function(cfg1=pp_cfg()) {
+df_chaturaji <- function() {
     df_t <- df_rect_board_tiles(8, 8)
     df_p <- tibble(piece_side="coin_back", 
                    x=c(rep(2,4), 5:8, rep(7,4), 1:4),
@@ -250,7 +254,7 @@ df_chaturaji <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-df_cribbage_board <- function(cfg1=pp_cfg()) {
+df_cribbage_board <- function() {
     df_l <- df_rect_board_tiles(30, 3, x0=1, y0=3, max_tiles=12)
     df_r <- df_rect_board_tiles(30, 3, x0=6, y0=3, max_tiles=12)
     df_c <- tibble(piece_side="coin_face", x=rep(c(2, 7), each=12),
@@ -263,11 +267,9 @@ df_cribbage_board <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-textGrob_cribbage_board <- function(cfg1=pp_cfg()) {
-    gp1 <- gpar(col=c(cfg1$get_suit_color(1), cfg1$get_suit_color(2)),
-                fontsize=32)
-    gp2 <- gpar(col=c(cfg1$get_suit_color(3), cfg1$get_suit_color(4)),
-                fontsize=32)
+textGrob_cribbage_board <- function(suit_colors=rep("black", 4)) {
+    gp1 <- gpar(col=c(suit_colors[1], suit_colors[2]), fontsize=32)
+    gp2 <- gpar(col=c(suit_colors[3], suit_colors[4]), fontsize=32)
     grobTree(textGrob(1:30, x=0.5, y=3:32, default.units="in", gp=gp1),
              textGrob(31:60, x=3.5, y=32:3, default.units="in", gp=gp1),
              textGrob(1:30, x=5.5, y=3:32, default.units="in", gp=gp2),
@@ -275,35 +277,50 @@ textGrob_cribbage_board <- function(cfg1=pp_cfg()) {
              )
 }
 
-df_fide_chess_pieces <- function(cfg1=pp_cfg()) {
-    df_p1 <- tibble(piece_side="coin_back",
-                    suit=(1:8+1) %% 2 + 1, x=1:8, y=7, angle=180)
-    df_p2 <- tibble(piece_side="coin_back",
-                    suit=1:8 %% 2 + 3, x=1:8, y=2)
-    df_r <- tibble(piece_side="die_face", suit=1:4, rank=4,
-                   x=c(1,8,8,1), y=c(8,8,1,1), angle=c(180,180,0,0))
-    df_n <- tibble(piece_side="coin_face", rank=2,
-                   x=c(2,7,7,2), y=c(8,8,1,1), angle=c(180,180,0,0))
-    df_b <- tibble(piece_side="pawn_face", suit=1:4, 
-                   x=c(3,6,6,3), y=c(8,8,1,1), angle=c(180,180,0,0))
-    df_q <- tibble(piece_side="coin_face", rank=5,
-                   x=4, y=c(8,1), angle=c(180,0))
-    df_k <- tibble(piece_side="coin_face", rank=6,
-                   x=5, y=c(8,1), angle=c(180,0))
-    bind_rows(df_p1, df_p2, df_r, df_n, df_b, df_q, df_k)
+df_fide_chess_pieces <- function(has_subpack=FALSE) {
+    if (has_subpack) {
+        df_pb <- tibble(piece_side="coin_back", cfg="piecepack",
+                        suit=rep(1:2, each=4), x=1:8, y=7, angle=180)
+        df_ob <- tibble(piece_side="tile_face", cfg="subpack",
+                        suit=rep(1:2, each=4), x=1:8, y=8, angle=180,
+                        rank=c(4,2,3,5,6,3,2,4))
+        df_pw <- tibble(piece_side="coin_back", cfg="piecepack",
+                        suit=rep(3:4, each=4), x=1:8, y=2)
+        df_ow <- tibble(piece_side="tile_face", cfg="subpack",
+                        suit=rep(3:4, each=4), x=1:8, y=1, 
+                        rank=c(4,2,3,5,6,3,2,4))
+        bind_rows(df_pb, df_pw, df_ow, df_ob)
+    } else {
+        df_p1 <- tibble(piece_side="coin_back",
+                        suit=(1:8+1) %% 2 + 1, x=1:8, y=7, angle=180)
+        df_p2 <- tibble(piece_side="coin_back",
+                        suit=1:8 %% 2 + 3, x=1:8, y=2)
+        df_r <- tibble(piece_side="die_face", suit=1:4, rank=4,
+                       x=c(1,8,8,1), y=c(8,8,1,1), angle=c(180,180,0,0))
+        df_n <- tibble(piece_side="coin_face", rank=2,
+                       x=c(2,7,7,2), y=c(8,8,1,1), angle=c(180,180,0,0))
+        df_b <- tibble(piece_side="pawn_face", suit=1:4, 
+                       x=c(3,6,6,3), y=c(8,8,1,1), angle=c(180,180,0,0))
+        df_q <- tibble(piece_side="coin_face", rank=5,
+                       x=4, y=c(8,1), angle=c(180,0))
+        df_k <- tibble(piece_side="coin_face", rank=6,
+                       x=5, y=c(8,1), angle=c(180,0))
+        bind_rows(df_p1, df_p2, df_r, df_n, df_b, df_q, df_k)
+    }
 }
 
 #' @rdname df_game
 #' @export
-df_fide_chess <- function(cfg1=pp_cfg()) {
+df_fide_chess <- function(has_subpack=FALSE) {
     df_t <- df_rect_board_tiles(8, 8)
-    df_p <- df_fide_chess_pieces(cfg1)
+    if(has_subpack) { df_t$cfg <- "piecepack" }
+    df_p <- df_fide_chess_pieces(has_subpack)
     bind_rows(df_t, df_p)
 }
 
 #' @rdname df_game
 #' @export
-df_ultima <- function(cfg1=pp_cfg()) {
+df_ultima <- function() {
     df_t <- df_rect_board_tiles(8, 8)
     df_p1 <- tibble(piece_side="coin_back",
                     suit=(1:8+1) %% 2 + 1, x=1:8, y=7, angle=180)
@@ -328,17 +345,17 @@ df_baroque_chess <- df_ultima
 
 #' @rdname df_game
 #' @export
-df_alice_chess <- function(cfg1=pp_cfg()) {
-    max_tiles <- floor(cfg1$n_suits * cfg1$n_ranks / 2)
-    df_t1 <- df_rect_board_tiles(8, 8, max_tiles=max_tiles)
-    df_t2 <- df_rect_board_tiles(8, 8, max_tiles=max_tiles, x0=11)
-    df_p <- df_fide_chess_pieces(cfg1)
+df_alice_chess <- function(has_subpack=FALSE, max_tiles=24) {
+    max_tiles_per_board <- floor(max_tiles / 2)
+    df_t1 <- df_rect_board_tiles(8, 8, max_tiles=max_tiles_per_board)
+    df_t2 <- df_rect_board_tiles(8, 8, max_tiles=max_tiles_per_board, x0=11)
+    df_p <- df_fide_chess_pieces(has_subpack)
     bind_rows(df_t1, df_t2, df_p)
 }
 
 #' @rdname df_game
 #' @export
-df_four_seasons_chess <- function(cfg1=pp_cfg()) {
+df_four_seasons_chess <- function() {
     df_t <- df_rect_board_tiles(8, 8)
     angles <- c(180,90,0,-90)
     suits <- c(1,4,2,3)
@@ -359,55 +376,54 @@ df_four_seasons_chess <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-df_shogi <- function(cfg1=pp_cfg(), cfg2=cfg1) {
-    ee <- list(cfg1=cfg1, cfg2=cfg2)
+df_shogi <- function(cfg2="piecepack") {
     # board
     x_t <- seq(2, 8, by=2)
     y_tr <- rep(c(4, 6), each=4)
     y_tb <- rep(c(2, 8), each=4)
     df_t <- tibble(piece_side="tile_back", 
                    x=rep(x_t,4), y=c(y_tr, y_tb),
-                   cfg=rep(c("cfg2", "cfg1"), each=8))
+                   cfg=rep(c(cfg2, "piecepack"), each=8))
     
     # pawns
     df_pb <- tibble(piece_side="coin_back",
-                   suit=1:9 %% cfg1$n_suits +1,
+                   suit=1:9 %% 4 +1,
                    x=1:9, y=3,
-                   cfg="cfg1")
+                   cfg="piecepack")
     df_pt <- df_pb
     df_pt$y <- 7
     df_pt$angle <- 180
     
     # bishops
-    df_b <- tibble(piece_side="coin_face", rank=3, cfg="cfg2",
+    df_b <- tibble(piece_side="coin_face", rank=3, cfg=cfg2,
                    x=c(2, 10-2), y=c(2, 10-2), angle=c(0, 180))
 
     # rooks
-    df_r <- tibble(piece_side="coin_face", rank=4, cfg="cfg2",
+    df_r <- tibble(piece_side="coin_face", rank=4, cfg=cfg2,
                    x=c(8, 10-8), y=c(2, 10-2), angle=c(0, 180))
 
     # lances
-    df_l <- tibble(piece_side="coin_face", rank=5, cfg="cfg2",
+    df_l <- tibble(piece_side="coin_face", rank=5, cfg=cfg2,
                    x=c(1,9,10-1,10-9), y=c(1,1,10-1,10-1), angle=c(0,0,180,180))
     # knights
-    df_n <- tibble(piece_side="coin_face", rank=2, cfg="cfg2",
+    df_n <- tibble(piece_side="coin_face", rank=2, cfg=cfg2,
                    x=c(2,8,10-2,10-8), y=c(1,1,10-1,10-1), angle=c(0,0,180,180))
 
     # silvers
-    df_s <- tibble(piece_side="coin_face", rank=6, cfg="cfg2",
+    df_s <- tibble(piece_side="coin_face", rank=6, cfg=cfg2,
                    x=c(3,7,10-3,10-7), y=c(1,1,10-1,10-1), angle=c(0,0,180,180))
     # golds
-    df_g <- tibble(piece_side="die_face", suit=1:4, rank=6, cfg="cfg1",
+    df_g <- tibble(piece_side="die_face", suit=1:4, rank=6, cfg="piecepack",
                    x=c(4,6,10-4,10-6), y=c(1,1,10-1,10-1), angle=c(0,0,180,180))
     # kings
-    df_k <- tibble(piece_side="pawn_face", suit=cfg1$n_suits-0:1, cfg="cfg1",
+    df_k <- tibble(piece_side="pawn_face", suit=4-0:1, cfg="piecepack",
                    x=c(5,10-5), y=c(1,10-1), angle=c(0,180))
     bind_rows(df_t, df_pb, df_pt, df_b, df_r, df_l, df_n, df_s, df_g, df_k)
 }
 
 #' @rdname df_game
 #' @export
-df_tablut <- function(cfg1=pp_cfg()) {
+df_tablut <- function(die_width=0.5) {
     df_t <- df_rect_board_tiles(9, 9)
     df_cf <- tibble(piece_side="coin_face",
                  rank=rep(3:6, 4),
@@ -419,7 +435,7 @@ df_tablut <- function(cfg1=pp_cfg()) {
                  x=c(5,5,6,7,5,5,4,3),
                  y=c(6,7,5,5,4,3,5,5),
                  angle=rep(c(0, -90, 180,  90), each=2))
-    if (cfg1$get_width("die_face") > 0.25 * cfg1$get_width("tile_back")) {
+    if (piecepackr:::less_than(0.5, die_width)) {
         df_d <- tibble(piece_side="die_face", 
                        suit=3, rank=1, x=5, y=5, angle=0)
     } else {
@@ -435,7 +451,7 @@ df_tablut <- function(cfg1=pp_cfg()) {
 
 #' @rdname df_game
 #' @export
-df_xiangqi <- function(cfg1=pp_cfg()) {
+df_xiangqi <- function() {
     ang2 <- rep(c(180, 0), each=2)
     suits <- c(1,2,4,3)
     x2 <- function(x) { rep(c(x, 10-x), 2) }

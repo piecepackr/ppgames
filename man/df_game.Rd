@@ -25,52 +25,60 @@
 \usage{
 df_everest()
 
-df_four_field_kono(cfg1 = pp_cfg())
+df_four_field_kono()
 
 df_cell_management(seed = NULL)
 
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
-df_nine_mens_morris(cfg1 = pp_cfg())
+df_nine_mens_morris(has_matchsticks = FALSE)
 
-df_twelve_mens_morris(cfg1 = pp_cfg())
+df_twelve_mens_morris(has_matchsticks = FALSE)
 
-df_american_checkers(cfg1 = pp_cfg())
+df_american_checkers()
 
-df_backgammon(cfg1 = pp_cfg())
+df_backgammon()
 
-df_chaturaji(cfg1 = pp_cfg())
+df_chaturaji()
 
-df_cribbage_board(cfg1 = pp_cfg())
+df_cribbage_board()
 
-textGrob_cribbage_board(cfg1 = pp_cfg())
+textGrob_cribbage_board(suit_colors = rep("black", 4))
 
-df_fide_chess(cfg1 = pp_cfg())
+df_fide_chess(has_subpack = FALSE)
 
-df_ultima(cfg1 = pp_cfg())
+df_ultima()
 
-df_baroque_chess(cfg1 = pp_cfg())
+df_baroque_chess()
 
-df_alice_chess(cfg1 = pp_cfg())
+df_alice_chess(has_subpack = FALSE, max_tiles = 24)
 
-df_four_seasons_chess(cfg1 = pp_cfg())
+df_four_seasons_chess()
 
-df_shogi(cfg1 = pp_cfg(), cfg2 = cfg1)
+df_shogi(cfg2 = "piecepack")
 
-df_tablut(cfg1 = pp_cfg())
+df_tablut(die_width = 0.5)
 
-df_xiangqi(cfg1 = pp_cfg())
+df_xiangqi()
 }
 \arguments{
-\item{cfg1}{A \code{pp_cfg} configuration list object}
-
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}
 
 \item{coins}{String of coin layout}
 
 \item{dice}{String of dice layout}
 
-\item{cfg2}{A \code{pp_cfg} configuration list object}
+\item{has_matchsticks}{Has matchsticks}
+
+\item{suit_colors}{Character vector of the suit colors}
+
+\item{has_subpack}{Has a piecepack subpack}
+
+\item{max_tiles}{Maximum number of (piecepack) tiles available to build boards}
+
+\item{cfg2}{A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)}
+
+\item{die_width}{Width of dice}
 }
 \description{
 \code{tibble} data frames of starting diagrams for various games.

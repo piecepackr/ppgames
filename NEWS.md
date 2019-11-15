@@ -1,3 +1,19 @@
+ppgames 0.3.0
+=============
+
+New features
+------------
+
+* ``df_fide_chess`` and ``df_alice_chess`` now have a new argument ``has_subpack`` which if ``TRUE``
+  will provide suitable piecepack "stackpack" diagrams.
+
+Breaking changes
+----------------
+
+* Arguments for starting board generators have been changed.  
+  In particular functions no longer takes piecepackr configuration list objects as arguments but 
+  instead uses arguments like ``has_matchsticks`` to determine how to customize output.
+
 ppgames 0.2.1
 =============
 
@@ -18,7 +34,7 @@ New features
 Breaking changes
 ----------------
 
-* ``df_ultima_chess`` renamed ``df_ultima``, ``df_baroque_chess`` added as an alias
+* ``df_ultima_chess`` renamed ``df_ultima``, ``df_baroque_chess`` added as an alias.
 
 ppgames 0.1.0
 =============

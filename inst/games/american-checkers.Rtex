@@ -24,7 +24,7 @@ American checkers is played on an 8-by-8 board made with the backs of 16 tiles. 
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) checkers starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_american_checkers(cfg), cfg=cfg, default.units="in")
+% pmap_piece(df_american_checkers(), cfg=cfg, default.units="in")
 %% end.rcode
 
 \subsection{External Links}

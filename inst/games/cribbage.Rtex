@@ -26,8 +26,8 @@ Give each player 12 tiles and arrange them in one vertical column in groups of t
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=33, out.width="2in", out.height="7.33in", fig.cap="Cribbage starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_cribbage_board(cfg), cfg=cfg, default.units="in")
-% grid.draw(textGrob_cribbage_board(cfg))
+% pmap_piece(df_cribbage_board(), cfg=cfg, default.units="in")
+% grid.draw(textGrob_cribbage_board(cfg$get_suit_color()))
 %% end.rcode
 
 \subsection{External Links}

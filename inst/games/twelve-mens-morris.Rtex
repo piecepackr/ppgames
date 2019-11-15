@@ -25,13 +25,13 @@ Figure \ref{fig:twelve-mens-morris-starting-diagram} shows the recommended setup
 %% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Twelve Men's Morris starting diagram", echo=FALSE
 % cfg <- gk$get_piecepacks(1)[[1]]
 % pushViewport(viewport(width=inch(14), height=inch(14)))
-% pmap_piece(df_nine_mens_morris(cfg), cfg=cfg, default.units="in")
+% pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 % popViewport()
 %% end.rcode
 
 %% begin.rcode possible-moves, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Moves of the pieces in Twelve Men's Morris.  Once a player has been reduced to three pieces their movements are no longer restricted.", echo=FALSE
 % pushViewport(viewport(width=inch(14), height=inch(14)))
-% pmap_piece(df_nine_mens_morris(cfg), cfg=cfg, default.units="in")
+% pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 % grid.piece("coin_back", suit=1, cfg=cfg, default.units="in",
 %           x=c(3, 7, 7, 9, 13), y=c(7, 5, 1, 9, 13))
 % gp <- gpar(lex=10)
