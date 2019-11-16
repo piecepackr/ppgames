@@ -1,9 +1,3 @@
-# svg("shogi.svg", width=10, height=10)
-# df <- df_shogi(cfg)
-# ee <- list(cfg1=cfg, cfg2=cfg)
-# pmap_piece(df, default.units="in", envir=ee)
-# invisible(dev.off())
-
 #' Data frames of starting diagrams for various games
 #'
 #' \code{tibble} data frames of starting diagrams for various games.
@@ -447,6 +441,28 @@ df_tablut <- function(die_width=0.5) {
     }
     df_p <- tibble(piece_side="pawn_face", suit=3, x=5, y=5)
     bind_rows(df_t, df_cf, df_cb, df_d, df_p)
+}
+
+#' @rdname df_game
+#' @export
+df_triactor <- function(seed=NULL, cfg2="playing_cards_expansion") {
+    set.seed(NULL)
+    df_tb <- tibble(piece_side="tile_back", cfg="piecepack",
+                    x=0.5+rep(c(seq(5,15,2),1,2,18,19),2),
+                    y=0.5+c(rep(1,6),5,3,3,5,rep(11,6),7,9,9,7),
+                    angle=rep(c(rep(0,7),90,90,0),2))
+    df_tf <- tibble(piece_side="tile_face", cfg="piecepack",
+                    x=0.5+c(3,17,17,3), y=0.5+c(11,11,1,1),
+                    suit=1:4, rank=1)
+    df_c1 <- tibble(piece_side="coin_back", cfg="piecepack",
+                    suit=1:4, rank=sample.int(1:6, 4, replace=TRUE),
+                    x=0.5+c(5,15,15,5),y=0.5+c(11,11,1,1))
+    df_c2 <- tibble(piece_side="coin_back", cfg=cfg2,
+                    suit=1:4, rank=sample.int(1:6, 4, replace=TRUE),
+                    x=0.5+c(2,18,18,2), y=0.5+c(9,9,3,3))
+    df_p <- tibble(piece_side="pawn_face", cfg=rep(c("piecepack", cfg2), each=4),
+                   x=10.5, y=0.5+0:7, angle=90, suit=rep(1:4, 2))
+    bind_rows(df_tb, df_tf, df_c1, df_c2, df_p)
 }
 
 #' @rdname df_game

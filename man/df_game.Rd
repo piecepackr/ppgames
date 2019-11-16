@@ -20,6 +20,7 @@
 \alias{df_four_seasons_chess}
 \alias{df_shogi}
 \alias{df_tablut}
+\alias{df_triactor}
 \alias{df_xiangqi}
 \title{Data frames of starting diagrams for various games}
 \usage{
@@ -58,6 +59,8 @@ df_four_seasons_chess()
 df_shogi(cfg2 = "piecepack")
 
 df_tablut(die_width = 0.5)
+
+df_triactor(seed = NULL, cfg2 = "playing_cards_expansion")
 
 df_xiangqi()
 }
