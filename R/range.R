@@ -9,7 +9,10 @@ range_heuristic <- function(df) {
 
 #' @importFrom rlang .data
 range_true <- function(df, cfg=pp_cfg(), envir=NULL, op_scale=0, op_angle=90, ...) {
-    if(nrow(df) == 0) { return (c(NA_real_, NA_real_)) }
+    if(nrow(df) == 0) { 
+        return(tibble::tibble(xmin=NA, xmax=NA, ymin=NA, ymax=NA, 
+                              xmin_op=NA, xmax_op=NA, ymin_op=NA, ymax_op=NA))
+    }
     df <- piecepackr:::add_3d_info(df, cfg, envir)
     df <- dplyr::mutate(df,
                         xllb = piecepackr:::op_x(.data$xll, .data$yll, .data$zb, op_angle, op_scale),

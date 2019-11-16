@@ -9,8 +9,8 @@ animate_game(
   file = "animation.gif",
   annotate = TRUE,
   ...,
-  cfg = pp_cfg(),
-  envir = list(piecepack = cfg)
+  cfg = NULL,
+  envir = NULL
 )
 }
 \arguments{

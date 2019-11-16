@@ -26,7 +26,12 @@ read_ppn <- function(file, parse=TRUE) {
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
 animate_game <- function(game, file="animation.gif", annotate=TRUE, ..., 
-                         cfg=pp_cfg(), envir=list(piecepack=cfg)) {
+                         cfg=NULL, envir=NULL) {
+
+    ce <- piecepackr:::default_cfg_envir(cfg, envir)
+    cfg <- ce$cfg
+    envir <- ce$envir
+
     dfs <- game$dfs
 
     ranges <- lapply(dfs, range_true, cfg=cfg, envir=envir, ...)
@@ -78,7 +83,12 @@ get_df_from_move <- function(game, move=NULL) {
 #' @import grDevices
 #' @export
 plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72, 
-                      cfg=pp_cfg(), envir=list(piecepack=cfg)) {
+                      cfg=NULL, envir=NULL) {
+
+    ce <- piecepackr:::default_cfg_envir(cfg, envir)
+    cfg <- ce$cfg
+    envir <- ce$envir
+
     df <- get_df_from_move(game, move)
     dfr <- range_true(df, cfg=cfg, envir=envir, ...)
     width <- dfr$xmax_op + 0.5

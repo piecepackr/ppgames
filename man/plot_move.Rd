@@ -12,8 +12,8 @@ plot_move(
   ...,
   bg = "white",
   res = 72,
-  cfg = pp_cfg(),
-  envir = list(piecepack = cfg)
+  cfg = NULL,
+  envir = NULL
 )
 }
 \arguments{
