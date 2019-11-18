@@ -7,7 +7,10 @@ New features
 * ``df_fide_chess`` and ``df_alice_chess`` now have a new argument ``has_subpack`` which if ``TRUE``
   will provide suitable piecepack "stackpack" diagrams.
 * Starting board generators for specific games:
-  - ``df_triactor``
+  - ``df_triactor`` (#36)
+* Portable Piecepack Notation enhancements:
+  - Simplified piece notation now supports playing cards expansion (#30),
+    icehouse pieces (#34), and (stackpack) subpacks
 
 Breaking changes
 ----------------

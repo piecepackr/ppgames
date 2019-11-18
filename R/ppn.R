@@ -266,17 +266,33 @@ parse_simplified_piece <- function(text) {
     rank <- get_simplified_rank(text)
     angle <- get_simplified_angle(text)
     ps <- get_simplified_ps(text, suit, rank)
-    tibble(piece_side=ps, suit=suit, rank=rank, angle=angle, cfg="piecepack")
+    cfg <- get_simplified_cfg(text)
+    tibble(piece_side=ps, suit=suit, rank=rank, angle=angle, cfg=cfg)
+}
+get_simplified_cfg <- function(text) {
+    if (grepl("\u25b3", text)) {
+        "icehouse_pieces"
+    } else if (grepl("\u2665|\u2660|\u2663|\u2666", text)) {
+        "playing_cards_expansion"
+    } else if (grepl("\u00b5|\u03bc|u", text)) {
+        "subpack"
+    } else {
+        "piecepack"
+    }
 }
 get_simplified_suit <- function(text) {
-    if (grepl("S", text)) {
+    if (grepl("S|\u2665|R", text)) {
         1
-    } else if (grepl("M", text)) {
+    } else if (grepl("M|\u2660|K", text)) {
         2 
-    } else if (grepl("C", text)) {
+    } else if (grepl("C|\u2663|G", text)) {
         3
-    } else if (grepl("A", text)) {
+    } else if (grepl("A|\u2666|B", text)) {
         4
+    } else if (grepl("Y", text)) {
+        5
+    } else if (grepl("W", text)) {
+        6
     } else {
         NA_integer_
     }
@@ -316,7 +332,7 @@ get_simplified_piece <- function(text, suit, rank) {
         "matchstick"
     } else if (grepl("s", text)) {
         "saucer"
-    } else if (grepl("\u25b2", text)) {
+    } else if (grepl("\u25b2|\u25b3", text)) {
         "pyramid"
     } else {
         if(!is.na(suit) && !is.na(rank)) {
