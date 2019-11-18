@@ -274,6 +274,8 @@ get_simplified_cfg <- function(text) {
         "icehouse_pieces"
     } else if (grepl("\u2665|\u2660|\u2663|\u2666", text)) {
         "playing_cards_expansion"
+    } else if (grepl("\u2661|\u2664|\u2667|\u2662", text)) {
+        "dual_piecepacks_expansion"
     } else if (grepl("\u00b5|\u03bc|u", text)) {
         "subpack"
     } else {
@@ -281,13 +283,13 @@ get_simplified_cfg <- function(text) {
     }
 }
 get_simplified_suit <- function(text) {
-    if (grepl("S|\u2665|R", text)) {
+    if (grepl("S|\u2665|R|\u2661", text)) {
         1
-    } else if (grepl("M|\u2660|K", text)) {
+    } else if (grepl("M|\u2660|K|\u2664", text)) {
         2 
-    } else if (grepl("C|\u2663|G", text)) {
+    } else if (grepl("C|\u2663|G|\u2667", text)) {
         3
-    } else if (grepl("A|\u2666|B", text)) {
+    } else if (grepl("A|\u2666|B|\u2662", text)) {
         4
     } else if (grepl("Y", text)) {
         5

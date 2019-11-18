@@ -10,7 +10,8 @@ New features
   - ``df_triactor`` (#36)
 * Portable Piecepack Notation enhancements:
   - Simplified piece notation now supports playing cards expansion (#30),
-    icehouse pieces (#34), and (stackpack) subpacks
+    icehouse pieces (#34), (stackpack) subpacks,
+    and dual piecepacks expansion
 
 Breaking changes
 ----------------

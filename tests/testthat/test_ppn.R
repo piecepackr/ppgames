@@ -95,6 +95,10 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(D$piece_side, "tile_face")
     expect_equal(D$cfg, "playing_cards_expansion")
     expect_equal(D$suit, 4)
+    D <- parse_simplified_piece("\u26625")
+    expect_equal(D$piece_side, "tile_face")
+    expect_equal(D$cfg, "dual_piecepacks_expansion")
+    expect_equal(D$suit, 4)
     # icehouse pieces
     I <- parse_simplified_piece("\u25b3M2")
     expect_equal(I$piece_side, "pyramid_top")
