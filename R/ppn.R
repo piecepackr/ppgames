@@ -116,9 +116,14 @@ plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white
 annotate_plot <- function(xmax, ymax) {
         gp <- gpar(fontsize=18, fontface="bold")
         x_indices <- seq(floor(xmax))
-        grid.text(letters[x_indices], x=x_indices, y=0.25, default.units="in", gp=gp)
+        l <- letters[x_indices]
+        l <- stringr::str_pad(l, max(stringr::str_count(l)))
+        grid.text(l, x=x_indices, y=0.25, default.units="in", gp=gp)
         y_indices <- seq(floor(ymax))
-        grid.text(as.character(y_indices), x=0.25, y=y_indices, default.units="in", gp=gp)
+        n <- as.character(y_indices)
+        n <- stringr::str_pad(n, max(stringr::str_count(n)))
+        grid.text(n, x=0.25, y=y_indices, default.units="in", gp=gp)
+        invisible(NULL)
 }
 
 # Parse ppn files
@@ -278,6 +283,8 @@ get_simplified_cfg <- function(text) {
         "dual_piecepacks_expansion"
     } else if (grepl("\u00b5|\u03bc|u", text)) {
         "subpack"
+    } else if (grepl("\u2b22|\u2b21|\u2b23", text)) {
+        "hexpack"
     } else {
         "piecepack"
     }

@@ -95,6 +95,7 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(D$piece_side, "tile_face")
     expect_equal(D$cfg, "playing_cards_expansion")
     expect_equal(D$suit, 4)
+    # dual piecepacks expansion
     D <- parse_simplified_piece("\u26625")
     expect_equal(D$piece_side, "tile_face")
     expect_equal(D$cfg, "dual_piecepacks_expansion")
@@ -124,6 +125,10 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(c5$angle, 180)
     expect_equal(c5$piece_side, "coin_face")
     expect_equal(c5$cfg, "subpack")
+    # hexpack
+    ht <- parse_simplified_piece("\u2b22")
+    expect_equal(ht$piece_side, "tile_back")
+    expect_equal(ht$cfg, "hexpack")
 })
 
 test_that("parsing algebraic coordinates works as expected", {
