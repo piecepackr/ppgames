@@ -2,6 +2,7 @@
 % Please edit documentation in R/game_starts.R
 \name{df_game}
 \alias{df_game}
+\alias{df_alien_city}
 \alias{df_everest}
 \alias{df_four_field_kono}
 \alias{df_cell_management}
@@ -24,6 +25,8 @@
 \alias{df_xiangqi}
 \title{Data frames of starting diagrams for various games}
 \usage{
+df_alien_city(seed = NULL, tiles = NULL)
+
 df_everest()
 
 df_four_field_kono()
@@ -66,6 +69,8 @@ df_xiangqi()
 }
 \arguments{
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}
+
+\item{tiles}{String of tile layout}
 
 \item{coins}{String of coin layout}
 

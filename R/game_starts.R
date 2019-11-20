@@ -7,6 +7,9 @@
 #' @param cfg2 A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)
 #' @param has_matchsticks Has matchsticks
 #' @param has_subpack Has a piecepack subpack
+#' @param coins String of coin layout
+#' @param dice String of dice layout
+#' @param tiles String of tile layout
 #' @param die_width Width of dice
 #' @param max_tiles Maximum number of (piecepack) tiles available to build boards
 #' @param suit_colors Character vector of the suit colors
@@ -14,6 +17,63 @@
 #' @importFrom dplyr bind_rows
 #' @name df_game
 NULL
+
+#' @rdname df_game
+#' @export
+df_alien_city <- function(seed=NULL, tiles=NULL) {
+    set.seed(seed)
+    df_t1 <- tibble(piece_side="tile_face", 
+                   x=0.5+rep(seq(1,7,2),5),
+                   y=0.5+rep(seq(9,1,-2),each=4))
+    if(is.null(tiles)) {
+        df_t2 <- tibble(suit=rep(1:4, each=5),
+                        rank=rep(1:5, 4)+1,
+                        angle=90*(sample(4,20,replace=TRUE)-1))
+        df_t2 <- df_t2[sample.int(20),]
+    } else {
+        df_t2 <- process_alien_city_tiles(tiles)
+    }
+    cbind(df_t1, df_t2)
+}
+
+process_alien_city_tiles <- function(tiles) {
+    tiles <- gsub("[[:space:]]", "", tiles)
+    tiles <- gsub("[/:;\\\\|]", "", tiles)
+    tiles <- stringr::str_split(tiles, "")[[1]]
+    if(length(tiles) == 40) {
+        suits <- tiles[which(seq(40) %% 2 == 1)]
+        angles <- tiles[which(seq(40) %% 2 + 1 == 1)]
+        ranks <- integer(20)
+    } else if (length(tiles) == 60) {
+        suits <- tiles[which(seq(60) %% 3 == 1)]
+        ranks <- tiles[which(seq(60) %% 3 + 1 == 1)]
+        angles <- tiles[which(seq(60) %% 3 + 2 == 1)]
+    } else {
+        stop(paste("Don't know how to handle tiles string", tiles))
+    }
+    suits <- toupper(suits)
+    suits <- gsub("S|R", "1", suits)
+    suits <- gsub("M|K", "2", suits)
+    suits <- gsub("C|G", "3", suits)
+    suits <- gsub("A|B", "4", suits)
+    suits <- as.numeric(suits)
+    if(length(tiles) == 40) {
+        ranks[which(suits==1)] <- sample.int(5)
+        ranks[which(suits==2)] <- sample.int(5)
+        ranks[which(suits==3)] <- sample.int(5)
+        ranks[which(suits==4)] <- sample.int(5)
+    } else { 
+        ranks <- gsub("n", "0", ranks)
+        ranks <- gsub("a", "1", ranks)
+        ranks <- as.numeric(ranks) + 1
+    }
+    angles <- gsub("\\^", "0", angles)
+    angles <- gsub("<", "90", angles)
+    angles <- gsub("v", "180", angles)
+    angles <- gsub(">", "270", angles)
+    angles <- as.numeric(angles)
+    tibble(suit=suits, rank=ranks, angle=angles)
+}
 
 #' @rdname df_game
 #' @export
@@ -93,15 +153,13 @@ df_cell_management <- function(seed=NULL) {
 }
 
 #' @rdname df_game
-#' @param coins String of coin layout
-#' @param dice String of dice layout
 #' @export
 df_fujisan <- function(seed=NULL, coins=NULL, dice=NULL) {
     set.seed(seed)
     if(is.null(coins)) {
         coins <- random_fujisan_coins()
     } else if (is.character(coins)) {
-        coins <- process_coins(coins)
+        coins <- process_fujisan_coins(coins)
     }
     if (is.vector(coins)) {
         coins <- matrix(coins, nrow=2, byrow=TRUE)   
@@ -116,7 +174,7 @@ df_fujisan <- function(seed=NULL, coins=NULL, dice=NULL) {
         if(is.null(dice)) {
             dice <- random_dice()
         } else {
-            dice <- process_coins(dice)
+            dice <- process_fujisan_coins(dice)
         }
         df_d <- tibble(piece_side="die_face", x=c(16,17,16,17), y=c(2,2,1,1), suit=c(1,2,4,3), rank=dice+1)
         bind_rows(df_t, df_c, df_p, df_d)
@@ -279,9 +337,9 @@ df_fide_chess_pieces <- function(has_subpack=FALSE) {
                         suit=rep(1:2, each=4), x=1:8, y=8, angle=180,
                         rank=c(4,2,3,5,6,3,2,4))
         df_pw <- tibble(piece_side="coin_back", cfg="piecepack",
-                        suit=rep(3:4, each=4), x=1:8, y=2)
+                        suit=rep(4:3, each=4), x=1:8, y=2)
         df_ow <- tibble(piece_side="tile_face", cfg="subpack",
-                        suit=rep(3:4, each=4), x=1:8, y=1, 
+                        suit=rep(4:3, each=4), x=1:8, y=1, 
                         rank=c(4,2,3,5,6,3,2,4))
         bind_rows(df_pb, df_pw, df_ow, df_ob)
     } else {

@@ -199,7 +199,7 @@ n2alg <- function(n) {
 first_move_needs_dice <- function(coins) {
     !((1 %in% coins[,c(1,12)]) || (2 %in% coins[,c(2,11)]) || (3 %in% coins[,c(3,10)]) || (4 %in% coins[,c(4,9)]) || (5 %in% coins[,c(5,8)]))
 }
-process_coins <- function(coins) {
+process_fujisan_coins <- function(coins) {
     if (is.character(coins)) {
         coins <- gsub("[[:space:]]", "", coins)
         coins <- gsub("[[:punct:]]", "", coins)
@@ -209,7 +209,6 @@ process_coins <- function(coins) {
     }
     coins
 }
-
 
 #' Solve Fujisan game
 #' 
@@ -229,11 +228,11 @@ solve_fujisan <- function(coins = random_fujisan_coins(), dice = random_dice()) 
         stop("You need to install the suggested package 'igraph' to use 'solve_fujisan'.",
              "Use 'install.packages(\"igraph\")'")
     }
-    coins <- process_coins(coins)
+    coins <- process_fujisan_coins(coins)
     if (is.vector(coins)) {
         coins <- matrix(coins, nrow=2, byrow=TRUE)   
     }
-    dice <- process_coins(dice)
+    dice <- process_fujisan_coins(dice)
 
     edges <- do.call(rbind, apply(get_states(), 2, states2edges, coins, dice))
     g <- igraph::graph_from_edgelist(edges, directed=TRUE)
