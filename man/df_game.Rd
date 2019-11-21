@@ -43,7 +43,7 @@ df_american_checkers()
 
 df_backgammon()
 
-df_chaturaji()
+df_chaturaji(has_subpack = FALSE)
 
 df_cribbage_board()
 
@@ -51,21 +51,21 @@ textGrob_cribbage_board(suit_colors = rep("black", 4))
 
 df_fide_chess(has_subpack = FALSE)
 
-df_ultima()
+df_ultima(has_subpack = FALSE)
 
-df_baroque_chess()
+df_baroque_chess(has_subpack = FALSE)
 
 df_alice_chess(has_subpack = FALSE, max_tiles = 24)
 
-df_four_seasons_chess()
+df_four_seasons_chess(has_subpack = FALSE)
 
-df_shogi(cfg2 = "piecepack")
+df_shogi(has_subpack = FALSE, cfg2 = "piecepack")
 
 df_tablut(die_width = 0.5)
 
 df_triactor(seed = NULL, cfg2 = "playing_cards_expansion")
 
-df_xiangqi()
+df_xiangqi(has_subpack = FALSE)
 }
 \arguments{
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}
@@ -78,9 +78,9 @@ df_xiangqi()
 
 \item{has_matchsticks}{Has matchsticks}
 
-\item{suit_colors}{Character vector of the suit colors}
-
 \item{has_subpack}{Has a piecepack subpack}
+
+\item{suit_colors}{Character vector of the suit colors}
 
 \item{max_tiles}{Maximum number of (piecepack) tiles available to build boards}
 
