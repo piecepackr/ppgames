@@ -2,10 +2,11 @@ LICENSE.md
 README.rst
 Rakefile
 noto.style
-others/
 rule_ideas.rst
-raw-data/
-tmp/
+html
+others
+raw-data
+tmp
 .*.pdf
 .appveyor.yml
 .travis.yml
