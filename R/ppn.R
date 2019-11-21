@@ -183,7 +183,7 @@ get_starting_df <- function(metadata) {
     if (is.character(game_type)) {
         get_starting_df_from_name(game_type)
     } else if (is.list(game_type)) {
-        names(game_type) <- tolower(names(game_type))
+        names(game_type) <- to_varname(names(game_type))
         i_name = which("name" %in% names(game_type))
         get_starting_df_from_name(game_type[["name"]], game_type[-i_name])
     } else {
@@ -191,19 +191,22 @@ get_starting_df <- function(metadata) {
     }
 }
 
+to_varname <- function(string) {
+    string <- str_squish(string)
+    string <- tolower(string)
+    string <- gsub("'", '', string)
+    string <- gsub('-', '', string)
+    string <- gsub(' ', '_', string)
+    string
+}
+
 get_starting_df_from_name <- function(game_name, .l=list()) {
-    game_name <- str_squish(game_name)
-    game_name <- tolower(game_name)
-    game_name <- gsub("'", "", game_name)
-    game_name <- gsub("-", "", game_name)
-    game_name <- gsub(" ", "_", game_name)
     #### Get function from passed in list?
-    fn <- get(paste0("df_", game_name))
+    fn <- get(paste0("df_", to_varname(game_name)))
     df <- do.call(fn, .l)
     df <- tibble::rowid_to_column(df, "id")
     if(is.null(df[["cfg"]])) { df$cfg <- "piecepack" }
     df
-
 }
 
 # Parse Movetext by Move number
