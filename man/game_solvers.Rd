@@ -12,14 +12,15 @@ solve_fujisan(coins = random_fujisan_coins(), dice = random_dice())
 \item{dice}{A vector of Fujisan dice layout.  Default is random dice.  Usually not needed.}
 }
 \value{
-A list with solution of Fujisan solution, its length, coin layout, dice (if needed), and portable piecepack notation.
+A list with solution of Fujisan solution, its length, coin layout, dice (if needed),
+        and portable piecepack notation.
 }
 \description{
 Solves a game of Fujisan (if possible).
 }
 \examples{
- puzzle2 <- matrix(c(4,4,4,5,2,0,2,4,0,3,1,1,
-                     1,2,5,3,3,5,3,2,5,1,0,0), nrow=2, byrow=TRUE)
- s2 <- solve_fujisan(coins=puzzle2)
+ puzzle2 <- matrix(c(4, 4, 4, 5, 2, 0, 2, 4, 0, 3, 1, 1,
+                     1, 2, 5, 3, 3, 5, 3, 2, 5, 1, 0, 0), nrow = 2, byrow = TRUE)
+ s2 <- solve_fujisan(coins = puzzle2)
  g2 <- read_ppn(textConnection(s2$ppn))[[1]]
 }

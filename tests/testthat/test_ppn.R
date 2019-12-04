@@ -1,18 +1,17 @@
 library("piecepackr")
 library("vdiffr")
 context("test ppn")
-ppn1 <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
-ppn2 <- read_ppn(system.file("extdata/ex2.ppn", package="ppgames"))
-ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package="ppgames"))
-ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package="ppgames"))
+ppn1 <- read_ppn(system.file("extdata/ex1.ppn", package = "ppgames"))
+ppn2 <- read_ppn(system.file("extdata/ex2.ppn", package = "ppgames"))
+ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package = "ppgames"))
+ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package = "ppgames"))
 g1 <- ppn1[[1]]
 g2 <- ppn2[[1]]
 g3a <- ppn3[[1]]
 g3b <- ppn3[[2]]
 g4 <- ppn4[[1]]
-pp <- function(df) { function() { 
-    pmap_piece(df, envir=list(piecepack=pp_cfg()), default.units="in") 
-    }
+pp <- function(df) {
+    function() pmap_piece(df, envir = list(piecepack = pp_cfg()), default.units = "in")
 }
 test_that("parsing ppn files works as expected", {
     expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
@@ -27,7 +26,6 @@ test_that("parsing ppn files works as expected", {
 
     df3a <- tail(g3a$dfs, 1)[[1]]
     expect_equal(g3a$metadata$GameType, "Ultima")
-    # expect_doppelganger("ultima-chess", pp(df3a))
 
     expect_equal(g3b$metadata$Event, "Example 3 Game B")
     expect_equal(g3b$movetext, "0. t@b4 cA@c3")

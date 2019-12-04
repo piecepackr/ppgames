@@ -71,14 +71,14 @@ graphical parameter settings.}
 
 \item{max_tiles}{Maximum number of tiles that can be used}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
 or a character vector of \code{pp_cfg} objects}
 
 \item{envir}{Environment (or named list) containing configuration list(s).}
 }
 \description{
-\code{grid.board_rect_tiles} draws a rectangular board using the back of piecepack tiles, 
+\code{grid.board_rect_tiles} draws a rectangular board using the back of piecepack tiles,
 it applies \code{pmap_piece} to the \code{tibble} data frame returned by \code{df_rect_board_tiles}.
 \code{grid.board_rect_cells} draws a rectangular board where pieces are placed in the cells of the board.
 \code{grid.board_rect_points} draws a rectangular board where pieces are placed in the points of the board.

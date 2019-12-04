@@ -6,13 +6,10 @@
 #' @return A list, for each game in the file a list containing info about the game
 #' @import stringr
 #' @export
-read_ppn <- function(file, parse=TRUE) {
+read_ppn <- function(file, parse = TRUE) {
     list_ppns <- parse_ppn_file(file)
-    lapply(list_ppns, parse_ppn_game, parse=parse)
+    lapply(list_ppns, parse_ppn_game, parse = parse)
 }
-
-# pmp <- function(x) { grid.newpage(); pmap_piece(x, default.units="in") }
-# saveGIF({lapply(pmt1$dfs, pmp)}, movie.name="test.gif")
 
 #' Animate a ppn game
 #'
@@ -25,8 +22,8 @@ read_ppn <- function(file, parse=TRUE) {
 #' @param envir Environment (or named list) of piecepackr configuration lists
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
-animate_game <- function(game, file="animation.gif", annotate=TRUE, ..., 
-                         cfg=NULL, envir=NULL) {
+animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
+                         cfg = NULL, envir = NULL) {
 
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
@@ -34,30 +31,30 @@ animate_game <- function(game, file="animation.gif", annotate=TRUE, ...,
 
     dfs <- game$dfs
 
-    ranges <- lapply(dfs, range_true, cfg=cfg, envir=envir, ...)
-    xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm=TRUE)
-    ymax_op <- max(sapply(ranges, function(y) y$ymax_op), na.rm=TRUE)
-    xmax <- max(sapply(ranges, function(x) x$xmax), na.rm=TRUE)
-    ymax <- max(sapply(ranges, function(y) y$ymax), na.rm=TRUE)
+    ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
+    xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm = TRUE)
+    ymax_op <- max(sapply(ranges, function(y) y$ymax_op), na.rm = TRUE)
+    xmax <- max(sapply(ranges, function(x) x$xmax), na.rm = TRUE)
+    ymax <- max(sapply(ranges, function(y) y$ymax), na.rm = TRUE)
     #### Adjust if xmin under 0
     #### Add grid and comment annotations
     m <- max(xmax, ymax) + 0.5
     res <- round(600 / m, 0)
     height <- res * (ymax_op+0.5)
-    width <- res * (xmax_op+0.5) 
+    width <- res * (xmax_op+0.5)
     plot_fn <- function(df, ...) {
         grid::grid.newpage()
-        pmap_piece(df, default.units="in", ..., envir=envir)
-        if (annotate) { annotate_plot(xmax, ymax) }
+        pmap_piece(df, default.units = "in", ..., envir = envir)
+        if (annotate) annotate_plot(xmax, ymax)
     }
-    animation::saveGIF({lapply(dfs, plot_fn, ...)}, movie.name=file,
-        ani.height=height, ani.width=width, ani.res=res, ani.dev="png", ani.type="png")
+    animation::saveGIF(lapply(dfs, plot_fn, ...), movie.name = file,
+        ani.height = height, ani.width = width, ani.res = res, ani.dev = "png", ani.type = "png")
     invisible(NULL)
 }
 
 #### Option to generate postcard?
 
-get_df_from_move <- function(game, move=NULL) {
+get_df_from_move <- function(game, move = NULL) {
     if (is.null(move)) {
         utils::tail(game$dfs, 1)[[1]]
     } else {
@@ -69,67 +66,67 @@ get_df_from_move <- function(game, move=NULL) {
 #'
 #' Plot game move
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
-#' @param file Filename to save graphic to unless \code{NULL} in which 
+#' @param file Filename to save graphic to unless \code{NULL} in which
 #'        case it opens a new graphics device.
-#' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})  
+#' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 #'             unless \code{NULL} in which case will plot the game state after the last move.
 #' @param annotate If \code{TRUE} annotate the plot
 #' @param bg Background color (\code{"transparent")} for transparent
-#' @param res For bitmap image formats the resolution 
+#' @param res For bitmap image formats the resolution
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
 #' @return Nothing, as a side effect saves a graphic
 #' @import grDevices
 #' @export
-plot_move <- function(game, file=NULL,  move=NULL, annotate=TRUE, ..., bg="white", res=72, 
-                      cfg=NULL, envir=NULL) {
+plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg = "white", res = 72,
+                      cfg = NULL, envir = NULL) {
 
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
     envir <- ce$envir
 
     df <- get_df_from_move(game, move)
-    dfr <- range_true(df, cfg=cfg, envir=envir, ...)
+    dfr <- range_true(df, cfg = cfg, envir = envir, ...)
     width <- dfr$xmax_op + 0.5
     height <- dfr$ymax_op + 0.5
 
     if (is.null(file)) {
-        dev.new(width=width, height=height, unit="in", noRstudioGD=TRUE)
+        dev.new(width = width, height = height, unit = "in", noRstudioGD = TRUE)
     } else {
         format <- tools::file_ext(file)
         switch(format,
-               bmp = bmp(file, width, height, "in", res=res, bg=bg),
-               jpeg = jpeg(file, width, height, "in", res=res, bg=bg),
-               pdf = cairo_pdf(file, width, height, bg=bg),
-               png = png(file, width, height, "in", res=res, bg=bg),
-               ps = cairo_ps(file, width, height, bg=bg),
-               svg = svg(file, width, height, bg=bg),
-               tiff = tiff(file, width, height, "in", res=res, bg=bg))
+               bmp = bmp(file, width, height, "in", res = res, bg = bg),
+               jpeg = jpeg(file, width, height, "in", res = res, bg = bg),
+               pdf = cairo_pdf(file, width, height, bg = bg),
+               png = png(file, width, height, "in", res = res, bg = bg),
+               ps = cairo_ps(file, width, height, bg = bg),
+               svg = svg(file, width, height, bg = bg),
+               tiff = tiff(file, width, height, "in", res = res, bg = bg))
     }
-    pmap_piece(df, default.units="in", ..., envir=envir)
-    if (annotate) { annotate_plot(dfr$xmax, dfr$ymax) }
-    if (!is.null(file)) { dev.off() }
+    pmap_piece(df, default.units = "in", ..., envir = envir)
+    if (annotate) annotate_plot(dfr$xmax, dfr$ymax)
+    if (!is.null(file)) dev.off()
     invisible(NULL)
 }
 
 annotate_plot <- function(xmax, ymax) {
-        gp <- gpar(fontsize=18, fontface="bold")
+        gp <- gpar(fontsize = 18, fontface = "bold")
         x_indices <- seq(floor(xmax))
         l <- letters[x_indices]
         l <- stringr::str_pad(l, max(stringr::str_count(l)))
-        grid.text(l, x=x_indices, y=0.25, default.units="in", gp=gp)
+        grid.text(l, x = x_indices, y = 0.25, default.units = "in", gp = gp)
         y_indices <- seq(floor(ymax))
         n <- as.character(y_indices)
         n <- stringr::str_pad(n, max(stringr::str_count(n)))
-        grid.text(n, x=0.25, y=y_indices, default.units="in", gp=gp)
+        grid.text(n, x = 0.25, y = y_indices, default.units = "in", gp = gp)
         invisible(NULL)
 }
 
 # Parse ppn files
 #
-# Parses ppn file 
-# @param file Filename 
+# Parses ppn file
+# @param file Filename
 # @return A list, each element is a character vector containing the text of the PPN games within that file
 parse_ppn_file <- function(file) {
     text <- readLines(file)
@@ -149,9 +146,9 @@ parse_ppn_file <- function(file) {
 #
 # Parses (single) ppn game text to get Metadata and Movetext
 # @param text Character vector of ppn game text
-# @return A list with a named list element named \code{Metadata} 
+# @return A list with a named list element named \code{Metadata}
 #         and character vector element named \code{Movetext}
-parse_ppn_game <- function(text, parse=TRUE) {
+parse_ppn_game <- function(text, parse = TRUE) {
     yaml_end <- grep("^\\.{3}", text)
     if (length(yaml_end) == 0) {
         yaml_end <- grep("^[[:blank:]]+|^$", text)
@@ -167,16 +164,16 @@ parse_ppn_game <- function(text, parse=TRUE) {
         metadata <- list()
         movetext <- text
     }
-    game_list <- list(metadata=metadata, movetext=movetext)
+    game_list <- list(metadata = metadata, movetext = movetext)
     if (parse) {
         df <- get_starting_df(metadata)
-        move_list <- parse_moves(movetext, df=df)
+        move_list <- parse_moves(movetext, df = df)
         game_list <- c(game_list, move_list)
     }
     game_list
 }
-starting_df <- tibble::tibble(id=integer(0), piece_side=character(0), suit=numeric(0), rank=numeric(0),
-                              cfg=character(0), x=numeric(0), y=numeric(0))
+starting_df <- tibble::tibble(id = integer(0), piece_side = character(0), suit = numeric(0), rank = numeric(0),
+                              cfg = character(0), x = numeric(0), y = numeric(0))
 
 get_starting_df <- function(metadata) {
     game_type <- metadata$GameType
@@ -184,7 +181,7 @@ get_starting_df <- function(metadata) {
         get_starting_df_from_name(game_type)
     } else if (is.list(game_type)) {
         names(game_type) <- to_varname(names(game_type))
-        i_name = which("name" %in% names(game_type))
+        i_name <- which("name" %in% names(game_type))
         get_starting_df_from_name(game_type[["name"]], game_type[-i_name])
     } else {
         starting_df
@@ -194,18 +191,18 @@ get_starting_df <- function(metadata) {
 to_varname <- function(string) {
     string <- str_squish(string)
     string <- tolower(string)
-    string <- gsub("'", '', string)
-    string <- gsub('-', '', string)
-    string <- gsub(' ', '_', string)
+    string <- gsub("'", "", string)
+    string <- gsub("-", "", string)
+    string <- gsub(" ", "_", string)
     string
 }
 
-get_starting_df_from_name <- function(game_name, .l=list()) {
+get_starting_df_from_name <- function(game_name, .l = list()) {
     #### Get function from passed in list?
     fn <- get(paste0("df_", to_varname(game_name)))
     df <- do.call(fn, .l)
     df <- tibble::rowid_to_column(df, "id")
-    if(is.null(df[["cfg"]])) { df$cfg <- "piecepack" }
+    if (is.null(df[["cfg"]])) df$cfg <- "piecepack"
     df
 }
 
@@ -214,14 +211,14 @@ get_starting_df_from_name <- function(game_name, .l=list()) {
 # Parse Movetext by Move number
 # @param text Character vector of Movetext
 # @param df Data frame containing starting state (inferred from Metadata)
-# @return A list with element \code{moves} containing 
+# @return A list with element \code{moves} containing
 #     named list (by move number) of move text and element \code{comments}
 #     containing named list (by move number) of comments
-parse_moves <- function(text, df=NULL) {
-    if(is.null(df)) { df <- starting_df } 
+parse_moves <- function(text, df = NULL) {
+    if (is.null(df)) df <- starting_df
     #### Convert # comments into braces?
-    if(length(text)>0) { 
-        text <- str_squish(paste(text, collapse=" "))
+    if (length(text)>0) {
+        text <- str_squish(paste(text, collapse = " "))
         # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
         # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
         move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_]+\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
@@ -231,20 +228,20 @@ parse_moves <- function(text, df=NULL) {
         if (nr == 0) {
             moves_raw[[1]] <- text
         } else {
-            i1 <- locations[1,1] 
+            i1 <- locations[1, 1]
             if (i1 > 1) {
                 moves_raw[[1]] <- str_sub(text, 1, i1-2)
-            } 
+            }
             for (ii in seq(nr)) {
-                is <- locations[ii,1]
-                ie <- locations[ii,2]
+                is <- locations[ii, 1]
+                ie <- locations[ii, 2]
                 movenumber <- str_sub(text, is, ie)
-                is <- locations[ii,2]+2
-                if(ii < nr) 
-                    ie <- locations[ii+1,1]-2
+                is <- locations[ii, 2]+2
+                if (ii < nr)
+                    ie <- locations[ii+1, 1]-2
                 else
                     ie <- str_count(text)
-                moves_raw[[movenumber]] <- str_sub(text, is, ie) 
+                moves_raw[[movenumber]] <- str_sub(text, is, ie)
             }
         }
         moves <- lapply(moves_raw, remove_comments)
@@ -257,12 +254,12 @@ parse_moves <- function(text, df=NULL) {
     }
     moves <- c(list(SetupFn.=""), moves)
     comments <- c(list(SetupFn.=""), comments)
-    list(moves=moves, comments=comments, dfs=dfs)
+    list(moves = moves, comments = comments, dfs = dfs)
 }
 
 comment_token <- "(?<![[:alnum:][:punct:]])\\{[^}]*\\}(?![[:alnum:][:punct:]])"
 extract_comments <- function(text) {
-    text <- paste(str_extract_all(text, comment_token)[[1]], collapse=" ")
+    text <- paste(str_extract_all(text, comment_token)[[1]], collapse = " ")
     str_squish(str_remove_all(text, "\\{|\\}"))
 }
 remove_comments <- function(text) {
@@ -275,7 +272,7 @@ parse_simplified_piece <- function(text) {
     angle <- get_simplified_angle(text)
     ps <- get_simplified_ps(text, suit, rank)
     cfg <- get_simplified_cfg(text)
-    tibble(piece_side=ps, suit=suit, rank=rank, angle=angle, cfg=cfg)
+    tibble(piece_side = ps, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 get_simplified_cfg <- function(text) {
     if (grepl("\u25b3", text)) {
@@ -296,7 +293,7 @@ get_simplified_suit <- function(text) {
     if (grepl("S|\u2665|R|\u2661", text)) {
         1
     } else if (grepl("M|\u2660|K|\u2664", text)) {
-        2 
+        2
     } else if (grepl("C|\u2663|G|\u2667", text)) {
         3
     } else if (grepl("A|\u2666|B|\u2662", text)) {
@@ -347,7 +344,7 @@ get_simplified_piece <- function(text, suit, rank) {
     } else if (grepl("\u25b2|\u25b3", text)) {
         "pyramid"
     } else {
-        if(!is.na(suit) && !is.na(rank)) {
+        if (!is.na(suit) && !is.na(rank)) {
             "tile"
         } else if (!is.na(suit) || !is.na(rank)) {
             "coin"
@@ -374,15 +371,15 @@ get_simplified_ps <- function(text, suit, rank) {
                pyramid = "top",
                "face")
     }
-    paste(piece, side, sep="_")
+    paste(piece, side, sep = "_")
 }
 
 get_algebraic_x <- function(text) {
-    ss <- str_extract(text, "[[:lower:]]+")   
+    ss <- str_extract(text, "[[:lower:]]+")
     ndigits <- str_count(ss)
     int <- 0
     for (ii in rev(seq(ndigits))) {
-        int <- int + 26^(ii-1) * match(str_sub(ss, ii, ii), letters)
+        int <- int + 26 ^ (ii - 1) * match(str_sub(ss, ii, ii), letters)
     }
     int
 }
@@ -423,19 +420,19 @@ process_at_move <- function(df, text) {
     insert_df(df, df_piece, index)
 }
 
-aef <- function(x,y) { isTRUE(all.equal(x,y)) }
+aef <- function(x, y) isTRUE(all.equal(x, y))
 process_asterisk_move <- function(df, text) {
     coords <- gsub("\\*", "", text)
     index <- get_index_from_coords(df, coords)
-    df[-index,]
+    df[-index, ]
 }
 get_index_from_coords <- function(df, coords) {
     xy <- get_xy(coords)
-    indices <- as.logical(sapply(df$x, aef, xy[1])) & 
+    indices <- as.logical(sapply(df$x, aef, xy[1])) &
                as.logical(sapply(df$y, aef, xy[2]))
     #### get index for piece restriction
     index <- utils::tail(which(indices), 1)
-    if (length(index) < 1) { stop(paste("Can't identify piece(s) from", coords)) }
+    if (length(index) < 1) stop(paste("Can't identify piece(s) from", coords))
     index
 }
 
@@ -443,9 +440,9 @@ process_hyphen_move <- function(df, text) {
     cc <- str_split(text, "-")[[1]]
     index <- get_index_from_coords(df, cc[1])
     new_xy <- get_xy(cc[2])
-    df[index,"x"] <- new_xy[1]
-    df[index,"y"] <- new_xy[2]
-    insert_df(df[-index,], df[index,])
+    df[index, "x"] <- new_xy[1]
+    df[index, "y"] <- new_xy[2]
+    insert_df(df[-index, ], df[index, ])
 }
 
 process_equal_move <- function(df, text) {
@@ -465,19 +462,19 @@ colon_token <- ":(?![^\\[]*])"
 process_colon_move <- function(df, text) {
     cc <- str_split(text, colon_token)[[1]]
     df <- process_asterisk_move(df, paste0("*", cc[2]))
-    df <- process_hyphen_move(df, paste(cc[1], cc[2], sep="-"))
+    df <- process_hyphen_move(df, paste(cc[1], cc[2], sep = "-"))
     df
 }
 
 # Insert `df2` into `df1` after `index`
 # index = 0 means instead at beginning
-insert_df <- function(df1, df2, index=nrow(df1)) {
+insert_df <- function(df1, df2, index = nrow(df1)) {
     if (index == 0) {
         bind_rows(df2, df1)
     } else if (index == nrow(df1)) {
         bind_rows(df1, df2)
     } else {
-        bind_rows(df1[seq(index),], df2, df1[-seq(index),])
+        bind_rows(df1[seq(index), ], df2, df1[-seq(index), ])
     }
 }
 
@@ -503,8 +500,8 @@ get_y <- function(coords) {
 process_moveline <- function(df, text) {
     text <- bracer::expand_braces(text)
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
-    moves <- c(str_split(text, "[[:blank:]]+"), recursive=TRUE)
-    for(move in moves) {
+    moves <- c(str_split(text, "[[:blank:]]+"), recursive = TRUE)
+    for (move in moves) {
         df <- process_move(df, move)
     }
     df
@@ -513,8 +510,8 @@ process_moveline <- function(df, text) {
 process_moves <- function(df, movelist) {
     df_list <- list(SetupFn.=df)
     nms <- names(movelist)
-    if(is.null(nms)) { nms <- 1 + seq(movelist) }
-    for(ii in seq(movelist)) {
+    if (is.null(nms)) nms <- 1 + seq(movelist)
+    for (ii in seq(movelist)) {
         df <- process_moveline(df, movelist[[ii]])
         df_list[[nms[ii]]] <- df
     }

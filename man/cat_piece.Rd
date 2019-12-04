@@ -26,6 +26,6 @@ unless \code{NULL} in which case will cat the game state after the last move.}
 None (invisible \code{NULL})
 }
 \description{
-\code{format_piece} generates plaintext piecepack diagrams and 
+\code{format_piece} generates plaintext piecepack diagrams and
  outputs them using \code{cat}.
 }

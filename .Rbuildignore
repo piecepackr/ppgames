@@ -8,5 +8,6 @@ others
 raw-data
 tmp
 .*.pdf
-.appveyor.yml
-.travis.yml
+^.appveyor.yml$
+^.lintr$
+^.travis.yml$

@@ -90,5 +90,5 @@ df_xiangqi(has_subpack = FALSE)
 }
 \description{
 \code{tibble} data frames of starting diagrams for various games.
-  data frame output can usually be plotted with \code{pmap_piece(df, cfg=cfg, default.units="in")}.
+  data frame output can usually be plotted with \code{pmap_piece(df, cfg = cfg, default.units = "in")}.
 }
