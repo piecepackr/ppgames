@@ -381,6 +381,15 @@ df_fide_chess <- function(has_subpack = FALSE) {
 
 #' @rdname df_game
 #' @export
+df_the_in_crowd <- function() {
+    df_t1 <- df_rect_board_tiles(6, 6)
+    df_t2 <- df_rect_board_tiles(4, 4, 2, 2)
+    df_t3 <- tibble(piece_side="tile_back", x=3.5, y=3.5)
+    bind_rows(df_t1, df_t2, df_t3)
+}
+
+#' @rdname df_game
+#' @export
 df_ultima <- function(has_subpack = FALSE) {
     df_t <- df_rect_board_tiles(8, 8)
     df_p1 <- tibble(piece_side = "coin_back",

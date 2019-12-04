@@ -15,6 +15,7 @@
 \alias{df_cribbage_board}
 \alias{textGrob_cribbage_board}
 \alias{df_fide_chess}
+\alias{df_the_in_crowd}
 \alias{df_ultima}
 \alias{df_baroque_chess}
 \alias{df_alice_chess}
@@ -50,6 +51,8 @@ df_cribbage_board()
 textGrob_cribbage_board(suit_colors = rep("black", 4))
 
 df_fide_chess(has_subpack = FALSE)
+
+df_the_in_crowd()
 
 df_ultima(has_subpack = FALSE)
 

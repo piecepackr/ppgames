@@ -9,6 +9,7 @@ New features
   ``has_subpack`` which if ``TRUE`` will provide alternative piecepack "stackpack" diagrams.
 * Starting board generators for specific games:
   - ``df_alien_city`` (#8)
+  - ``df_the_in_crowd``
   - ``df_triactor`` (#36)
 * Portable Piecepack Notation enhancements:
   - Simplified piece notation now supports playing cards expansion (#30),

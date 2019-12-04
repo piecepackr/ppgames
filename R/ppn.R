@@ -191,9 +191,10 @@ get_starting_df <- function(metadata) {
 to_varname <- function(string) {
     string <- str_squish(string)
     string <- tolower(string)
-    string <- gsub("'", "", string)
-    string <- gsub("-", "", string)
-    string <- gsub(" ", "_", string)
+    string <- gsub('"', "", string) # e.g. The "In" Crowd -> the_in_crowd
+    string <- gsub("'", "", string) # e.g. Nine Men's Morris -> nine_mens_morris
+    string <- gsub("-", "", string) # e.g. Fuji-san -> fujisan
+    string <- gsub(" ", "_", string) # e.g. Nine Men's Morris -> nine_mens_morris
     string
 }
 
