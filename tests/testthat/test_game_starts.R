@@ -4,6 +4,10 @@ cfg <- pp_cfg()
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {
+    expect_doppelganger("alien_city", function() {
+        df <- df_alien_city(seed=42)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
     expect_doppelganger("backgammon", function() {
         df <- df_backgammon()
         pmap_piece(df, cfg = cfg, default.units = "in")

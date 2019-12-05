@@ -20,6 +20,7 @@
 \alias{df_baroque_chess}
 \alias{df_alice_chess}
 \alias{df_four_seasons_chess}
+\alias{df_san_andreas}
 \alias{df_shogi}
 \alias{df_tablut}
 \alias{df_triactor}
@@ -61,6 +62,8 @@ df_baroque_chess(has_subpack = FALSE)
 df_alice_chess(has_subpack = FALSE, max_tiles = 24)
 
 df_four_seasons_chess(has_subpack = FALSE)
+
+df_san_andreas()
 
 df_shogi(has_subpack = FALSE, cfg2 = "piecepack")
 

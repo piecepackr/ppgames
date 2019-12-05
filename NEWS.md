@@ -10,6 +10,7 @@ New features
 * Starting board generators for specific games:
   - ``df_alien_city`` (#8)
   - ``df_the_in_crowd``
+  - ``df_san_andreas``
   - ``df_triactor`` (#36)
 * Portable Piecepack Notation enhancements:
   - Simplified piece notation now supports playing cards expansion (#30),

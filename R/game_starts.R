@@ -484,6 +484,14 @@ df_four_seasons_chess <- function(has_subpack = FALSE) {
 
 #' @rdname df_game
 #' @export
+df_san_andreas <- function() {
+    x <- 0.5+c(rep(c(1,3,5), 3), 2,4,6, 3,5,7, 4,6,8, 5,7,9, 7,9)
+    y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)
+    tibble(piece_side="tile_back", x=x, y=y)
+}
+
+#' @rdname df_game
+#' @export
 df_shogi <- function(has_subpack = FALSE, cfg2 = "piecepack") {
     # board
     x_t <- seq(2, 8, by = 2)
