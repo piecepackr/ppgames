@@ -25,6 +25,11 @@ test_that("game diagrams work as expected", {
         df <- df_tablut(cfg$get_width("die_face"))
         pmap_piece(df, cfg = cfg, default.units = "in")
     })
+
+    verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
+    verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
+    verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
+
 })
 
     # chess
