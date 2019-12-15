@@ -4,15 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 2
-\item[Length] 10-180 minutes
-\item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Trevor L Davis
-\item[Version] 2.0
-\item[Version Date] 2019-05-17
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("xiangqi")
+%% end.rcode
 
 \subsection{Description}
 
@@ -33,9 +27,6 @@ Each player has 5 soldiers, 2 cannons, 2 chariots, 2 horses, 2 elephants, 2 advi
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/2393/xiangqi}
-\item[The Chess Variants Pages] \url{https://www.chessvariants.com/xiangqi.html}
-\item[Cyningstan] \url{http://www.cyningstan.com/game/75/xiang-qi}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Xiangqi}
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("xiangqi")
+%% end.rcode

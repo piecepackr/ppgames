@@ -4,15 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 2
-\item[Length] 10-180 minutes
-\item[Equipment Required] one standard piecepack and one deck of playing cards
-\item[Designer] Traditional (Sir John Suckling), adapted by Trevor L Davis
-\item[Version] 2.0
-\item[Version Date] 2019-05-16
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("cribbage")
+%% end.rcode
 
 \subsection{Description}
 
@@ -32,7 +26,6 @@ Give each player 12 tiles and arrange them in one vertical column in groups of t
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/2398/cribbage}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Cribbage}
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("cribbage")
+%% end.rcode

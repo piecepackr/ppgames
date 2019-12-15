@@ -4,17 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 2
-\item[Length] 15 minutes
-\item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Michael Schoessow
-\item[Author] Michael Schoessow and Trevor L Davis
-\item[Version] 1.1
-\item[Version Date] 2019-05-18
-% Public Domain and/or CC0
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("four_field_kono")
+%% end.rcode
 
 \subsection{Description}
 
@@ -39,8 +31,6 @@ moving one space onto an empty square.
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/20560/four-field-kono}
-\item[Cyningstan] \url{http://www.cyningstan.com/game/205/four-field-kono}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Four_Field_Kono}
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("four_field_kono")
+%% end.rcode

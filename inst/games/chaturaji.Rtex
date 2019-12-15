@@ -4,15 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 4
-\item[Length] 10-180 minutes
-\item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Trevor L Davis
-\item[Version] 2.0
-\item[Version Date] 2019-05-18
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("chaturaji")
+%% end.rcode
 
 \subsection{Description}
 
@@ -29,9 +23,6 @@ Chaturaji is played on an 8-by-8 board made with the backs of 16 tiles. Each pla
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/18011/chaturanga}
-\item[The Chess Variants Pages] \url{http://www.chessvariants.com/historic.dir/chaturang4.html}
-\item[Cyningstan] \url{http://www.cyningstan.com/download/90/four-handed-dice-chess-leaflet}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Chaturaji}
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("chaturaji")
+%% end.rcode

@@ -245,4 +245,191 @@ box2char[["2122"]] <- "\u2549"
 box2char[["2221"]] <- "\u254a"
 box2char[["2222"]] <- "\u254b"
 
-save(r90, r180, r270, box2char, char2bi, file="R/sysdata.rda")
+# nolint start
+# ppgames_spreadsheet <- "https://docs.google.com/spreadsheets/d/1dd9HuSLgiYOJyP-7wyV3ZjAbnoDJgQR2BWWkD1JbXTc"
+# googlesheets4::sheets_deauth()
+# df <- googlesheets4::read_sheet(ppgames_spreadsheet)
+
+# Fields
+# players : numeric(+)
+# length : numeric(2)
+# equipment : character(1)
+# designer : character(1)
+# version : character(1)
+# version_date : character(1)
+# license : character(1)
+
+# boardgamegeek : character(1)
+# chessvariants : character(1)
+# ludism : character(1)
+# wikipedia : character(1)
+
+# nolint end
+
+license_names <- list(`CC BY-SA 4.0` = "CC BY-SA 4.0")
+license_urls <- list(`CC BY-SA 4.0` = "https://creativecommons.org/licenses/by-sa/4.0")
+
+game_info <- list()
+game_info$alice_chess <- list(
+    players = 2,
+    length = c(30, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "1.0",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "134603/alice-chess",
+    chessvariants = "other.dir/alice.html",
+    wikipedia = "Alice_Chess"
+)
+game_info$american_checkers <- list(
+    players = 2,
+    length = 30,
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Mark A. Biggar",
+    version = "1.1",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "2083/checkers",
+    cyningstan = "game/399/draughts",
+    wikipedia = "English_draughts"
+)
+game_info$backgammon <- list(
+    players = 2,
+    length = c(5, 60),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "1.1",
+    version_date = "2019-05-01",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "2397/backgammon",
+    cyningstan = "game/400/backgammon",
+    wikipedia = "Backgammon"
+)
+game_info$chaturaji <- list(
+    players = 4,
+    length = c(10, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "2.0",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "18011/chaturanga",
+    chessvariants = "historic.dir/chaturang4.html",
+    cyningstan = "game/124/chaturaji",
+    wikipedia = "Chaturaji"
+)
+game_info$cribbage <- list(
+    players = 2,
+    length = c(10, 180),
+    equipment = "one standard piecepack and one deck of playing cards",
+    designer = "Traditional (Sir John Suckling), adapted by Trevor L Davis",
+    version = "2.0",
+    version_date = "2019-05-16",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "2398/cribbage",
+    wikipedia = "Cribbage"
+)
+game_info$fide_chess <- list(
+    players = 2,
+    length = c(30, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Ron Hale-Evans, Mark A. Biggar, and Trevor L Davis",
+    version = "2.0",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "171/chess",
+    chessvariants = "d.chess/chess.html",
+    cyningstan = "game/398/chess",
+    wikipedia = "chess"
+)
+game_info$four_field_kono <- list(
+    players = 2,
+    length = 15,
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Michael Schoessow",
+    author = "Michael Schoessow and Trevor L Davis",
+    version = "2.0",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "20560/four-field-kono",
+    cyningstan = "game/205/four-field-kono",
+    wikipedia = "Four_Field_Kono"
+)
+game_info$four_seasons_chess <- list(
+    players = 4,
+    length = c(10, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "1.0",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "104556/four-seasons-chess",
+    chessvariants = "historic.dir/4seiz.html",
+    cyningstan = "game/348/four-seasons-chess"
+)
+game_info$nine_mens_morris <- list(
+    players = 2,
+    length = c(10, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Dan Burkey and Trevor L Davis",
+    version = "1.1",
+    version_date = "2019-06-29",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "3886/nine-mens-morris",
+    cyningstan = "game/12/nine-mens-morris",
+    wikipedia = "Nine_men%27s_morris"
+)
+game_info$tablut <- list(
+    players = 2,
+    length = 45,
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "1.0",
+    version_date = "2019-04-09",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "6121/tablut",
+    cyningstan = "game/2/tablut",
+    wikipedia = "Tafl_games#Tablut"
+)
+game_info$twelve_mens_morris <- list(
+    players = 2,
+    length = c(10, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Dan Burkey and Trevor L Davis",
+    version = "1.1",
+    version_date = "2019-06-29",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "29080/twelve-mens-morris",
+    cyningstan = "game/111/twelve-mens-morris",
+    wikipedia = "Morabaraba"
+)
+game_info$ultima <- list(
+    players = 2,
+    length = c(30, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "1.0",
+    version_date = "2019-05-18",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "25343/ultima",
+    chessvariants = "other.dir/ultima.html",
+    wikipedia = "Baroque_chess"
+)
+game_info$xiangqi <- list(
+    players = 2,
+    length = c(10, 180),
+    equipment = "one standard piecepack",
+    designer = "Traditional, adapted by Trevor L Davis",
+    version = "2.0",
+    version_date = "2019-05-17",
+    license = "CC BY-SA 4.0",
+    boardgamegeek = "2393/xiangqi",
+    chessvariants = "xiangqi.html",
+    cyningstan = "game/75/xiang-qi",
+    wikipedia = "Xiangqi"
+)
+
+save(r90, r180, r270, box2char, char2bi,
+     game_info, license_names, license_urls,
+     file="R/sysdata.rda", version=2)

@@ -98,3 +98,54 @@ save_rulebook <- function(book = "the-historical-piecepacker", gk = game_kit(), 
 
     invisible(NULL)
 }
+
+game_data <- function(game) {
+    info <- game_info[[game]]
+    items <- list()
+    items$Players <- paste(info$players, collapse=", ")
+    items$Length <- game_length(info$length)
+    items$Equipment <- info$equipment
+    items$Designer <- info$designer
+    if ("author" %in% names(info)) items$Author <- info$author
+    items$Version <- info$version
+    items[["Version date"]] <- info$version_date
+    items$License <- sprintf("\\href{%s}{%s}", license_urls[[info$license]], license_names[[info$license]])
+    cat(paste(c("\\begin{description}",
+                sprintf("\\item[%s] %s", names(items), sapply(items, identity)),
+                "\\end{description}\n"),
+          collapse="\n"))
+}
+
+game_length <- function(gl) {
+    if (length(gl) == 2)
+        sprintf("%s-%s minutes", gl[1], gl[2])
+    else
+        paste(gl, "minutes")
+}
+
+external_links <- function(game) {
+    links <- character(0)
+    info <- game_info[[game]]
+    if ("boardgamegeek" %in% names(info)) {
+        link <- sprintf("\\item[BoardGameGeek] \\url{https://boardgamegeek.com/boardgame/%s}",
+                        info$boardgamegeek)
+        links <- append(links, link)
+    }
+    if ("chessvariants" %in% names(info)) {
+        link <- sprintf("\\item[The Chess Variants Pages] \\url{https://www.chessvariants.com/%s}",
+                        info$chessvariants)
+        links <- append(links, link)
+    }
+    if ("cyningstan" %in% names(info)) {
+        link <- sprintf("\\item[Cyningstan] \\url{http://www.cyningstan.com/%s}",
+                        info$cyningstan)
+        links <- append(links, link)
+    }
+    if ("wikipedia" %in% names(info)) {
+        link <- sprintf("\\item[Wikipedia] \\url{https://en.wikipedia.org/wiki/%s}",
+                        info$wikipedia)
+        links <- append(links, link)
+    }
+    cat(paste(c("\\begin{description}", links, "\\end{description}\n"),
+          collapse="\n"))
+}

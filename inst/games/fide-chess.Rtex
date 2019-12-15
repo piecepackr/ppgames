@@ -4,15 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 2
-\item[Length] 30-180 minutes
-\item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Ron Hale-Evans, Mark A. Biggar, and Trevor L Davis
-\item[Version] 2.0
-\item[Version Date] 2019-05-18
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("fide_chess")
+%% end.rcode
 
 \subsection{Description}
 
@@ -29,9 +23,6 @@ FIDE chess is played on an 8-by-8 board made with the backs of 16 tiles.  Have e
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/171/chess}
-\item[The Chess Variants Pages] \url{https://www.chessvariants.com/d.chess/chess.html}
-\item[Cyningstan] \url{http://www.cyningstan.com/game/398/chess}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/chess}
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("fide_chess")
+%% end.rcode

@@ -4,15 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 2
-\item[Length] 5-60 minutes
-\item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Trevor L Davis
-\item[Version] 1.1
-\item[Version Date] 2019-05-01
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("backgammon")
+%% end.rcode
 
 \subsection{Description}
 
@@ -35,8 +29,6 @@ The other two dice are rolled as ``normal'' dice (i.e. ace = 1, nulls = 6). A pl
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/2397/backgammon}
-\item[Cyningstan] \url{http://www.cyningstan.com/game/400/backgammon}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Backgammon}
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("backgammon")
+%% end.rcode

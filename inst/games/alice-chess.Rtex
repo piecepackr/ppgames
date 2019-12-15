@@ -4,15 +4,9 @@
 % set_knitr_opts(game)
 %% end.rcode
 
-\begin{description}
-\item[Players] 2
-\item[Length] 30-180 minutes
-\item[Equipment Required] one standard piecepack
-\item[Designer] Traditional, adapted by Trevor L Davis
-\item[Version] 1.0
-\item[Version Date] 2019-05-18
-\item[License] \href{https://creativecommons.org/licenses/by-sa/4.0}{CC BY-SA 4.0}
-\end{description}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data("alice_chess")
+%% end.rcode
 
 \subsection{Description}
 
@@ -29,9 +23,6 @@ If you only have one piecepack then Alice chess is played on the points of two 8
 
 \subsection{External Links}
 
-\begin{description}
-\item[BoardGameGeek] \url{https://boardgamegeek.com/boardgame/134603/alice-chess}
-\item[The Chess Variants Pages] \url{https://www.chessvariants.com/other.dir/alice.html}
-\item[Wikipedia] \url{https://en.wikipedia.org/wiki/Alice_Chess}
-
-\end{description}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links("alice_chess")
+%% end.rcode
