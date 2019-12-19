@@ -1,28 +1,16 @@
-\section{(American) Checkers}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("american_checkers")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
 
-Checkers (aka Draughts) is a classic two-player board game.  The English/American version is straightforwardly adapted to the piecepack.
+(American) checkers (aka English draughts aka straight checkers) is a classic two-player board game straightforwardly adapted to the piecepack.
 
 \subsection{Setup}
 
 American checkers is played on an 8-by-8 board made with the backs of 16 tiles.  Have each other sit across from each other and give each player all the coins of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:american-checkers-starting-diagram}.  King promotion is the same as in traditional checkers: place another ``coin`` on top.
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) checkers starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_american_checkers(), cfg=cfg, default.units="in")
-%% end.rcode
-
-\subsection{External Links}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("american_checkers")
+%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) Checkers starting diagram", echo=FALSE
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_american_checkers(), cfg=cfg, default.units="in")
 %% end.rcode

@@ -1,11 +1,5 @@
-\section{Four seasons chess}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("four_seasons_chess")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
@@ -17,12 +11,6 @@ Four seasons chess is an old 4 player chess variant recorded in the \emph{Acedre
 Four season chess is played on an 8-by-8 board made with the backs of 16 tiles.  Give each player all 8 game pieces of the same suit: 1 king (piecepack pawn), 1 horse (ace-valued coin), 1 alfil (null-valued coin), 1 rook (3-valued piecepack die or pawn saucer), and 4 pawns (remaining 4 coins face down).  Place the pieces as in Figure \ref{fig:four-seasons-chess-starting-diagram}.  Ownership of a piece is indicated by orientation (and suit).  To promote a pawn to a general flip it over.  Since we use the null/ace for alfil/horse (both ``leaping'' pieces) this means that any number-valued coin must be a general.
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Four seasons chess starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_four_seasons_chess(), cfg=cfg, default.units="in")
-%% end.rcode
-
-\subsection{External Links}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("four_seasons_chess")
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_four_seasons_chess(), cfg=cfg, default.units="in")
 %% end.rcode

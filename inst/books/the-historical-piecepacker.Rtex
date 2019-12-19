@@ -1,12 +1,13 @@
-\documentclass{report}
-%\documentclass{book}
+%% begin.rcode documentclass, echo=FALSE, results='asis'
+% cat(sprintf("\\documentclass[%spaper, onecolumn]{report}\n", tolower(size))) # book
+%% end.rcode
 
 \usepackage[colorlinks]{hyperref}
 \usepackage{fancyhdr}
 
 % Add Copyright Page
 \def\secondpage{\clearpage\null\vfill
-\pagestyle{empty}
+\thispagestyle{empty}
 \begin{minipage}[b]{0.9\textwidth}
 \footnotesize\raggedright
 \setlength{\parskip}{0.5\baselineskip}
@@ -21,8 +22,9 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \g@addto@macro{\maketitle}{\secondpage}
 \makeatother
 
-% Manage depth of TOC
-\setcounter{tocdepth}{1}
+\pagestyle{plain}
+\pagenumbering{roman}
+\setcounter{tocdepth}{1} % Manage depth of TOC
 
 \begin{document}
 %\frontmatter
@@ -32,20 +34,21 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \tableofcontents
 \listoffigures
 \listoftables
+\clearpage
 
 %\mainmatter
-
+\pagenumbering{arabic}
 \part{Making Various Boards}
 
 \chapter{Making Traditional Board Game Accessories}
 
-\include{cribbage}
+\include{cribbage-chapter}
 
 \part{Game Rules}
 
 \chapter{Traditional Board Games}
 
-\include{four-field-kono}
+\include{four-field-kono-chapter}
 
 \part{Game Hints}
 
@@ -77,20 +80,20 @@ Five & King & King & General \\
 \end{center}
 \end{table}
 
-\include{fide-chess}
-\include{alice-chess}
-\include{chaturaji}
-\include{four-seasons-chess}
-\include{ultima-chess}
-\include{xiangqi}
+\include{international-chess-chapter}
+\include{alice-chess-chapter}
+\include{chaturaji-chapter}
+\include{four-seasons-chess-chapter}
+\include{ultima-chess-chapter}
+\include{xiangqi-chapter}
 
 \chapter{Morris aka Merels Games}
-\include{nine-mens-morris}
-\include{twelve-mens-morris}
+\include{nine-mens-morris-chapter}
+\include{twelve-mens-morris-chapter}
 
 \chapter{Other Traditional Games}
-\include{backgammon}
-\include{american-checkers}
-\include{tablut}
+\include{backgammon-chapter}
+\include{american-checkers-chapter}
+\include{tablut-chapter}
 
 \end{document}

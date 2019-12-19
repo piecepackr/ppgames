@@ -1,0 +1,155 @@
+# Defaults
+# license "CC-BY-SA-4"
+# equipment "one standard piecepack"
+# title inferred from list key
+alice_chess:
+    players: 2
+    length: [30, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.0"
+    version_date: "2019-05-18"
+    boardgamegeek: "134603"
+    chessvariants: "other.dir/alice.html"
+    wikipedia: "Alice_Chess"
+    copyright: "2019 Trevor L. Davis"
+american_checkers:
+    title: "(American) Checkers"
+    players: 2
+    length: 30
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Mark A. Biggar"
+    version: "1.1"
+    version_date: "2019-05-18"
+    boardgamegeek: "2083"
+    cyningstan: "399"
+    wikipedia: "English_draughts"
+    copyright: "2019 Trevor L. Davis"
+backgammon:
+    players: 2
+    length: [5, 60]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.1"
+    version_date: "2019-05-01"
+    boardgamegeek: "2397"
+    cyningstan: "400"
+    wikipedia: "Backgammon"
+    copyright: "2016-2019 Trevor L. Davis"
+chaturaji:
+    players: 4
+    length: [10, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "2.0"
+    version_date: "2019-05-18"
+    boardgamegeek: "18011"
+    chessvariants: "historic.dir/chaturang4.html"
+    cyningstan: "124"
+    wikipedia: "Chaturaji"
+    copyright: "2016-2019 Trevor L. Davis"
+cribbage:
+    players: 2
+    length: [10, 180]
+    equipment: "one standard piecepack and one deck of playing cards"
+    designer: "Traditional (Sir John Suckling), adapted by Trevor L. Davis"
+    version: "2.0"
+    version_date: "2019-05-16"
+    boardgamegeek: "2398"
+    wikipedia: "Cribbage"
+    copyright: "2016-2019 Trevor L. Davis"
+international_chess:
+    title: "(International) Chess"
+    players: 2
+    length: [30, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Ron Hale-Evans, Mark A. Biggar, and Trevor L. Davis"
+    version: "2.0"
+    version_date: "2019-05-18"
+    boardgamegeek: "171"
+    chessvariants: "d.chess/chess.html"
+    cyningstan: "398"
+    wikipedia: "chess"
+    copyright: "2019 Trevor L. Davis"
+four_field_kono:
+    players: 2
+    length: 15
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Michael Schoessow"
+    version: "2.0"
+    version_date: "2019-05-18"
+    boardgamegeek: "20560"
+    cyningstan: "205"
+    wikipedia: "Four_Field_Kono"
+    copyright: "2019 Trevor L. Davis"
+four_seasons_chess:
+    players: 4
+    length: [10, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.0"
+    version_date: "2019-05-18"
+    boardgamegeek: "104556"
+    chessvariants: "historic.dir/4seiz.html"
+    cyningstan: "348"
+    copyright: "2019 Trevor L. Davis"
+nine_mens_morris:
+    title: "Nine Men's Morris"
+    players: 2
+    length: [10, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Dan Burkey and Trevor L. Davis"
+    version: "1.1"
+    version_date: "2019-06-29"
+    boardgamegeek: "3886"
+    cyningstan: "12"
+    wikipedia: "Nine_men%27s_morris"
+    copyright: "2019 Trevor L. Davis"
+tablut:
+    players: 2
+    length: 45
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.0"
+    version_date: "2019-04-09"
+    boardgamegeek: "6121"
+    cyningstan: "2"
+    wikipedia: "Tafl_games#Tablut"
+    copyright: "2019 Trevor L. Davis"
+twelve_mens_morris:
+    title: "Twelve Men's Morris"
+    players: 2
+    length: [10, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Dan Burkey and Trevor L. Davis"
+    version: "1.1"
+    version_date: "2019-06-29"
+    boardgamegeek: "29080"
+    cyningstan: "111"
+    wikipedia: "Morabaraba"
+    copyright: "2019 Trevor L. Davis"
+ultima:
+    title: "Ultima (Baroque Chess)"
+    players: 2
+    length: [30, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.0"
+    version_date: "2019-05-18"
+    boardgamegeek: "25343"
+    chessvariants: "other.dir/ultima.html"
+    wikipedia: "Baroque_chess"
+    copyright: "2019 Trevor L. Davis"
+xiangqi:
+    title: "Xiangqi (Chinese Chess)"
+    players: 2
+    length: [10, 180]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "2.0"
+    version_date: "2019-05-17"
+    boardgamegeek: "2393"
+    chessvariants: "xiangqi.html"
+    cyningstan: "75"
+    wikipedia: "Xiangqi"
+    copyright: "2016-2019 Trevor L. Davis"

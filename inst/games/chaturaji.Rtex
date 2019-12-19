@@ -1,28 +1,16 @@
-\section{Chaturaji (Chaturanga for four players)}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("chaturaji")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
 
-Chaturaji aka Chaturanga for four players aka Choupat is an old four-person chess variant. The diceless version is playable with a single standard piecepack, the version with dice either needs an additional two dice (preferably four-sided) or alternatively 2-4 extra game pieces (i.e. pawn saucers) to free up two piecepack dice from game piece duty. 
+Chaturaji (aka Chaturanga for four players aka Choupat) is an old four-person chess variant. The diceless version is playable with a single standard piecepack, the version with dice either needs an additional two dice (preferably four-sided) or alternatively 2-4 extra game pieces (i.e. pawn saucers) to free up two piecepack dice from game piece duty. 
 
 \subsection{Setup}
 
 Chaturaji is played on an 8-by-8 board made with the backs of 16 tiles. Each player needs 8 game pieces of the same suit: 1 king (piecepack pawn), 1 horse (ace-valued coin), 1 boat (2-valued coin), 1 rook (3-valued piecepack die or pawn saucer), and 4 pawns (remaining 4 coins face down).  Ownership of horses and boats are distinguished by orientation. Figure \ref{fig:chaturaji-starting-diagram} shows the recommended setup.
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Chaturaji starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_chaturaji(), cfg=cfg, default.units="in")
-%% end.rcode
-
-\subsection{External Links}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("chaturaji")
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_chaturaji(), cfg=cfg, default.units="in")
 %% end.rcode

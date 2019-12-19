@@ -6,26 +6,25 @@
 
 
 xelatex <- function(tex, quietly = TRUE) {
-    if (quietly)
-        stdout <- NULL
-    else
-        stdout <- ""
+    stdout <- if (quietly) NULL else ""
     pdf <- sub(paste0(file_ext(tex), "$"), "pdf", tex)
-    system2("xelatex", c("-papersize=letter", tex), stdout = stdout)
-    system2("xelatex", c("-papersize=letter", tex), stdout = stdout)
+    system2("xelatex", c(tex), stdout = stdout)
+    system2("xelatex", c(tex), stdout = stdout)
     pdf
 }
 
-to_tex <- function(kf) {
-    tex <- sub(paste0(file_ext(kf), "$"), "tex", kf)
-    system2("pandoc", args = c("-o", tex, kf))
-    tex
-}
-to_pdf <- function(kf) {
-    pdf <- sub(paste0(file_ext(kf), "$"), "pdf", kf)
-    system2("pandoc", args = c("-o", pdf, "--pdf-engine=xelatex", kf))
-    pdf
-}
+# nolint start
+# to_tex <- function(kf) {
+#     tex <- sub(paste0(file_ext(kf), "$"), "tex", kf)
+#     system2("pandoc", args = c("-o", tex, kf))
+#     tex
+# }
+# to_pdf <- function(kf) {
+#     pdf <- sub(paste0(file_ext(kf), "$"), "pdf", kf)
+#     system2("pandoc", args = c("-o", pdf, "--pdf-engine=xelatex", kf))
+#     pdf
+# }
+# nolint end
 
 set_knitr_opts <- function(name) {
     hook_plot <- knit_hooks$get("plot")
@@ -42,44 +41,96 @@ set_knitr_opts <- function(name) {
 
 #' Save ruleset and/or rulebook
 #'
-#' Save ruleset and/or rulebook
+#' \code{save_ruleset} save ruleset of a game,
+#' \code{save_pamphlet} is a variant that saves the ruleset as a pamphlet.
+#' \code{save_rulebook} saves a rulebook.
 #'
 #' @param game Game name
 #' @param gk A \code{game_kit} R6 object.
-#' @param output_dir Directory to save ruleset/rulebook to.
+#' @param output Path to the output file.
+#'        If \code{NULL} the function will guess a default.
+#' @param size Paper size (either "letter", or "A4")
+#' @param quietly Whether to hide document compilation output.
 #' @rdname save_ruleset
 #' @export
-save_ruleset <- function(game, gk = game_kit(), output_dir = getwd(), quietly = TRUE) {
+save_ruleset <- function(game, gk = game_kit(), output = NULL,
+                         quietly = TRUE, size = "letter") {
 
-    force(output_dir)
+    if (is.null(output)) output <- paste0(game, ".pdf")
+    if (!exists(output)) file.create(output)
+    output <- normalizePath(output)
+
     wd <- getwd()
     on.exit(setwd(wd))
     setwd(tempdir())
 
+    knit_game(game, gk, quietly)
+
+    of <- system.file("extdata/ruleset.Rtex", package = "ppgames")
+    tex <- knit(of, quiet = quietly)
+    pdf <- xelatex(tex, quietly)
+
+    file.copy(pdf, output, overwrite = TRUE)
+    invisible(NULL)
+}
+
+#' @rdname save_ruleset
+#' @export
+save_pamphlet <- function(game, gk = game_kit(), output = NULL,
+                          quietly = TRUE, size = "letter") {
+
+    if (is.null(output)) output <- paste0(game, ".pdf")
+    if (!exists(output)) file.create(output)
+    output <- normalizePath(output)
+
+    wd <- getwd()
+    on.exit(setwd(wd))
+    setwd(tempdir())
+
+    knit_game(game, gk, quietly)
+
+    of <- system.file("extdata/pamphlet.Rtex", package = "ppgames")
+    tex <- knit(of, quiet = quietly)
+    pdf <- xelatex(tex, quietly)
+
+    file.copy(pdf, output, overwrite = TRUE)
+    invisible(NULL)
+}
+
+game_info <- yaml::yaml.load_file(system.file("extdata", "game_info.yaml", package = "ppgames"))
+
+knit_chapter <- function(game, gk = game_kit(), quietly = TRUE) {
+    output <- paste0(game, "-chapter.tex")
+
+    wd <- getwd()
+    on.exit(setwd(wd))
+    setwd(tempdir())
+
+    knit_game(game, gk, quietly)
+
+    of <- system.file("extdata/chapter.Rtex", package = "ppgames")
+    tex <- knit(of, quiet = quietly)
+
+    file.copy(tex, output, overwrite = TRUE)
+    invisible(NULL)
+}
+
+knit_game <- function(game, gk, quietly = TRUE) {
     game_files <- list.files(system.file("games", package = "ppgames"),
                              full.names = TRUE)
     of <- game_files[grep(game, game_files)]
-    kf <- knit(of, quiet = quietly)
-
-    if (is.null(output_dir)) {
-        if (file_ext(kf) != "tex") {
-            to_tex(kf)
-        }
-    } else {
-        output_dir <- normalizePath(output_dir)
-        pdf <- to_pdf(kf)
-        file.copy(pdf, output_dir, overwrite = TRUE)
-    }
-    invisible(NULL)
+    knit(of, quiet = quietly)
 }
 
 #' @param book Book name
 #' @rdname save_ruleset
-#' @param quietly Whether to hide xelatex output.
 #' @export
-save_rulebook <- function(book = "the-historical-piecepacker", gk = game_kit(), output_dir = getwd(), quietly = TRUE) {
+save_rulebook <- function(book = "the-historical-piecepacker", gk = game_kit(), output = NULL,
+                          quietly = TRUE, size = "letter") {
 
-    output_dir <- normalizePath(output_dir)
+    if (is.null(output)) output <- paste0(book, ".pdf")
+    if (!exists(output)) file.create(output)
+    output <- normalizePath(output)
 
     wd <- getwd()
     on.exit(setwd(wd))
@@ -88,64 +139,101 @@ save_rulebook <- function(book = "the-historical-piecepacker", gk = game_kit(), 
     games <- list.files(system.file("games", package = "ppgames"), pattern = ".Rtex")
     games <- gsub(".Rtex", "", games)
     for (game in games) {
-        save_ruleset(game, gk, NULL, quietly)
+        knit_chapter(game, gk, quietly = quietly)
     }
 
     of <- system.file(sprintf("books/%s.Rtex", book), package = "ppgames")
     tex <- knit(of, quiet = quietly)
     pdf <- xelatex(tex, quietly)
-    file.copy(pdf, output_dir, overwrite = TRUE)
 
+    file.copy(pdf, output, overwrite = TRUE)
     invisible(NULL)
 }
 
 game_data <- function(game) {
-    info <- game_info[[game]]
+    info <- get_game_info(game)
     items <- list()
     items$Players <- paste(info$players, collapse=", ")
     items$Length <- game_length(info$length)
-    items$Equipment <- info$equipment
-    items$Designer <- info$designer
-    if ("author" %in% names(info)) items$Author <- info$author
-    items$Version <- info$version
-    items[["Version date"]] <- info$version_date
-    items$License <- sprintf("\\href{%s}{%s}", license_urls[[info$license]], license_names[[info$license]])
+    equipment <- if (is.null(info$equipment)) "one standard piecepack" else info$equipment
+    items$Equipment <- equipment
+    items$Version <- sprintf("%s (%s)", info$version, info$version_date)
     cat(paste(c("\\begin{description}",
-                sprintf("\\item[%s] %s", names(items), sapply(items, identity)),
+                sprintf("\\item[%s] %s", names(items), as.character(items)),
                 "\\end{description}\n"),
           collapse="\n"))
 }
 
+game_credits <- function(game) {
+    info <- get_game_info(game)
+    items <- list()
+    if ("author" %in% names(info)) items$author <- paste("Written by:", info$author, "\\newline")
+    items$designer <- paste("Game design:", info$designer, "\\newline")
+    license <- if (is.null(info$license)) "CC-BY-SA-4" else info$license
+    license_text <- sprintf("\\href{%s}{%s}", license_urls[[license]], license_names[[license]])
+    copyright <- paste0("\\copyright~", info$copyright, "\\newline")
+    items$license <- paste(copyright, "Some Rights Reserved.\\newline",
+                     paste("Licensed under a", license_text, "license.\\newline"),
+                     collapse="\n")
+    cat(paste(as.character(items), collapse="\n"))
+}
+
 game_length <- function(gl) {
     if (length(gl) == 2)
-        sprintf("%s-%s minutes", gl[1], gl[2])
+        sprintf("%s--%s minutes", gl[1], gl[2])
     else
         paste(gl, "minutes")
 }
 
-external_links <- function(game) {
-    links <- character(0)
-    info <- game_info[[game]]
+get_game_info <- function(game) {
+    game <- gsub("-", "_", game)
+    game_info[[game]]
+}
+
+title <- function(game) {
+    info <- get_game_info(game)
+    if (is.null(info$title)) {
+        stringr::str_to_title(gsub("_|-", " ", game))
+    } else {
+        info$title
+    }
+}
+
+external_links <- function(game, list_type = "itemize") {
+    links <- list()
+    info <- get_game_info(game)
     if ("boardgamegeek" %in% names(info)) {
-        link <- sprintf("\\item[BoardGameGeek] \\url{https://boardgamegeek.com/boardgame/%s}",
-                        info$boardgamegeek)
-        links <- append(links, link)
+        links[["BoardGameGeek"]] <- paste0("https://boardgamegeek.com/boardgame/", info$boardgamegeek)
     }
     if ("chessvariants" %in% names(info)) {
-        link <- sprintf("\\item[The Chess Variants Pages] \\url{https://www.chessvariants.com/%s}",
-                        info$chessvariants)
-        links <- append(links, link)
+        links[["The Chess Variants Pages"]] <- paste0("https://www.chessvariants.com/", info$chessvariants)
     }
     if ("cyningstan" %in% names(info)) {
-        link <- sprintf("\\item[Cyningstan] \\url{http://www.cyningstan.com/%s}",
-                        info$cyningstan)
-        links <- append(links, link)
+        links[["Cyningstan"]] <- paste0("http://www.cyningstan.com/game/", info$cyningstan)
     }
     if ("wikipedia" %in% names(info)) {
-        link <- sprintf("\\item[Wikipedia] \\url{https://en.wikipedia.org/wiki/%s}",
-                        info$wikipedia)
-        links <- append(links, link)
+        links[["Wikipedia"]] <- paste0("https://en.wikipedia.org/wiki/", info$wikipedia)
     }
-    cat(paste(c("\\begin{description}", links, "\\end{description}\n"),
-          collapse="\n"))
+    if (list_type == "description") {
+        items <- paste("\\item[%s] \\url{%s}", names(links), as.character(links))
+        cat(paste(c("\\begin{description}", items, "\\end{description}\n"),
+              collapse="\n"))
+    } else {
+        items <- paste("\\item", href(as.character(links)))
+        cat(paste(c("\\begin{itemize}", items, "\\end{itemize}\n"),
+              collapse="\n"))
+    }
+}
+
+latex_url_name <- function(url) {
+    name <- gsub("https*://", "", url)
+    name <- gsub("%", "\\\\%", name)
+    name <- gsub("#", "\\\\#", name)
+    name <- gsub("_", "\\\\_", name)
+    name
+}
+# url <- function(url) sprintf("\\url{%s}", name)
+href <- function(url, name=NULL) {
+    if (is.null(name)) name <- latex_url_name(url)
+    sprintf("\\href{%s}{%s}", url, name)
 }

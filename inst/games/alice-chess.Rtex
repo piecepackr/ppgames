@@ -1,11 +1,5 @@
-\section{Alice Chess}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("alice_chess")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
@@ -17,12 +11,6 @@ Alice chess is chess variant invented in 1953 by V.R. Parton played on two board
 If you only have one piecepack then Alice chess is played on the points of two 8-by-8 boards each made with the backs of 9 tiles\footnote{If you have more than one piecepack simply made two 8-by-8 boards each made with the backs of 16 tiles.}.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:alice-chess-starting-diagram} making sure that the two ``4`` coins used as pawns are placed in the left column so they can be easily found if necessary for queen promotion.
 
 %% begin.rcode starting-diagram, fig.width=19, fig.height=9, out.width="1\\linewidth", out.height="0.474\\linewidth", fig.cap="Alice chess starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_alice_chess(), cfg=cfg, default.units="in")
-%% end.rcode
-
-\subsection{External Links}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("alice_chess")
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_alice_chess(), cfg=cfg, default.units="in")
 %% end.rcode

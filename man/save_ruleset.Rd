@@ -2,16 +2,32 @@
 % Please edit documentation in R/rules.R
 \name{save_ruleset}
 \alias{save_ruleset}
+\alias{save_pamphlet}
 \alias{save_rulebook}
 \title{Save ruleset and/or rulebook}
 \usage{
-save_ruleset(game, gk = game_kit(), output_dir = getwd(), quietly = TRUE)
+save_ruleset(
+  game,
+  gk = game_kit(),
+  output = NULL,
+  quietly = TRUE,
+  size = "letter"
+)
+
+save_pamphlet(
+  game,
+  gk = game_kit(),
+  output = NULL,
+  quietly = TRUE,
+  size = "letter"
+)
 
 save_rulebook(
   book = "the-historical-piecepacker",
   gk = game_kit(),
-  output_dir = getwd(),
-  quietly = TRUE
+  output = NULL,
+  quietly = TRUE,
+  size = "letter"
 )
 }
 \arguments{
@@ -19,12 +35,17 @@ save_rulebook(
 
 \item{gk}{A \code{game_kit} R6 object.}
 
-\item{output_dir}{Directory to save ruleset/rulebook to.}
+\item{output}{Path to the output file.
+If \code{NULL} the function will guess a default.}
 
-\item{quietly}{Whether to hide xelatex output.}
+\item{quietly}{Whether to hide document compilation output.}
+
+\item{size}{Paper size (either "letter", or "A4")}
 
 \item{book}{Book name}
 }
 \description{
-Save ruleset and/or rulebook
+\code{save_ruleset} save ruleset of a game,
+\code{save_pamphlet} is a variant that saves the ruleset as a pamphlet.
+\code{save_rulebook} saves a rulebook.
 }

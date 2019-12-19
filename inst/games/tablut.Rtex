@@ -1,11 +1,5 @@
-\section{Tablut}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("tablut")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
@@ -17,12 +11,6 @@ Tablut is a historical (hnefa)tafl game played by the Sámi people until at leas
 The game is played by two players one of which controls 16 ``attackers'' and other who controls 8 ``defenders'' plus a ``king''.  There is also a ``castle'' in the center of the board (some modern derivatives also have special corners).  There are multiple schemes that can be used to play this game.  Visualized in Figure \ref{fig:tablut-starting-diagram} is one scheme (``ranks'' versus ``suits'') which gives the attacking player all the coin faces of rank 2,3,4,5 as the attackers and gives the defending player the remaining coin backs as defenders plus a pawn as the king and use 1-4 piecepack dice as the ``castle'' (place the pawn on top of the dice to start the game).\footnote{Another scheme could be for the defenders to be four coin ``aces'' and four coin ``moons'' plus a ``moons'' pawn king versus the remaining coin backs as attackers (with a traditional piecepack this give you black-colored coin defenders plus a black-colored pawn versus non-black-colored coin attackers).}
 
 %% begin.rcode starting-diagram, fig.width=10, fig.height=10, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Tablut starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_tablut(cfg$get_width("die_face")), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
-%% end.rcode
-
-\subsection{Rules}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("tablut")
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_tablut(cfg$get_width("die_face")), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
 %% end.rcode

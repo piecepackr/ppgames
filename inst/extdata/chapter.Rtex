@@ -1,0 +1,18 @@
+%% begin.rcode include, echo=FALSE, results='asis'
+cat(sprintf("\\section{%s}", title(game)))
+game_data(game)
+cat(sprintf("\\input{%s}", game)) 
+%% end.rcode
+
+\subsection{External Links}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links(game)
+%% end.rcode
+
+\subsection{Credits}
+%% begin.rcode credits, echo=FALSE, results='asis'
+game_credits(game)
+%% end.rcode
+
+
+

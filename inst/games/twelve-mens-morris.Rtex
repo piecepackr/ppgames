@@ -1,11 +1,5 @@
-\section{Twelve Men's Morris}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("twelve_mens_morris")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
@@ -17,38 +11,32 @@ Twelve Men's Morris is an ancient game that used to be very popular.
 Figure \ref{fig:twelve-mens-morris-starting-diagram} shows the recommended setup of the board.  Give each player twelve of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits).  Before a player is reduced to three pieces there moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  One can also move diagonally from ``3'' valued tile faces to either the ``ace'' or ``five'' valued tile faces (and vice versa).  Figure \ref{fig:twelve-mens-morris-possible-moves} shows the moves of the pieces. If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} use them to connect tiles where orthogonal moves are possible.
 
 %% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Twelve Men's Morris starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pushViewport(viewport(width=inch(14), height=inch(14)))
-% pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
-% popViewport()
+cfg <- gk$get_piecepacks(1)[[1]]
+pushViewport(viewport(width=inch(14), height=inch(14)))
+pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
+popViewport()
 %% end.rcode
 
 %% begin.rcode possible-moves, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Moves of the pieces in Twelve Men's Morris.  Once a player has been reduced to three pieces their movements are no longer restricted.", echo=FALSE
-% pushViewport(viewport(width=inch(14), height=inch(14)))
-% pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
-% grid.piece("coin_back", suit=1, cfg=cfg, default.units="in",
-%           x=c(3, 7, 7, 9, 13), y=c(7, 5, 1, 9, 13))
-% gp <- gpar(lex=10)
-% grid.segments(x0 = c(3, 3.5, 3, 2.5), y0 = c(7.5, 7, 6.5, 7),
-%               x1 = c(3, 4.5, 3, 1.5), y1 = c(10.5, 7, 3.5, 7),
-%               arrow = arrow(), default.units="in", gp=gp)
-% grid.segments(x0 = c(6.5, 7, 7.5), y0 = c(5, 4.5, 5),
-%               x1 = c(5.5, 7, 8.5), y1 = c(5, 3.5, 5),
-%               arrow = arrow(), default.units="in", gp=gp)
-% grid.segments(x0 = c(6.5, 7, 7.5), y0 = c(1, 1.5, 1),
-%               x1 = c(1.5, 7, 12.5), y1 = c(1, 2.5, 1),
-%               arrow = arrow(), default.units="in", gp=gp)
-% grid.segments(x0 = c(8.5, 9, 9.5), y0 = c(9, 8.5, 9.5),
-%               x1 = c(7.5, 9, 10.5), y1 = c(9, 7.5, 10.5),
-%               arrow = arrow(), default.units="in", gp=gp)
-% grid.segments(x0 = c(12.5, 13, 12.5), y0 = c(13, 12.5, 12.5),
-%               x1 = c(7.5, 13, 11.5), y1 = c(13, 7.5, 11.5),
-%               arrow = arrow(), default.units="in", gp=gp)
-% popViewport()
-%% end.rcode
-
-\subsection{External Links}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("twelve_mens_morris")
+pushViewport(viewport(width=inch(14), height=inch(14)))
+pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
+grid.piece("coin_back", suit=1, cfg=cfg, default.units="in",
+          x=c(3, 7, 7, 9, 13), y=c(7, 5, 1, 9, 13))
+gp <- gpar(lex=10)
+grid.segments(x0 = c(3, 3.5, 3, 2.5), y0 = c(7.5, 7, 6.5, 7),
+              x1 = c(3, 4.5, 3, 1.5), y1 = c(10.5, 7, 3.5, 7),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(6.5, 7, 7.5), y0 = c(5, 4.5, 5),
+              x1 = c(5.5, 7, 8.5), y1 = c(5, 3.5, 5),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(6.5, 7, 7.5), y0 = c(1, 1.5, 1),
+              x1 = c(1.5, 7, 12.5), y1 = c(1, 2.5, 1),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(8.5, 9, 9.5), y0 = c(9, 8.5, 9.5),
+              x1 = c(7.5, 9, 10.5), y1 = c(9, 7.5, 10.5),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(12.5, 13, 12.5), y0 = c(13, 12.5, 12.5),
+              x1 = c(7.5, 13, 11.5), y1 = c(13, 7.5, 11.5),
+              arrow = arrow(), default.units="in", gp=gp)
+popViewport()
 %% end.rcode

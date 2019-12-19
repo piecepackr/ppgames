@@ -1,0 +1,45 @@
+%% begin.rcode documentclass, echo=FALSE, results='asis'
+cat(sprintf("\\documentclass[%spaper]{leaflet}\n",
+            tolower(size)))
+%% end.rcode
+
+\usepackage[colorlinks]{hyperref}
+% \usepackage{fancyhdr}
+\usepackage{etoolbox}
+
+\setcounter{secnumdepth}{0}
+\pagenumbering{gobble}
+
+
+%% begin.rcode title, echo=FALSE, results='asis'
+cat(sprintf("\\title{%s}", title(game)))
+%% end.rcode
+\date{}
+
+\begin{document}
+\maketitle\vspace{-3\baselineskip}
+%% begin.rcode game-data, echo=FALSE, results='asis'
+game_data(game)
+%% end.rcode
+\clearpage
+%% begin.rcode include, echo=FALSE, results='asis'
+cat(sprintf("\\section{%s}", title(game))) 
+cat(sprintf("\\input{%s}", game)) 
+%% end.rcode
+
+\subsection{External Links}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links(game)
+%% end.rcode
+
+\ifnumcomp{\value{page}}{<}{2}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{3}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{4}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{5}{\newpage\mbox{}}{}
+
+\subsection{Credits}
+%% begin.rcode credits, echo=FALSE, results='asis'
+game_credits(game)
+%% end.rcode
+
+\end{document}

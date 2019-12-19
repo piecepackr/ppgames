@@ -1,11 +1,5 @@
-\section{Cribbage}
-
 %% begin.rcode opts, echo=FALSE
-% set_knitr_opts(game)
-%% end.rcode
-
-%% begin.rcode game-data, echo=FALSE, results='asis'
-game_data("cribbage")
+set_knitr_opts(game)
 %% end.rcode
 
 \subsection{Description}
@@ -16,16 +10,10 @@ Cribbage is a popular two-person card game that usually requires a special cribb
 
 Depending on the version of cribbage played a player usually wins if they score 61 points or 121 points (on a traditional cribbage board the latter effect is achieved by going twice around a 60 hole crib board). 
 
-Give each player 12 tiles and arrange them in one vertical column in groups of two as in Figure \ref{fig:cribbage-starting-diagram}.  If you look at the ``points'' of this board and ignore the middle column of points then this gives you two columns each with 30 ``points'' arranged in groups of 5 as in a traditional cribbage board.  Each player can place up to 12 coins in the middle column as a reminder to not use it.  Give each player two pawns that they will use as "pegs". They will start off the board before entering the beginning of the board and a player wins when one peg goes off the end of the board. For a 121 point game the player must make a circuit of the board twice.  Use piecepack dice as counters to keep track of how many games each player has won.
+Give each player 12 tiles and arrange them in one vertical column in groups of two as in Figure \ref{fig:cribbage-starting-diagram}.  If you look at the ``points'' of this board and ignore the middle column of points then this gives you two columns each with 30 ``points'' arranged in groups of 5 as in a traditional cribbage board.  Each player can place up to 12 coins in the middle column as a reminder to not use it.  Give each player two pawns that they will use as ``pegs''. They will start off the board before entering the beginning of the board and a player wins when one peg goes off the end of the board. For a 121 point game the player must make a circuit of the board twice.  Use piecepack dice as counters to keep track of how many games each player has won.
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=33, out.width="2in", out.height="7.33in", fig.cap="Cribbage starting diagram", echo=FALSE
-% cfg <- gk$get_piecepacks(1)[[1]]
-% pmap_piece(df_cribbage_board(), cfg=cfg, default.units="in")
-% grid.draw(textGrob_cribbage_board(cfg$get_suit_color()))
-%% end.rcode
-
-\subsection{External Links}
-
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links("cribbage")
+%% begin.rcode starting-diagram, fig.width=9, fig.height=33, out.width="0.24545\\textheight", out.height="0.9\\textheight", fig.cap="Cribbage starting diagram", echo=FALSE
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_cribbage_board(), cfg=cfg, default.units="in")
+grid.draw(textGrob_cribbage_board(cfg$get_suit_color()))
 %% end.rcode
