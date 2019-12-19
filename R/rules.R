@@ -232,7 +232,8 @@ latex_url_name <- function(url) {
     name <- gsub("_", "\\\\_", name)
     name
 }
-# url <- function(url) sprintf("\\url{%s}", name)
+
+# url <- function(url) sprintf("\\url{%s}", name) # nolint
 href <- function(url, name=NULL) {
     if (is.null(name)) name <- latex_url_name(url)
     sprintf("\\href{%s}{%s}", url, name)

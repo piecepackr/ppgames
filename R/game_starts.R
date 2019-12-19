@@ -225,11 +225,11 @@ df_american_checkers <- function() {
 
 #' @rdname df_game
 #' @export
-df_english_draughts <- df_american_checkers 
+df_english_draughts <- df_american_checkers
 
 #' @rdname df_game
 #' @export
-df_checkers <- df_american_checkers 
+df_checkers <- df_american_checkers
 
 #' @rdname df_game
 #' @export
