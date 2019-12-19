@@ -10,11 +10,14 @@
 \alias{df_nine_mens_morris}
 \alias{df_twelve_mens_morris}
 \alias{df_american_checkers}
+\alias{df_english_draughts}
+\alias{df_checkers}
 \alias{df_backgammon}
 \alias{df_chaturaji}
 \alias{df_cribbage_board}
 \alias{textGrob_cribbage_board}
-\alias{df_fide_chess}
+\alias{df_international_chess}
+\alias{df_chess}
 \alias{df_the_in_crowd}
 \alias{df_ultima}
 \alias{df_baroque_chess}
@@ -25,6 +28,7 @@
 \alias{df_tablut}
 \alias{df_triactor}
 \alias{df_xiangqi}
+\alias{df_wormholes}
 \title{Data frames of starting diagrams for various games}
 \usage{
 df_alien_city(seed = NULL, tiles = NULL)
@@ -43,6 +47,10 @@ df_twelve_mens_morris(has_matchsticks = FALSE)
 
 df_american_checkers()
 
+df_english_draughts()
+
+df_checkers()
+
 df_backgammon()
 
 df_chaturaji(has_subpack = FALSE)
@@ -51,7 +59,9 @@ df_cribbage_board()
 
 textGrob_cribbage_board(suit_colors = rep("black", 4))
 
-df_fide_chess(has_subpack = FALSE)
+df_international_chess(has_subpack = FALSE)
+
+df_chess(has_subpack = FALSE)
 
 df_the_in_crowd()
 
@@ -72,6 +82,8 @@ df_tablut(die_width = 0.5)
 df_triactor(seed = NULL, cfg2 = "playing_cards_expansion")
 
 df_xiangqi(has_subpack = FALSE)
+
+df_wormholes()
 }
 \arguments{
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}

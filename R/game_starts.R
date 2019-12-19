@@ -225,6 +225,14 @@ df_american_checkers <- function() {
 
 #' @rdname df_game
 #' @export
+df_english_draughts <- df_american_checkers 
+
+#' @rdname df_game
+#' @export
+df_checkers <- df_american_checkers 
+
+#' @rdname df_game
+#' @export
 df_backgammon <- function() {
     y_top <- 4
     y_bot <- 1
@@ -338,7 +346,7 @@ textGrob_cribbage_board <- function(suit_colors = rep("black", 4)) {
              )
 }
 
-df_fide_chess_pieces <- function(has_subpack = FALSE) {
+df_chess_pieces <- function(has_subpack = FALSE) {
     if (has_subpack) {
         df_pb <- tibble(piece_side = "coin_back", cfg = "piecepack",
                         suit = rep(1:2, each = 4), x = 1:8, y = 7, angle = 180)
@@ -372,12 +380,16 @@ df_fide_chess_pieces <- function(has_subpack = FALSE) {
 
 #' @rdname df_game
 #' @export
-df_fide_chess <- function(has_subpack = FALSE) {
+df_international_chess <- function(has_subpack = FALSE) {
     df_t <- df_rect_board_tiles(8, 8)
     if (has_subpack) df_t$cfg <- "piecepack"
-    df_p <- df_fide_chess_pieces(has_subpack)
+    df_p <- df_chess_pieces(has_subpack)
     bind_rows(df_t, df_p)
 }
+
+#' @rdname df_game
+#' @export
+df_chess <- df_international_chess
 
 #' @rdname df_game
 #' @export
@@ -443,7 +455,7 @@ df_alice_chess <- function(has_subpack = FALSE, max_tiles = 24) {
     max_tiles_per_board <- floor(max_tiles / 2)
     df_t1 <- df_rect_board_tiles(8, 8, max_tiles = max_tiles_per_board)
     df_t2 <- df_rect_board_tiles(8, 8, max_tiles = max_tiles_per_board, x0 = 11)
-    df_p <- df_fide_chess_pieces(has_subpack)
+    df_p <- df_chess_pieces(has_subpack)
     bind_rows(df_t1, df_t2, df_p)
 }
 
@@ -628,4 +640,14 @@ df_xiangqi <- function(has_subpack = FALSE) {
     df <- bind_rows(df_t1, df_t2, df_zu1, df_zu2, df_pao, df_sb)
     df$cfg <- ifelse(is.na(df$cfg), "piecepack", df$cfg)
     df
+}
+
+#' @rdname df_game
+#' @export
+df_wormholes <- function() {
+    df_tiles <- tibble(piece_side = "tile_back",
+                       x = -0.5 + 2*c(1,2, 2,3, 2,3,4, 3,4,5, 2,3,4, 1,2,3, 2,3,4, 3,4, 4,5),
+                       y = -0.5 + 2*c(9,9, 8,8, 7,7,7, 6,6,6, 5,5,5, 4,4,4, 3,3,3, 2,2, 1,1))
+    df_coins <- tibble(piece_side = "pawn_face", x=c(10,10,1,1), y=c(1,2,17,18), suit=1:4)
+    bind_rows(df_tiles, df_coins)
 }

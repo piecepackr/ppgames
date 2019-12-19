@@ -7,11 +7,14 @@ New features
 * ``df_alice_chess``, ``df_chaturaji``, ``df_fide_chess``, ``df_four_seasons_chess``, 
   ``df_shogi``, ``df_ultima``, ``df_xiangqi``  now have a new argument 
   ``has_subpack`` which if ``TRUE`` will provide alternative piecepack "stackpack" diagrams.
-* Starting board generators for specific games:
+* New starting board generators for specific games:
   - ``df_alien_city`` (#8)
   - ``df_the_in_crowd``
   - ``df_san_andreas``
   - ``df_triactor`` (#36)
+* Aliases added for some existing starting board generators:
+  - ``df_checkers`` and ``df_english_draughts`` for ``df_american_checkers``
+  - ``df_chess`` for ``df_international_chess``
 * Portable Piecepack Notation enhancements:
   - Simplified piece notation now supports playing cards expansion (#30),
     icehouse pieces (#34), (stackpack) subpack,
@@ -23,6 +26,7 @@ Breaking changes
 * Arguments for starting board generators have been changed.  
   In particular functions no longer takes piecepackr configuration list objects as arguments but 
   instead uses arguments like ``has_matchsticks`` to determine how to customize output.
+* ``df_fide_chess`` renamed ``df_international_chess``
 
 Bug fixes and minor improvements
 --------------------------------
