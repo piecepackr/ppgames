@@ -26,16 +26,12 @@ test_that("game diagrams work as expected", {
         pmap_piece(df, cfg = cfg, default.units = "in")
     })
 
+    verify_output("../text_diagrams/alice_chess", cat_piece(df_alice_chess()))
+    verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
-
+    verify_output("../text_diagrams/international_chess.txt", cat_piece(df_international_chess()))
+    verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))
+    verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
 })
-
-    # chess
-    # checkers
-    # xiangqi (without palaces?)
-    # alice chess (twice)
-    # cribbage (twice)
-    # shogi (twice)
-    # tablut
