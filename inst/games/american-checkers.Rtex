@@ -6,11 +6,32 @@ set_knitr_opts(game)
 
 (American) checkers (aka English draughts aka straight checkers) is a classic two-player board game straightforwardly adapted to the piecepack.
 
+\subsection{Objective} A player wins by capturing and/or blocking all their opponent's pieces.\footnote{That is if their opponent were allowed an extra move after the conclusion of the game (which they are not) then they would not have any legal moves available to them \emph{for that move}.  One also wins if their opponent resigns, forfeits, and (when using clocks) fails to reach the time control.}  If neither player can force a win then the game ends in a draw.\footnote{Formally, a game ends in a draw if either 1) the players agree to a draw, 2) on their next move a player repeats the same board position for the third time in a game, or 3) in the past 40 moves no pieces have been removed from the board \emph{and} neither player has advanced an uncrowned man forward.}
+
 \subsection{Setup}
 
-American checkers is played on an 8-by-8 board made with the backs of 16 tiles.  Have each other sit across from each other and give each player all the coins of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:american-checkers-starting-diagram}.  King promotion is the same as in traditional checkers: place another ``coin`` on top.
+Make an 8\texttimes 8 board with the backs of 16 tiles.  Give each player all the coins of two suits\footnote{For example ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits.}---these 12 coins will initially serve as each player's (uncrowned) \emph{men}---and place them as in Figure \ref{fig:american-checkers-starting-diagram}.  
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) Checkers starting diagram", echo=FALSE
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_american_checkers(), cfg=cfg, default.units="in")
 %% end.rcode
+
+\subsection{The Order Of Play}
+
+Decide by random selection which player will make the first move.\footnote{Traditional methods are 1) a coin toss or 2) one player hiding a piece from each player in their hands and having the other player pick a hand (the player whose piece is in that hand will make the first move).}  In subsequent games alternate which player makes the first move.  Within a game players alternate moves, during their move each player's moves a single piece.
+
+\subsection{The Moves}
+
+Each player has two possible pieces available to them: (uncrowned) \emph{men} represented by a single coin and (crowned) \emph{kings} represented by two coins stacked upon each other.  At the beginning of the game there are only men, when a man reaches the farthest row of the board\footnote{Traditionally each of these rows is called a \emph{king-row}.} then their move ends and they are promoted to a \emph{king} by placing an available coin \emph{under} the man.\footnote{Alternatively, if coins of that player's suits are available one could also place a coin suit-side up \emph{on top} of the man as well.  However if only coins of that player's opponent's suits are available one must promote by placing a coin \emph{under} the man.}
+
+Men and kings each have a non-capturing \emph{simple move} and a capturing \emph{jump} move.  For the \emph{simple move} men slide \emph{diagonally} to an empty square one square forward while kings slide diagonally to an empty square one square forward \emph{or} backwards.  For the capturing \emph{jump} men move diagonally to an empty square two squares forward over an opponent's piece that exists in between that square and the capturing piece's initial square (the opponent's piece is then removed from the board).  Kings may jump over an opponent diagonally two squares forward \emph{or} backwards.  Multiple jumps in a turn are possible, if after a jump a piece is in a position to make another jump (possibly in another diagonal direction) then they can (and in fact must) do so until they are no longer in a position to do so.\footnote{Note once a man reaches the king-row their turn is over and they are promoted to king.}  
+
+If possible a player must choose to do a jump instead of a simple move.  After making a jump a piece must continue to jump until it can no longer do so.  If multiple pieces can make a jump and/or a piece may jump in multiple directions then the player may choose which piece and which jumps to make---they need not maximize the number of possible jumps (but any jumping piece must continue to make jumps until it can no longer do so).
+
+\subsection{Common Rule Variants}
+\begin{itemize}
+\item Jumps as described earlier in the rules are now optional but if a player fails to do (previously mandatory) jump in their turn then the piece that would have jumped is removed by the opponent before their move.\footnote{Even if that piece jumped over one or more pieces it can still be ``huffed'' off the board if that piece could have made additional jumps that turn.  If there are multiple pieces that could have jumped that turn then the opponent gets to choose which one to huff off the board.}  This is called ``huffing''.
+\item A man's jumping move doesn't necessarily end upon reaching the king-row and promoting to a king but (if possible) must continue making jumps as a king.
+\item For two subsequent games (each player moving first in one) use a pre-determined 3 move opening.\footnote{Traditionally drawn from a recognized set of ballot cards.}
+\end{itemize}

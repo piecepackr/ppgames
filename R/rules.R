@@ -167,15 +167,19 @@ game_data <- function(game) {
 game_credits <- function(game) {
     info <- get_game_info(game)
     items <- list()
-    if ("author" %in% names(info)) items$author <- paste("Written by:", info$author, "\\newline")
-    items$designer <- paste("Game design:", info$designer, "\\newline")
+    if ("author" %in% names(info)) items$`Written by:` <- info$author
+    items$`Game design:` <- info$designer
     license <- if (is.null(info$license)) "CC-BY-SA-4" else info$license
     license_text <- sprintf("\\href{%s}{%s}", license_urls[[license]], license_names[[license]])
     copyright <- paste0("\\copyright~", info$copyright, "\\newline")
-    items$license <- paste(copyright, "Some Rights Reserved.\\newline",
-                     paste("Licensed under a", license_text, "license.\\newline"),
+    license <- paste(copyright, "Some Rights Reserved.\\newline",
+                     paste("Licensed under the", license_text, "\\newline"),
                      collapse="\n")
-    cat(paste(as.character(items), collapse="\n"))
+    cat(paste(c("\\begin{description}",
+                sprintf("\\item[%s] %s", names(items), as.character(items)),
+                "\\end{description}\n"),
+          collapse="\n"))
+    cat(license, "\n")
 }
 
 game_length <- function(gl) {
@@ -202,6 +206,9 @@ title <- function(game) {
 external_links <- function(game, list_type = "itemize") {
     links <- list()
     info <- get_game_info(game)
+    if ("ppwiki" %in% names(info)) {
+        links[["Piecepack Wiki"]] <- paste0("http://www.ludism.org/ppwiki/", info$ppwiki)
+    }
     if ("boardgamegeek" %in% names(info)) {
         links[["BoardGameGeek"]] <- paste0("https://boardgamegeek.com/boardgame/", info$boardgamegeek)
     }
@@ -213,6 +220,10 @@ external_links <- function(game, list_type = "itemize") {
     }
     if ("wikipedia" %in% names(info)) {
         links[["Wikipedia"]] <- paste0("https://en.wikipedia.org/wiki/", info$wikipedia)
+    }
+    if ("external_links" %in% names(info)) {
+        for (n in names(info$external_links))
+            links[[n]] <- info$external_links[[n]]
     }
     if (list_type == "description") {
         items <- paste("\\item[%s] \\url{%s}", names(links), as.character(links))

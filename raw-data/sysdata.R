@@ -266,8 +266,8 @@ box2char[["2222"]] <- "\u254b"
 
 # nolint end
 
-# license_names <- list(`CC-BY-SA-4` = "Creative Commons Attribution-ShareAlike 4.0 International License")
-license_names <- list(`CC-BY-SA-4` = "CC BY-SA 4.0")
+license_names <- list(`CC-BY-SA-4` = "Creative Commons Attribution-ShareAlike 4.0 International License")
+# license_names <- list(`CC-BY-SA-4` = "CC BY-SA 4.0")
 license_urls <- list(`CC-BY-SA-4` = "https://creativecommons.org/licenses/by-sa/4.0")
 
 

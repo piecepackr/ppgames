@@ -5,8 +5,11 @@ cat(sprintf("\\documentclass[%spaper,onecolumn]{article}\n",
 
 \usepackage[colorlinks]{hyperref}
 % \usepackage{fancyhdr}
+\usepackage{enumitem}
+
 \setcounter{secnumdepth}{0}
-%\pagenumbering{gobble}
+% \setlist{noitemsep} % \setlist{nosep}
+% \pagenumbering{gobble}
 
 %% begin.rcode title, echo=FALSE, results='asis'
 cat(sprintf("\\title{%s}", title(game)))
@@ -14,7 +17,7 @@ cat(sprintf("\\title{%s}", title(game)))
 \date{}
 
 \begin{document}
-\maketitle\vspace{-3\baselineskip}
+\maketitle\vspace{-4\baselineskip}
 %% begin.rcode include, echo=FALSE, results='asis'
 game_data(game)
 cat(sprintf("\\input{%s}", game)) 
@@ -25,6 +28,9 @@ cat(sprintf("\\input{%s}", game))
 external_links(game)
 %% end.rcode
 
+% \mbox{} 
+% 
+% \vspace*{\fill} % empty line needed before \vspace
 \subsection{Credits}
 %% begin.rcode credits, echo=FALSE, results='asis'
 game_credits(game)
