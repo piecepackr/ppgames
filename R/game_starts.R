@@ -496,6 +496,45 @@ df_four_seasons_chess <- function(has_subpack = FALSE) {
 
 #' @rdname df_game
 #' @export
+df_salta <- function(has_subpack = FALSE) {
+    if(has_subpack) {
+        df_t1 <- tibble(piece_side = "tile_back", 
+                       x=-0.5+2*rep(c(1,2,4,5), each=5),
+                       y=-0.5+2*rep(1:5, 4))
+        df_t2 <- tibble(piece_side="tile_back", x=-0.5+2*3, y=-0.5+2*c(1,2,4,5))
+        df_t <- bind_rows(df_t1, df_t2)
+    } else {
+        df_t <- df_rect_board_tiles(10, 10)
+    }
+    df_t$cfg <- "piecepack"
+    df_cf <- tibble(piece_side = "coin_face", rank=c(2:6, 6:2),
+                    x=c(seq(1,9,2), seq(2,10,2)), y=rep(c(1,10), each=5),
+                    angle=rep(c(0,180), each=5))
+    if(has_subpack) {
+        df_st <- tibble(piece_side = "tile_face", cfg = "subpack",
+                        suit=rep(c(2,1,3,4), each=5), rank=rep(2:6, 4),
+                        x=c(seq(2,10,2), seq(1,9,2), seq(10,2,-2), seq(9,1,-2)),
+                        y=rep(c(2,3,8,9), each=5), angle=rep(c(0,180), each=10))
+        df_tb <- tibble(piece_side = "tile_back", cfg = "subpack",
+                        x = c(5,5,6,6), y = c(5,6,5,6))
+        df <- bind_rows(df_t, df_tb, df_cf, df_st)
+    } else {
+        df_cb <- tibble(piece_side = "coin_back", suit=c(1:4, 4:1),
+                        x=c(seq(2,8,2), seq(3,9,2)), y=rep(c(2,9), each=4),
+                        angle=rep(c(0,180), each=4))
+        df_cf2 <- tibble(piece_side = "coin_face", rank=c(1,1,6,1,1,6),
+                         x=c(10,9,9,1,2,2), y=c(2,3,3,9,8,8),
+                         angle=rep(c(0,180), each=3))
+        df_d <- tibble(piece_side = "die_face", rank=2:5, suit=1:4, x=seq(1,7,2), y=3)
+        df_p <- tibble(piece_side = "pawn_face", rank=2:5, suit=1:4, x=seq(10,4,-2), y=8, angle=180)
+        df <- bind_rows(df_t, df_cf, df_cb, df_cf2, df_d, df_p)
+    }
+    df$cfg <- ifelse(is.na(df$cfg), "piecepack", df$cfg)
+    df
+}
+
+#' @rdname df_game
+#' @export
 df_san_andreas <- function() {
     x <- 0.5+c(rep(c(1,3,5), 3), 2,4,6, 3,5,7, 4,6,8, 5,7,9, 7,9)
     y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)

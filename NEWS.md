@@ -11,6 +11,7 @@ New features
   - ``df_alien_city`` (#8)
   - ``df_the_in_crowd``
   - ``df_san_andreas``
+  - ``df_salta``
   - ``df_triactor`` (#36)
   - ``df_wormholes``
 * Aliases added for some existing starting board generators:
