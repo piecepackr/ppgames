@@ -29,6 +29,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/alice_chess", cat_piece(df_alice_chess()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
+    verify_output("../text_diagrams/ice_floe.txt", cat_piece(df_ice_floe()))
     verify_output("../text_diagrams/international_chess.txt", cat_piece(df_international_chess()))
     verify_output("../text_diagrams/salta.txt", cat_piece(df_salta()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))

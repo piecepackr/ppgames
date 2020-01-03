@@ -7,6 +7,7 @@
 \alias{df_four_field_kono}
 \alias{df_cell_management}
 \alias{df_fujisan}
+\alias{df_ice_floe}
 \alias{df_nine_mens_morris}
 \alias{df_twelve_mens_morris}
 \alias{df_american_checkers}
@@ -41,6 +42,8 @@ df_four_field_kono()
 df_cell_management(seed = NULL)
 
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
+
+df_ice_floe()
 
 df_nine_mens_morris(has_matchsticks = FALSE)
 

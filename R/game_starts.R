@@ -185,6 +185,17 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
 
 #' @rdname df_game
 #' @export
+df_ice_floe <- function() {
+    df <- tibble(piece_side = "tile_face",
+           x = rep(seq(1,9,2), 5),
+           y = rep(seq(9,1,-2), each=5),
+           suit = c(1,1,3,2,2, 1,1,4,2,2, 2,3,NA,1,4, 4,4,2,3,3, 4,4,1,3,3),
+           rank = c(2,3,1,2,3, 4,5,1,4,5, 0,0,NA,0,0, 2,3,1,2,3, 4,5,1,4,5) + 1)
+    df[-13, ]
+}
+
+#' @rdname df_game
+#' @export
 df_nine_mens_morris <- function(has_matchsticks = FALSE) {
     df <- tibble(piece_side = "tile_face",
            suit = rep(1:4, each = 6),
@@ -497,8 +508,8 @@ df_four_seasons_chess <- function(has_subpack = FALSE) {
 #' @rdname df_game
 #' @export
 df_salta <- function(has_subpack = FALSE) {
-    if(has_subpack) {
-        df_t1 <- tibble(piece_side = "tile_back", 
+    if (has_subpack) {
+        df_t1 <- tibble(piece_side = "tile_back",
                        x=-0.5+2*rep(c(1,2,4,5), each=5),
                        y=-0.5+2*rep(1:5, 4))
         df_t2 <- tibble(piece_side="tile_back", x=-0.5+2*3, y=-0.5+2*c(1,2,4,5))
@@ -510,7 +521,7 @@ df_salta <- function(has_subpack = FALSE) {
     df_cf <- tibble(piece_side = "coin_face", rank=c(2:6, 6:2),
                     x=c(seq(1,9,2), seq(2,10,2)), y=rep(c(1,10), each=5),
                     angle=rep(c(0,180), each=5))
-    if(has_subpack) {
+    if (has_subpack) {
         df_st <- tibble(piece_side = "tile_face", cfg = "subpack",
                         suit=rep(c(2,1,3,4), each=5), rank=rep(2:6, 4),
                         x=c(seq(2,10,2), seq(1,9,2), seq(10,2,-2), seq(9,1,-2)),
