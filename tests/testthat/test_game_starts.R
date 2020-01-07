@@ -8,6 +8,16 @@ test_that("game diagrams work as expected", {
         df <- df_alien_city(seed=42)
         pmap_piece(df, cfg = cfg, default.units = "in")
     })
+    expect_doppelganger("alien_city_tiles", function() {
+        tiles <- "G^R^K^R^/R<B<GvB^/B<R^K<B</GvR^K>B>/G>K>G>K<"
+        df <- df_alien_city(seed=42, tiles=tiles)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("alien_city_tiles", function() {
+        tiles <- "G3^Rn^K3^R4^/R3<Ba<GnvB4^/B2<R2^Ka<Bn</G4vRa^K4>B3>/Ga>Kn>G2>K2<"
+        df <- df_alien_city(seed=42, tiles=tiles)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
     expect_doppelganger("backgammon", function() {
         df <- df_backgammon()
         pmap_piece(df, cfg = cfg, default.units = "in")
@@ -31,6 +41,12 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/ice_floe.txt", cat_piece(df_ice_floe()))
     verify_output("../text_diagrams/international_chess.txt", cat_piece(df_international_chess()))
+    verify_output("../text_diagrams/plans_of_action_seed.txt", cat_piece(df_plans_of_action(seed=42)))
+    coins <- "ASSCCM/CAMSMS/AAMCSS/ACAMMC"
+    verify_output("../text_diagrams/plans_of_action_coins.txt", cat_piece(df_plans_of_action(coins=coins)))
+    verify_output("../text_diagrams/relativity_seed.txt", cat_piece(df_relativity(seed=42)))
+    coins <- "3ann4a/524253/345n34/a2na52"
+    verify_output("../text_diagrams/relativity_coins.txt", cat_piece(df_relativity(coins=coins)))
     verify_output("../text_diagrams/salta.txt", cat_piece(df_salta()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))

@@ -11,6 +11,8 @@ New features
   - ``df_alien_city`` (#8)
   - ``df_ice_floe``
   - ``df_the_in_crowd``
+  - ``df_plans_of_action``
+  - ``df_relativity``
   - ``df_san_andreas``
   - ``df_salta``
   - ``df_triactor`` (#36)

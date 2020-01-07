@@ -1,4 +1,7 @@
 *.pdf
 *.swp
 *.png
-*.svg
+
+html/
+others/
+tmp/
