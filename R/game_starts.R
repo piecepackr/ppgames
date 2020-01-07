@@ -207,6 +207,8 @@ df_relativity <- function(seed = NULL, coins = NULL) {
     bind_rows(df_tiles, df_coins)
 }
 
+
+#' @importFrom stats sd
 should_resample_relativity_coins <- function(coins) {
     sd(c(coins[6], coins[4], coins[3], coins[1])) == 0
 }
