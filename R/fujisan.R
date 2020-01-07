@@ -241,15 +241,18 @@ solve_fujisan <- function(coins = random_fujisan_coins(), dice = random_dice()) 
 
     edges <- do.call(rbind, apply(get_states(), 2, states2edges, coins, dice))
     g <- igraph::graph_from_edgelist(edges, directed = TRUE)
-    initial <- igraph::V(g)["1_14_15_28"]
-    final <- igraph::V(g)["7_8_21_22"]
-    d <- igraph::distances(g, v = initial, to = final, mode = "out")
-    d <- as.numeric(d)
-    if (is.infinite(d)) {
-        d <- NA_integer_
-    } else {
-        d <- as.integer(d)
-    }
+    te <- try({
+        initial <- igraph::V(g)["1_14_15_28"]
+        final <- igraph::V(g)["7_8_21_22"]
+        d <- igraph::distances(g, v = initial, to = final, mode = "out")
+        d <- as.numeric(d)
+        if (is.infinite(d)) {
+            d <- NA_integer_
+        } else {
+            d <- as.integer(d)
+        }
+    }, silent=TRUE)
+    if (inherits(te, "try-error")) d <- NA_integer_
     if (is.na(d)) {
         p <- character(0)
     } else {

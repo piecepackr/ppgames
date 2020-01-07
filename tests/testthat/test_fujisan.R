@@ -12,4 +12,8 @@ test_that("fujisan solver works as expected", {
         pmap_piece(g2$dfs[[1]], envir = list(piecepack = pp_cfg()), default.units = "in")
     })
 
+    coins <- "235334140030554141221205"
+    dice <- "0000"
+    s <- solve_fujisan(coins=coins, dice=dice)
+    expect_length(s$shortest_path, 0)
 })
