@@ -16,4 +16,12 @@ test_that("fujisan solver works as expected", {
     dice <- "0000"
     s <- solve_fujisan(coins=coins, dice=dice)
     expect_length(s$shortest_path, 0)
+
+    verify_output("../text_diagrams/fujisan_seed.txt",
+                  cat_piece(df_fujisan(seed=42)))
+    coins <- "44nna233nna4/5342352a2a55"
+    verify_output("../text_diagrams/fujisan_dice1.txt",
+                  cat_piece(df_fujisan(seed=42, coins=coins)))
+    verify_output("../text_diagrams/fujisan_dice2.txt",
+                  cat_piece(df_fujisan(seed=42, coins=coins, dice="3n/n5")))
 })

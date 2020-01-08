@@ -21,6 +21,7 @@ Imports:
     piecepackr (>= 1.2.1),
     R6,
     rlang,
+    stats,
     stringr,
     tibble,
     tools,

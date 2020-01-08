@@ -137,7 +137,7 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
     if (is.null(coins)) {
         coins <- random_fujisan_coins()
     } else if (is.character(coins)) {
-        coins <- process_ranks(coins)
+        coins <- process_ranks(coins) - 1
     }
     if (is.vector(coins)) {
         coins <- matrix(coins, nrow = 2, byrow = TRUE)
@@ -146,11 +146,11 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
                    x = 1.5+c(seq(1,11,2),seq(2,10,2),seq(3,9,2),4,6,8,5,7,5,7,6,6))
     suit <- rev((0:23%%4)+1)
     df_c <- tibble(piece_side = "coin_face", x = rep(2:13, 2), y = rep(1:2, each = 12),
-                   suit = suit, rank = c(coins[2, ], coins[1, ]))
+                   suit = suit, rank = c(coins[2, ], coins[1, ]) + 1)
     df_p <- tibble(piece_side = "pawn_face", x = c(1,14,14,1), y = c(2,2,1,1), suit = 1:4)
-    if (first_move_needs_dice(coins - 1)) {
+    if (first_move_needs_dice(coins)) {
         if (is.null(dice)) {
-            dice <- random_dice()
+            dice <- random_dice() + 1
         } else {
             dice <- process_ranks(dice)
         }
@@ -175,13 +175,13 @@ df_ice_floe <- function() {
 #' @rdname df_game
 #' @export
 df_plans_of_action <- function(seed = NULL, coins = NULL) {
-    if(is.null(coins)) {
+    if (is.null(coins)) {
         set.seed(seed)
         suits <- sample(rep(1:4, 6), 24)
     } else {
         suits <- process_suits(coins)
     }
-    df_tiles <- df_rect_board_tiles(nrow=8, ncol=8)
+    df_tiles <- df_rect_board_tiles(nrows=8, ncols=8)
     df_coins <- tibble(piece_side = "coin_back", suit = suits,
                        x = rep(2:7, 4), y = rep(6:3, each=6))
     bind_rows(df_tiles, df_coins)
@@ -190,11 +190,11 @@ df_plans_of_action <- function(seed = NULL, coins = NULL) {
 #' @rdname df_game
 #' @export
 df_relativity <- function(seed = NULL, coins = NULL) {
-    df_tiles <- df_rect_board_tiles(nrow=4, ncol=6)
+    df_tiles <- df_rect_board_tiles(nrows=4, ncols=6)
     if (is.null(coins)) {
         set.seed(seed)
         ranks <- c(sample.int(6), sample.int(6), sample.int(6), sample.int(6))
-        while (should_resample_relativity_coins(ranks)) {
+        while (should_resample_relativity(ranks)) {
             ranks <- c(sample.int(6), sample.int(6), sample.int(6), sample.int(6))
         }
         ranks <- ranks[c(1:3, 7:9, 4:6, 10:12, 13:15, 19:21, 16:18, 22:24)]
@@ -207,10 +207,8 @@ df_relativity <- function(seed = NULL, coins = NULL) {
     bind_rows(df_tiles, df_coins)
 }
 
-
-#' @importFrom stats sd
-should_resample_relativity_coins <- function(coins) {
-    sd(c(coins[6], coins[4], coins[3], coins[1])) == 0
+should_resample_relativity <- function(coins) {
+    stats::sd(c(coins[6], coins[4], coins[3], coins[1])) == 0
 }
 
 #' @rdname df_game

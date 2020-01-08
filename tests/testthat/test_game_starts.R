@@ -22,6 +22,11 @@ test_that("game diagrams work as expected", {
         df <- df_backgammon()
         pmap_piece(df, cfg = cfg, default.units = "in")
     })
+    expect_doppelganger("cell_management", function() {
+        text <- "---\nGameType:\n  Name: Cell Management\n  Seed: 42\n..."
+        game <- read_ppn(textConnection(text))[[1]]
+        plot_move(game, new_device=FALSE)
+    })
     expect_doppelganger("cribbage", function() {
         df <- df_cribbage_board()
         pmap_piece(df, cfg = cfg, default.units = "in")

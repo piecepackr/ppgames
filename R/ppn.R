@@ -66,8 +66,8 @@ get_df_from_move <- function(game, move = NULL) {
 #'
 #' Plot game move
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
-#' @param file Filename to save graphic to unless \code{NULL} in which
-#'        case it opens a new graphics device.
+#' @param file Filename to save graphic to unless \code{NULL} and \code{new_device==TRUE}
+#'        in which case it opens a new graphics device.
 #' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 #'             unless \code{NULL} in which case will plot the game state after the last move.
 #' @param annotate If \code{TRUE} annotate the plot
@@ -76,11 +76,12 @@ get_df_from_move <- function(game, move = NULL) {
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
+#' @param new_device If \code{file} is \code{NULL} should we open up a new graphics device?
 #' @return Nothing, as a side effect saves a graphic
 #' @import grDevices
 #' @export
 plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg = "white", res = 72,
-                      cfg = NULL, envir = NULL) {
+                      cfg = NULL, envir = NULL, new_device = TRUE) {
 
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
@@ -92,7 +93,7 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg 
     height <- dfr$ymax_op + 0.5
 
     if (is.null(file)) {
-        dev.new(width = width, height = height, unit = "in", noRstudioGD = TRUE)
+        if (new_device) dev.new(width = width, height = height, unit = "in", noRstudioGD = TRUE)
     } else {
         format <- tools::file_ext(file)
         switch(format,

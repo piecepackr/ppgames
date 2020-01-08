@@ -13,14 +13,15 @@ plot_move(
   bg = "white",
   res = 72,
   cfg = NULL,
-  envir = NULL
+  envir = NULL,
+  new_device = TRUE
 )
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
-\item{file}{Filename to save graphic to unless \code{NULL} in which
-case it opens a new graphics device.}
+\item{file}{Filename to save graphic to unless \code{NULL} and \code{new_device==TRUE}
+in which case it opens a new graphics device.}
 
 \item{move}{Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 unless \code{NULL} in which case will plot the game state after the last move.}
@@ -36,6 +37,8 @@ unless \code{NULL} in which case will plot the game state after the last move.}
 \item{cfg}{A piecepackr configuration list}
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
+
+\item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
 }
 \value{
 Nothing, as a side effect saves a graphic
