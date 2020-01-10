@@ -22,6 +22,8 @@ ppgames: Piecepack game diagrams and rules
 .. _piecepackr: https://github.com/trevorld/piecepackr
 .. _R: https://www.r-project.org/
 
+.. contents::
+
 Installation
 ------------
 
@@ -116,8 +118,7 @@ This package provides a prototype `Portable Piecepack Notation <https://trevorld
 
 .. code:: r
 
-    ppn <- read_ppn(system.file("extdata/ex1.ppn", package="ppgames"))
-    game <- ppn[[1]]
+    game <- read_ppn(system.file("ppn/four-field-kono.ppn", package="ppgames"))[[1]]
     animate_game(game)
     plot_move(game)
     cat_move(game)

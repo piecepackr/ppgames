@@ -1,8 +1,8 @@
 library("piecepackr")
 library("vdiffr")
 context("test ppn")
-ppn1 <- read_ppn(system.file("extdata/ex1.ppn", package = "ppgames"))
-ppn2 <- read_ppn(system.file("extdata/ex2.ppn", package = "ppgames"))
+ppn1 <- read_ppn(system.file("ppn/tic-tac-toe.ppn", package = "ppgames"))
+ppn2 <- read_ppn(system.file("ppn/four-field-kono.ppn", package = "ppgames"))
 ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package = "ppgames"))
 ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package = "ppgames"))
 g1 <- ppn1[[1]]
