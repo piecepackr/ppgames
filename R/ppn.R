@@ -416,7 +416,7 @@ process_at_move <- function(df, text) {
     xy <- get_xy(coords)
     df_piece$x <- xy[1]
     df_piece$y <- xy[2]
-    df_piece$id <- nrow(df)+1
+    df_piece$id <- max(df$id, 0) + 1 ####
     #### get index for piece restriction
     index <- nrow(df)
     insert_df(df, df_piece, index)

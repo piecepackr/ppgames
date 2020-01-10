@@ -55,6 +55,9 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/salta.txt", cat_piece(df_salta()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
+    df <- df_triactor()
+    df$angle <- 0
+    verify_output("../text_diagrams/triactor.txt", cat_piece(df))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
     verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))
 })

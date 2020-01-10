@@ -24,6 +24,9 @@ cat_piece <- function(df, color = NULL, ...) {
     if (!("suit" %in% nn)) df$suit <- NA
     if (!("angle" %in% nn)) df$angle <- NA
     df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
+    if (!("cfg" %in% nn)) df$cfg <- "piecepack"
+    df$cfg <- ifelse(is.na(df$cfg), "piecepack", df$cfg)
+
     lr <- range_heuristic(df)
     nc <- 2*lr$xmax+1
     nr <- 2*lr$ymax+1
@@ -38,7 +41,8 @@ cat_piece <- function(df, color = NULL, ...) {
         x <- 2*as.numeric(df[rr, "x"])+1
         y <- 2*as.numeric(df[rr, "y"])+1
         angle <- as.numeric(df[rr, "angle"])
-        cm <- add_piece(cm, ps, suit, rank, x, y, angle)
+        cfg <- as.character(df[rr, "cfg"])
+        cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg)
     }
 
     if (isTRUE(color) || color == "crayon") {
@@ -66,60 +70,72 @@ cat_move <- function(game, move = NULL, ...) {
     df <- get_df_from_move(game, move)
     cat_piece(df, ...)
 }
+# nolint start
+# Use Half-circle for Moons?
+# Use Arrows for Arms?
+# sss <- c("\u2665", "\u2660", "\u2663", "\u2666", "\u263c")
+# sss <- c("\u2600", "\u263e", "\u2641", "\u2e38", " ")
+# nolint end
+ss_list <- list(piecepack = c("\u2600", "\u263e", "\u265b", "\u2e38"),
+                playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
+                dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"))
+piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
+rs_list <- list(piecepack = piecepack_ranks,
+                playing_cards_expansion = piecepack_ranks,
+                dual_piecepacks_expansion = piecepack_ranks)
+piecepack_colors <- c("darkred", "black", "darkgreen", "darkblue")
 
-add_piece <- function(cm, piece_side, suit, rank, x, y, angle) {
+fg_list <- list(piecepack = piecepack_colors,
+                dual_piecepacks_expansion = piecepack_colors,
+                playing_cards_expansion = c("darkred", "black", "black", "red"))
+add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
+    if (piecepackr:::has_suit(piece_side)) {
+        if (is.na(suit)) suit <- 1
+        ss <- ss_list[[cfg]][suit]
+        ss <- rotate(ss, angle)
+        fg <- fg_list[[cfg]][suit]
+    } else {
+        fg <- "black"
+    }
+    if (piecepackr:::has_rank(piece_side)) {
+        if (is.na(rank)) rank <- 1
+        rs <- rs_list[[cfg]][rank]
+        rs <- rotate(rs, angle)
+    }
     switch(piece_side,
-           coin_back = add_coin_back(cm, suit, x, y, angle),
-           coin_face = add_coin_face(cm, rank, x, y, angle),
-           die_face = add_die_face(cm, suit, rank, x, y, angle),
-           pawn_face = add_pawn_face(cm, suit, x, y, angle),
-           pawn_back = add_pawn_back(cm, suit, x, y, angle),
-           tile_face = add_tile_face(cm, suit, rank, x, y, angle),
+           coin_back = add_coin_back(cm, ss, x, y, angle, fg),
+           coin_face = add_coin_face(cm, rs, x, y, angle, fg),
+           die_face = add_die_face(cm, rs, x, y, angle, fg),
+           pawn_face = add_pawn_face(cm, ss, x, y, angle, fg),
+           pawn_back = add_pawn_back(cm, ss, x, y, angle, fg),
+           tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg),
            tile_back = add_tile_back(cm, x, y),
            cm)
 }
 
-# nolint start
-# sss <- c("\u2665", "\u2660", "\u2663", "\u2666", "\u263c")
-# sss <- c("\u2600", "\u263e", "\u2641", "\u2e38", " ")
-# nolint end
-# Moons U+263E or U+25D0
-sss <- c("\u2600", "\u263e", "\u265b", "\u2e38", " ")
-rss <- c("n", "a", "2", "3", "4", "5")
-fg_colors <- c("darkred", "black", "darkgreen", "darkblue", "black")
-
-add_coin_back <- function(cm, suit, x, y, angle) {
-    ss <- switch(suit, sss[1], sss[2], sss[3], sss[4], sss[5])
-    ss <- rotate(ss, angle)
+add_coin_back <- function(cm, ss, x, y, angle, fg) {
     cm$char[y, x] <- paste0(ss, "\u20dd")
-    cm$fg[y, x] <- fg_colors[suit]
+    cm$fg[y, x] <- fg
     cm
 }
-add_coin_face <- function(cm, rank, x, y, angle) {
-    rs <- switch(rank, rss[1], rss[2], rss[3], rss[4], rss[5], rss[6])
-    rs <- rotate(rs, angle)
+add_coin_face <- function(cm, rs, x, y, angle, fg) {
     cm$char[y, x] <- paste0(rs, "\u20dd")
+    cm$fg[y, x] <- fg
     cm
 }
-add_die_face <- function(cm, suit, rank, x, y, angle) {
-    rs <- switch(rank, rss[1], rss[2], rss[3], rss[4], rss[5], rss[6])
-    rs <- rotate(rs, angle)
+add_die_face <- function(cm, rs, x, y, angle, fg) {
     cm$char[y, x] <- paste0(rs, "\u20de")
-    cm$fg[y, x] <- fg_colors[suit]
+    cm$fg[y, x] <- fg
     cm
 }
-add_pawn_face <- function(cm, suit, x, y, angle) {
-    ss <- switch(suit, sss[1], sss[2], sss[3], sss[4], sss[5])
-    ss <- rotate(ss, angle)
+add_pawn_face <- function(cm, ss, x, y, angle, fg) {
     cm$char[y, x] <- paste0(ss, "\u20df")
-    cm$fg[y, x] <- fg_colors[suit]
+    cm$fg[y, x] <- fg
     cm
 }
-add_pawn_back <- function(cm, suit, x, y, angle) {
-    ss <- switch(suit, sss[1], sss[2], sss[3], sss[4], sss[5])
-    ss <- rotate(ss, angle)
+add_pawn_back <- function(cm, ss, x, y, angle, fg) {
     cm$char[y, x] <- paste0(ss, "\u20df")
-    cm$fg[y, x] <- fg_colors[suit]
+    cm$fg[y, x] <- fg
     cm
 }
 add_tile_back <- function(cm, x, y) {
@@ -137,13 +153,11 @@ add_tile_back <- function(cm, x, y) {
     cm <- add_tile_border(cm, x, y)
     cm
 }
-add_tile_face <- function(cm, suit, rank, x, y, angle) {
+add_tile_face <- function(cm, ss, rs, x, y, angle, fg) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
     # rank symbol
-    rs <- switch(rank, rss[1], rss[2], rss[3], rss[4], rss[5], rss[6])
-    rs <- rotate(rs, angle)
     cm$char[y, x] <- rs
-    cm$fg[y, x] <- fg_colors[suit]
+    cm$fg[y, x] <- fg
     # interior blanks
     cm$char[y+1, x-1] <- " "
     cm$char[y-1, x-1] <- " "
@@ -152,20 +166,18 @@ add_tile_face <- function(cm, suit, rank, x, y, angle) {
     cm$char[y, x+c(-1,1)] <- " "
     cm$char[y+c(-1,1), x] <- " "
     # suit symbol
-    ss <- switch(suit, sss[1], sss[2], sss[3], sss[4], sss[5])
-    ss <- rotate(ss, angle)
     if (angle == 0) {
         cm$char[y+1, x-1] <- ss
-        cm$fg[y+1, x-1] <- fg_colors[suit]
+        cm$fg[y+1, x-1] <- fg
     } else if (angle == 90) {
         cm$char[y-1, x-1] <- ss
-        cm$fg[y-1, x-1] <- fg_colors[suit]
+        cm$fg[y-1, x-1] <- fg
     } else if (angle == 180) {
         cm$char[y-1, x+1] <- ss
-        cm$fg[y-1, x+1] <- fg_colors[suit]
+        cm$fg[y-1, x+1] <- fg
     } else if (angle == 270) {
         cm$char[y+1, x+1] <- ss
-        cm$fg[y+1, x+1] <- fg_colors[suit]
+        cm$fg[y+1, x+1] <- fg
     } else {
         stop(paste("Don't know how to handle angle", angle))
     }
