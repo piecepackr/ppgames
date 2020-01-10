@@ -154,7 +154,7 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
         } else {
             dice <- process_ranks(dice)
         }
-        df_d <- tibble(piece_side = "die_face", x = c(16,17,16,17), y = c(2,2,1,1), suit = c(1,2,4,3), rank = dice+1)
+        df_d <- tibble(piece_side = "die_face", x = c(16,17,16,17), y = c(2,2,1,1), suit = c(1,2,4,3), rank = dice)
         bind_rows(df_t, df_c, df_p, df_d)
     } else {
         bind_rows(df_t, df_c, df_p)
