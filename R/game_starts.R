@@ -14,9 +14,13 @@
 #' @param max_tiles Maximum number of (piecepack) tiles available to build boards
 #' @param suit_colors Character vector of the suit colors
 #' @rdname df_game
-#' @importFrom dplyr bind_rows
 #' @name df_game
 NULL
+
+#' @importFrom dplyr %>%
+#' @importFrom dplyr bind_cols
+#' @importFrom dplyr bind_rows
+#' @importFrom dplyr mutate
 
 #' @rdname df_game
 #' @export
@@ -113,6 +117,43 @@ df_cell_management <- function(seed = NULL) {
     df_p <- tibble(piece_side = "pawn_face", suit = 1:2, x = x0+c(4,5), y = y0)
 
     bind_rows(df_t, df_tm, df_c, df_p)
+}
+
+df_desfases <- function(seed = NULL) {
+    set.seed(seed)
+    df_txy <- tibble(piece_side = "tile_face",
+                     x = 2+rep(seq(1,9,2), 5), y = 2+rep(seq(1,9,2), each=5))
+    df_txy <- df_txy[-13, ]
+    df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+    df_t <- bind_cols(df_txy, df_tsr) %>% mutate(angle = ((suit + 1) * -90) %% 360)
+
+    df_c <- tibble(piece_side = "coin_face",
+                   x = c(11:6, rep(13, 6), 3:8, rep(1, 6)),
+                   y = c(rep(13, 6), 3:8, rep(1, 6), 11:6),
+                   suit = rep(1:4, each=6), rank = rep(1:6, 4),
+                   angle = rep(c(180, 90, 0, -90), each=6))
+
+    df_d <- tibble(piece_side = "die_face",
+                   x = c(3, 13, 11, 1), y = c(13, 11, 1, 3),
+                   angle = c(180, 90, 0, -90), suit = 1:4,
+                   rank = random_dice() + 1)
+
+    df_p <- df_d %>% mutate(piece_side = "pawn_face", rank = NULL)
+
+    for (i in seq(4)) {
+        # Move relevant coins under their respective dice
+        index <- which(df_c$rank == df_d$rank[i] & df_c$suit == i)
+        df_c[index, "piece_side"] <- "coin_back"
+        df_c[index, "x"] <- df_d$x[i]
+        df_c[index, "y"] <- df_d$y[i]
+
+        # Move pawns un top of their respective dice
+        index <- which(df_t$rank == df_d$rank[i] & df_t$suit == i)
+        df_p[i, "x"] <- df_t$x[index]
+        df_p[i, "y"] <- df_t$y[index]
+    }
+
+    bind_rows(df_t, df_c, df_d, df_p)
 }
 
 #' @rdname df_game

@@ -9,12 +9,13 @@ New features
   ``has_subpack`` which if ``TRUE`` will provide alternative piecepack "stackpack" diagrams.
 * New starting board generators for specific games:
   - ``df_alien_city`` (#8)
+  - ``df_desfases``
   - ``df_ice_floe``
-  - ``df_the_in_crowd``
   - ``df_plans_of_action``
   - ``df_relativity``
   - ``df_san_andreas``
   - ``df_salta``
+  - ``df_the_in_crowd``
   - ``df_triactor`` (#36)
   - ``df_wormholes``
 * Aliases added for some existing starting board generators:
