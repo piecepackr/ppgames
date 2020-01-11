@@ -31,6 +31,10 @@ test_that("game diagrams work as expected", {
         df <- df_cribbage_board()
         pmap_piece(df, cfg = cfg, default.units = "in")
     })
+    expect_doppelganger("desfases", function() {
+        df <- df_desfases(seed=42)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
     expect_doppelganger("shogi", function() {
         df <- df_shogi()
         ee <- list(piecepack = cfg)

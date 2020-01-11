@@ -4,7 +4,7 @@
 \alias{solve_fujisan}
 \title{Solve Fujisan game}
 \usage{
-solve_fujisan(coins = random_fujisan_coins(), dice = random_dice())
+solve_fujisan(coins = random_fujisan_coins(), dice = random_dice() - 1)
 }
 \arguments{
 \item{coins}{A vector or matrix of Fujisan coin layout.  Default is a random layout.}

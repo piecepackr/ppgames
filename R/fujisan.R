@@ -121,10 +121,6 @@ random_fujisan_coins <- function(...) {
     coins
 }
 
-random_dice <- function(...) {
-    sample(0:5, 4, replace = TRUE)
-}
-
 path2movetext <- function(p) {
     if (length(p) == 0) return("")
     p <- stringr::str_split(p, "_")
@@ -218,7 +214,7 @@ first_move_needs_dice <- function(coins) {
 #'  s2 <- solve_fujisan(coins = puzzle2)
 #'  g2 <- read_ppn(textConnection(s2$ppn))[[1]]
 #' @export
-solve_fujisan <- function(coins = random_fujisan_coins(), dice = random_dice()) {
+solve_fujisan <- function(coins = random_fujisan_coins(), dice = random_dice() - 1) {
     if (!requireNamespace("igraph", quietly = TRUE)) {
         stop("You need to install the suggested package 'igraph' to use 'solve_fujisan'.",
              "Use 'install.packages(\"igraph\")'")

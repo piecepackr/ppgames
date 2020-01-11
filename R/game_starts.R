@@ -35,39 +35,10 @@ df_alien_city <- function(seed = NULL, tiles = NULL) {
                         angle = 90 * (sample(4, 20, replace = TRUE)-1))
         df_t2 <- df_t2[sample.int(20), ]
     } else {
-        df_t2 <- process_alien_city_tiles(tiles)
+        df_t2 <- process_tiles(tiles, 20)
     }
-    cbind(df_t1, df_t2)
+    bind_cols(df_t1, df_t2)
 }
-
-process_alien_city_tiles <- function(tiles) {
-    tiles <- gsub("[[:space:]]", "", tiles)
-    tiles <- gsub("[/:;\\\\|]", "", tiles)
-    tiles <- stringr::str_split(tiles, "")[[1]]
-    if (length(tiles) == 40) {
-        suits <- tiles[which(seq(40) %% 2 == 1)]
-        angles <- tiles[which(seq(40) %% 2 == 0)]
-        ranks <- integer(20)
-    } else if (length(tiles) == 60) {
-        suits <- tiles[which(seq(60) %% 3 == 1)]
-        ranks <- tiles[which(seq(60) %% 3 == 2)]
-        angles <- tiles[which(seq(60) %% 3 == 0)]
-    } else {
-        stop(paste("Don't know how to handle tiles string", tiles))
-    }
-    suits <- process_suits(suits)
-    if (length(tiles) == 40) {
-        ranks[which(suits==1)] <- sample.int(5)
-        ranks[which(suits==2)] <- sample.int(5)
-        ranks[which(suits==3)] <- sample.int(5)
-        ranks[which(suits==4)] <- sample.int(5)
-    } else {
-        ranks <- process_ranks(ranks)
-    }
-    angles <- process_angles(angles)
-    tibble(suit = suits, rank = ranks, angle = angles)
-}
-
 
 #' @rdname df_game
 #' @export
@@ -119,13 +90,18 @@ df_cell_management <- function(seed = NULL) {
     bind_rows(df_t, df_tm, df_c, df_p)
 }
 
-df_desfases <- function(seed = NULL) {
+df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     set.seed(seed)
     df_txy <- tibble(piece_side = "tile_face",
                      x = 2+rep(seq(1,9,2), 5), y = 2+rep(seq(1,9,2), each=5))
     df_txy <- df_txy[-13, ]
-    df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
-    df_t <- bind_cols(df_txy, df_tsr) %>% mutate(angle = ((suit + 1) * -90) %% 360)
+    if (is.null(tiles)) {
+        df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+        df_tsr$angle <- ((df_tsr$suit + 1) * -90) %% 360
+    } else {
+        df_tsr <- process_tiles(tiles)
+    }
+    df_t <- bind_cols(df_txy, df_tsr) 
 
     df_c <- tibble(piece_side = "coin_face",
                    x = c(11:6, rep(13, 6), 3:8, rep(1, 6)),
@@ -133,22 +109,27 @@ df_desfases <- function(seed = NULL) {
                    suit = rep(1:4, each=6), rank = rep(1:6, 4),
                    angle = rep(c(180, 90, 0, -90), each=6))
 
+    if (is.null(dice)) {
+        dice <- random_dice()
+    } else {
+        dice <- process_ranks(dice)
+    }
     df_d <- tibble(piece_side = "die_face",
                    x = c(3, 13, 11, 1), y = c(13, 11, 1, 3),
                    angle = c(180, 90, 0, -90), suit = 1:4,
-                   rank = random_dice() + 1)
+                   rank = dice)
 
     df_p <- df_d %>% mutate(piece_side = "pawn_face", rank = NULL)
 
     for (i in seq(4)) {
         # Move relevant coins under their respective dice
-        index <- which(df_c$rank == df_d$rank[i] & df_c$suit == i)
+        index <- which(df_c$rank == dice[i] & df_c$suit == i)
         df_c[index, "piece_side"] <- "coin_back"
         df_c[index, "x"] <- df_d$x[i]
         df_c[index, "y"] <- df_d$y[i]
 
         # Move pawns un top of their respective dice
-        index <- which(df_t$rank == df_d$rank[i] & df_t$suit == i)
+        index <- which(df_t$rank == dice[i] & df_t$suit == i)
         df_p[i, "x"] <- df_t$x[index]
         df_p[i, "y"] <- df_t$y[index]
     }
@@ -191,7 +172,7 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
     df_p <- tibble(piece_side = "pawn_face", x = c(1,14,14,1), y = c(2,2,1,1), suit = 1:4)
     if (first_move_needs_dice(coins)) {
         if (is.null(dice)) {
-            dice <- random_dice() + 1
+            dice <- random_dice()
         } else {
             dice <- process_ranks(dice)
         }

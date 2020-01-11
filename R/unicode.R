@@ -71,10 +71,8 @@ cat_move <- function(game, move = NULL, ...) {
     cat_piece(df, ...)
 }
 # nolint start
-# Use Half-circle for Moons?
+# Use Half-circle for Moons? \u25d0
 # Use Arrows for Arms?
-# sss <- c("\u2665", "\u2660", "\u2663", "\u2666", "\u263c")
-# sss <- c("\u2600", "\u263e", "\u2641", "\u2e38", " ")
 # nolint end
 ss_list <- list(piecepack = c("\u2600", "\u263e", "\u265b", "\u2e38"),
                 playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
