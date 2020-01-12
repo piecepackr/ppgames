@@ -5,6 +5,7 @@
 \alias{df_game}
 \alias{df_alien_city}
 \alias{df_cell_management}
+\alias{df_desfases}
 \alias{df_everest}
 \alias{df_fujisan}
 \alias{df_ice_floe}
@@ -39,6 +40,8 @@
 df_alien_city(seed = NULL, tiles = NULL)
 
 df_cell_management(seed = NULL)
+
+df_desfases(seed = NULL, tiles = NULL, dice = NULL)
 
 df_everest()
 
@@ -103,9 +106,9 @@ df_tablut(die_width = 0.5)
 
 \item{tiles}{String of tile layout}
 
-\item{coins}{String of coin layout}
-
 \item{dice}{String of dice layout}
+
+\item{coins}{String of coin layout}
 
 \item{cfg2}{A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)}
 

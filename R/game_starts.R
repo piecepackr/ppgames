@@ -90,6 +90,8 @@ df_cell_management <- function(seed = NULL) {
     bind_rows(df_t, df_tm, df_c, df_p)
 }
 
+#' @rdname df_game
+#' @export
 df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     set.seed(seed)
     df_txy <- tibble(piece_side = "tile_face",
