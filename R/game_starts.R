@@ -103,7 +103,7 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     } else {
         df_tsr <- process_tiles(tiles)
     }
-    df_t <- bind_cols(df_txy, df_tsr) 
+    df_t <- bind_cols(df_txy, df_tsr)
 
     df_c <- tibble(piece_side = "coin_face",
                    x = c(11:6, rep(13, 6), 3:8, rep(1, 6)),
