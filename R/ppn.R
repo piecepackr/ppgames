@@ -343,7 +343,7 @@ get_simplified_piece <- function(text, suit, rank) {
         "matchstick"
     } else if (grepl("s", text)) {
         "saucer"
-    } else if (grepl("\u25b2|\u25b3", text)) {
+    } else if (grepl("\u25b2|\u25b3|x|l|r", text)) {
         "pyramid"
     } else {
         if (!is.na(suit) && !is.na(rank)) {
@@ -365,6 +365,8 @@ get_simplified_ps <- function(text, suit, rank) {
         "left"
     } else if (grepl("r", text)) {
         "right"
+    } else if (grepl("x", text)) {
+        "top"
     } else {
         switch(piece,
                tile = ifelse(is.na(suit) || is.na(rank), "back", "face"),
