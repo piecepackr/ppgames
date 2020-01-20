@@ -18,7 +18,7 @@ Imports:
     grid,
     grDevices,
     knitr,
-    piecepackr (>= 1.2.1),
+    piecepackr (>= 1.2.2-4),
     R6,
     rlang,
     stats,
