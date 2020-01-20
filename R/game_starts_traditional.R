@@ -107,9 +107,10 @@ textGrob_cribbage_board <- function(suit_colors = rep("black", 4)) {
 #' @rdname df_game
 #' @export
 df_four_field_kono <- function() {
-    df_t <- df_rect_board_tiles(4,4)
+    df_t <- df_rect_board_tiles(4, 4)
     df_c <- tibble(piece_side = "coin_back",
                    suit = rep(1:4, each = 4),
+                   rank = rep(3:6, 4),
                    x = c(1:2,1:2,3:4,3:4,3:4,3:4,1:2,1:2),
                    y = rep(c(4,3,4,3,2,1,2,1), each = 2),
                    angle = rep(c(180,0), each = 8))

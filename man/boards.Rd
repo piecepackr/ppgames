@@ -46,7 +46,15 @@ grid.board_rect_tiles(
   vp = NULL
 )
 
-df_rect_board_tiles(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles = 24)
+df_rect_board_tiles(
+  nrows = 8,
+  ncols = 8,
+  x0 = 1,
+  y0 = 1,
+  max_tiles = 24,
+  suit = rep(1:4, 6),
+  rank = rep(1:6, each = 4)
+)
 }
 \arguments{
 \item{nrows}{Number of rows in game board}
@@ -76,6 +84,10 @@ a list of \code{pp_cfg} objects,
 or a character vector of \code{pp_cfg} objects}
 
 \item{envir}{Environment (or named list) containing configuration list(s).}
+
+\item{suit}{Vector of suit values to use for tile back (will be repeated).}
+
+\item{rank}{Vector of rank values to use for tile back (will be repeated).}
 }
 \description{
 \code{grid.board_rect_tiles} draws a rectangular board using the back of piecepack tiles,

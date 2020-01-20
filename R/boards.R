@@ -77,8 +77,11 @@ grid.board_rect_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tile
 }
 
 #' @rdname boards
+#' @param suit Vector of suit values to use for tile back (will be repeated).
+#' @param rank Vector of rank values to use for tile back (will be repeated).
 #' @export
-df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles = 24) {
+df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles = 24,
+                               suit = rep(1:4, 6), rank = rep(1:6, each = 4)) {
     if (can_use_squares(nrows, ncols, max_tiles)) {
         x <- seq(0.5, by = 2, length.out = ncols/2)
         y <- seq(0.5, by = 2, length.out = nrows/2)
@@ -108,7 +111,10 @@ df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles 
     }
     xr <- x0 + rep(x, length(y))
     yr <- y0 + rep(y, each = length(x))
-    tibble(piece_side = "tile_back", suit = NA, rank = NA, x = xr, y = yr)
+    df <- tibble(piece_side = "tile_back", x = xr, y = yr, angle = 0)
+    df$suit <- rep(suit, length.out = nrow(df))
+    df$rank <- rep(rank, length.out = nrow(df))
+    df
 }
 
 can_use_squares <- function(nrows, ncols, max_tiles) {
