@@ -268,13 +268,43 @@ remove_comments <- function(text) {
     str_squish(str_remove_all(text, comment_token))
 }
 
+parse_piece <- function(text) {
+    df <- parse_simplified_piece(text)
+    if (is.na(df$cfg))
+        df$cfg <- "piecepack"
+    if (is.na(df$angle))
+        df$angle <- 0
+    if (is.na(df$piece)) {
+        df$piece <- if (df$side %in% c("left", "right", "top")) {
+            "pyramid"
+        } else if (!is.na(df$suit) && !is.na(df$rank)) {
+            "tile"
+        } else if (!is.na(df$suit) || !is.na(df$rank)) {
+            "coin"
+        } else {
+            "tile"
+        }
+    }
+    if (is.na(df$side)) {
+        df$side <- switch(df$piece,
+               tile = ifelse(is.na(df$suit) || is.na(df$rank), "back", "face"),
+               coin = ifelse(is.na(df$suit), "face", "back"),
+               saucer = ifelse(is.na(df$suit), "face", "back"),
+               pyramid = "top",
+               "face")
+    }
+    df$piece_side <- paste0(df$piece, "_", df$side)
+    tibble::as_tibble(df[c("piece_side", "suit", "rank", "angle", "cfg")])
+}
+
 parse_simplified_piece <- function(text) {
     suit <- get_simplified_suit(text)
     rank <- get_simplified_rank(text)
     angle <- get_simplified_angle(text)
-    ps <- get_simplified_ps(text, suit, rank)
+    piece <- get_simplified_piece(text)
+    side <- get_simplified_side(text)
     cfg <- get_simplified_cfg(text)
-    tibble(piece_side = ps, suit = suit, rank = rank, angle = angle, cfg = cfg)
+    list(piece = piece, side = side, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 get_simplified_cfg <- function(text) {
     if (grepl("\u25b3", text)) {
@@ -288,7 +318,7 @@ get_simplified_cfg <- function(text) {
     } else if (grepl("\u2b22|\u2b21|\u2b23", text)) {
         "hexpack"
     } else {
-        "piecepack"
+        NA_character_
     }
 }
 get_simplified_suit <- function(text) {
@@ -320,17 +350,19 @@ get_simplified_rank <- function(text) {
     }
 }
 get_simplified_angle <- function(text) {
-    if (grepl("<", text)) {
+    if (grepl("\\^", text)) {
+        0
+    } else if (grepl("<", text)) {
         90
     } else if (grepl("v", text)) {
         180
     } else if (grepl(">", text)) {
         270
     } else {
-        0
+        NA_integer_
     }
 }
-get_simplified_piece <- function(text, suit, rank) {
+get_simplified_piece <- function(text) {
     if (grepl("t", text)) {
         "tile"
     } else if (grepl("c", text)) {
@@ -343,20 +375,13 @@ get_simplified_piece <- function(text, suit, rank) {
         "matchstick"
     } else if (grepl("s", text)) {
         "saucer"
-    } else if (grepl("\u25b2|\u25b3|x|l|r", text)) {
+    } else if (grepl("\u25b2|\u25b3", text)) { ####
         "pyramid"
     } else {
-        if (!is.na(suit) && !is.na(rank)) {
-            "tile"
-        } else if (!is.na(suit) || !is.na(rank)) {
-            "coin"
-        } else {
-            "tile"
-        }
+        NA_character_
     }
 }
-get_simplified_ps <- function(text, suit, rank) {
-    piece <- get_simplified_piece(text, suit, rank)
+get_simplified_side <- function(text, suit, rank) {
     side <- if (grepl("f", text)) {
         "face"
     } else if (grepl("b", text)) {
@@ -368,14 +393,8 @@ get_simplified_ps <- function(text, suit, rank) {
     } else if (grepl("x", text)) {
         "top"
     } else {
-        switch(piece,
-               tile = ifelse(is.na(suit) || is.na(rank), "back", "face"),
-               coin = ifelse(is.na(suit), "face", "back"),
-               saucer = ifelse(is.na(suit), "face", "back"),
-               pyramid = "top",
-               "face")
+        NA_character_
     }
-    paste(piece, side, sep = "_")
 }
 
 get_algebraic_x <- function(text) {
@@ -414,7 +433,7 @@ process_at_move <- function(df, text) {
     piece <- pc[1]
     coords <- pc[2]
     #### handle complicated piece and coords
-    df_piece <- parse_simplified_piece(piece)
+    df_piece <- parse_piece(piece)
     xy <- get_xy(coords)
     df_piece$x <- xy[1]
     df_piece$y <- xy[2]
@@ -454,7 +473,7 @@ process_equal_move <- function(df, text) {
     coords <- cp[1]
     piece <- cp[2]
     index <- get_index_from_coords(df, coords)
-    df_piece <- parse_simplified_piece(piece)
+    df_piece <- parse_piece(piece)
     df[index, "piece_side"] <- df_piece$piece_side
     df[index, "suit"] <- df_piece$suit
     df[index, "rank"] <- df_piece$rank
