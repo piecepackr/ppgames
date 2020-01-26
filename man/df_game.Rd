@@ -9,6 +9,7 @@
 \alias{df_everest}
 \alias{df_fujisan}
 \alias{df_ice_floe}
+\alias{df_ley_lines}
 \alias{df_plans_of_action}
 \alias{df_relativity}
 \alias{df_the_in_crowd}
@@ -48,6 +49,8 @@ df_everest()
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
 df_ice_floe()
+
+df_ley_lines()
 
 df_plans_of_action(seed = NULL, coins = NULL)
 
@@ -159,6 +162,8 @@ Here is some more information about the various games:
                 See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
                  See \url{http://www.ludism.org/ppwiki/IceFloe}.}
+ \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
+                  See \url{http://www.ludism.org/ppwiki/LeyLines}.}
  \item{Nine Men's Morris}{Traditional board game.
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.

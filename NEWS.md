@@ -1,3 +1,9 @@
+ppgames 0.4.0
+=============
+
+* New starting board generators for specific games:
+  - ``df_ley_lines``
+
 ppgames 0.3.1
 =============
 

@@ -35,6 +35,8 @@
 #'                 See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
 #'  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
 #'                  See \url{http://www.ludism.org/ppwiki/IceFloe}.}
+#'  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
+#'                   See \url{http://www.ludism.org/ppwiki/LeyLines}.}
 #'  \item{Nine Men's Morris}{Traditional board game.
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
 #'  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
@@ -258,6 +260,15 @@ df_ice_floe <- function() {
 
 #' @rdname df_game
 #' @export
+df_ley_lines <- function() {
+    df <- tibble(piece_side = "tile_back",
+                 x = c(  6,8,   7,9,   7,9,   3,5, 8,10, 2,4, 9,11, 2,4,13, 7,9,11, 13, 9,11, 7) - 0.5,
+                 y = c(15,15, 13,13, 11,11, 10,10,  9,9, 8,8, 7,7,  6,6,6,  5,5,5,  4,  3,3,  2) - 0.5,
+                 suit = rep(1:4, each=6), rank = rep(1:6, 4))
+}
+
+#' @rdname df_game
+#' @export
 df_plans_of_action <- function(seed = NULL, coins = NULL) {
     if (is.null(coins)) {
         set.seed(seed)
@@ -309,7 +320,8 @@ df_the_in_crowd <- function() {
 df_san_andreas <- function() {
     x <- 0.5+c(rep(c(1,3,5), 3), 2,4,6, 3,5,7, 4,6,8, 5,7,9, 7,9)
     y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)
-    tibble(piece_side="tile_back", x=x, y=y)
+    tibble(piece_side="tile_back", x=x, y=y,
+           suit = rep(1:4, each=6, length.out=23), rank = rep(1:6, 4, length.out=23))
 }
 
 
