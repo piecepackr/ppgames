@@ -1,15 +1,15 @@
 ppgames: Piecepack game diagrams and rules
 ==========================================
-.. image:: https://travis-ci.org/trevorld/ppgames.png?branch=master
-    :target: https://travis-ci.org/trevorld/ppgames
+.. image:: https://travis-ci.org/piecepackr/ppgames.png?branch=master
+    :target: https://travis-ci.org/piecepackr/ppgames
     :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/ppgames?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/trevorld/ppgames
+.. image:: https://ci.appveyor.com/api/projects/status/github/piecepackr/ppgames?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/piecepackr/ppgames
     :alt: AppVeyor Build Status
 
-.. image:: https://img.shields.io/codecov/c/github/trevorld/ppgames/master.svg
-    :target: https://codecov.io/github/trevorld/ppgames?branch=master
+.. image:: https://img.shields.io/codecov/c/github/piecepackr/ppgames/master.svg
+    :target: https://codecov.io/github/piecepackr/ppgames?branch=master
     :alt: Coverage Status
 
 .. image:: http://www.repostatus.org/badges/latest/wip.svg
@@ -19,7 +19,7 @@ ppgames: Piecepack game diagrams and rules
 ``ppgames`` is an R_ package with functions that help generate piecepack_ game graphics, rulesets, and books as well as functions to parse "Portable Piecepack Notation" files and a Fuji-san solver.
 
 .. _piecepack: http://www.ludism.org/ppwiki/HomePage
-.. _piecepackr: https://github.com/trevorld/piecepackr
+.. _piecepackr: https://github.com/piecepackr/piecepackr
 .. _R: https://www.r-project.org/
 
 .. contents::
@@ -32,8 +32,8 @@ To install the ``ppgames`` R package use the following commands in R_:
 .. code:: r
 
    install.packages("remotes")
-   remotes::install_github("trevorld/piecepackr")
-   remotes::install_github("trevorld/ppgames")
+   remotes::install_github("piecepackr/piecepackr")
+   remotes::install_github("piecepackr/ppgames")
 
 If you want to make rulebooks you'll need ``xelatex`` and if you want to make rulesets you'll need a recent version of ``pandoc``.  The following instructions should work on Ubuntu:
 
