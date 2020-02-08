@@ -11,4 +11,5 @@ tmp
 .*.pdf
 ^.appveyor.yml$
 ^.lintr$
+^_pkgdown.yml$
 ^.travis.yml$
