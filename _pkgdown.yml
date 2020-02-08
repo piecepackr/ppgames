@@ -1,0 +1,4 @@
+destination: "/home/trevorld/a/projects/websites/R/ppgames/"
+url: "https://trevorldavis.com/R/ppgames"
+development:
+    mode: auto
