@@ -2,6 +2,9 @@
 *.swp
 *.png
 
+README.html
+README.md
+
 html/
 others/
 tmp/

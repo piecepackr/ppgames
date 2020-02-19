@@ -10,6 +10,9 @@
 #'  \item{Alien City}{Awarding winning game by Michael Schoessow that is traditionally played with both a piecepack
 #'                    and icehouse pieces.  See \url{http://www.ludism.org/ppwiki/AlienCity}.}
 #'  \item{Backgammon}{One of the oldest board games.  See \url{http://www.ludism.org/ppwiki/Backgammon}.}
+#'  \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
+#'                      that won the 2001 8x8 Game Design Competition.
+#'                      See \url{https://en.wikipedia.org/wiki/Breakthrough_(board_game)}.}
 #'  \item{Cell Management}{Solitaire game for the piecepack by Mark Goadrich.
 #'                         See \url{http://www.ludism.org/ppwiki/CellManagement}.}
 #'  \item{Chaturaji}{An old 4-player chess variant.
@@ -55,6 +58,8 @@
 #'        See \url{http://www.ludism.org/ppwiki/TheInCrowd}.}
 #'  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
 #'                  See \url{http://www.ludism.org/ppwiki/Triactor}.}
+#'  \item{Turkish Draughts}{AKA \dQuote{Dama} is a traditional checkers variant played in the Mediterranean.
+#'                          See \url{https://en.wikipedia.org/wiki/Turkish_draughts}.}
 #'  \item{Twelve Men's Morris}{Traditional two-player abstract.
 #'                             See \url{https://en.wikipedia.org/wiki/Morabaraba}.}
 #'  \item{Ultima}{AKA \dQuote{Baroque chess}, a chess variant by Robert Abbott.

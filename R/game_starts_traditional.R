@@ -81,6 +81,22 @@ df_backgammon <- function() {
 
 #' @rdname df_game
 #' @export
+df_breakthrough <- function() {
+    df_t <- df_rect_board_tiles(8, 8)
+    df_p <- tibble(piece_side = "pawn_face", x = c(1, 8, 8, 1),
+                   y = c(7, 7, 2, 2), angle = c(180, 180, 0, 0), suit = 1:4)
+    df_d <- tibble(piece_side = "die_face", x = c(1, 8, 8, 1),
+                   y = c(8, 8, 1, 1), angle = c(180, 180, 0, 0),
+                   suit = 1:4, rank = 2)
+    df_c <- tibble(piece_side = "coin_back", x = rep(c(2:7, 7:2), each=2),
+                   y = c(rep(c(8, 7), 6), rep(c(2, 1), 6)),
+                   angle = rep(c(180, 0), each=12),
+                   suit = rep(1:4, each = 6), rank = rep(1:6, 4))
+    bind_rows(df_t, df_p, df_d, df_c)
+}
+
+#' @rdname df_game
+#' @export
 df_cribbage_board <- function() {
     df_l <- df_rect_board_tiles(30, 3, x0 = 1, y0 = 3, max_tiles = 12)
     df_r <- df_rect_board_tiles(30, 3, x0 = 6, y0 = 3, max_tiles = 12)
@@ -139,6 +155,22 @@ df_nine_mens_morris <- function(has_matchsticks = FALSE) {
         df <- bind_rows(df, df_m)
     }
     df
+}
+
+#' @rdname df_game
+#' @export
+df_turkish_draughts <- function() {
+    df_t <- df_rect_board_tiles(8, 8)
+    df_p <- tibble(piece_side = "pawn_face", x = c(1, 8, 8, 1),
+                   y = c(6, 6, 3, 3), angle = c(180, 180, 0, 0), suit = 1:4)
+    df_d <- tibble(piece_side = "die_face", x = c(1, 8, 8, 1),
+                   y = c(7, 7, 2, 2), angle = c(180, 180, 0, 0),
+                   suit = 1:4, rank = 2)
+    df_c <- tibble(piece_side = "coin_back", x = rep(c(2:7, 7:2), each=2),
+                   y = c(rep(c(7, 6), 6), rep(c(3, 2), 6)),
+                   angle = rep(c(180, 0), each=12),
+                   suit = rep(1:4, each = 6), rank = rep(1:6, 4))
+    bind_rows(df_t, df_p, df_d, df_c)
 }
 
 #' @rdname df_game

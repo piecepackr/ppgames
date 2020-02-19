@@ -29,10 +29,12 @@
 \alias{df_english_draughts}
 \alias{df_checkers}
 \alias{df_backgammon}
+\alias{df_breakthrough}
 \alias{df_cribbage_board}
 \alias{textGrob_cribbage_board}
 \alias{df_four_field_kono}
 \alias{df_nine_mens_morris}
+\alias{df_turkish_draughts}
 \alias{df_twelve_mens_morris}
 \alias{df_salta}
 \alias{df_tablut}
@@ -90,6 +92,8 @@ df_checkers()
 
 df_backgammon()
 
+df_breakthrough()
+
 df_cribbage_board()
 
 textGrob_cribbage_board(suit_colors = rep("black", 4))
@@ -97,6 +101,8 @@ textGrob_cribbage_board(suit_colors = rep("black", 4))
 df_four_field_kono()
 
 df_nine_mens_morris(has_matchsticks = FALSE)
+
+df_turkish_draughts()
 
 df_twelve_mens_morris(has_matchsticks = FALSE)
 
@@ -137,6 +143,9 @@ Here is some more information about the various games:
  \item{Alien City}{Awarding winning game by Michael Schoessow that is traditionally played with both a piecepack
                    and icehouse pieces.  See \url{http://www.ludism.org/ppwiki/AlienCity}.}
  \item{Backgammon}{One of the oldest board games.  See \url{http://www.ludism.org/ppwiki/Backgammon}.}
+ \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
+                     that won the 2001 8x8 Game Design Competition.
+                     See \url{https://en.wikipedia.org/wiki/Breakthrough_(board_game)}.}
  \item{Cell Management}{Solitaire game for the piecepack by Mark Goadrich.
                         See \url{http://www.ludism.org/ppwiki/CellManagement}.}
  \item{Chaturaji}{An old 4-player chess variant.
@@ -182,6 +191,8 @@ Here is some more information about the various games:
        See \url{http://www.ludism.org/ppwiki/TheInCrowd}.}
  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
                  See \url{http://www.ludism.org/ppwiki/Triactor}.}
+ \item{Turkish Draughts}{AKA \dQuote{Dama} is a traditional checkers variant played in the Mediterranean.
+                         See \url{https://en.wikipedia.org/wiki/Turkish_draughts}.}
  \item{Twelve Men's Morris}{Traditional two-player abstract.
                             See \url{https://en.wikipedia.org/wiki/Morabaraba}.}
  \item{Ultima}{AKA \dQuote{Baroque chess}, a chess variant by Robert Abbott.

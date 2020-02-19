@@ -2,7 +2,9 @@ ppgames 0.4.0
 =============
 
 * New starting board generators for specific games:
+  - ``df_breakthrough``
   - ``df_ley_lines``
+  - ``df_turkish_draughts``
 
 ppgames 0.3.1
 =============

@@ -46,6 +46,7 @@ test_that("game diagrams work as expected", {
     })
 
     verify_output("../text_diagrams/alice_chess", cat_piece(df_alice_chess()))
+    verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/ice_floe.txt", cat_piece(df_ice_floe()))
@@ -63,6 +64,7 @@ test_that("game diagrams work as expected", {
     df <- df_triactor()
     df$angle <- 0
     verify_output("../text_diagrams/triactor.txt", cat_piece(df))
+    verify_output("../text_diagrams/turkish_draughts.txt", cat_piece(df_turkish_draughts()))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
     verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))
 })
