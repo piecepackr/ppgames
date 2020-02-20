@@ -25,6 +25,8 @@
 #'  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
 #'                  but one can use a piecepack as a cribbage board instead.
 #'                  See \url{http://www.ludism.org/ppwiki/Cribbage}.}
+#'  \item{Crossings}{An abstract invented by Robert Abbot.
+#'                   See \url{https://en.wikipedia.org/wiki/Crossings_(game)}}
 #'  \item{Desfases}{Game by Antonio Recuenco Muñoz.
 #'                  Runner-up for best game in the eighth community piecepack game design contest.
 #'                  See \url{http://www.ludism.org/ppwiki/Desfases}.}
@@ -40,6 +42,8 @@
 #'                  See \url{http://www.ludism.org/ppwiki/IceFloe}.}
 #'  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
 #'                   See \url{http://www.ludism.org/ppwiki/LeyLines}.}
+#'  \item{Lines of Action}{An abstract designed by Claude Soucie.
+#'                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
 #'  \item{Nine Men's Morris}{Traditional board game.
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
 #'  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.

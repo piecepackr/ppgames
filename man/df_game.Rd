@@ -32,7 +32,9 @@
 \alias{df_breakthrough}
 \alias{df_cribbage_board}
 \alias{textGrob_cribbage_board}
+\alias{df_crossings}
 \alias{df_four_field_kono}
+\alias{df_lines_of_action}
 \alias{df_nine_mens_morris}
 \alias{df_turkish_draughts}
 \alias{df_twelve_mens_morris}
@@ -98,7 +100,11 @@ df_cribbage_board()
 
 textGrob_cribbage_board(suit_colors = rep("black", 4))
 
+df_crossings()
+
 df_four_field_kono()
+
+df_lines_of_action()
 
 df_nine_mens_morris(has_matchsticks = FALSE)
 
@@ -158,6 +164,8 @@ Here is some more information about the various games:
  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
                  but one can use a piecepack as a cribbage board instead.
                  See \url{http://www.ludism.org/ppwiki/Cribbage}.}
+ \item{Crossings}{An abstract invented by Robert Abbot.
+                  See \url{https://en.wikipedia.org/wiki/Crossings_(game)}}
  \item{Desfases}{Game by Antonio Recuenco Muñoz.
                  Runner-up for best game in the eighth community piecepack game design contest.
                  See \url{http://www.ludism.org/ppwiki/Desfases}.}
@@ -173,6 +181,8 @@ Here is some more information about the various games:
                  See \url{http://www.ludism.org/ppwiki/IceFloe}.}
  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
                   See \url{http://www.ludism.org/ppwiki/LeyLines}.}
+ \item{Lines of Action}{An abstract designed by Claude Soucie.
+                        See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
  \item{Nine Men's Morris}{Traditional board game.
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.

@@ -122,6 +122,10 @@ textGrob_cribbage_board <- function(suit_colors = rep("black", 4)) {
 
 #' @rdname df_game
 #' @export
+df_crossings <- df_breakthrough
+
+#' @rdname df_game
+#' @export
 df_four_field_kono <- function() {
     df_t <- df_rect_board_tiles(4, 4)
     df_c <- tibble(piece_side = "coin_back",
@@ -130,6 +134,18 @@ df_four_field_kono <- function() {
                    x = c(1:2,1:2,3:4,3:4,3:4,3:4,1:2,1:2),
                    y = rep(c(4,3,4,3,2,1,2,1), each = 2),
                    angle = rep(c(180,0), each = 8))
+    bind_rows(df_t, df_c)
+}
+
+#' @rdname df_game
+#' @export
+df_lines_of_action <- function() {
+    df_t <- df_rect_board_tiles(8, 8)
+    df_c <- tibble(piece_side = "coin_back",
+                   x = c(2:7, rep(8, 6), 2:7, rep(1, 6)),
+                   y = c(rep(8, 6), 2:7, rep(1, 6), 2:7),
+                   suit = rep(c(1,3,2,4), each = 6), rank = rep(1:6, 4),
+                   angle = rep(c(180, 90, 0, 270), each = 6))
     bind_rows(df_t, df_c)
 }
 
