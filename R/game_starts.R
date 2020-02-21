@@ -36,6 +36,8 @@
 #'                         See \url{http://www.ludism.org/ppwiki/FourFieldKono}.}
 #'  \item{Four Seasons Chess}{A traditional four person chess variant recorded in \emph{Libro del Acedrex}.
 #'                            See \url{https://www.chessvariants.com/historic.dir/4seiz.html}.}
+#'  \item{Froggy Bottom}{Game by Clay Blankenship.
+#'                       See \url{http://www.ludism.org/ppwiki/FroggyBottom}.}
 #'  \item{Fujisan}{Popular solitaire game for the piecepack by James \dQuote{Kyle} Droscha.
 #'                 See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
 #'  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
@@ -214,16 +216,20 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
 #' @export
 df_everest <- function() {
     df_t1 <- tibble(piece_side = "tile_back",
-                    x = 0.5+c(seq(1,7,2),seq(2,6,2), seq(1,7,2)),
-                    y = 0.5+c(rep(1, 4), rep(3, 3), rep(5,4)))
-    df_t2 <- df_rect_board_tiles(4,6, x0 = 2, y0 = 2)
-    df_t3 <- df_rect_board_tiles(4,4, x0 = 3, y0 = 2)
-    df_t4 <- df_rect_board_tiles(2,4, x0 = 3, y0 = 3)
+                    x = 0.5 + c(seq(1, 7, 2),seq(2, 6, 2), seq(1, 7, 2)),
+                    y = 0.5 + c(rep(1, 4), rep(3, 3), rep(5, 4)))
+    df_t2 <- df_rect_board_tiles(4, 6, x0 = 2, y0 = 2)
+    df_t3 <- df_rect_board_tiles(4, 4, x0 = 3, y0 = 2)
+    df_t4 <- df_rect_board_tiles(2, 4, x0 = 3, y0 = 3)
     df_t5 <- tibble(piece_side = "tile_back", x = 4.5, y = 3.5)
     df_p <- tibble(piece_side = "pawn_face",
                    x = c(1,8,8,1), y = c(5,5,2,2), suit = 1:4)
     bind_rows(df_t1, df_t2, df_t3, df_t4, df_t5, df_p)
 }
+
+#' @rdname df_game
+#' @export
+df_froggy_bottom <- function() df_rect_board_tiles(ncols = 6, nrows = 8)
 
 #' @rdname df_game
 #' @export

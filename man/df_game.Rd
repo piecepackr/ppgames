@@ -7,6 +7,7 @@
 \alias{df_cell_management}
 \alias{df_desfases}
 \alias{df_everest}
+\alias{df_froggy_bottom}
 \alias{df_fujisan}
 \alias{df_ice_floe}
 \alias{df_ley_lines}
@@ -49,6 +50,8 @@ df_cell_management(seed = NULL)
 df_desfases(seed = NULL, tiles = NULL, dice = NULL)
 
 df_everest()
+
+df_froggy_bottom()
 
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
@@ -175,6 +178,8 @@ Here is some more information about the various games:
                         See \url{http://www.ludism.org/ppwiki/FourFieldKono}.}
  \item{Four Seasons Chess}{A traditional four person chess variant recorded in \emph{Libro del Acedrex}.
                            See \url{https://www.chessvariants.com/historic.dir/4seiz.html}.}
+ \item{Froggy Bottom}{Game by Clay Blankenship.
+                      See \url{http://www.ludism.org/ppwiki/FroggyBottom}.}
  \item{Fujisan}{Popular solitaire game for the piecepack by James \dQuote{Kyle} Droscha.
                 See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
