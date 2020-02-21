@@ -76,16 +76,26 @@ cat_move <- function(game, move = NULL, ...) {
 # nolint end
 ss_list <- list(piecepack = c("\u2600", "\u263e", "\u265b", "\u2e38"),
                 playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
-                dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"))
+                dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),
+                checkers1 = c(rep("\u26c2", 5), "\u26c0"),
+                checkers2 = c(rep("\u26c2", 5), "\u26c0"),
+                dice = rep(" ", 6))
 piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 rs_list <- list(piecepack = piecepack_ranks,
                 playing_cards_expansion = piecepack_ranks,
-                dual_piecepacks_expansion = piecepack_ranks)
+                dual_piecepacks_expansion = piecepack_ranks,
+                checkers1 = rep("\u26c2", 6),
+                checkers2 = rep("\u26c2", 6),
+                dice = c("\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f"))
 piecepack_colors <- c("darkred", "black", "darkgreen", "darkblue")
+checkers_colors <- c("darkred", "black", "darkgreen", "darkblue", "darkorange3", "black")
+dice_colors <- c("darkred", "grey40", "darkgreen", "darkblue", "darkorange3", "black")
 
 fg_list <- list(piecepack = piecepack_colors,
                 dual_piecepacks_expansion = piecepack_colors,
-                playing_cards_expansion = c("darkred", "black", "black", "red"))
+                playing_cards_expansion = c("darkred", "black", "black", "red"),
+                checkers1 = checkers_colors, checkers2 = checkers_colors,
+                dice = dice_colors)
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_suit(piece_side)) {
         if (is.na(suit)) suit <- 1
@@ -100,59 +110,88 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
         rs <- rs_list[[cfg]][rank]
         rs <- rotate(rs, angle)
     }
+    if (grepl("2", cfg)) {
+        cell <- 2
+    } else {
+        cell <- 1
+    }
     switch(piece_side,
-           coin_back = add_coin_back(cm, ss, x, y, angle, fg),
-           coin_face = add_coin_face(cm, rs, x, y, angle, fg),
+           coin_back = add_coin_back(cm, ss, x, y, fg),
+           coin_face = add_coin_face(cm, rs, x, y, fg),
            die_face = add_die_face(cm, rs, x, y, angle, fg),
            pawn_face = add_pawn_face(cm, ss, x, y, angle, fg),
            pawn_back = add_pawn_back(cm, ss, x, y, angle, fg),
            tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg),
            tile_back = add_tile_back(cm, x, y),
+           bit_back = add_bit_back(cm, ss, x, y, fg),
+           bit_face = add_bit_face(cm, rs, x, y, fg),
+           board_back = add_board(cm, x, y, cell * rank, cell * rank, cell),
+           board_face = add_board(cm, x, y, cell * rank, cell * rank, cell),
            cm)
 }
-
-add_coin_back <- function(cm, ss, x, y, angle, fg) {
+add_bit_face <- function(cm, rs, x, y, fg) {
+    cm$char[y, x] <- rs
+    cm$fg[y, x] <- fg
+    cm
+}
+add_bit_back <- function(cm, ss, x, y, fg) {
+    cm$char[y, x] <- ss
+    cm$fg[y, x] <- fg
+    cm
+}
+add_coin_back <- function(cm, ss, x, y, fg) {
     cm$char[y, x] <- paste0(ss, "\u20dd")
     cm$fg[y, x] <- fg
     cm
 }
-add_coin_face <- function(cm, rs, x, y, angle, fg) {
+add_coin_face <- function(cm, rs, x, y, fg) {
     cm$char[y, x] <- paste0(rs, "\u20dd")
     cm$fg[y, x] <- fg
     cm
 }
 add_die_face <- function(cm, rs, x, y, angle, fg) {
-    cm$char[y, x] <- paste0(rs, "\u20de")
+    if (angle %% 90 == 0) {
+        char <- paste0(rs, "\u20de")
+    } else {
+        char <- paste0(rs, "\u20df")
+    }
+    # nolint start
+    # ds <- die_subs[[char]]
+    # if (!is.null(ds)) char <- ds
+    # nolint end
+    cm$char[y, x] <- char
     cm$fg[y, x] <- fg
     cm
 }
 add_pawn_face <- function(cm, ss, x, y, angle, fg) {
-    cm$char[y, x] <- paste0(ss, "\u20df")
+    if (angle %% 90 == 0) {
+        cm$char[y, x] <- paste0(ss, "\u20df")
+    } else {
+        cm$char[y, x] <- paste0(ss, "\u20de")
+    }
     cm$fg[y, x] <- fg
     cm
 }
 add_pawn_back <- function(cm, ss, x, y, angle, fg) {
-    cm$char[y, x] <- paste0(ss, "\u20df")
+    if (angle %% 90 == 0) {
+        cm$char[y, x] <- paste0(ss, "\u20df")
+    } else {
+        cm$char[y, x] <- paste0(ss, "\u20de")
+    }
     cm$fg[y, x] <- fg
     cm
 }
 add_tile_back <- function(cm, x, y) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
-    # gridlines
-    cm$char[y, x] <- "\u254b" # "\u256c"
-    cm$char[y, x+c(-1, 1)] <- "\u2501" # "\u2550"
-    cm$char[y+c(-1, 1), x] <- "\u2503" # "\u2551"
-    # intersection gridlines and border line
-    cm <- add_box_edge(cm, x, y+2, c(NA,1,2,1)) # t
-    cm <- add_box_edge(cm, x, y-2, c(2,1,NA,1)) # b
-    cm <- add_box_edge(cm, x+2, y, c(1,NA,1,2)) # r
-    cm <- add_box_edge(cm, x-2, y, c(1,2,1,NA)) # l
     # border line
-    cm <- add_tile_border(cm, x, y)
+    cm <- add_border(cm, x, y)
+    cm <- add_gridlines(cm, x, y)
     cm
 }
 add_tile_face <- function(cm, ss, rs, x, y, angle, fg) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
+    # border line
+    cm <- add_border(cm, x, y)
     # rank symbol
     cm$char[y, x] <- rs
     cm$fg[y, x] <- fg
@@ -161,8 +200,8 @@ add_tile_face <- function(cm, ss, rs, x, y, angle, fg) {
     cm$char[y-1, x-1] <- " "
     cm$char[y-1, x+1] <- " "
     cm$char[y+1, x+1] <- " "
-    cm$char[y, x+c(-1,1)] <- " "
-    cm$char[y+c(-1,1), x] <- " "
+    cm$char[y, x+c(-1, 1)] <- " "
+    cm$char[y+c(-1, 1), x] <- " "
     # suit symbol
     if (angle == 0) {
         cm$char[y+1, x-1] <- ss
@@ -179,36 +218,58 @@ add_tile_face <- function(cm, ss, rs, x, y, angle, fg) {
     } else {
         stop(paste("Don't know how to handle angle", angle))
     }
-    # border line
-    cm <- add_box_edge(cm, x, y+2, c(NA,1,0,1)) # t
-    cm <- add_box_edge(cm, x, y-2, c(0,1,NA,1)) # b
-    cm <- add_box_edge(cm, x+2, y, c(1,NA,1,0)) # r
-    cm <- add_box_edge(cm, x-2, y, c(1,0,1,NA)) # l
-    cm <- add_tile_border(cm, x, y)
+    cm
+}
+add_board <- function(cm, x, y, width = 8, height = 8, cell = 1) {
+    cm$fg[y+-height:height, x+-width:width] <- "black"
+    cm <- add_border(cm, x, y, width, height)
+    cm <- add_gridlines(cm, x, y, width, height, cell)
     cm
 }
 
-add_tile_border <- function(cm, x, y) {
-    # border line
-    cm <- add_box_edge(cm, x-1, y+2, c(NA,1,0,1)) # t
-    cm <- add_box_edge(cm, x+1, y+2, c(NA,1,0,1)) # t
-    cm <- add_box_edge(cm, x-1, y-2, c(0,1,NA,1)) # b
-    cm <- add_box_edge(cm, x+1, y-2, c(0,1,NA,1)) # b
-    cm <- add_box_edge(cm, x+2, y-1, c(1,NA,1,0)) # r
-    cm <- add_box_edge(cm, x+2, y+1, c(1,NA,1,0)) # r
-    cm <- add_box_edge(cm, x-2, y-1, c(1,0,1,NA)) # l
-    cm <- add_box_edge(cm, x-2, y+1, c(1,0,1,NA)) # l
-    cm <- add_box_edge(cm, x-2, y+2, c(NA,1,1,NA)) # ul
-    cm <- add_box_edge(cm, x+2, y+2, c(NA,NA,1,1)) # ur
-    cm <- add_box_edge(cm, x-2, y-2, c(1,1,NA,NA)) # ll
-    cm <- add_box_edge(cm, x+2, y-2, c(1,NA,NA,1)) # lr
+add_gridlines <- function(cm, x, y, width = 2, height = 2, cell = 1) {
+    # gridlines
+    xgs <- x + seq(2 * cell - width, width - 2 * cell, 2 * cell)
+    ygs <- y + seq(2 * cell - height, height - 2 * cell, 2 * cell)
+    xo <- x + seq(1 - width, width - 1)
+    yo <- y + seq(1 - height, height - 1)
+
+    cm$char[ygs, xo] <- "\u2501" # horizontal lines
+    cm$char[yo, xgs] <- "\u2503" # vertical lines
+    cm$char[ygs, xgs] <- "\u254b" # crosses
+
+    # intersection gridlines and border line
+    for (xg in xgs) {
+        cm <- add_box_edge(cm, xg, y+height, c(NA, 1, 2, 1)) # top
+        cm <- add_box_edge(cm, xg, y-height, c(2, 1, NA, 1)) # bottom
+    }
+    for (yg in ygs) {
+        cm <- add_box_edge(cm, x+width, yg, c(1, NA, 1, 2)) # right
+        cm <- add_box_edge(cm, x-width, yg, c(1, 2, 1, NA)) # left
+    }
+    cm
+}
+
+add_border <- function(cm, x, y, width = 2, height = 2) {
+    for (i in seq(1 - width, width - 1)) {
+        cm <- add_box_edge(cm, x+i, y+height, c(NA, 1, 0, 1)) # top side
+        cm <- add_box_edge(cm, x+i, y-height, c(0, 1, NA, 1)) # bottom side
+    }
+    for (j in seq(1 - height, height - 1)) {
+        cm <- add_box_edge(cm, x+width, y+j, c(1, NA, 1, 0)) # right side
+        cm <- add_box_edge(cm, x-width, y+j, c(1, 0, 1, NA)) # left side
+    }
+    cm <- add_box_edge(cm, x-width, y+height, c(NA, 1, 1, NA)) # ul corner
+    cm <- add_box_edge(cm, x+width, y+height, c(NA, NA, 1, 1)) # ur corner
+    cm <- add_box_edge(cm, x-width, y-height, c(1, 1, NA, NA)) # ll corner
+    cm <- add_box_edge(cm, x+width, y-height, c(1, NA, NA, 1)) # lr corner
     cm
 }
 
 add_box_edge <- function(cm, x, y, box_info) {
     # [top, right, bottom, left] 0-none 1-light 2-dark
     bi <- char2bi[[cm$char[y, x]]]
-    if (is.null(bi)) bi <- c(0,0,0,0)
+    if (is.null(bi)) bi <- c(0, 0, 0, 0)
     ind <- which(!is.na(box_info))
     for (ii in ind) {
         bi[ii] <- box_info[ii]
@@ -220,12 +281,20 @@ add_box_edge <- function(cm, x, y, box_info) {
 rotate <- function(char, angle) {
     if (angle == 0) {
         rchar <- char
+    } else if (angle == 45) {
+        rchar <- r45[[char]]
     } else if (angle == 90) {
         rchar <- r90[[char]]
+    } else if (angle == 135) {
+        rchar <- r135[[char]]
     } else if (angle == 180) {
         rchar <- r180[[char]]
+    } else if (angle == 225) {
+        rchar <- r225[[char]]
     } else if (angle == 270) {
         rchar <- r270[[char]]
+    } else if (angle == 315) {
+        rchar <- r315[[char]]
     } else {
         rchar <- NULL
     }

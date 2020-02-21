@@ -4,9 +4,18 @@ ppgames 0.4.0
 * New starting board generators for specific games:
   - ``df_breakthrough``
   - ``df_crossings``
+  - ``df_froggy_bottom``
   - ``df_ley_lines``
   - ``df_lines_of_action``
   - ``df_turkish_draughts``
+
+Bug fixes and minor improvements
+--------------------------------
+
+* ``cat_piece`` now has crude support for the following ``game_systems``:
+  - ``bit`` and ``board`` components from ``checkers1`` and ``checkers2``
+  - ``die`` component from ``dice``
+
 
 ppgames 0.3.1
 =============

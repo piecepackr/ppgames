@@ -1,0 +1,3 @@
+> cat_piece(df)
+Error in char2bi[[cm$char[y, x]]]: attempt to select less than one element in get1index
+

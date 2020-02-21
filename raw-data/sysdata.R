@@ -1,10 +1,16 @@
 # https://en.wikipedia.org/wiki/Transformation_of_text#Reversed_text
 
+r45 <- list()
 r90 <- list()
+r135 <- list()
 r180 <- list()
+r225 <- list()
 r270 <- list()
+r315 <- list()
 
 ## Spaces, Letters, Numbers
+
+r45[[" "]] <- " "
 
 r90[[" "]] <- " "
 r90[["A"]] <- "\u2222"
@@ -12,6 +18,8 @@ r90[["1"]] <- "\u21bd"
 r90[["\u21bf"]] <- "\u21bd"
 # r90[["1"]] <- "\u295e" # nolint
 r90[["\u2960"]] <- "\u295e"
+
+r135[[" "]] <- " "
 
 r180[[" "]] <- " "
 # nolint start
@@ -39,6 +47,8 @@ r180[["4"]] <- "\u152d"
 r180[["5"]] <- "\u2185\u0332"
 r180[["6"]] <- "9"
 
+r225[[" "]] <- " "
+
 r270[[" "]] <- " "
 r270[["1"]] <- "\u21c0"
 r270[["\u21bf"]] <- "\u21c0"
@@ -46,7 +56,13 @@ r270[["\u21bf"]] <- "\u21c0"
 r270[["\u2960"]] <- "\u295b"
 r270[["3"]] <- "\u03c9"
 
+r315[[" "]] <- " "
+
 ## Piecepack/French Suits
+
+r45[["\u2600"]] <- "\u2600" # Suns
+r45[["\u2609"]] <- "\u2609"
+r45[["\u263c"]] <- "\u263c"
 
 r90[["\u2600"]] <- "\u2600" # Suns
 r90[["\u2609"]] <- "\u2609"
@@ -55,6 +71,10 @@ r90[["\u25d0"]] <- "\u25d3" # Moons
 r90[["\u25d8"]] <- "\u25d8"
 r90[["\u2665"]] <- "\u2765" # Rotated Black Heart
 r90[["\u2764"]] <- "\u2765"
+
+r135[["\u2600"]] <- "\u2600" # Suns
+r135[["\u2609"]] <- "\u2609"
+r135[["\u263c"]] <- "\u263c"
 
 r180[["\u2600"]] <- "\u2600" # Suns
 r180[["\u2609"]] <- "\u2609"
@@ -75,13 +95,26 @@ r180[["\u260a"]] <- "\u260b" # Ascending/Descending nodes
 r180[["\u260b"]] <- "\u260a" # Ascending/Descending nodes
 r180[["\u0ed1"]] <- "\u0ed2" ## Spirals (Lao Digit One)
 
+r225[["\u2600"]] <- "\u2600" # Suns
+r225[["\u2609"]] <- "\u2609"
+r225[["\u263c"]] <- "\u263c"
+
 r270[["\u2600"]] <- "\u2600" # Suns
 r270[["\u2609"]] <- "\u2609"
 r270[["\u263c"]] <- "\u263c"
 r270[["\u25d0"]] <- "\u25d2" # Moons
 r270[["\u25d8"]] <- "\u25d8"
 
+r315[["\u2600"]] <- "\u2600" # Suns
+r315[["\u2609"]] <- "\u2609"
+r315[["\u263c"]] <- "\u263c"
+
 ## Chess symbols
+# https://www.unicode.org/charts/PDF/U1FA00.pdf (note Unicode rotates clockwise)
+# Could add "neutral chess"
+
+r45[["\u2658"]] <- "\U1fa45" # N
+r45[["\u265e"]] <- "\U1fa46" # n
 
 r90[["\u2654"]] <- "\U1fa33" # K
 r90[["\u2655"]] <- "\U1fa34" # Q
@@ -96,6 +129,9 @@ r90[["\u265d"]] <- "\U1fa3c" # b
 r90[["\u265e"]] <- "\U1fa3d" # n
 r90[["\u265f"]] <- "\U1fa3e" # p
 
+r135[["\u2658"]] <- "\U1fa30" # N
+r135[["\u265e"]] <- "\U1fa31" # n
+
 r180[["\u2654"]] <- "\U1fa1e" # K
 r180[["\u2655"]] <- "\U1fa1f" # Q
 r180[["\u2656"]] <- "\U1fa20" # R
@@ -109,6 +145,9 @@ r180[["\u265d"]] <- "\U1fa27" # b
 r180[["\u265e"]] <- "\U1fa28" # n
 r180[["\u265f"]] <- "\U1fa29" # p
 
+r225[["\u2658"]] <- "\U1fa1b" # N
+r225[["\u265e"]] <- "\U1fa1c" # n
+
 r270[["\u2654"]] <- "\U1fa09" # K
 r270[["\u2655"]] <- "\U1fa0a" # Q
 r270[["\u2656"]] <- "\U1fa0b" # R
@@ -121,6 +160,82 @@ r270[["\u265c"]] <- "\U1fa11" # r
 r270[["\u265d"]] <- "\U1fa12" # b
 r270[["\u265e"]] <- "\U1fa13" # n
 r270[["\u265f"]] <- "\U1fa14" # p
+
+r225[["\u2658"]] <- "\U1fa06" # N
+r225[["\u265e"]] <- "\U1fa07" # n
+
+# Checkers
+r45[["\u26c0"]] <- "\u26c0" # wm
+r45[["\u26c1"]] <- "\u26c1" # wk
+r45[["\u26c2"]] <- "\u26c2" # bm
+r45[["\u26c3"]] <- "\u26c3" # bk
+r90[["\u26c0"]] <- "\u26c0" # wm
+r90[["\u26c1"]] <- "\u26c1" # wk
+r90[["\u26c2"]] <- "\u26c2" # bm
+r90[["\u26c3"]] <- "\u26c3" # bk
+r135[["\u26c0"]] <- "\u26c0" # wm
+r135[["\u26c1"]] <- "\u26c1" # wk
+r135[["\u26c2"]] <- "\u26c2" # bm
+r135[["\u26c3"]] <- "\u26c3" # bk
+r180[["\u26c0"]] <- "\u26c0" # wm
+r180[["\u26c1"]] <- "\u26c1" # wk
+r180[["\u26c2"]] <- "\u26c2" # bm
+r180[["\u26c3"]] <- "\u26c3" # bk
+r225[["\u26c0"]] <- "\u26c0" # wm
+r225[["\u26c1"]] <- "\u26c1" # wk
+r225[["\u26c2"]] <- "\u26c2" # bm
+r225[["\u26c3"]] <- "\u26c3" # bk
+r270[["\u26c0"]] <- "\u26c0" # wm
+r270[["\u26c1"]] <- "\u26c1" # wk
+r270[["\u26c2"]] <- "\u26c2" # bm
+r270[["\u26c3"]] <- "\u26c3" # bk
+r315[["\u26c0"]] <- "\u26c0" # wm
+r315[["\u26c1"]] <- "\u26c1" # wk
+r315[["\u26c2"]] <- "\u26c2" # bm
+r315[["\u26c3"]] <- "\u26c3" # bk
+
+# Dice
+r45[["\u00b7"]] <- "\u00b7" # Middle Dot
+r45[["\u280c"]] <- "\u205a" # Braille Dots-34
+r45[["\u22f0"]] <- "\u22ee" # Right Diagonal Ellipsis
+r45[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
+r90[["\u00b7"]] <- "\u00b7" # Middle Dot
+r90[["\u280c"]] <- "\u2821" # Braille Dots-34
+r90[["\u22f0"]] <- "\u22f1" # Right Diagonal Ellipsis
+# r90[["\u2e2c"]] <- "\u2e2c" # Squared Four Dot Punctuation # nolint
+r90[["\u2237"]] <- "\u2237" # Proportion
+r90[["\u2059"]] <- "\u2059" # Five Dot Punctuation
+r135[["\u00b7"]] <- "\u00b7" # Middle Dot
+r135[["\u22f0"]] <- "\u22ef" # Right Diagonal Ellipsis
+r135[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
+r180[["\u00b7"]] <- "\u00b7" # Middle Dot
+r180[["\u280c"]] <- "\u280c" # Braille Dots-34
+r180[["\u22f0"]] <- "\u22f0" # Right Diagonal Ellipsis
+# r180[["\u2e2c"]] <- "\u2e2c" # Squared Four Dot Punctuation # nolint
+r180[["\u2237"]] <- "\u2237" # Proportion
+r180[["\u2059"]] <- "\u2059" # Five Dot Punctuation
+r180[["\u283f"]] <- "\u283f" # Braille Dots-123456
+r225[["\u00b7"]] <- "\u00b7" # Middle Dot
+r225[["\u280c"]] <- "\u205a" # Braille Dots-34
+r225[["\u22f0"]] <- "\u22ee" # Right Diagonal Ellipsis
+r225[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
+r270[["\u00b7"]] <- "\u00b7" # Middle Dot
+r270[["\u280c"]] <- "\u2821" # Braille Dots-34
+r270[["\u22f0"]] <- "\u22f1" # Right Diagonal Ellipsis
+# r270[["\u2e2c"]] <- "\u2e2c" # Squared Four Dot Punctuation # nolint
+r270[["\u2237"]] <- "\u2237" # Proportion
+r270[["\u2059"]] <- "\u2059" # Five Dot Punctuation
+r315[["\u00b7"]] <- "\u00b7" # Middle Dot
+r315[["\u22f0"]] <- "\u22ef" # Right Diagonal Ellipsis
+r315[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
+
+die_subs <- list()
+die_subs[["\u00b7\u20de"]] <- "\u2680" # Die Face-1
+die_subs[["\u280c\u20de"]] <- "\u2681" # Die Face-2
+die_subs[["\u22f0\u20de"]] <- "\u2682" # Die Face-3
+die_subs[["\u2237\u20de"]] <- "\u2683" # Die Face-4
+die_subs[["\u2059\u20de"]] <- "\u2684" # Die Face-5
+die_subs[["\u283f\u20de"]] <- "\u2685" # Die Face-6
 
 ## Box info
 # [top, right, bottom, left] 0-none 1-light 2-dark
@@ -292,6 +407,7 @@ license_names <- list(`CC-BY-SA-4` = "Creative Commons Attribution-ShareAlike 4.
 license_urls <- list(`CC-BY-SA-4` = "https://creativecommons.org/licenses/by-sa/4.0")
 
 
-save(r90, r180, r270, box2char, char2bi,
+save(r45, r90, r135, r180, r225, r270, r315,
+     die_subs, box2char, char2bi,
      license_names, license_urls,
      file="R/sysdata.rda", version=2)
