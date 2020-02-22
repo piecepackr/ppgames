@@ -8,20 +8,15 @@ r225 <- list()
 r270 <- list()
 r315 <- list()
 
-## Spaces, Letters, Numbers
-
+### Spaces, Letters, Numbers
+## Null
 r45[[" "]] <- " "
-
 r90[[" "]] <- " "
-r90[["A"]] <- "\u2222"
-r90[["1"]] <- "\u21bd"
-r90[["\u21bf"]] <- "\u21bd"
-# r90[["1"]] <- "\u295e" # nolint
-r90[["\u2960"]] <- "\u295e"
-
 r135[[" "]] <- " "
-
 r180[[" "]] <- " "
+r225[[" "]] <- " "
+r270[[" "]] <- " "
+r315[[" "]] <- " "
 # nolint start
 # r180[["\u2202"]] <- "e"
 # r180[["\u2202"]] <- "\u03ed"
@@ -30,14 +25,29 @@ r180[["\u2202"]] <- "\u03f1"
 r180[["n"]] <- "u"
 r180[["N"]] <- "N"
 r180[["0"]] <- "0"
-r180[["a"]] <- "\u0250"
+## Ace
+r90[["A"]] <- "\u2222"
 r180[["A"]] <- "\u2200"
+r180[["a"]] <- "\u0250"
+r90[["1"]] <- "\u21bd"
+# r90[["1"]] <- "\u295e" # nolint
 r180[["1"]] <- "\u21c2"
-r180[["\u21bf"]] <- "\u21c2"
 # r180[["1"]] <- "\u295d" # nolint
+r270[["1"]] <- "\u21c0"
+# r270[["1"]] <- "\u295b" # nolint
+r90[["\u21bf"]] <- "\u21bd"
+r180[["\u21bf"]] <- "\u21c2"
+r270[["\u21bf"]] <- "\u21c0"
+r90[["\u2960"]] <- "\u295e"
 r180[["\u2960"]] <- "\u295d"
+r270[["\u2960"]] <- "\u295b"
+
 r180[["2"]] <- "\u218a"
+
+r90[["3"]] <- "m"
 r180[["3"]] <- "\u218b"
+r270[["3"]] <- "\u03c9"
+
 r180[["4"]] <- "\u152d"
 # nolint start
 # r180[["4"]] <- "\u3123"
@@ -45,21 +55,11 @@ r180[["4"]] <- "\u152d"
 # r180[["5"]] <- "\u03da"
 # nolint end
 r180[["5"]] <- "\u2185\u0332"
+
 r180[["6"]] <- "9"
+r180[["9"]] <- "6"
 
-r225[[" "]] <- " "
-
-r270[[" "]] <- " "
-r270[["1"]] <- "\u21c0"
-r270[["\u21bf"]] <- "\u21c0"
-# r270[["1"]] <- "\u295b" # nolint
-r270[["\u2960"]] <- "\u295b"
-r270[["3"]] <- "\u03c9"
-
-r315[[" "]] <- " "
-
-## Piecepack/French Suits
-
+### Piecepack/French Suits
 r45[["\u2600"]] <- "\u2600" # Suns
 r45[["\u2609"]] <- "\u2609"
 r45[["\u263c"]] <- "\u263c"
@@ -109,10 +109,10 @@ r315[["\u2600"]] <- "\u2600" # Suns
 r315[["\u2609"]] <- "\u2609"
 r315[["\u263c"]] <- "\u263c"
 
-## Chess symbols
-# https://www.unicode.org/charts/PDF/U1FA00.pdf (note Unicode rotates clockwise)
+### Chess symbols
+# https://www.unicode.org/charts/PDF/U1FA00.pdf 
+# Note Unicode rotates clockwise whereas we rotate counter-clockwise
 # Could add "neutral chess"
-
 r45[["\u2658"]] <- "\U1fa45" # N
 r45[["\u265e"]] <- "\U1fa46" # n
 
@@ -164,70 +164,172 @@ r270[["\u265f"]] <- "\U1fa14" # p
 r225[["\u2658"]] <- "\U1fa06" # N
 r225[["\u265e"]] <- "\U1fa07" # n
 
-# Checkers
-r45[["\u26c0"]] <- "\u26c0" # wm
-r45[["\u26c1"]] <- "\u26c1" # wk
-r45[["\u26c2"]] <- "\u26c2" # bm
-r45[["\u26c3"]] <- "\u26c3" # bk
-r90[["\u26c0"]] <- "\u26c0" # wm
-r90[["\u26c1"]] <- "\u26c1" # wk
-r90[["\u26c2"]] <- "\u26c2" # bm
-r90[["\u26c3"]] <- "\u26c3" # bk
-r135[["\u26c0"]] <- "\u26c0" # wm
-r135[["\u26c1"]] <- "\u26c1" # wk
-r135[["\u26c2"]] <- "\u26c2" # bm
-r135[["\u26c3"]] <- "\u26c3" # bk
-r180[["\u26c0"]] <- "\u26c0" # wm
-r180[["\u26c1"]] <- "\u26c1" # wk
-r180[["\u26c2"]] <- "\u26c2" # bm
-r180[["\u26c3"]] <- "\u26c3" # bk
-r225[["\u26c0"]] <- "\u26c0" # wm
-r225[["\u26c1"]] <- "\u26c1" # wk
-r225[["\u26c2"]] <- "\u26c2" # bm
-r225[["\u26c3"]] <- "\u26c3" # bk
-r270[["\u26c0"]] <- "\u26c0" # wm
-r270[["\u26c1"]] <- "\u26c1" # wk
-r270[["\u26c2"]] <- "\u26c2" # bm
-r270[["\u26c3"]] <- "\u26c3" # bk
-r315[["\u26c0"]] <- "\u26c0" # wm
-r315[["\u26c1"]] <- "\u26c1" # wk
-r315[["\u26c2"]] <- "\u26c2" # bm
-r315[["\u26c3"]] <- "\u26c3" # bk
+### Checkers
+# White man
+r45[["\u26c0"]] <- "\u26c0"
+r90[["\u26c0"]] <- "\u26c0"
+r135[["\u26c0"]] <- "\u26c0"
+r180[["\u26c0"]] <- "\u26c0"
+r225[["\u26c0"]] <- "\u26c0"
+r270[["\u26c0"]] <- "\u26c0"
+r315[["\u26c0"]] <- "\u26c0"
+# White king
+r45[["\u26c1"]] <- "\u26c1"
+r90[["\u26c1"]] <- "\u26c1"
+r135[["\u26c1"]] <- "\u26c1"
+r180[["\u26c1"]] <- "\u26c1"
+r225[["\u26c1"]] <- "\u26c1"
+r270[["\u26c1"]] <- "\u26c1"
+r315[["\u26c1"]] <- "\u26c1"
+# Black man
+r45[["\u26c2"]] <- "\u26c2"
+r90[["\u26c2"]] <- "\u26c2"
+r135[["\u26c2"]] <- "\u26c2"
+r180[["\u26c2"]] <- "\u26c2"
+r225[["\u26c2"]] <- "\u26c2"
+r270[["\u26c2"]] <- "\u26c2"
+r315[["\u26c2"]] <- "\u26c2"
+# Black king
+r45[["\u26c3"]] <- "\u26c3"
+r90[["\u26c3"]] <- "\u26c3"
+r135[["\u26c3"]] <- "\u26c3"
+r180[["\u26c3"]] <- "\u26c3"
+r225[["\u26c3"]] <- "\u26c3"
+r270[["\u26c3"]] <- "\u26c3"
+r315[["\u26c3"]] <- "\u26c3"
 
-# Dice
-r45[["\u00b7"]] <- "\u00b7" # Middle Dot
-r45[["\u280c"]] <- "\u205a" # Braille Dots-34
-r45[["\u22f0"]] <- "\u22ee" # Right Diagonal Ellipsis
+### Dice
+# Middle Dot
+r45[["\u00b7"]] <- "\u00b7"
+r90[["\u00b7"]] <- "\u00b7"
+r135[["\u00b7"]] <- "\u00b7"
+r180[["\u00b7"]] <- "\u00b7"
+r225[["\u00b7"]] <- "\u00b7"
+r270[["\u00b7"]] <- "\u00b7"
+r315[["\u00b7"]] <- "\u00b7"
+# Braille Dots-34
+r45[["\u280c"]] <- "\u205a"
+r90[["\u280c"]] <- "\u2821"
+r180[["\u280c"]] <- "\u280c"
+r225[["\u280c"]] <- "\u205a"
+r270[["\u280c"]] <- "\u2821"
+# Right Diagonal Ellipsis
+r45[["\u22f0"]] <- "\u22ee"
+r90[["\u22f0"]] <- "\u22f1"
+r135[["\u22f0"]] <- "\u22ef"
+r180[["\u22f0"]] <- "\u22f0"
+r225[["\u22f0"]] <- "\u22ee"
+r270[["\u22f0"]] <- "\u22f1"
+r315[["\u22f0"]] <- "\u22ef"
+# Proportion
+r90[["\u2237"]] <- "\u2237"
+r180[["\u2237"]] <- "\u2237"
+r270[["\u2237"]] <- "\u2237"
+# Squared Four Dot Punctuation
+# r90[["\u2e2c"]] <- "\u2e2c" # nolint
+# r180[["\u2e2c"]] <- "\u2e2c" # nolint
+# r270[["\u2e2c"]] <- "\u2e2c" # nolint
+# Five Dot Punctuation
 r45[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
-r90[["\u00b7"]] <- "\u00b7" # Middle Dot
-r90[["\u280c"]] <- "\u2821" # Braille Dots-34
-r90[["\u22f0"]] <- "\u22f1" # Right Diagonal Ellipsis
-# r90[["\u2e2c"]] <- "\u2e2c" # Squared Four Dot Punctuation # nolint
-r90[["\u2237"]] <- "\u2237" # Proportion
 r90[["\u2059"]] <- "\u2059" # Five Dot Punctuation
-r135[["\u00b7"]] <- "\u00b7" # Middle Dot
-r135[["\u22f0"]] <- "\u22ef" # Right Diagonal Ellipsis
 r135[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
-r180[["\u00b7"]] <- "\u00b7" # Middle Dot
-r180[["\u280c"]] <- "\u280c" # Braille Dots-34
-r180[["\u22f0"]] <- "\u22f0" # Right Diagonal Ellipsis
-# r180[["\u2e2c"]] <- "\u2e2c" # Squared Four Dot Punctuation # nolint
-r180[["\u2237"]] <- "\u2237" # Proportion
 r180[["\u2059"]] <- "\u2059" # Five Dot Punctuation
-r180[["\u283f"]] <- "\u283f" # Braille Dots-123456
-r225[["\u00b7"]] <- "\u00b7" # Middle Dot
-r225[["\u280c"]] <- "\u205a" # Braille Dots-34
-r225[["\u22f0"]] <- "\u22ee" # Right Diagonal Ellipsis
 r225[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
-r270[["\u00b7"]] <- "\u00b7" # Middle Dot
-r270[["\u280c"]] <- "\u2821" # Braille Dots-34
-r270[["\u22f0"]] <- "\u22f1" # Right Diagonal Ellipsis
-# r270[["\u2e2c"]] <- "\u2e2c" # Squared Four Dot Punctuation # nolint
-r270[["\u2237"]] <- "\u2237" # Proportion
 r270[["\u2059"]] <- "\u2059" # Five Dot Punctuation
-r315[["\u00b7"]] <- "\u00b7" # Middle Dot
-r315[["\u22f0"]] <- "\u22ef" # Right Diagonal Ellipsis
 r315[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
+# Braille Dots-123456
+r180[["\u283f"]] <- "\u283f"
+
+### Arrows
+# Simple Arrows
+r45[["\u2191"]] <- "\u2196"
+r90[["\u2191"]] <- "\u2190"
+r135[["\u2191"]] <- "\u2199"
+r180[["\u2191"]] <- "\u2193"
+r225[["\u2191"]] <- "\u2198"
+r270[["\u2191"]] <- "\u2192"
+r315[["\u2191"]] <- "\u2197"
+# Double Arrows
+r45[["\u21d1"]] <- "\u21d6"
+r90[["\u21d1"]] <- "\u21d0"
+r135[["\u21d1"]] <- "\u21d9"
+r180[["\u21d1"]] <- "\u21d3"
+r225[["\u21d1"]] <- "\u21d8"
+r270[["\u21d1"]] <- "\u21d2"
+r315[["\u21d1"]] <- "\u21d7"
+# Black Arrows
+r45[["\u2b06"]] <- "\u2b09"
+r90[["\u2b06"]] <- "\u2b05"
+r135[["\u2b06"]] <- "\u2b0b"
+r180[["\u2b06"]] <- "\u2b07"
+r225[["\u2b06"]] <- "\u2b0a"
+# r270[["\u2b06"]] <- "\u27a1" # nolint
+r270[["\u2b06"]] <- "\u2b95" # nolint
+r315[["\u2b06"]] <- "\u2b08"
+# White Arrows
+r45[["\u21e7"]] <- "\u2b01"
+r90[["\u21e7"]] <- "\u21e6"
+r135[["\u21e7"]] <- "\u2b03"
+r180[["\u21e7"]] <- "\u21e9"
+r225[["\u21e7"]] <- "\u2b02"
+r270[["\u21e7"]] <- "\u21e8"
+r315[["\u21e7"]] <- "\u2b00"
+# Very Heavy Barb Arrows
+r45[["\U1f881"]] <- "\U1f884"
+r90[["\U1f881"]] <- "\U1f880"
+r135[["\U1f881"]] <- "\U1f887"
+r180[["\U1f881"]] <- "\U1f883"
+r225[["\U1f881"]] <- "\U1f886"
+r270[["\U1f881"]] <- "\U1f882"
+r315[["\U1f881"]] <- "\U1f885"
+
+### Misc
+# Multiplication Sign
+r45[["\u00d7"]] <- "\u002b"
+r90[["\u00d7"]] <- "\u00d7"
+r135[["\u00d7"]] <- "\u002b"
+r180[["\u00d7"]] <- "\u00d7"
+r225[["\u00d7"]] <- "\u002b"
+r270[["\u00d7"]] <- "\u00d7"
+r315[["\u00d7"]] <- "\u002b"
+# Smash Product
+r45[["\u2a33"]] <- "\u0023" # \ufe5f
+r90[["\u2a33"]] <- "\u2a33"
+r135[["\u2a33"]] <- "\u0023" # \ufe5f
+r180[["\u2a33"]] <- "\u2a33"
+r225[["\u2a33"]] <- "\u0023" # \ufe5f
+r270[["\u2a33"]] <- "\u2a33"
+r315[["\u2a33"]] <- "\u0023" # \ufe5f
+# Triple Horizontal Bar with Triple Vertical Stroke
+r90[["\u2a69"]] <- "\u2a69"
+r180[["\u2a69"]] <- "\u2a69"
+r270[["\u2a69"]] <- "\u2a69"
+
+### Geometric Shapes
+# https://en.wikipedia.org/wiki/Geometric_Shapes
+# Diamond
+r45[["\u25c6"]] <- "\u25aa" # \u25a0
+r90[["\u25c6"]] <- "\u25c6"
+r135[["\u25c6"]] <- "\u25aa" # \u25a0
+r180[["\u25c6"]] <- "\u25c6"
+r225[["\u25c6"]] <- "\u25aa" # \u25a0
+r270[["\u25c6"]] <- "\u25c6"
+r315[["\u25c6"]] <- "\u25aa" # \u25a0
+# Square
+r45[["\u25aa"]] <- "\u25c6"
+r90[["\u25aa"]] <- "\u25aa"
+r135[["\u25aa"]] <- "\u25c6"
+r180[["\u25aa"]] <- "\u25aa"
+r225[["\u25aa"]] <- "\u25c6"
+r270[["\u25aa"]] <- "\u25aa"
+r315[["\u25aa"]] <- "\u25c6"
+r45[["\u25a0"]] <- "\u25c6"
+r90[["\u25a0"]] <- "\u25a0"
+r135[["\u25a0"]] <- "\u25c6"
+r180[["\u25a0"]] <- "\u25a0"
+r225[["\u25a0"]] <- "\u25c6"
+r270[["\u25a0"]] <- "\u25a0"
+r315[["\u25a0"]] <- "\u25c6"
 
 die_subs <- list()
 die_subs[["\u00b7\u20de"]] <- "\u2680" # Die Face-1
@@ -236,6 +338,13 @@ die_subs[["\u22f0\u20de"]] <- "\u2682" # Die Face-3
 die_subs[["\u2237\u20de"]] <- "\u2683" # Die Face-4
 die_subs[["\u2059\u20de"]] <- "\u2684" # Die Face-5
 die_subs[["\u283f\u20de"]] <- "\u2685" # Die Face-6
+
+top_subs <- list()
+top_subs[["\u2191"]] <- "\u00d7"
+top_subs[["\u21d1"]] <- "\u2a33"
+top_subs[["\u2b06"]] <- "\u25a0"
+top_subs[["\U1f881"]] <- "\u25a0"
+top_subs[["\u21e7"]] <- "\u25a0"
 
 ## Box info
 # [top, right, bottom, left] 0-none 1-light 2-dark
@@ -408,6 +517,7 @@ license_urls <- list(`CC-BY-SA-4` = "https://creativecommons.org/licenses/by-sa/
 
 
 save(r45, r90, r135, r180, r225, r270, r315,
-     die_subs, box2char, char2bi,
+     die_subs, top_subs,
+     box2char, char2bi,
      license_names, license_urls,
      file="R/sysdata.rda", version=2)

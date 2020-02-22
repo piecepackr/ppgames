@@ -15,7 +15,7 @@ Bug fixes and minor improvements
 * ``cat_piece`` now has crude support for the following ``game_systems``:
   - ``bit`` and ``board`` components from ``checkers1`` and ``checkers2``
   - ``die`` component from ``dice``
-
+  - ``pyramid`` component from ``icehouse_pieces``
 
 ppgames 0.3.1
 =============

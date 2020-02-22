@@ -79,14 +79,16 @@ ss_list <- list(piecepack = c("\u2600", "\u263e", "\u265b", "\u2e38"),
                 dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),
                 checkers1 = c(rep("\u26c2", 5), "\u26c0"),
                 checkers2 = c(rep("\u26c2", 5), "\u26c0"),
-                dice = rep(" ", 6))
+                dice = rep(" ", 6),
+                icehouse_pieces = rep(" ", 6))
 piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 rs_list <- list(piecepack = piecepack_ranks,
                 playing_cards_expansion = piecepack_ranks,
                 dual_piecepacks_expansion = piecepack_ranks,
                 checkers1 = rep("\u26c2", 6),
                 checkers2 = rep("\u26c2", 6),
-                dice = c("\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f"))
+                dice = c("\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f"),
+                icehouse_pieces = c("\u2191", "\u21d1", "\u2b06")) # "\u21e7"))
 piecepack_colors <- c("darkred", "black", "darkgreen", "darkblue")
 checkers_colors <- c("darkred", "black", "darkgreen", "darkblue", "darkorange3", "black")
 dice_colors <- c("darkred", "grey40", "darkgreen", "darkblue", "darkorange3", "black")
@@ -95,7 +97,7 @@ fg_list <- list(piecepack = piecepack_colors,
                 dual_piecepacks_expansion = piecepack_colors,
                 playing_cards_expansion = c("darkred", "black", "black", "red"),
                 checkers1 = checkers_colors, checkers2 = checkers_colors,
-                dice = dice_colors)
+                dice = dice_colors, icehouse_pieces = dice_colors)
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_suit(piece_side)) {
         if (is.na(suit)) suit <- 1
@@ -108,6 +110,7 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_rank(piece_side)) {
         if (is.na(rank)) rank <- 1
         rs <- rs_list[[cfg]][rank]
+        if (piece_side == "pyramid_top") rs <- top_subs[[rs]]
         rs <- rotate(rs, angle)
     }
     if (grepl("2", cfg)) {
@@ -127,6 +130,8 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
            bit_face = add_bit_face(cm, rs, x, y, fg),
            board_back = add_board(cm, x, y, cell * rank, cell * rank, cell),
            board_face = add_board(cm, x, y, cell * rank, cell * rank, cell),
+           pyramid_face = add_pyramid_face(cm, rs, x, y, angle, fg),
+           pyramid_top = add_pyramid_top(cm, rs, x, y, angle, fg),
            cm)
 }
 add_bit_face <- function(cm, rs, x, y, fg) {
@@ -177,6 +182,24 @@ add_pawn_back <- function(cm, ss, x, y, angle, fg) {
         cm$char[y, x] <- paste0(ss, "\u20df")
     } else {
         cm$char[y, x] <- paste0(ss, "\u20de")
+    }
+    cm$fg[y, x] <- fg
+    cm
+}
+add_pyramid_face <- function(cm, ss, x, y, angle, fg) {
+    if (angle %% 90 == 0) {
+        cm$char[y, x] <- paste0(ss, "\u20de")
+    } else {
+        cm$char[y, x] <- paste0(ss, "\u20df")
+    }
+    cm$fg[y, x] <- fg
+    cm
+}
+add_pyramid_top <- function(cm, ss, x, y, angle, fg) {
+    if (angle %% 90 == 0) {
+        cm$char[y, x] <- paste0(ss, "\u20de")
+    } else {
+        cm$char[y, x] <- paste0(ss, "\u20df")
     }
     cm$fg[y, x] <- fg
     cm
