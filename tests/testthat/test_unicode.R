@@ -13,12 +13,14 @@ test_that("text diagrams", {
     expect_warning(rotate("&", 180))
     expect_warning(rotate("&", 270))
     expect_warning(rotate("&", 45))
+    expect_warning(rotate("&", 35))
     expect_null(cat_piece(tibble()))
+    expect_error(suppressWarnings(cat_piece(tibble(piece_side = "tile_face", x=2, y=2, angle = 45))))
 
     # checkers
     dft <- tibble(piece_side = "board_back", x=seq(1.5, 5.5, 2), y=1.5, rank=2, cfg="checkers1")
     dfb <- tibble(piece_side = "bit_back", x=1:6, y=1, suit=1:6, cfg="checkers1")
-    dfd <- tibble(piece_side = "die_face", x=1:6, y=2, suit=1:6, rank=1:6, cfg="dice")
+    dfd <- tibble(piece_side = "die_face", x=1:6, y=2, suit=1:6, rank=1:6, cfg="dice", angle = c(45, rep(0, 5)))
     df <- dplyr::bind_rows(dft, dfb, dfd)
     verify_output("../text_diagrams/some_checkers1.txt", cat_piece(df))
 
@@ -31,12 +33,27 @@ test_that("text diagrams", {
     dfpt <- tibble(piece_side = "pyramid_top", x=1:8, y=4,
                    rank=rep(1:3, length.out=8), suit=c(1:6, 1:2),
                    angle=seq(0, by=45, length.out=8), cfg="icehouse_pieces")
-    dfpf <- tibble(piece_side = "pyramid_face", x=rep(1:8, 3), y=rep(1:3, each=8),
+    dfpf <- tibble(piece_side = rep(c("pyramid_face", "pyramid_left", "pyramid_right", "pyramid_back"), 6),
+                   x=rep(1:8, 3), y=rep(1:3, each=8),
                    rank=rep(1:3, each=8), suit=rep(1:6, 4),
                    angle=rep(seq(0, by=45, length.out=8), 3),
                    cfg="icehouse_pieces")
     df <- dplyr::bind_rows(dfb, dfpt, dfpf)
     verify_output("../text_diagrams/icehouse.txt", cat_piece(df))
+
+    # stackpack
+    dfpt <- tibble(piece_side = "tile_back", x = c(1.5, 3.5, 1.5, 3.5),
+                   y = c(1.5, 1.5, 3.5, 3.5))
+    dfbt <- tibble(piece_side = rep(c("tile_face", "tile_back"), 2),
+                   x = 1:4, y = 1, suit = 1:4, rank = 1:4, cfg = "subpack")
+    dfc <- tibble(piece_side = rep(c("coin_face", "coin_back"), 2),
+                   x = 1:4, y = 2, suit = 1:4, rank = 1:4, cfg = "subpack")
+    dfd <- tibble(piece_side = "die_face",
+                   x = 1:4, y = 3, suit = 1:4, rank = 1:4, cfg = "subpack")
+    dfp <- tibble(piece_side = rep(c("pawn_face", "pawn_back"), 2),
+                   x = 1:4, y = 4, suit = 1:4, rank = 1:4, cfg = "subpack")
+    df <- dplyr::bind_rows(dfpt, dfbt, dfc, dfd, dfp)
+    verify_output("../text_diagrams/stackpack.txt", cat_piece(df))
 
     # misc
     dft <- tibble(piece_side = "tile_face", x=c(1.5, 3.5), y=1.5,

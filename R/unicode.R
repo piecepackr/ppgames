@@ -74,9 +74,11 @@ cat_move <- function(game, move = NULL, ...) {
 # Use Half-circle for Moons? \u25d0
 # Use Arrows for Arms?
 # nolint end
-ss_list <- list(piecepack = c("\u2600", "\u263e", "\u265b", "\u2e38"),
+piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
+ss_list <- list(piecepack = piecepack_suits,
                 playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
                 dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),
+                subpack = piecepack_suits,
                 checkers1 = c(rep("\u26c2", 5), "\u26c0"),
                 checkers2 = c(rep("\u26c2", 5), "\u26c0"),
                 dice = rep(" ", 6),
@@ -85,17 +87,20 @@ piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 rs_list <- list(piecepack = piecepack_ranks,
                 playing_cards_expansion = piecepack_ranks,
                 dual_piecepacks_expansion = piecepack_ranks,
+                subpack = piecepack_ranks,
                 checkers1 = rep("\u26c2", 6),
                 checkers2 = rep("\u26c2", 6),
                 dice = c("\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f"),
                 icehouse_pieces = c("\u2191", "\u21d1", "\u2b06")) # "\u21e7"))
-piecepack_colors <- c("darkred", "black", "darkgreen", "darkblue")
-checkers_colors <- c("darkred", "black", "darkgreen", "darkblue", "darkorange3", "black")
-dice_colors <- c("darkred", "grey40", "darkgreen", "darkblue", "darkorange3", "black")
+# darkgreen sometimes shows up as black?
+piecepack_colors <- c("darkred", "black", "green", "darkblue")
+checkers_colors <- c("darkred", "black", "green", "darkblue", "darkorange3", "black")
+dice_colors <- c("darkred", "grey40", "green", "darkblue", "darkorange3", "black")
 
 fg_list <- list(piecepack = piecepack_colors,
                 dual_piecepacks_expansion = piecepack_colors,
                 playing_cards_expansion = c("darkred", "black", "black", "red"),
+                subpack = piecepack_colors,
                 checkers1 = checkers_colors, checkers2 = checkers_colors,
                 dice = dice_colors, icehouse_pieces = dice_colors)
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
@@ -124,14 +129,17 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
            die_face = add_die_face(cm, rs, x, y, angle, fg),
            pawn_face = add_pawn_face(cm, ss, x, y, angle, fg),
            pawn_back = add_pawn_back(cm, ss, x, y, angle, fg),
-           tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg),
-           tile_back = add_tile_back(cm, x, y),
+           tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg, cfg),
+           tile_back = add_tile_back(cm, x, y, cfg),
            bit_back = add_bit_back(cm, ss, x, y, fg),
            bit_face = add_bit_face(cm, rs, x, y, fg),
            board_back = add_board(cm, x, y, cell * rank, cell * rank, cell),
            board_face = add_board(cm, x, y, cell * rank, cell * rank, cell),
-           pyramid_face = add_pyramid_face(cm, rs, x, y, angle, fg),
            pyramid_top = add_pyramid_top(cm, rs, x, y, angle, fg),
+           pyramid_face = add_pyramid_face(cm, rs, x, y, angle, fg),
+           pyramid_left = add_pyramid_face(cm, rs, x, y, angle, fg),
+           pyramid_right = add_pyramid_face(cm, rs, x, y, angle, fg),
+           pyramid_back = add_pyramid_face(cm, rs, x, y, angle, fg),
            cm)
 }
 add_bit_face <- function(cm, rs, x, y, fg) {
@@ -204,27 +212,48 @@ add_pyramid_top <- function(cm, ss, x, y, angle, fg) {
     cm$fg[y, x] <- fg
     cm
 }
-add_tile_back <- function(cm, x, y) {
+add_tile_back <- function(cm, x, y, cfg) {
+    if (cfg == "subpack") {
+        add_tile_back_subpack(cm, x, y)
+    } else {
+        add_tile_back_piecepack(cm, x, y)
+    }
+}
+add_tile_back_piecepack <- function(cm, x, y) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
+    cm$char[y+-1:1, x+-1:1] <- " "
     # border line
     cm <- add_border(cm, x, y)
     cm <- add_gridlines(cm, x, y)
     cm
 }
-add_tile_face <- function(cm, ss, rs, x, y, angle, fg) {
+add_tile_back_subpack <- function(cm, x, y) {
+    cm$fg[y+-1:1, x+-1:1] <- "black"
+    cm <- add_border(cm, x, y, 1, 1)
+    cm <- add_gridlines(cm, x, y, 1, 1, 0.5)
+    cm
+}
+add_tile_face <- function(cm, ss, rs, x, y, angle, fg, cfg) {
+    if (cfg == "subpack") {
+        add_tile_face_subpack(cm, rs, x, y, angle, fg)
+    } else {
+        add_tile_face_piecepack(cm, ss, rs, x, y, angle, fg)
+    }
+}
+add_tile_face_subpack <- function(cm, rs, x, y, angle, fg) {
+    cm$fg[y+-1:1, x+-1:1] <- "black"
+    cm$char[y, x] <- rs
+    cm$fg[y, x] <- fg
+    cm <- add_border(cm, x, y, 1, 1)
+    cm
+}
+add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
-    # border line
+    cm$char[y+-1:1, x+-1:1] <- " "
     cm <- add_border(cm, x, y)
     # rank symbol
     cm$char[y, x] <- rs
     cm$fg[y, x] <- fg
-    # interior blanks
-    cm$char[y+1, x-1] <- " "
-    cm$char[y-1, x-1] <- " "
-    cm$char[y-1, x+1] <- " "
-    cm$char[y+1, x+1] <- " "
-    cm$char[y, x+c(-1, 1)] <- " "
-    cm$char[y+c(-1, 1), x] <- " "
     # suit symbol
     if (angle == 0) {
         cm$char[y+1, x-1] <- ss

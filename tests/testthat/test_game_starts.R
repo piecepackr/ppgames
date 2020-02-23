@@ -71,4 +71,23 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/turkish_draughts.txt", cat_piece(df_turkish_draughts()))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
     verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))
+
+    # subpack
+    df <- df_chaturaji(TRUE)
+    df$angle <- 0
+    verify_output("../text_diagrams/chaturaji_subpack.txt", cat_piece(df))
+    df <- df_four_seasons_chess(TRUE)
+    df$angle <- 0
+    verify_output("../text_diagrams/four_seasons_chess_subpack.txt", cat_piece(df))
+    df <- df_international_chess(TRUE)
+    verify_output("../text_diagrams/international_chess_subpack.txt", cat_piece(df))
+    df <- df_salta(TRUE)
+    verify_output("../text_diagrams/salta_subpack.txt", cat_piece(df))
+    df <- df_shogi(TRUE)
+    df$angle <- 0
+    verify_output("../text_diagrams/shogi_subpack.txt", cat_piece(df))
+    df <- df_ultima(TRUE)
+    verify_output("../text_diagrams/ultima_subpack.txt", cat_piece(df))
+    df <- df_xiangqi(TRUE)
+    verify_output("../text_diagrams/xiangqi_subpack.txt", cat_piece(df))
 })

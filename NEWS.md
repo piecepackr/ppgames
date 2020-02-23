@@ -16,6 +16,7 @@ Bug fixes and minor improvements
   - ``bit`` and ``board`` components from ``checkers1`` and ``checkers2``
   - ``die`` component from ``dice``
   - ``pyramid`` component from ``icehouse_pieces``
+  - ``tile`` component from ``subpack`` (plus ``coin``, ``pawn``, ``die``)
 
 ppgames 0.3.1
 =============
