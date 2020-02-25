@@ -74,7 +74,14 @@ cat_move <- function(game, move = NULL, ...) {
 # Use Half-circle for Moons? \u25d0
 # Use Arrows for Arms?
 # nolint end
+dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
+# darkgreen sometimes shows up as black?
+checkers_colors <- c("darkred", "black", "green", "darkblue", "darkorange3", "black")
+piecepack_colors <- checkers_colors
+dice_colors <- checkers_colors
+dice_colors[2] <- "grey40"
 ss_list <- list(piecepack = piecepack_suits,
                 playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
                 dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),
@@ -82,31 +89,50 @@ ss_list <- list(piecepack = piecepack_suits,
                 checkers1 = c(rep("\u26c2", 5), "\u26c0"),
                 checkers2 = c(rep("\u26c2", 5), "\u26c0"),
                 dice = rep(" ", 6),
-                icehouse_pieces = rep(" ", 6))
-piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
+                dominoes = dominoes_ranks,
+                dominoes_black = dominoes_ranks,
+                dominoes_blue = dominoes_ranks,
+                dominoes_green = dominoes_ranks,
+                dominoes_red = dominoes_ranks,
+                dominoes_white = dominoes_ranks,
+                dominoes_yellow = dominoes_ranks,
+                icehouse_pieces = c(rep("\u25b2", 5), "\u25b3"))
 rs_list <- list(piecepack = piecepack_ranks,
                 playing_cards_expansion = piecepack_ranks,
                 dual_piecepacks_expansion = piecepack_ranks,
                 subpack = piecepack_ranks,
                 checkers1 = rep("\u26c2", 6),
                 checkers2 = rep("\u26c2", 6),
-                dice = c("\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f"),
-                icehouse_pieces = c("\u2191", "\u21d1", "\u2b06")) # "\u21e7"))
-# darkgreen sometimes shows up as black?
-piecepack_colors <- c("darkred", "black", "green", "darkblue")
-checkers_colors <- c("darkred", "black", "green", "darkblue", "darkorange3", "black")
-dice_colors <- c("darkred", "grey40", "green", "darkblue", "darkorange3", "black")
-
+                dice = dominoes_ranks[-1],
+                dominoes = dominoes_ranks,
+                dominoes_black = dominoes_ranks,
+                dominoes_blue = dominoes_ranks,
+                dominoes_green = dominoes_ranks,
+                dominoes_red = dominoes_ranks,
+                dominoes_white = dominoes_ranks,
+                dominoes_yellow = dominoes_ranks,
+                icehouse_pieces = rep(" ", 6))
 fg_list <- list(piecepack = piecepack_colors,
                 dual_piecepacks_expansion = piecepack_colors,
-                playing_cards_expansion = c("darkred", "black", "black", "red"),
+                playing_cards_expansion = piecepack_colors[c(1, 2, 2, 1)],
                 subpack = piecepack_colors,
-                checkers1 = checkers_colors, checkers2 = checkers_colors,
-                dice = dice_colors, icehouse_pieces = dice_colors)
+                checkers1 = checkers_colors,
+                checkers2 = checkers_colors,
+                dice = dice_colors,
+                dominoes = rep("black", 7),
+                dominoes_black = rep(dice_colors[2], 7),
+                dominoes_blue = rep(dice_colors[4], 7),
+                dominoes_green = rep(dice_colors[3], 7),
+                dominoes_red = rep(dice_colors[1], 7),
+                dominoes_white = rep(dice_colors[6], 7),
+                dominoes_yellow = rep(dice_colors[5], 7),
+                icehouse_pieces = dice_colors)
+
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_suit(piece_side)) {
         if (is.na(suit)) suit <- 1
         ss <- ss_list[[cfg]][suit]
+        if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
         ss <- rotate(ss, angle)
         fg <- fg_list[[cfg]][suit]
     } else {
@@ -115,7 +141,6 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_rank(piece_side)) {
         if (is.na(rank)) rank <- 1
         rs <- rs_list[[cfg]][rank]
-        if (piece_side == "pyramid_top") rs <- top_subs[[rs]]
         rs <- rotate(rs, angle)
     }
     if (grepl("2", cfg)) {
@@ -130,16 +155,16 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
            pawn_face = add_pawn_face(cm, ss, x, y, angle, fg),
            pawn_back = add_pawn_back(cm, ss, x, y, angle, fg),
            tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg, cfg),
-           tile_back = add_tile_back(cm, x, y, cfg),
+           tile_back = add_tile_back(cm, x, y, angle, cfg),
            bit_back = add_bit_back(cm, ss, x, y, fg),
            bit_face = add_bit_face(cm, rs, x, y, fg),
            board_back = add_board(cm, x, y, cell * rank, cell * rank, cell),
            board_face = add_board(cm, x, y, cell * rank, cell * rank, cell),
-           pyramid_top = add_pyramid_top(cm, rs, x, y, angle, fg),
-           pyramid_face = add_pyramid_face(cm, rs, x, y, angle, fg),
-           pyramid_left = add_pyramid_face(cm, rs, x, y, angle, fg),
-           pyramid_right = add_pyramid_face(cm, rs, x, y, angle, fg),
-           pyramid_back = add_pyramid_face(cm, rs, x, y, angle, fg),
+           pyramid_top = add_pyramid_top(cm, ss, x, y, angle, fg, rank),
+           pyramid_face = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
+           pyramid_left = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
+           pyramid_right = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
+           pyramid_back = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
            cm)
 }
 add_bit_face <- function(cm, rs, x, y, fg) {
@@ -194,35 +219,67 @@ add_pawn_back <- function(cm, ss, x, y, angle, fg) {
     cm$fg[y, x] <- fg
     cm
 }
-add_pyramid_face <- function(cm, ss, x, y, angle, fg) {
-    if (angle %% 90 == 0) {
-        cm$char[y, x] <- paste0(ss, "\u20de")
-    } else {
-        cm$char[y, x] <- paste0(ss, "\u20df")
-    }
+add_pyramid_face <- function(cm, ss, x, y, angle, fg, rank = 1) {
+    # nolint start
+    # if (angle %% 90 == 0) {
+    #     cm$char[y, x] <- paste0(ss, "\u20de")
+    # } else {
+    #     cm$char[y, x] <- paste0(ss, "\u20df")
+    # }
+    # nolint end
+    cm$char[y, x] <- paste0(ss, get_dots(rank))
     cm$fg[y, x] <- fg
     cm
 }
-add_pyramid_top <- function(cm, ss, x, y, angle, fg) {
-    if (angle %% 90 == 0) {
-        cm$char[y, x] <- paste0(ss, "\u20de")
-    } else {
-        cm$char[y, x] <- paste0(ss, "\u20df")
-    }
+# top dots U+0307 U+0308 U+20db U+20dc
+# bottom dots U+0323 U+0324 U+20ef
+get_dots <- function(rank) {
+    switch(rank,
+           "\u0323",
+           "\u0324",
+           "\u20e8",
+           stop("Doesn't support ", rank, " dots"))
+}
+add_pyramid_top <- function(cm, ss, x, y, angle, fg, rank = 1) {
+    # nolint start
+    # if (angle %% 90 == 0) {
+    #     cm$char[y, x] <- paste0(ss, "\u20de")
+    # } else {
+    #     cm$char[y, x] <- paste0(ss, "\u20df")
+    # }
+    # nolint end
+    cm$char[y, x] <- paste0(ss, get_dots(rank))
     cm$fg[y, x] <- fg
     cm
 }
-add_tile_back <- function(cm, x, y, cfg) {
+add_tile_back <- function(cm, x, y, angle, cfg) {
+    if (angle %% 90 != 0)
+        stop("Don't know how to handle angle ", angle)
+
     if (cfg == "subpack") {
         add_tile_back_subpack(cm, x, y)
+    } else if (grepl("dominoes", cfg)) {
+        add_tile_back_dominoes(cm, x, y, angle)
     } else {
         add_tile_back_piecepack(cm, x, y)
     }
 }
+add_tile_back_dominoes <- function(cm, x, y, angle) {
+    if (angle %% 180 == 0) { # vertical
+        cm$fg[y+-2:2, x+-1:1] <- "black"
+        cm$char[y+-1:1, x] <- " "
+        cm <- add_border(cm, x, y, width = 1, height = 2)
+        cm
+    } else if (angle %% 90 == 0) { # horizontal
+        cm$fg[y+-1:1, x+-2:2] <- "black"
+        cm$char[y, x+-1:1] <- " "
+        cm <- add_border(cm, x, y, width = 2, height = 1)
+        cm
+    } 
+}
 add_tile_back_piecepack <- function(cm, x, y) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
     cm$char[y+-1:1, x+-1:1] <- " "
-    # border line
     cm <- add_border(cm, x, y)
     cm <- add_gridlines(cm, x, y)
     cm
@@ -234,17 +291,49 @@ add_tile_back_subpack <- function(cm, x, y) {
     cm
 }
 add_tile_face <- function(cm, ss, rs, x, y, angle, fg, cfg) {
+    if (angle %% 90 != 0)
+        stop("Don't know how to handle angle ", angle)
+
     if (cfg == "subpack") {
-        add_tile_face_subpack(cm, rs, x, y, angle, fg)
+        add_tile_face_subpack(cm, rs, x, y, fg)
+    } else if (grepl("dominoes", cfg)) {
+        add_tile_face_dominoes(cm, ss, rs, x, y, angle, fg)
     } else {
         add_tile_face_piecepack(cm, ss, rs, x, y, angle, fg)
     }
 }
-add_tile_face_subpack <- function(cm, rs, x, y, angle, fg) {
+add_tile_face_subpack <- function(cm, rs, x, y, fg) {
     cm$fg[y+-1:1, x+-1:1] <- "black"
     cm$char[y, x] <- rs
     cm$fg[y, x] <- fg
     cm <- add_border(cm, x, y, 1, 1)
+    cm
+}
+add_tile_face_dominoes <- function(cm, ss, rs, x, y, angle, fg) {
+    ss <- rotate(ss, 180)
+    if (angle == 0) {
+        cm$fg[y+-2:2, x+-1:1] <- "black"
+        cm <- add_border(cm, x, y, width = 1, height = 2)
+        cm$char[y+-1:1, x] <-  c(ss, "\u2501", rs)
+        cm$fg[y+-1:1, x] <- fg
+    } else if (angle == 90) {
+        cm$fg[y+-1:1, x+-2:2] <- "black"
+        cm$char[y, x+-1:1] <- " "
+        cm <- add_border(cm, x, y, width = 2, height = 1)
+        cm$char[y, x+-1:1] <-  c(rs, "\u2503", ss)
+        cm$fg[y, x+-1:1] <- fg
+    } 
+    if (angle == 180) {
+        cm$fg[y+-2:2, x+-1:1] <- "black"
+        cm <- add_border(cm, x, y, width = 1, height = 2)
+        cm$char[y+-1:1, x] <-  c(rs, "\u2501", ss)
+        cm$fg[y+-1:1, x] <- fg
+    } else if (angle == 270) {
+        cm$fg[y+-1:1, x+-2:2] <- "black"
+        cm <- add_border(cm, x, y, width = 2, height = 1)
+        cm$char[y, x+-1:1] <-  c(ss, "\u2503", rs)
+        cm$fg[y, x+-1:1] <- fg
+    } 
     cm
 }
 add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg) {

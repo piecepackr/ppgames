@@ -2,3 +2,29 @@ destination: "/home/trevorld/a/projects/websites/R/ppgames/"
 url: "https://trevorldavis.com/R/ppgames"
 development:
     mode: auto
+reference:
+    - title: "Portable Piecpack Notation parsers and utilities"
+      desc: "Functions to parse and visualize games written in PPN format"
+      contents:
+        - read_ppn
+        - plot_move
+        - animate_game
+        - cat_move
+    - title: "Plaintext game diagrams"
+      desc: "Functions to generate plaintext game diagrams"
+      contents:
+        - cat_piece
+    - title: "Ruleset generators"
+      desc: "Functions to generate rulesets and rulebooks"
+      contents:
+        - save_ruleset
+        - game_kit
+    - title: "Game solvers"
+      desc: "Functions that solve games"
+      contents:
+          - solve_fujisan
+    - title: "Game starts"
+      desc: "Functions that return data frames of starting diagrams"
+      contents:
+          - df_backgammon
+          - df_rect_board_tiles

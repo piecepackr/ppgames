@@ -12,11 +12,14 @@ ppgames 0.4.0
 Bug fixes and minor improvements
 --------------------------------
 
-* ``cat_piece`` now has crude support for the following ``game_systems``:
+* ``cat_piece`` now has basic support for the following ``game_systems``:
   - ``bit`` and ``board`` components from ``checkers1`` and ``checkers2``
+  - ``tile``  component from ``dominoes``, ``dominoes_black``, ``dominoes_blue``
+    ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``.
+    Only supports double-6 domino ranks (and not the remaining double-12 domino ranks).
   - ``die`` component from ``dice``
   - ``pyramid`` component from ``icehouse_pieces``
-  - ``tile`` component from ``subpack`` (plus ``coin``, ``pawn``, ``die``)
+  - ``tile`` component from ``subpack``
 
 ppgames 0.3.1
 =============

@@ -213,6 +213,12 @@ r90[["\u280c"]] <- "\u2821"
 r180[["\u280c"]] <- "\u280c"
 r225[["\u280c"]] <- "\u205a"
 r270[["\u280c"]] <- "\u2821"
+# Braille Dots-43
+r90[["\u2821"]] <- "\u280c"
+r135[["\u2821"]] <- "\u205a"
+r180[["\u2821"]] <- "\u2821"
+r270[["\u2821"]] <- "\u280c"
+r315[["\u2821"]] <- "\u205a"
 # Right Diagonal Ellipsis
 r45[["\u22f0"]] <- "\u22ee"
 r90[["\u22f0"]] <- "\u22f1"
@@ -221,6 +227,14 @@ r180[["\u22f0"]] <- "\u22f0"
 r225[["\u22f0"]] <- "\u22ee"
 r270[["\u22f0"]] <- "\u22f1"
 r315[["\u22f0"]] <- "\u22ef"
+# Left Diagonal Ellipsis
+r45[["\u22f1"]] <- "\u22ef"
+r90[["\u22f1"]] <- "\u22f0"
+r135[["\u22f1"]] <- "\u22ee"
+r180[["\u22f1"]] <- "\u22f1"
+r225[["\u22f1"]] <- "\u22ef"
+r270[["\u22f1"]] <- "\u22f0"
+r315[["\u22f1"]] <- "\u22ee"
 # Proportion
 r90[["\u2237"]] <- "\u2237"
 r180[["\u2237"]] <- "\u2237"
@@ -230,15 +244,21 @@ r270[["\u2237"]] <- "\u2237"
 # r180[["\u2e2c"]] <- "\u2e2c" # nolint
 # r270[["\u2e2c"]] <- "\u2e2c" # nolint
 # Five Dot Punctuation
-r45[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
-r90[["\u2059"]] <- "\u2059" # Five Dot Punctuation
-r135[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
-r180[["\u2059"]] <- "\u2059" # Five Dot Punctuation
-r225[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
-r270[["\u2059"]] <- "\u2059" # Five Dot Punctuation
-r315[["\u2059"]] <- "\u2e2d" # Five Dot Punctuation
+r45[["\u2059"]] <- "\u2e2d"
+r90[["\u2059"]] <- "\u2059"
+r135[["\u2059"]] <- "\u2e2d"
+r180[["\u2059"]] <- "\u2059"
+r225[["\u2059"]] <- "\u2e2d"
+r270[["\u2059"]] <- "\u2059"
+r315[["\u2059"]] <- "\u2e2d"
 # Braille Dots-123456
+r90[["\u283f"]] <- "\u2026\u20db"
 r180[["\u283f"]] <- "\u283f"
+r270[["\u283f"]] <- "\u2026\u20db"
+# Ellipsis plus Combining Three Dots Above
+r90[["\u2026\u20db"]] <- "\u283f"
+r180[["\u2026\u20db"]] <- "\u2026\u20db"
+r270[["\u2026\u20db"]] <- "\u283f"
 
 ### Arrows
 # Simple Arrows
@@ -307,7 +327,7 @@ r270[["\u2a69"]] <- "\u2a69"
 
 ### Geometric Shapes
 # https://en.wikipedia.org/wiki/Geometric_Shapes
-# Diamond
+# Black Diamond
 r45[["\u25c6"]] <- "\u25aa" # \u25a0
 r90[["\u25c6"]] <- "\u25c6"
 r135[["\u25c6"]] <- "\u25aa" # \u25a0
@@ -315,7 +335,15 @@ r180[["\u25c6"]] <- "\u25c6"
 r225[["\u25c6"]] <- "\u25aa" # \u25a0
 r270[["\u25c6"]] <- "\u25c6"
 r315[["\u25c6"]] <- "\u25aa" # \u25a0
-# Square
+# White Diamond
+r45[["\u25c7"]] <- "\u25a1"
+r90[["\u25c7"]] <- "\u25c7"
+r135[["\u25c7"]] <- "\u25a1"
+r180[["\u25c7"]] <- "\u25c7"
+r225[["\u25c7"]] <- "\u25a1"
+r270[["\u25c7"]] <- "\u25c7"
+r315[["\u25c7"]] <- "\u25a1"
+# Black Square
 r45[["\u25aa"]] <- "\u25c6"
 r90[["\u25aa"]] <- "\u25aa"
 r135[["\u25aa"]] <- "\u25c6"
@@ -330,6 +358,30 @@ r180[["\u25a0"]] <- "\u25a0"
 r225[["\u25a0"]] <- "\u25c6"
 r270[["\u25a0"]] <- "\u25a0"
 r315[["\u25a0"]] <- "\u25c6"
+# White Square
+r45[["\u25a1"]] <- "\u25c7"
+r90[["\u25a1"]] <- "\u25a1"
+r135[["\u25a1"]] <- "\u25c7"
+r180[["\u25a1"]] <- "\u25a1"
+r225[["\u25a1"]] <- "\u25c7"
+r270[["\u25a1"]] <- "\u25a1"
+r315[["\u25a1"]] <- "\u25c7"
+# Black Triangle
+r45[["\u25b2"]] <- "\u25e4"
+r90[["\u25b2"]] <- "\u25c0"
+r135[["\u25b2"]] <- "\u25e3"
+r180[["\u25b2"]] <- "\u25bc"
+r225[["\u25b2"]] <- "\u25e2"
+r270[["\u25b2"]] <- "\u25b6"
+r315[["\u25b2"]] <- "\u25e5"
+# White Triangle
+r45[["\u25b3"]] <- "\u25f8"
+r90[["\u25b3"]] <- "\u25c1"
+r135[["\u25b3"]] <- "\u25fa"
+r180[["\u25b3"]] <- "\u25bd"
+r225[["\u25b3"]] <- "\u25ff"
+r270[["\u25b3"]] <- "\u25b7"
+r315[["\u25b3"]] <- "\u25f9"
 
 die_subs <- list()
 die_subs[["\u00b7\u20de"]] <- "\u2680" # Die Face-1
@@ -345,6 +397,8 @@ top_subs[["\u21d1"]] <- "\u2a33"
 top_subs[["\u2b06"]] <- "\u25a0"
 top_subs[["\U1f881"]] <- "\u25a0"
 top_subs[["\u21e7"]] <- "\u25a0"
+top_subs[["\u25b2"]] <- "\u25a0"
+top_subs[["\u25b3"]] <- "\u25a1"
 
 ## Box info
 # [top, right, bottom, left] 0-none 1-light 2-dark
