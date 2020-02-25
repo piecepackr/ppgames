@@ -275,7 +275,7 @@ add_tile_back_dominoes <- function(cm, x, y, angle) {
         cm$char[y, x+-1:1] <- " "
         cm <- add_border(cm, x, y, width = 2, height = 1)
         cm
-    } 
+    }
 }
 add_tile_back_piecepack <- function(cm, x, y) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
@@ -322,7 +322,7 @@ add_tile_face_dominoes <- function(cm, ss, rs, x, y, angle, fg) {
         cm <- add_border(cm, x, y, width = 2, height = 1)
         cm$char[y, x+-1:1] <-  c(rs, "\u2503", ss)
         cm$fg[y, x+-1:1] <- fg
-    } 
+    }
     if (angle == 180) {
         cm$fg[y+-2:2, x+-1:1] <- "black"
         cm <- add_border(cm, x, y, width = 1, height = 2)
@@ -333,7 +333,7 @@ add_tile_face_dominoes <- function(cm, ss, rs, x, y, angle, fg) {
         cm <- add_border(cm, x, y, width = 2, height = 1)
         cm$char[y, x+-1:1] <-  c(ss, "\u2503", rs)
         cm$fg[y, x+-1:1] <- fg
-    } 
+    }
     cm
 }
 add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg) {

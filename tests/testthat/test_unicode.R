@@ -68,7 +68,7 @@ test_that("text diagrams", {
     verify_output("../text_diagrams/misc.txt", cat_piece(df))
 
     # dominoes
-    dff <- tibble(piece_side = "tile_face", 
+    dff <- tibble(piece_side = "tile_face",
                   x = rep(1:6, 2), y = rep(c(1,3), each = 6),
                   suit = rep(1:6, 2), rank = rep(2:7, 2),
                   angle = rep(c(0, 180), each = 6),
@@ -78,7 +78,7 @@ test_that("text diagrams", {
                   cfg = paste0("dominoes_", c("black", "blue", "green", "red", "white", "yellow")))
     df <- dplyr::bind_rows(dff, dfb)
     verify_output("../text_diagrams/dominoes_vertical.txt", cat_piece(df))
-    dff <- tibble(piece_side = "tile_face", 
+    dff <- tibble(piece_side = "tile_face",
                   x = rep(c(1,3), each = 6), y = rep(1:6, 2),
                   suit = rep(1:6, 2), rank = rep(2:7, 2),
                   angle = rep(c(90, 270), each = 6),
