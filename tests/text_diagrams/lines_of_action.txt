@@ -1,4 +1,4 @@
-> cat_piece(df)
+> cat_piece(mzero(df_lines_of_action()))
  ┌─┰─┬─┰─┬─┰─┬─┰─┐
  │ ┃☀⃝│☀⃝┃☀⃝│☀⃝┃☀⃝│☀⃝┃ │
  ┝━╋━┿━╋━┿━╋━┿━╋━┥

@@ -1,6 +1,9 @@
+library("dplyr")
 library("piecepackr")
 library("vdiffr")
 cfg <- pp_cfg()
+
+mzero <- function(df) mutate(df, angle = 0)
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {
@@ -53,11 +56,13 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/ice_floe.txt", cat_piece(df_ice_floe()))
     verify_output("../text_diagrams/international_chess.txt", cat_piece(df_international_chess()))
     verify_output("../text_diagrams/ley_lines.txt", cat_piece(df_ley_lines()))
-    df <- df_lines_of_action()
-    df$angle <- 0
-    verify_output("../text_diagrams/lines_of_action.txt", cat_piece(df))
-    df <- df_nine_mens_morris(has_matchsticks = TRUE)
-    verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt", cat_piece(df))
+    verify_output("../text_diagrams/lines_of_action.txt",
+                  cat_piece(mzero(df_lines_of_action())))
+    verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt",
+                  cat_piece(df_nine_mens_morris(has_matchsticks = TRUE)))
+    verify_output("../text_diagrams/piecepackmen.txt",
+                  cat_piece(df_piecepackman(seed = 42)))
+    expect_error(df_piecepackman(seed = 42, variant = 2))
     verify_output("../text_diagrams/plans_of_action_seed.txt", cat_piece(df_plans_of_action(seed=42)))
     coins <- "ASSCCM/CAMSMS/AAMCSS/ACAMMC"
     verify_output("../text_diagrams/plans_of_action_coins.txt", cat_piece(df_plans_of_action(coins=coins)))
@@ -67,31 +72,29 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/salta.txt", cat_piece(df_salta()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
-    df <- df_triactor()
-    df$angle <- 0
-    verify_output("../text_diagrams/triactor.txt", cat_piece(df))
+    verify_output("../text_diagrams/tablut.txt",
+                  cat_piece(mzero(df_tablut())))
+    verify_output("../text_diagrams/triactor.txt",
+                  cat_piece(mzero(df_triactor())))
     verify_output("../text_diagrams/turkish_draughts.txt", cat_piece(df_turkish_draughts()))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
     verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))
 
     # subpack
-    df <- df_chaturaji(TRUE)
-    df$angle <- 0
-    verify_output("../text_diagrams/chaturaji_subpack.txt", cat_piece(df))
-    df <- df_four_seasons_chess(TRUE)
-    df$angle <- 0
-    verify_output("../text_diagrams/four_seasons_chess_subpack.txt", cat_piece(df))
-    df <- df_international_chess(TRUE)
-    verify_output("../text_diagrams/international_chess_subpack.txt", cat_piece(df))
-    df <- df_salta(TRUE)
-    verify_output("../text_diagrams/salta_subpack.txt", cat_piece(df))
-    df <- df_shogi(TRUE)
-    df$angle <- 0
-    verify_output("../text_diagrams/shogi_subpack.txt", cat_piece(df))
-    df <- df_ultima(TRUE)
-    verify_output("../text_diagrams/ultima_subpack.txt", cat_piece(df))
-    df <- df_xiangqi(TRUE)
-    verify_output("../text_diagrams/xiangqi_subpack.txt", cat_piece(df))
+    verify_output("../text_diagrams/chaturaji_subpack.txt",
+                  cat_piece(mzero(df_chaturaji(TRUE))))
+    verify_output("../text_diagrams/four_seasons_chess_subpack.txt",
+                  cat_piece(mzero(df_four_seasons_chess(TRUE))))
+    verify_output("../text_diagrams/international_chess_subpack.txt",
+                  cat_piece(df_international_chess(TRUE)))
+    verify_output("../text_diagrams/salta_subpack.txt",
+                  cat_piece(df_salta(TRUE)))
+    verify_output("../text_diagrams/shogi_subpack.txt",
+                  cat_piece(mzero(df_shogi(TRUE))))
+    verify_output("../text_diagrams/ultima_subpack.txt",
+                  cat_piece(df_ultima(TRUE)))
+    verify_output("../text_diagrams/xiangqi_subpack.txt",
+                  cat_piece(df_xiangqi(TRUE)))
 
     expect_error(process_tiles("&^&&"))
 })

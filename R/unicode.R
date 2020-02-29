@@ -77,10 +77,10 @@ dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u28
 piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
 # darkgreen sometimes shows up as black?
-checkers_colors <- c("darkred", "grey40", "green", "darkblue", "darkorange3", "black")
+checkers_colors <- c("darkred", "grey", "green", "darkblue", "darkorange3", "black")
 piecepack_colors <- checkers_colors
 dice_colors <- checkers_colors
-dice_colors[2] <- "grey40"
+dice_colors[2] <- "grey"
 ss_list <- list(piecepack = piecepack_suits,
                 playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
                 dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),

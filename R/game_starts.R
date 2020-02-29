@@ -48,6 +48,8 @@
 #'                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
 #'  \item{Nine Men's Morris}{Traditional board game.
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
+#'  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
+#'                      Pac-Man, designed for Namco by Toru Iwatani}
 #'  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
 #'        See \url{http://www.ludism.org/ppwiki/PlansOfAction}.}
 #'  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.
@@ -86,6 +88,7 @@
 #' @param die_width Width of dice
 #' @param max_tiles Maximum number of (piecepack) tiles available to build boards
 #' @param suit_colors Character vector of the suit colors
+#' @param variant Number of variant.
 #' @rdname df_game
 #' @name df_game
 NULL
@@ -93,7 +96,10 @@ NULL
 #' @importFrom dplyr %>%
 #' @importFrom dplyr bind_cols
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr filter
 #' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom dplyr setdiff
 
 #' @rdname df_game
 #' @export
@@ -280,6 +286,68 @@ df_ley_lines <- function() {
                  x = c(6,8,     7,9,   7,9,   3,5, 8,10, 2,4, 9,11, 2,4,13, 7,9,11, 13, 9,11, 7) - 0.5,
                  y = c(15,15, 13,13, 11,11, 10,10,  9,9, 8,8, 7,7,  6,6,6,  5,5,5,  4,  3,3,  2) - 0.5,
                  suit = rep(1:4, each=6), rank = rep(1:6, 4))
+}
+
+#' @rdname df_game
+#' @export
+df_piecepackman <- function(seed = NULL, variant = 1) {
+    set.seed(seed)
+    df_tiles <- tibble(piece_side = "tile_back",
+                       x = 0.5 + c(rep(seq(1, 9, 2), 4), seq(2, 8, 2)),
+                       y = 0.5 + c(rep(c(1, 3, 7, 9), each = 5), rep(5, 4)),
+                       suit = rep(1:4, 6), rank = rep(1:6, each = 4))
+    df_p <- switch(variant,
+                   df_roundabout(),
+                   stop("Can't handle variant ", variant))
+    p_xy <- filter(df_p, !grepl("matchstick", .data$piece_side)) %>%
+            mutate(x_y = paste(.data$x, .data$y, sep = "_")) %>%
+            select(.data$x_y)
+    x_y_omit <- c(p_xy$x_y, "1_5", "1_6", "10_5", "10_6")
+    df_x_y <- expand.grid(x = 1:10, y = 1:10, stringsAsFactors = FALSE) %>%
+            mutate(x_y = paste(.data$x, .data$y, sep = "_")) %>%
+            select(.data$x_y)
+    x_y <- setdiff(df_x_y$x_y, x_y_omit)
+    x_y_nulls <- str_split(sample(x_y, 24), "_", simplify = TRUE)
+    df_n <- tibble(piece_side = "matchstick_face",
+                   x = as.numeric(x_y_nulls[, 1]), y = as.numeric(x_y_nulls[, 2]),
+                   rank = 1, suit = rep(1:4, 6))
+
+    bind_rows(df_tiles, df_p, df_n)
+}
+
+df_roundabout <- function() {
+    df_c <- tibble(piece_side = "coin_back",
+                   x = c(1, 1, 10, 10),
+                   y = c(1, 10, 10, 1),
+                   suit = c(4, 3, 2, 1))
+    df_p <- tibble(piece_side = "pawn_face",
+                   x = c(5, 5, 6, 6),
+                   y = c(5, 6, 6, 5), 
+                   suit = c(4, 2, 3, 1))
+    df_n <- tibble(piece_side = "coin_face",
+                   x = 6, y = 4, rank = 1)
+    df_mav <- tibble(piece_side = "matchstick_face", 
+                     rank = 2, angle = 0,
+                     x = 0.5 + c(4, 4, 6, 6, 5, 5),
+                     y = c(6, 8, 8, 5, 2:3),
+                     suit = c(2, 2, 2, 1, 4, 4))
+    df_mah <- tibble(piece_side = "matchstick_face",
+                     rank = 2, angle = 90, 
+                     x = c(3, 8, 5, 6, 3, 8),
+                     y = 0.5 + c(9, 9, 4, 4, 2, 2),
+                     suit = c(2, 2, 1, 1, 4, 4))
+    df_m3v <- tibble(piece_side = "matchstick_face",
+                     rank = 4, angle = 0,
+                     x = 0.5 + c(1, 9, 5, 1, 9),
+                     y = 0.5 + c(2, 2, 8, 8, 8),
+                     suit = c(4, 4, 2, 3, 3))
+    df_m3h <- tibble(piece_side = "matchstick_face",
+                     rank = 4, angle = 90,
+                     x = 0.5 + c(3, 4, 6, 7, 5, 2, 2, 8, 8, 2, 2, 8, 8, 3, 7, 4, 6, 3, 7),
+                     y = 0.5 + c(8, 9, 9, 8, 6, 6, 7, 6, 7, 4, 5, 4, 5, 3, 3, 2, 2, 1, 1),
+                     suit = c(rep(2, 5), rep(3, 4), rep(1, 6), rep(4, 4)))
+
+    bind_rows(df_c, df_p, df_n, df_mav, df_mah, df_m3v, df_m3h)
 }
 
 #' @rdname df_game

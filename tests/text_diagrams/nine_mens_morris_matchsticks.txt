@@ -1,4 +1,4 @@
-> cat_piece(df)
+> cat_piece(df_nine_mens_morris(has_matchsticks = TRUE))
 ┌───┐       ┌───┐       ┌───┐
 │☀  │       │☀  │       │☾  │
 │ a │━━━ ━━━│ n │━━━ ━━━│ a │

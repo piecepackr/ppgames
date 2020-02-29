@@ -11,6 +11,7 @@
 \alias{df_fujisan}
 \alias{df_ice_floe}
 \alias{df_ley_lines}
+\alias{df_piecepackman}
 \alias{df_plans_of_action}
 \alias{df_relativity}
 \alias{df_the_in_crowd}
@@ -58,6 +59,8 @@ df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 df_ice_floe()
 
 df_ley_lines()
+
+df_piecepackman(seed = NULL, variant = 1)
 
 df_plans_of_action(seed = NULL, coins = NULL)
 
@@ -128,6 +131,8 @@ df_tablut(die_width = 0.5)
 
 \item{coins}{String of coin layout}
 
+\item{variant}{Number of variant.}
+
 \item{cfg2}{A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)}
 
 \item{has_subpack}{Has a piecepack subpack}
@@ -190,6 +195,8 @@ Here is some more information about the various games:
                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
  \item{Nine Men's Morris}{Traditional board game.
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
+ \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
+                     Pac-Man, designed for Namco by Toru Iwatani}
  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
        See \url{http://www.ludism.org/ppwiki/PlansOfAction}.}
  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.

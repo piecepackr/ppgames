@@ -234,7 +234,7 @@ df_salta <- function(has_subpack = FALSE) {
 
 #' @rdname df_game
 #' @export
-df_tablut <- function(die_width = 0.5) {
+df_tablut <- function(die_width = 0.63) {
     df_t <- df_rect_board_tiles(9, 9)
     df_cf <- tibble(piece_side = "coin_face",
                  rank = rep(3:6, 4),

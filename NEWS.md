@@ -7,6 +7,7 @@ ppgames 0.4.0
   - ``df_froggy_bottom``
   - ``df_ley_lines``
   - ``df_lines_of_action``
+  - ``df_piecepackman``
   - ``df_turkish_draughts``
 
 Bug fixes and minor improvements
