@@ -5,7 +5,7 @@
 \alias{cat_move}
 \title{Generate plaintext piecepack diagrams}
 \usage{
-cat_piece(df, color = NULL, ...)
+cat_piece(df, color = NULL, ..., file = "")
 
 cat_move(game, move = NULL, ...)
 }
@@ -16,6 +16,9 @@ cat_move(game, move = NULL, ...)
 will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
 
 \item{...}{Passed to \code{cat}}
+
+\item{file}{\code{file} argument of \code{cat}.
+Default (\code{""}) is to print to standard output.}
 
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 

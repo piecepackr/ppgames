@@ -24,6 +24,8 @@ test_that("parsing ppn files works as expected", {
     df2 <- tail(g2$dfs, 1)[[1]]
     expect_doppelganger("four-field-kono", pp(df2))
 
+    verify_output("../text_diagrams/ppn-four-field-kono.txt", cat_move(g2))
+
     df3a <- tail(g3a$dfs, 1)[[1]]
     expect_equal(g3a$metadata$GameType, "Ultima")
 
@@ -59,6 +61,10 @@ test_that("parsing simplified piece notation works as expected", {
     cn <- parse_piece("n")
     cn2 <- parse_piece("0")
     expect_equal(cn, cn2)
+    ca <- parse_piece("af<")
+    expect_equal(ca$rank, 2)
+    expect_equal(ca$angle, 90)
+    expect_equal(ca$piece_side, "coin_face")
     pM <- parse_piece("pMb")
     expect_equal(pM$suit, 2)
     expect_true(is.na(pM$rank))
@@ -99,11 +105,16 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(D$cfg, "dual_piecepacks_expansion")
     expect_equal(D$suit, 4)
     # icehouse pieces
-    I <- parse_piece("\u25b3M2")
+    I <- parse_piece("\u25b3Y2")
     expect_equal(I$piece_side, "pyramid_top")
     expect_equal(I$cfg, "icehouse_pieces")
-    expect_equal(I$rank, 3)
-    expect_equal(I$suit, 2)
+    expect_equal(I$rank, 2)
+    expect_equal(I$suit, 5)
+    I <- parse_piece("xW1")
+    expect_equal(I$piece_side, "pyramid_top")
+    expect_equal(I$cfg, "icehouse_pieces")
+    expect_equal(I$rank, 1)
+    expect_equal(I$suit, 6)
     # subpack
     c5 <- parse_piece("\u03bcc5v")
     expect_true(is.na(c5$suit))
@@ -134,4 +145,38 @@ test_that("parsing algebraic coordinates works as expected", {
     expect_equal(get_algebraic_y("d5"), 5)
     expect_equal(get_algebraic_x("aa12"), 27)
     expect_equal(get_algebraic_y("aa12"), 12)
+})
+
+test_that("process_move works as expected", {
+    expect_equal(process_move(tibble(), ""), tibble())
+
+    df <- df_four_field_kono()
+    df$cfg <- "piecepack"
+    expect_equal(nrow(df), 20)
+
+    df <- process_move(df, "*b4")
+    df <- process_move(df, "*d2")
+    expect_equal(nrow(df), 18)
+
+    df <- process_move(df, "b2=dC4")
+    expect_equal(nrow(df), 18)
+    expect_true(any(grepl("die_face", df$piece_side)))
+
+    expect_error(process_move(df, "!"))
+    expect_error(get_index_from_coords(df, "e5"))
+})
+
+test_that("parse_moves works as expected", {
+    l <- parse_moves(c("S@b4", "M@b2"))
+    df1 <- l$dfs[[2]]
+    expect_equal(nrow(df1), 2)
+
+    l <- parse_moves(c("S@b4", "2. M@b2"))
+    df2 <- l$dfs[[3]]
+    expect_equal(nrow(df2), 2)
+    expect_equal(df1, df2)
+
+    df <- insert_df(df1, df2, 1)
+    expect_equal(nrow(df), 4)
+    expect_equal(df$suit, rep(1:2, each = 2))
 })

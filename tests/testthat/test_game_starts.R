@@ -56,6 +56,8 @@ test_that("game diagrams work as expected", {
     df <- df_lines_of_action()
     df$angle <- 0
     verify_output("../text_diagrams/lines_of_action.txt", cat_piece(df))
+    df <- df_nine_mens_morris(has_matchsticks = TRUE)
+    verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt", cat_piece(df))
     verify_output("../text_diagrams/plans_of_action_seed.txt", cat_piece(df_plans_of_action(seed=42)))
     coins <- "ASSCCM/CAMSMS/AAMCSS/ACAMMC"
     verify_output("../text_diagrams/plans_of_action_coins.txt", cat_piece(df_plans_of_action(coins=coins)))
@@ -90,4 +92,6 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/ultima_subpack.txt", cat_piece(df))
     df <- df_xiangqi(TRUE)
     verify_output("../text_diagrams/xiangqi_subpack.txt", cat_piece(df))
+
+    expect_error(process_tiles("&^&&"))
 })

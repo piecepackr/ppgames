@@ -15,7 +15,14 @@ test_that("text diagrams", {
     expect_warning(rotate("&", 270))
     expect_warning(rotate("&", 45))
     expect_warning(rotate("&", 35))
-    expect_null(cat_piece(tibble()))
+    f <- tempfile()
+    expect_null(cat_piece(tibble(), file = f))
+    unlink(f)
+    expect_warning(capture.output(cat_piece(tibble(piece_side = "saucer_face", x=2, y=2))))
+    expect_error(cat_piece(tibble(piece_side = "pyramid_top", x=2, y=2, rank=4, cfg="icehouse_pieces")))
+    expect_error(suppressWarnings(cat_piece(tibble(piece_side = "tile_face", x=2, y=2, angle=45))))
+    expect_error(cat_piece(tibble(piece_side = "tile_back", x=2, y=2, angle=45)))
+
     expect_error(suppressWarnings(cat_piece(tibble(piece_side = "tile_face", x=2, y=2, angle = 45))))
 
     # checkers
@@ -89,5 +96,25 @@ test_that("text diagrams", {
     df <- dplyr::bind_rows(dff, dfb)
     verify_output("../text_diagrams/dominoes_horizontal.txt", cat_piece(df))
 
+    # matsticks
+    dft <- tibble(piece_side = "tile_back",
+                  x=rep(seq(1, 9, 2), 7), y = rep(seq(1, 13, 2), each = 5))
+    for (angle in seq(0, 315, 45)) {
+        dfm <- tibble(piece_side = "matchstick_face",
+                      x = 1:6, y = seq(1, 11, 2),
+                      suit = 1, rank = 1:6, angle = angle)
+        df <- dplyr::bind_rows(dft, dfm)
+        filename <- paste0("../text_diagrams/matchsticks_a", angle, ".txt")
+        verify_output(filename, cat_piece(df))
+    }
 
+    dfm <- tibble(piece_side = "matchstick_back",
+                  x = 1:4, y = seq(1, 7, 2),
+                  suit = 1, rank = 5, angle = c(60, 120, 240, 300))
+    df <- dplyr::bind_rows(dft, dfm)
+    verify_output("../text_diagrams/matchsticks_r5.txt", cat_piece(df))
+    expect_error(cat_piece(tibble(piece_side = "matchstick_face", x=1, y=1, rank=7)))
+    for (rank in 1:6) {
+        expect_error(cat_piece(tibble(piece_side = "matchstick_face", x=1, y=1, rank=rank, angle=30)))
+    }
 })

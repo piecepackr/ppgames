@@ -20,6 +20,12 @@ Bug fixes and minor improvements
   - ``die`` component from ``dice``
   - ``pyramid`` component from ``icehouse_pieces``
   - ``tile`` component from ``subpack``
+* ``cat_piece`` now also has basic support for (piecepack) matchsticks.
+
+Breaking changes
+----------------
+
+* In PPN simplified piece notation ``1``, ``2``, ``3`` corresponds to icehouse pieces rank 1, 2, 3 in contrast to piecepack rank 2, 3, and 4 i.e. zero-pip icehouse pyramids have been removed.
 
 ppgames 0.3.1
 =============

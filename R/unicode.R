@@ -7,17 +7,16 @@
 #' @param color How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
 #'       will colorize output for the terminal.  If \code{FALSE} won't colorize output.
 #' @param ... Passed to \code{cat}
+#' @param file \code{file} argument of \code{cat}.
+#'             Default (\code{""}) is to print to standard output.
 #' @return None (invisible \code{NULL})
 #' @export
-cat_piece <- function(df, color = NULL, ...) {
-    if (nrow(df) == 0) {
-        cat(...)
-        return(invisible(NULL))
-    }
+cat_piece <- function(df, color = NULL, ..., file = "") {
     if (is.null(color)) color <- TRUE
-    file <- list(...)$file
-    if (!is.null(file)) {
-        if (file != "") color <- FALSE
+    if (file != "") color <- FALSE
+    if (nrow(df) == 0) {
+        cat(..., file = file)
+        return(invisible(NULL))
     }
     nn <- names(df)
     if (!("rank" %in% nn)) df$rank <- NA
@@ -57,7 +56,7 @@ cat_piece <- function(df, color = NULL, ...) {
     }
 
     text <- rev(apply(cm$char, 1, function(x) paste(x, collapse = "")))
-    cat(text, ..., sep = "\n")
+    cat(text, ..., file = file, sep = "\n")
     invisible(NULL)
 }
 
@@ -78,7 +77,7 @@ dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u28
 piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
 # darkgreen sometimes shows up as black?
-checkers_colors <- c("darkred", "black", "green", "darkblue", "darkorange3", "black")
+checkers_colors <- c("darkred", "grey40", "green", "darkblue", "darkorange3", "black")
 piecepack_colors <- checkers_colors
 dice_colors <- checkers_colors
 dice_colors[2] <- "grey40"
@@ -133,7 +132,7 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
         if (is.na(suit)) suit <- 1
         ss <- ss_list[[cfg]][suit]
         if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
-        ss <- rotate(ss, angle)
+        if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle)
         fg <- fg_list[[cfg]][suit]
     } else {
         fg <- "black"
@@ -141,7 +140,7 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_rank(piece_side)) {
         if (is.na(rank)) rank <- 1
         rs <- rs_list[[cfg]][rank]
-        rs <- rotate(rs, angle)
+        if (!grepl("matchstick", piece_side)) rs <- rotate(rs, angle)
     }
     if (grepl("2", cfg)) {
         cell <- 2
@@ -160,12 +159,114 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
            bit_face = add_bit_face(cm, rs, x, y, fg),
            board_back = add_board(cm, x, y, cell * rank, cell * rank, cell),
            board_face = add_board(cm, x, y, cell * rank, cell * rank, cell),
+           matchstick_back = add_matchstick_face(cm, x, y, angle, fg, rank),
+           matchstick_face = add_matchstick_face(cm, x, y, angle, fg, rank),
            pyramid_top = add_pyramid_top(cm, ss, x, y, angle, fg, rank),
            pyramid_face = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
            pyramid_left = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
            pyramid_right = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
            pyramid_back = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
-           cm)
+           {
+               warning("Don't know how to draw ", piece_side)
+               cm
+           })
+}
+add_matchstick_face <- function(cm, x, y, angle, fg, rank) {
+    switch(rank,
+           add_matchstick_face1(cm, x, y, angle, fg),
+           add_matchstick_face2(cm, x, y, angle, fg),
+           add_matchstick_face3(cm, x, y, angle, fg),
+           add_matchstick_face4(cm, x, y, angle, fg),
+           add_matchstick_face5(cm, x, y, angle, fg),
+           add_matchstick_face6(cm, x, y, angle, fg),
+           stop("Don't know how to draw matchstick of rank", rank))
+}
+add_matchstick_face1 <- function(cm, x, y, angle, fg) {
+    if (angle %in% c(0, 90, 180, 270)) {
+        cm$char[y, x] <- "\u25a0"
+    } else if (angle %in% c(45, 135, 225, 315)) {
+        cm$char[y, x] <- "\u25c6"
+    } else {
+        stop("Can't handle angle ", angle)
+    }
+    cm$fg[y, x] <- fg
+    cm
+}
+add_matchstick_face2 <- function(cm, x, y, angle, fg) {
+    if (angle %in% c(0, 180)) {
+        cm$char[y, x] <- "\u2503"
+    } else if (angle %in% c(90, 270)) {
+        cm$char[y, x] <- "\u2501"
+    } else if (angle %in% c(45, 225)) {
+        cm$char[y, x] <- "\u2572"
+    } else if (angle %in% c(135, 315)) {
+        cm$char[y, x] <- "\u2571"
+    } else {
+        stop("Can't handle angle ", angle)
+    }
+    cm$fg[y, x] <- fg
+    cm
+}
+add_matchstick_face3 <- add_matchstick_face2
+
+add_matchstick_face4 <- function(cm, x, y, angle, fg) {
+    if (angle %in% c(0, 180)) {
+        cm$char[y+-1:1, x] <- "\u2503"
+        cm$fg[y+-1:1, x] <- fg
+    } else if (angle %in% c(90, 270)) {
+        cm$char[y, x+-1:1] <- "\u2501"
+        cm$fg[y, x+-1:1] <- fg
+    } else if (angle %in% c(45, 225)) {
+        cm$char[y+1, x+-1] <- "\u2572"
+        cm$fg[y+1, x+-1] <- fg
+        cm$char[y, x] <- "\u2572"
+        cm$fg[y, x] <- fg
+        cm$char[y-1, x+1] <- "\u2572"
+        cm$fg[y-1, x+1] <- fg
+    } else if (angle %in% c(135, 315)) {
+        cm$char[y+-1, x+-1] <- "\u2571"
+        cm$fg[y+-1, x+-1] <- fg
+        cm$char[y, x] <- "\u2571"
+        cm$fg[y, x] <- fg
+        cm$char[y+1, x+1] <- "\u2571"
+        cm$fg[y+1, x+1] <- fg
+    } else if (angle %in% c(60, 240)) {
+        cm$char[y, x] <- "\u2572"
+        cm$fg[y, x] <- fg
+    } else if (angle %in% c(120, 300)) {
+        cm$char[y, x] <- "\u2571"
+        cm$fg[y, x] <- fg
+    } else {
+        stop("Can't handle angle ", angle)
+    }
+    cm
+}
+add_matchstick_face5 <- add_matchstick_face4
+add_matchstick_face6 <- function(cm, x, y, angle, fg) {
+    if (angle %in% c(0, 180)) {
+        cm$char[y+-2:2, x] <- "\u2503"
+        cm$fg[y+-2:2, x] <- fg
+    } else if (angle %in% c(90, 270)) {
+        cm$char[y, x+-2:2] <- "\u2501"
+        cm$fg[y, x+-2:2] <- fg
+    } else if (angle %in% c(45, 225)) {
+        cm$char[y+1, x+-1] <- "\u2572"
+        cm$fg[y+1, x+-1] <- fg
+        cm$char[y, x] <- "\u2572"
+        cm$fg[y, x] <- fg
+        cm$char[y-1, x+1] <- "\u2572"
+        cm$fg[y-1, x+1] <- fg
+    } else if (angle %in% c(135, 315)) {
+        cm$char[y+-1, x+-1] <- "\u2571"
+        cm$fg[y+-1, x+-1] <- fg
+        cm$char[y, x] <- "\u2571"
+        cm$fg[y, x] <- fg
+        cm$char[y+1, x+1] <- "\u2571"
+        cm$fg[y+1, x+1] <- fg
+    } else {
+        stop("Can't handle angle ", angle)
+    }
+    cm
 }
 add_bit_face <- function(cm, rs, x, y, fg) {
     cm$char[y, x] <- rs
@@ -356,8 +457,6 @@ add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg) {
     } else if (angle == 270) {
         cm$char[y+1, x+1] <- ss
         cm$fg[y+1, x+1] <- fg
-    } else {
-        stop(paste("Don't know how to handle angle", angle))
     }
     cm
 }
