@@ -322,17 +322,17 @@ df_roundabout <- function() {
                    suit = c(4, 3, 2, 1))
     df_p <- tibble(piece_side = "pawn_face",
                    x = c(5, 5, 6, 6),
-                   y = c(5, 6, 6, 5), 
+                   y = c(5, 6, 6, 5),
                    suit = c(4, 2, 3, 1))
     df_n <- tibble(piece_side = "coin_face",
                    x = 6, y = 4, rank = 1)
-    df_mav <- tibble(piece_side = "matchstick_face", 
+    df_mav <- tibble(piece_side = "matchstick_face",
                      rank = 2, angle = 0,
                      x = 0.5 + c(4, 4, 6, 6, 5, 5),
                      y = c(6, 8, 8, 5, 2:3),
                      suit = c(2, 2, 2, 1, 4, 4))
     df_mah <- tibble(piece_side = "matchstick_face",
-                     rank = 2, angle = 90, 
+                     rank = 2, angle = 90,
                      x = c(3, 8, 5, 6, 3, 8),
                      y = 0.5 + c(9, 9, 4, 4, 2, 2),
                      suit = c(2, 2, 1, 1, 4, 4))

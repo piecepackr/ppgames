@@ -120,7 +120,7 @@ df_twelve_mens_morris(has_matchsticks = FALSE)
 
 df_salta(has_subpack = FALSE)
 
-df_tablut(die_width = 0.5)
+df_tablut(die_width = 0.63)
 }
 \arguments{
 \item{seed}{Seed that determines setup, either an integer or \code{NULL}}

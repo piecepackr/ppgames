@@ -166,7 +166,7 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
            pyramid_left = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
            pyramid_right = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
            pyramid_back = add_pyramid_face(cm, ss, x, y, angle, fg, rank),
-           {
+           { # nolint
                warning("Don't know how to draw ", piece_side)
                cm
            })
