@@ -45,7 +45,7 @@ range_true <- function(df, cfg = pp_cfg(), envir = NULL, op_scale = 0, op_angle 
         return(tibble::tibble(xmin = NA, xmax = NA, ymin = NA, ymax = NA,
                               xmin_op = NA, xmax_op = NA, ymin_op = NA, ymax_op = NA))
     }
-    df <- piecepackr:::add_3d_info(df, cfg, envir)
+    df <- piecepackr:::add_3d_info(df, cfg = cfg, envir = envir)
     llb <- piecepackr:::Point3D$new(df$xll, df$yll, df$zb)$project_op(op_angle, op_scale)
     llt <- piecepackr:::Point3D$new(df$xll, df$yll, df$zt)$project_op(op_angle, op_scale)
     ulb <- piecepackr:::Point3D$new(df$xul, df$yul, df$zb)$project_op(op_angle, op_scale)
