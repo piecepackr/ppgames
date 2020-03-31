@@ -128,21 +128,21 @@
 <text x='572.38' y='489.03' style='font-size: 12.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='576.00' cy='504.00' r='27.00pt' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <circle cx='72.00' cy='360.00' r='27.00pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text transform='translate(60.30,351.33) rotate(90)' style='font-size: 34.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='17.34px' lengthAdjust='spacingAndGlyphs'>♦</text>
-<text transform='translate(86.97,356.38) rotate(90)' style='font-size: 12.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<text transform='translate(60.30,351.33) rotate(-270)' style='font-size: 34.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='17.34px' lengthAdjust='spacingAndGlyphs'>♦</text>
+<text transform='translate(86.97,356.38) rotate(-270)' style='font-size: 12.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='72.00' cy='360.00' r='27.00pt' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <circle cx='72.00' cy='72.00' r='27.00pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text transform='translate(62.37,64.21) rotate(90)' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text transform='translate(86.97,68.37) rotate(90)' style='font-size: 12.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<text transform='translate(62.37,64.21) rotate(-270)' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(86.97,68.37) rotate(-270)' style='font-size: 12.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='72.00' cy='72.00' r='27.00pt' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <circle cx='72.00' cy='144.00' r='27.00pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text transform='translate(62.37,136.21) rotate(90)' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>5</text>
-<text transform='translate(86.97,140.37) rotate(90)' style='font-size: 12.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<text transform='translate(62.37,136.21) rotate(-270)' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>5</text>
+<text transform='translate(86.97,140.37) rotate(-270)' style='font-size: 12.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='72.00' cy='144.00' r='27.00pt' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <polygon points='54.00,342.00 90.00,342.00 90.00,378.00 54.00,378.00 54.00,342.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <polyline points='54.00,342.00 90.00,342.00 90.00,378.00 54.00,378.00 54.00,342.00 54.00,342.00 ' style='stroke-width: 0.75; stroke: none;' />
-<text transform='translate(65.12,354.44) rotate(90)' style='font-size: 20.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text transform='translate(76.88,347.94) rotate(90)' style='font-size: 12.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='6.12px' lengthAdjust='spacingAndGlyphs'>♦</text>
+<text transform='translate(65.12,354.44) rotate(-270)' style='font-size: 20.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text transform='translate(76.88,347.94) rotate(-270)' style='font-size: 12.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='6.12px' lengthAdjust='spacingAndGlyphs'>♦</text>
 <polyline points='54.00,342.00 90.00,342.00 90.00,378.00 54.00,378.00 54.00,342.00 54.00,342.00 ' style='stroke-width: 0.75; stroke: none;' />
 <polyline points='54.00,342.00 90.00,342.00 90.00,378.00 54.00,378.00 54.00,342.00 54.00,342.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <polygon points='198.00,328.50 198.00,347.40 204.43,363.68 202.21,365.63 200.41,367.88 199.09,370.36 198.27,373.02 198.00,375.75 198.27,378.48 199.09,381.14 200.41,383.62 202.21,385.87 204.43,387.82 207.00,389.39 209.84,390.55 212.87,391.26 216.00,391.50 219.13,391.26 222.16,390.55 225.00,389.39 227.57,387.82 229.79,385.87 231.59,383.62 232.91,381.14 233.73,378.48 234.00,375.75 233.73,373.02 232.91,370.36 231.59,367.88 229.79,365.63 227.57,363.68 234.00,347.40 234.00,328.50 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />

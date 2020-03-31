@@ -181,7 +181,7 @@ df_ultima <- function(has_subpack = FALSE) {
     df_r <- tibble(piece_side = ifelse(has_subpack, "tile_face", "coin_face"),
                    suit = 1:4, x = c(1,8,8,1), y = c(8,8,1,1))
     if (has_subpack) {
-        df_r$cfg <- rep(c("subpack", "piecepack"))
+        df_r$cfg <- rep(c("subpack", "piecepack"), 2)
         df_r$piece_side <- rep(c("tile_face", "die_face"), 2)
         df_r$rank <- 4
         df_r$angle <- c(180,0,0,180)

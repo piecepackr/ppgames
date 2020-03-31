@@ -15,7 +15,7 @@
 <polygon points='468.00,2.58 472.48,0.00 632.78,0.00 664.71,55.29 540.00,127.29 468.00,2.58 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <polyline points='468.00,2.58 472.48,0.00 ' style='stroke-width: 0.75; stroke: none;' />
 <polyline points='632.78,0.00 664.71,55.29 540.00,127.29 468.00,2.58 468.00,2.58 ' style='stroke-width: 0.75; stroke: none;' />
-<text transform='translate(558.75,-28.72) rotate(60)' style='font-size: 40.00px; fill: #009E73; font-family: Liberation Sans;' textLength='35.47px' lengthAdjust='spacingAndGlyphs'>ȸ</text>
+<text transform='translate(558.75,-28.72) rotate(-300)' style='font-size: 40.00px; fill: #009E73; font-family: Liberation Sans;' textLength='35.47px' lengthAdjust='spacingAndGlyphs'>ȸ</text>
 <polyline points='468.00,2.58 472.48,0.00 ' style='stroke-width: 3.00; stroke: none;' />
 <polyline points='632.78,0.00 664.71,55.29 540.00,127.29 468.00,2.58 468.00,2.58 ' style='stroke-width: 3.00; stroke: none;' />
 <polyline points='468.00,2.58 472.48,0.00 ' style='stroke-width: 3.00;' />
@@ -81,8 +81,8 @@
 <polyline points='199.29,324.00 74.58,396.00 2.58,271.29 127.29,199.29 199.29,324.00 199.29,324.00 ' style='stroke-width: 3.00; stroke: none;' />
 <polyline points='199.29,324.00 74.58,396.00 2.58,271.29 127.29,199.29 199.29,324.00 199.29,324.00 ' style='stroke-width: 3.00;' />
 <circle cx='677.88' cy='6.12' r='27.00pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text transform='translate(665.65,4.19) rotate(60)' style='font-size: 28.00px; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text transform='translate(689.03,-4.51) rotate(60)' style='font-size: 12.00px; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<text transform='translate(665.65,4.19) rotate(-300)' style='font-size: 28.00px; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(689.03,-4.51) rotate(-300)' style='font-size: 12.00px; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='677.88' cy='6.12' r='27.00pt' style='stroke-width: 3.00;' />
 <circle cx='360.00' cy='432.00' r='27.00pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(367.79,422.37) rotate(-180)' style='font-size: 28.00px; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>5</text>

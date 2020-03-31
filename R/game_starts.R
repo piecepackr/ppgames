@@ -142,11 +142,13 @@ df_cell_management <- function(seed = NULL) {
     # Moon tiles and Coins
     last_played <- 1
     moon_ranks <- c(sample.int(5)+1, 1)
-    df_tm <- tibble(piece_side = "tile_face", suit = 2, rank = moon_ranks, x = NA, y = NA, angle = NA)
-    df_c <- tibble(piece_side = "coin_face", rank = rep(NA, 12), x = NA, y = NA, angle = NA)
+    df_tm <- tibble(piece_side = "tile_face", suit = 2, rank = moon_ranks,
+                    x = NA_real_, y = NA_real_, angle = NA_real_)
+    df_c <- tibble(piece_side = "coin_face", rank = rep(NA_integer_, 12),
+                   x = NA_real_, y = NA_real_, angle = NA_real_)
     for (ii in seq(along = moon_ranks)) {
         angle <- as.numeric(df_t[which(df_t$rank == last_played), "angle"])
-        theta <- angle+90
+        theta <- angle + 90
         xt <- x0 + to_x(theta, sqrt(3) + 3)
         yt <- y0 + to_y(theta, sqrt(3) + 3)
         last_played <- moon_ranks[ii]
