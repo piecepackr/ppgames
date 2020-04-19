@@ -11,6 +11,8 @@ ppgames 0.4.0
   - ``df_turkish_draughts``
 * Portable Piecepack Notation enhancements:
   - Can now (re)move a stack of pieces i.e. ``2b2-d4``, ``*3d5``, ``b4:2d5``
+  - Default parser now uses both ``GameType`` and ``SetUp`` to 
+    create starting setup (#49).
 
 Bug fixes and minor improvements
 --------------------------------

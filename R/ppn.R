@@ -64,16 +64,29 @@ starting_df <- tibble::tibble(id = integer(0), piece_side = character(0), suit =
                               cfg = character(0), x = numeric(0), y = numeric(0))
 
 get_starting_df <- function(metadata) {
-    game_type <- metadata$GameType
-    if (is.character(game_type)) {
-        get_starting_df_from_name(game_type)
-    } else if (is.list(game_type)) {
-        names(game_type) <- to_varname(names(game_type))
-        i_name <- which("name" %in% names(game_type))
-        get_starting_df_from_name(game_type[["name"]], game_type[-i_name])
-    } else {
-        starting_df
+    setup <- metadata$SetUp
+    if (!is.null(setup)) {
+        if (is.character(setup)) {
+            df <- get_starting_df_from_name(setup)
+        } else if (is.list(setup)) {
+            names(setup) <- to_varname(names(setup))
+            i_name <- which("name" %in% names(setup))
+            df <- get_starting_df_from_name(setup[["name"]], setup[-i_name])
+        }
+        return(df)
     }
+    game_type <- metadata$GameType
+    if (!is.null(game_type)) {
+        if (is.character(game_type)) {
+            df <- get_starting_df_from_name(game_type)
+        } else if (is.list(game_type)) {
+            names(game_type) <- to_varname(names(game_type))
+            i_name <- which("name" %in% names(game_type))
+            df <- get_starting_df_from_name(game_type[["name"]], game_type[-i_name])
+        }
+        return(df)
+    }
+    return(starting_df)
 }
 
 to_varname <- function(string) {

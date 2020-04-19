@@ -225,3 +225,23 @@ test_that("move multiple pieces works as expected", {
     checkers <- read_ppn(system.file("ppn/checkers.ppn", package = "ppgames"))[[1]]
     verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))
 })
+
+test_that("Setup and GameType work as expected", {
+    chess1 <- "GameType: Chess\n"
+    df1 <- read_ppn(textConnection(chess1))[[1]]$dfs[[1]]
+    chess2 <- "GameType:\n  Name: Chess\n"
+    df2 <- read_ppn(textConnection(chess1))[[1]]$dfs[[1]]
+    expect_true(all.equal(df1, df2))
+    chess3 <- "SetUp: Chess\n"
+    df3 <- read_ppn(textConnection(chess3))[[1]]$dfs[[1]]
+    expect_true(all.equal(df1, df3))
+    chess4 <- "SetUp:\n  Name: Chess\n"
+    df4 <- read_ppn(textConnection(chess4))[[1]]$dfs[[1]]
+    expect_true(all.equal(df1, df4))
+    chess5 <- "SetUp:\n  Name: Chess\nGameType: Hostage Chess\n...\n"
+    df5 <- read_ppn(textConnection(chess5))[[1]]$dfs[[1]]
+    expect_true(all.equal(df1, df5))
+    chess6 <- "---\nSetUp:\n  Chess\nGameType: Hostage Chess\n...\n"
+    df6 <- read_ppn(textConnection(chess6))[[1]]$dfs[[1]]
+    expect_true(all.equal(df1, df6))
+})
