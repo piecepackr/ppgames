@@ -1,3 +1,4 @@
+library("dplyr")
 library("piecepackr")
 library("vdiffr")
 context("test ppn")
@@ -152,6 +153,7 @@ test_that("process_move works as expected", {
 
     df <- df_four_field_kono()
     df$cfg <- "piecepack"
+    df <- tibble::rowid_to_column(df, "id")
     expect_equal(nrow(df), 20)
 
     df <- process_move(df, "*b4")
@@ -163,7 +165,7 @@ test_that("process_move works as expected", {
     expect_true(any(grepl("die_face", df$piece_side)))
 
     expect_error(process_move(df, "!"))
-    expect_error(get_index_from_coords(df, "e5"))
+    expect_error(get_id_from_coords(df, "e5"))
 })
 
 test_that("parse_moves works as expected", {
@@ -179,4 +181,47 @@ test_that("parse_moves works as expected", {
     df <- insert_df(df1, df2, 1)
     expect_equal(nrow(df), 4)
     expect_equal(df$suit, rep(1:2, each = 2))
+})
+
+test_that("# notation works as expected", {
+    df <- process_move(tibble(), "S@b2")
+    expect_true(near(df$x, 2))
+    expect_equal(nrow(df), 1)
+    expect_equal(df$suit, 1)
+    df <- process_move(df, "#1=M")
+    expect_equal(df$suit, 2)
+    df <- process_move(df, "#1-c3")
+    expect_true(near(df$x, 3))
+    expect_equal(nrow(df), 1)
+    df <- process_move(df, "*#1")
+    expect_equal(nrow(df), 0)
+})
+
+test_that("Move multiple pieces works as expected", {
+    df <- tail(process_moves(tibble(), c("S@b2", "S@b2", "S@b2")), 1)[[1]]
+    expect_equal(sum(near(df$x, 2)), 3)
+    df <- process_move(df, "2b2-c3")
+    expect_equal(sum(near(df$x, 2)), 1)
+    expect_equal(sum(near(df$x, 3)), 2)
+    expect_equal(nrow(df), 3)
+    df <- process_move(df, "b2:2c3")
+    expect_equal(sum(near(df$x, 2)), 0)
+    expect_equal(sum(near(df$x, 3)), 1)
+    expect_equal(nrow(df), 1)
+    df <- tail(process_moves(tibble(), c("S@b2", "S@b2", "S@b2")), 1)[[1]]
+    df <- process_move(df, "3b2-c3")
+    expect_equal(sum(near(df$x, 2)), 0)
+    expect_equal(sum(near(df$x, 3)), 3)
+    df <- process_move(df, "c3-b2")
+    expect_equal(sum(near(df$x, 2)), 1)
+    expect_equal(sum(near(df$x, 3)), 2)
+    df <- process_move(df, "2c3:b2")
+    expect_equal(sum(near(df$x, 2)), 2)
+    expect_equal(sum(near(df$x, 3)), 0)
+    expect_equal(nrow(df), 2)
+})
+
+test_that("move multiple pieces works as expected", {
+    checkers <- read_ppn(system.file("ppn/checkers.ppn", package = "ppgames"))[[1]]
+    verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))
 })

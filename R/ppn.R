@@ -305,6 +305,38 @@ get_algebraic_y <- function(text) {
     as.numeric(str_extract(text, "[[:digit:]]+"))
 }
 
+get_id_from_piece_id <- function(piece_id, df) {
+    if (grepl("^#", piece_id)) {
+        as.numeric(str_sub(piece_id, 2))
+    } else {
+        if (grepl("^[0-9]+", piece_id)) {
+            n_pieces <- as.integer(gsub("(^[0-9]+)(.*)", "\\1", piece_id))
+            location <- gsub("(^[0-9]+)(.*)", "\\2", piece_id)
+            get_id_from_coords(df, location, n_pieces)
+        } else {
+            get_id_from_coords(df, piece_id)
+        }
+    }
+}
+
+#### get index for piece restriction
+#' @importFrom dplyr near
+#' @importFrom utils tail
+get_id_from_coords <- function(df, coords, n_pieces = 1) {
+    xy <- get_xy(coords)
+    indices <- near(df$x, xy[1]) & near(df$y, xy[2])
+    index <- utils::tail(which(indices), n_pieces)
+    if (length(index) < n_pieces) stop(paste("Can't identify the piece(s) at", coords))
+    df$id[index]
+}
+
+get_coords_from_piece_id <- function(piece_id, df) {
+    id_ <- get_id_from_piece_id(piece_id, df)
+    indices <- which(match(df$id, id_, nomatch = 0) > 0)
+    index <- tail(indices, 1)
+    list(x=df$x[index], y=df$y[index])
+}
+
 process_move <- function(df, text) {
     if (text == "") {
         df
@@ -325,62 +357,70 @@ process_move <- function(df, text) {
 
 process_at_move <- function(df, text) {
     pc <- str_split(text, "@")[[1]]
-    piece <- pc[1]
-    coords <- pc[2]
-    #### handle complicated piece and coords
-    df_piece <- parse_piece(piece)
-    xy <- get_xy(coords)
+
+    piece_spec <- pc[1]
+    df_piece <- parse_piece(piece_spec)
+
+    location <- pc[2]
+    xy <- get_xy(location)
+
     df_piece$x <- xy[1]
     df_piece$y <- xy[2]
-    df_piece$id <- max(df$id, 0) + 1 ####
+    df_piece$id <- suppressWarnings(max(df$id, 0) + 1)
     #### get index for piece restriction
     index <- nrow(df)
     insert_df(df, df_piece, index)
 }
 
-aef <- function(x, y) isTRUE(all.equal(x, y))
 process_asterisk_move <- function(df, text) {
-    coords <- gsub("\\*", "", text)
-    index <- get_index_from_coords(df, coords)
-    df[-index, ]
-}
-get_index_from_coords <- function(df, coords) {
-    xy <- get_xy(coords)
-    indices <- as.logical(sapply(df$x, aef, xy[1])) &
-               as.logical(sapply(df$y, aef, xy[2]))
-    #### get index for piece restriction
-    index <- utils::tail(which(indices), 1)
-    if (length(index) < 1) stop(paste("Can't identify piece(s) from", coords))
-    index
+    piece_id <- gsub("\\*", "", text)
+    id_ <- get_id_from_piece_id(piece_id, df)
+    index <- which(match(df$id, id_, nomatch = 0) > 0)
+    df[-index,]
 }
 
 process_hyphen_move <- function(df, text) {
     cc <- str_split(text, "-")[[1]]
-    index <- get_index_from_coords(df, cc[1])
-    new_xy <- get_xy(cc[2])
-    df[index, "x"] <- new_xy[1]
-    df[index, "y"] <- new_xy[2]
-    insert_df(df[-index, ], df[index, ])
+    piece_id <- cc[1]
+    id_ <- get_id_from_piece_id(piece_id, df)
+    indices <- which(match(df$id, id_, nomatch = 0) > 0)
+
+    location <- cc[2]
+    new_xy <- get_xy(location)
+
+    df[indices, "x"] <- new_xy[1]
+    df[indices, "y"] <- new_xy[2]
+    insert_df(df[-indices, ], df[indices, ])
 }
 
 process_equal_move <- function(df, text) {
     cp <- str_split(text, "=")[[1]]
-    coords <- cp[1]
-    piece <- cp[2]
-    index <- get_index_from_coords(df, coords)
-    df_piece <- parse_piece(piece)
-    df[index, "piece_side"] <- df_piece$piece_side
-    df[index, "suit"] <- df_piece$suit
-    df[index, "rank"] <- df_piece$rank
-    df[index, "angle"] <- df_piece$angle
+
+    piece_id <- cp[1]
+    id_ <- get_id_from_piece_id(piece_id, df)
+
+    piece_spec <- cp[2]
+    df_piece <- parse_piece(piece_spec)
+
+    indices <- which(match(df$id, id_, nomatch = 0) > 0)
+    df[indices, "piece_side"] <- df_piece$piece_side
+    df[indices, "suit"] <- df_piece$suit
+    df[indices, "rank"] <- df_piece$rank
+    df[indices, "angle"] <- df_piece$angle
     df
 }
 
 colon_token <- ":(?![^\\[]*])"
 process_colon_move <- function(df, text) {
     cc <- str_split(text, colon_token)[[1]]
-    df <- process_asterisk_move(df, paste0("*", cc[2]))
-    df <- process_hyphen_move(df, paste(cc[1], cc[2], sep = "-"))
+
+    piece_id1 <- cc[1]
+    piece_id2 <- cc[2]
+    coords <- get_coords_from_piece_id(piece_id2, df)
+    location <- stringr::str_glue("({coords$x},{coords$y})")
+
+    df <- process_asterisk_move(df, paste0("*", piece_id2))
+    df <- process_hyphen_move(df, paste(piece_id1, location, sep = "-"))
     df
 }
 

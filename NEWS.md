@@ -9,6 +9,8 @@ ppgames 0.4.0
   - ``df_lines_of_action``
   - ``df_piecepackman``
   - ``df_turkish_draughts``
+* Portable Piecepack Notation enhancements:
+  - Can now (re)move a stack of pieces i.e. ``2b2-d4``, ``*3d5``, ``b4:2d5``
 
 Bug fixes and minor improvements
 --------------------------------
