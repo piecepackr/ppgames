@@ -1,5 +1,5 @@
 range_heuristic <- function(df) {
-    if (nrow(df) == 0) return(c(xmin = NA_real_, xmax = NA_real_, ymin = NA_real_, ymax = NA_real_))
+    if (nrow(df) == 0) return(list(xmin = NA_real_, xmax = NA_real_, ymin = NA_real_, ymax = NA_real_))
 
     # piecepack
     is_tile <- grepl("tile", df$piece_side)
@@ -42,8 +42,10 @@ range_heuristic <- function(df) {
 #' @importFrom rlang .data
 range_true <- function(df, cfg = pp_cfg(), envir = NULL, op_scale = 0, op_angle = 45, ...) {
     if (nrow(df) == 0) {
-        return(tibble::tibble(xmin = NA, xmax = NA, ymin = NA, ymax = NA,
-                              xmin_op = NA, xmax_op = NA, ymin_op = NA, ymax_op = NA))
+        return(tibble::tibble(xmin = NA_real_, xmax = NA_real_,
+                              ymin = NA_real_, ymax = NA_real_,
+                              xmin_op = NA_real_, xmax_op = NA_real_,
+                              ymin_op = NA_real_, ymax_op = NA_real_))
     }
     df <- piecepackr:::add_3d_info(df, cfg = cfg, envir = envir)
     llb <- piecepackr:::Point3D$new(df$xll, df$yll, df$zb)$project_op(op_angle, op_scale)
