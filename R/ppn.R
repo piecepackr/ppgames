@@ -52,41 +52,70 @@ parse_ppn_game <- function(text, parse = TRUE) {
         metadata <- list()
         movetext <- text
     }
-    game_list <- list(metadata = metadata, movetext = movetext)
     if (parse) {
-        df <- get_starting_df(metadata)
-        move_list <- parse_moves(movetext, df = df)
-        game_list <- c(game_list, move_list)
+        parse_movetext(movetext, metadata)
+    } else {
+        list(metadata = metadata, movetext = movetext)
     }
+}
+
+parse_movetext <- function(movetext, metadata) {
+    parser <- metadata$MovetextParser
+    if (is.null(parser)) {
+        parser_default(movetext, metadata)
+    } else {
+        if (is.character(parser)) {
+            parser_name <- parser
+            .l <- list()
+        } else if (is.list(parser)) {
+            names(parser) <- to_varname(names(parser))
+            i_name <- which("name" %in% names(parser))
+            parser_name <- parser[["name"]]
+            .l <- parser[-i_name]
+        }
+        fn <- ppn_get(paste0("parser_", to_varname(parser_name)))
+        .l$movetext <- movetext
+        .l$metadata <- metadata
+        do.call(fn, .l)
+    }
+}
+
+parser_default <- function(movetext = character(), metadata = list(), envir = NULL) {
+    game_list <- list(metadata = metadata, movetext = movetext)
+    df <- get_starting_df(metadata)
+    move_list <- parse_moves(movetext, df = df)
+    game_list <- c(game_list, move_list)
     game_list
 }
-starting_df <- tibble::tibble(id = integer(0), piece_side = character(0), suit = numeric(0), rank = numeric(0),
-                              cfg = character(0), x = numeric(0), y = numeric(0))
+
+df_none <- function() {
+    tibble::tibble(piece_side = character(0), suit = numeric(0), rank = numeric(0),
+                   cfg = character(0), x = numeric(0), y = numeric(0))
+}
 
 get_starting_df <- function(metadata) {
     setup <- metadata$SetUp
     if (!is.null(setup)) {
-        if (is.character(setup)) {
-            df <- get_starting_df_from_name(setup)
-        } else if (is.list(setup)) {
-            names(setup) <- to_varname(names(setup))
-            i_name <- which("name" %in% names(setup))
-            df <- get_starting_df_from_name(setup[["name"]], setup[-i_name])
-        }
-        return(df)
+        return(get_starting_df_from_field(setup))
     }
     game_type <- metadata$GameType
     if (!is.null(game_type)) {
-        if (is.character(game_type)) {
-            df <- get_starting_df_from_name(game_type)
-        } else if (is.list(game_type)) {
-            names(game_type) <- to_varname(names(game_type))
-            i_name <- which("name" %in% names(game_type))
-            df <- get_starting_df_from_name(game_type[["name"]], game_type[-i_name])
-        }
-        return(df)
+        return(get_starting_df_from_field(game_type))
     }
-    return(starting_df)
+    return(tibble::rowid_to_column(df_none(), "id"))
+}
+
+get_starting_df_from_field <- function(field) {
+    if (is.character(field)) {
+        df <- get_starting_df_from_name(field)
+    } else if (is.list(field)) {
+        names(field) <- to_varname(names(field))
+        i_name <- match("name", names(field))
+        i_system <- match("system", names(field), nomatch = 0)
+        .l <- field[-c(i_name, i_system)]
+        df <- get_starting_df_from_name(field[["name"]], .l, field[["system"]])
+    }
+    return(df)
 }
 
 to_varname <- function(string) {
@@ -99,13 +128,38 @@ to_varname <- function(string) {
     string
 }
 
-get_starting_df_from_name <- function(game_name, .l = list()) {
-    #### Get function from passed in list?
-    fn <- get(paste0("df_", to_varname(game_name)))
+get_ppn_package <- function(system) {
+    if (is.null(system)) return(NULL)
+    switch(to_varname(system),
+           checkers = "tradgames",
+           chess = "tradgames",
+           icehouse = "piecenikr",
+           icehouse_pieces = "piecenikr",
+           looney_pyramids = "piecenikr",
+           piecepack = "ppgames",
+           stackpack = "ppgames",
+           traditional = "tradgames",
+           stop("Don't recognize system ", system))
+}
+
+get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
+    if (!is.null(system) && to_varname(system) == "stackpack")
+        .l$has_subpack <- TRUE
+    package <- get_ppn_package(system)
+    fn_name <- paste0("df_", to_varname(game_name))
+    fn <- ppn_get(fn_name, package)
     df <- do.call(fn, .l)
     df <- tibble::rowid_to_column(df, "id")
     if (is.null(df[["cfg"]])) df$cfg <- "piecepack"
     df
+}
+
+ppn_get <- function(name, package = NULL) {
+    if (is.null(package)) {
+        tryCatch(dynGet(name), error = function(e) get(name))
+    } else {
+        get(name, envir=getNamespace(package))
+    }
 }
 
 # Parse Movetext by Move number
@@ -117,7 +171,7 @@ get_starting_df_from_name <- function(game_name, .l = list()) {
 #     named list (by move number) of move text and element \code{comments}
 #     containing named list (by move number) of comments
 parse_moves <- function(text, df = NULL) {
-    if (is.null(df)) df <- starting_df
+    if (is.null(df)) df <- tibble::rowid_to_column(df_none(), "id")
     #### Convert # comments into braces?
     if (length(text)>0) {
         text <- str_squish(paste(text, collapse = " "))

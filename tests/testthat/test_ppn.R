@@ -35,6 +35,22 @@ test_that("parsing ppn files works as expected", {
 
     expect_equal(g4$metadata, list())
     expect_equal(g4$movetext, "0. c5@b3 t@(2.5,2.5)")
+
+    no_parse <- "---\nSetUp: Chess\n...\n1. b2-d2 1... g2-e2"
+    g <- read_ppn(textConnection(no_parse), parse = FALSE)[[1]]
+    expect_length(g, 2)
+    expect_equal(g$metadata, list(SetUp = "Chess"))
+    expect_equal(g$movetext, "1. b2-d2 1... g2-e2")
+
+    null <- "---\nSetUp: Chess\nMovetextParser: 'Null'\n...\n1. b2-d2 1... g2-e2"
+    parser_null <- function(...) list()
+    g <- read_ppn(textConnection(null))[[1]]
+    expect_length(g, 0)
+
+    null <- "---\nSetUp: Chess\nMovetextParser: Default\n...\n1. b2-d2 1... g2-e2"
+    parser_default <- function(...) list()
+    g <- read_ppn(textConnection(null))[[1]]
+    expect_length(g, 0)
 })
 
 test_that("parsing simplified piece notation works as expected", {
@@ -231,17 +247,46 @@ test_that("Setup and GameType work as expected", {
     df1 <- read_ppn(textConnection(chess1))[[1]]$dfs[[1]]
     chess2 <- "GameType:\n  Name: Chess\n"
     df2 <- read_ppn(textConnection(chess1))[[1]]$dfs[[1]]
-    expect_true(all.equal(df1, df2))
-    chess3 <- "SetUp: Chess\n"
+    expect_true(identical(df1, df2))
+    chess3 <- "SetUp: Chess\n\nMovetextParser:\n  Name: Default\n...\n"
     df3 <- read_ppn(textConnection(chess3))[[1]]$dfs[[1]]
-    expect_true(all.equal(df1, df3))
-    chess4 <- "SetUp:\n  Name: Chess\n"
+    expect_true(identical(df1, df3))
+    chess4 <- "SetUp:\n  Name: Chess\nMovetextParser: Default\n...\n"
     df4 <- read_ppn(textConnection(chess4))[[1]]$dfs[[1]]
-    expect_true(all.equal(df1, df4))
-    chess5 <- "SetUp:\n  Name: Chess\nGameType: Hostage Chess\n...\n"
+    expect_true(identical(df1, df4))
+    chess5 <- "SetUp:\n  Name: Chess\n  System: Piecepack\nGameType: Hostage Chess\n...\n"
     df5 <- read_ppn(textConnection(chess5))[[1]]$dfs[[1]]
-    expect_true(all.equal(df1, df5))
+    expect_true(identical(df1, df5))
     chess6 <- "---\nSetUp:\n  Chess\nGameType: Hostage Chess\n...\n"
     df6 <- read_ppn(textConnection(chess6))[[1]]$dfs[[1]]
-    expect_true(all.equal(df1, df6))
+    expect_true(identical(df1, df6))
+    chess7 <- "GameType:\n  Name: Chess\n  System: Piecepack\n...\n"
+    df7 <- read_ppn(textConnection(chess7))[[1]]$dfs[[1]]
+    expect_true(identical(df1, df7))
+    chess8 <- "GameType:\n  Name: Chess\n  System: Stackpack\n...\n"
+    df8 <- read_ppn(textConnection(chess8))[[1]]$dfs[[1]]
+    expect_false(identical(df1, df8))
+    chess9 <- "GameType:\n  Name: Chess\n  Has Subpack: true\n...\n"
+    df9 <- read_ppn(textConnection(chess9))[[1]]$dfs[[1]]
+    expect_true(identical(df8, df9))
+
+    none1 <- ""
+    df1 <- read_ppn(textConnection(none1))[[1]]$dfs[[1]]
+    expect_equal(nrow(df1), 0)
+    none2 <- "GameType: None\n...\n"
+    df2 <- read_ppn(textConnection(none2))[[1]]$dfs[[1]]
+    expect_equal(nrow(df2), 0)
+    none3 <- "GameType: Tak\nSetUp:  None\n...\n"
+    df3 <- read_ppn(textConnection(none3))[[1]]$dfs[[1]]
+    expect_equal(nrow(df3), 0)
+
+    expect_equal(get_ppn_package("Piecepack"), "ppgames")
+    expect_equal(get_ppn_package("Stackpack"), "ppgames")
+    expect_equal(get_ppn_package("Chess"), "tradgames")
+    expect_equal(get_ppn_package("Checkers"), "tradgames")
+    expect_equal(get_ppn_package("Traditional"), "tradgames")
+    expect_equal(get_ppn_package("Looney Pyramids"), "piecenikr")
+    expect_equal(get_ppn_package("Icehouse Pieces"), "piecenikr")
+    expect_equal(get_ppn_package("Icehouse"), "piecenikr")
+    expect_error(get_ppn_package("Realm"), "Don't recognize system Realm")
 })
