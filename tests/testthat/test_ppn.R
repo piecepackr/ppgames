@@ -200,16 +200,18 @@ test_that("parse_moves works as expected", {
 })
 
 test_that("# notation works as expected", {
-    df <- process_move(tibble(), "S@b2")
+    df <- tibble::rowid_to_column(df_none(), "id")
+    state <- create_state(df)
+    df <- process_move(tibble(), "S@b2", state)
     expect_true(near(df$x, 2))
     expect_equal(nrow(df), 1)
     expect_equal(df$suit, 1)
-    df <- process_move(df, "#1=M")
+    df <- process_move(df, "#1=M", state)
     expect_equal(df$suit, 2)
-    df <- process_move(df, "#1-c3")
+    df <- process_move(df, "#2-c3", state)
     expect_true(near(df$x, 3))
     expect_equal(nrow(df), 1)
-    df <- process_move(df, "*#1")
+    df <- process_move(df, "*#2", state)
     expect_equal(nrow(df), 0)
 })
 
