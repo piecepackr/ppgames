@@ -91,7 +91,7 @@ parser_default <- function(movetext = character(), metadata = list(), envir = NU
 
 df_none <- function() {
     tibble::tibble(piece_side = character(0), suit = numeric(0), rank = numeric(0),
-                   cfg = character(0), x = numeric(0), y = numeric(0))
+                   cfg = character(0), x = numeric(0), y = numeric(0), angle = numeric(0))
 }
 
 get_starting_df <- function(metadata) {

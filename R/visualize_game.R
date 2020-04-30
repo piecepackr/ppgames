@@ -7,24 +7,34 @@
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
+#' @param nframes If over two (the default) uses \code{tweenr}
+#'                package for enhanced animation transitions.
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
 animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
-                         cfg = NULL, envir = NULL) {
+                         cfg = NULL, envir = NULL, nframes = 2) {
+
+    if (nframes > 2 && !requireNamespace("tweenr", quietly = TRUE)) {
+        stop("You need to install the suggested package 'tweenr' to use 'nframes > 2'.",
+             "Use 'install.packages(\"tweenr\")'")
+    }
 
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
     envir <- ce$envir
 
     dfs <- game$dfs
-
     ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
+    if (nframes > 2)
+        dfs <- get_tweenr_dfs(dfs, nframes, ..., cfg = cfg, envir = envir)
+
+    #### Adjust if xmin under 0
+    #### Add grid and comment annotations
+
     xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm = TRUE)
     ymax_op <- max(sapply(ranges, function(y) y$ymax_op), na.rm = TRUE)
     xmax <- max(sapply(ranges, function(x) x$xmax), na.rm = TRUE)
     ymax <- max(sapply(ranges, function(y) y$ymax), na.rm = TRUE)
-    #### Adjust if xmin under 0
-    #### Add grid and comment annotations
     m <- max(xmax, ymax) + 0.5
     res <- round(600 / m, 0)
     height <- res * (ymax_op+0.5)
@@ -34,9 +44,60 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
         pmap_piece(df, default.units = "in", ..., envir = envir)
         if (annotate) annotate_plot(xmax, ymax)
     }
-    animation::saveGIF(lapply(dfs, plot_fn, ...), movie.name = file,
-        ani.height = height, ani.width = width, ani.res = res, ani.dev = "png", ani.type = "png")
+    animation_fn()(lapply(dfs, plot_fn, ...), file, width, height, 1 / (nframes - 1), res)
     invisible(NULL)
+}
+#### How to handle empty tibbles??
+animation_fn <- function() {
+    if (requireNamespace("gifski", quietly = TRUE)) {
+        function(expr, file, width, height, delay, res) {
+            gifski::save_gif(expr, file, width, height, delay, res = res, progress = FALSE)
+        }
+    } else if (requireNamespace("animation", quietly = TRUE)) {
+        function(expr, file, width, height, delay, res) {
+            animation::saveGIF(expr, movie.name = file, interval = delay,
+                               ani.height = height, ani.width = width,
+                               ani.dev = "png", ani.type = "png", ani.res = res)
+        }
+    } else {
+        stop("You need to install either the suggested package 'animation' or 'gifski' to use 'animate_game'.",
+             "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")'")
+    }
+}
+
+#' @importFrom dplyr bind_rows left_join matches select
+to_zero <- function(df) {
+    # df$alpha <- 0 nocov
+    df$scale <- 0
+    df
+}
+get_tweenr_dfs <- function(dfs, nframes = 2, ..., trans = NULL) {
+    df_id_cfg <- get_id_cfg(dfs)
+    dfs <- lapply(dfs, get_tweenr_df, trans, ...)
+    df <- Reduce(tweenr_reducer(nframes), dfs)
+    df <- left_join(df, df_id_cfg, by = "id")
+    id_frames <- as.list(unique(df$.frame))
+    lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame))
+}
+get_id_cfg <- function(dfs) {
+    df <- do.call(bind_rows, dfs)
+    df <- select(df, .data$id, .data$cfg)
+    unique(df)
+}
+get_tweenr_df <- function(df, trans = NULL, ...) {
+    if (!is.null(trans)) df <- trans(df, ...)
+    df$scale <- 1
+    df$alpha <- 1
+    df <- select(df, .data$id, .data$piece_side, .data$suit, .data$rank,
+                 .data$x, .data$y, matches("^z$"), .data$angle,
+                 .data$scale, .data$alpha)
+    as.data.frame(df)
+}
+tweenr_reducer <- function(nframes = 2) {
+    function(x1, x2) {
+        tweenr::tween_state(x1, x2, ease = "cubic-in-out", nframes = nframes,
+                            id = .data$id, enter = to_zero, exit = to_zero)
+    }
 }
 
 #### Option to generate postcard?

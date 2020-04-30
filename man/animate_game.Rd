@@ -10,7 +10,8 @@ animate_game(
   annotate = TRUE,
   ...,
   cfg = NULL,
-  envir = NULL
+  envir = NULL,
+  nframes = 2
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ animate_game(
 \item{cfg}{A piecepackr configuration list}
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
+
+\item{nframes}{If over two (the default) uses \code{tweenr}
+package for enhanced animation transitions.}
 }
 \value{
 Nothing, as a side effect saves an animation of ppn game
