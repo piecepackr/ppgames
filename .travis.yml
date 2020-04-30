@@ -19,6 +19,7 @@ after_success:
 addons:
     apt:
        packages:
+            - cargo
             - libmagick++-dev
             - lmodern
             - texlive-math-extra
