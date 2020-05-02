@@ -244,6 +244,17 @@ test_that("move multiple pieces works as expected", {
     verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))
 })
 
+test_that("scale_factor works as expected", {
+    scale <- "MovetextParser:\n  Name: Default\n  ScaleFactor: 2\n...\n1. S@a2"
+    df <- tail(read_ppn(textConnection(scale))[[1]]$dfs, 1)[[1]]
+    expect_true(near(df$x, 2))
+    expect_true(near(df$y, 4))
+    scale <- "MovetextParser:\n  Name: Default\n  ScaleFactor: 2\n...\n1. S@a2 a2-b3 M@d3 b3:d3"
+    df <- tail(read_ppn(textConnection(scale))[[1]]$dfs, 1)[[1]]
+    expect_true(near(df$x, 8))
+    expect_true(near(df$y, 6))
+})
+
 test_that("Setup and GameType work as expected", {
     chess1 <- "GameType: Chess\n"
     df1 <- read_ppn(textConnection(chess1))[[1]]$dfs[[1]]

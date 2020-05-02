@@ -10,11 +10,13 @@ ppgames 0.4.0
   - ``df_piecepackman``
   - ``df_turkish_draughts``
 * Portable Piecepack Notation enhancements:
-  - Can now (re)move a stack of pieces i.e. ``2b2-d4``, ``*3d5``, ``b4:2d5``
+  - Can now (re)move a stack of pieces i.e. ``2b2-d4``, ``*3d5``, ``b4:2d5``.
   - Default parser now uses both ``GameType`` and ``SetUp`` to create starting setup (#49).
-  - Can now specify alternate movetext parsers with ``MovetextParser`` (#50)
+  - Can now specify alternate movetext parsers with ``MovetextParser`` (#50).
   - Can now specify game ``System`` in ``GameType``/``SetUp`` fields.
-  - Con now specify ``SetUp: None`` (or ``GameType: None``).
+  - Can now specify ``SetUp: None`` (or ``GameType: None``).
+  - Can now specify ``ScalingFactor`` in the default movetext parser or as
+    an ``attribute`` of the starting data frame (#52).
 
 Bug fixes and minor improvements
 --------------------------------

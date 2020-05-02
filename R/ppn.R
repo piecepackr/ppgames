@@ -80,9 +80,10 @@ parse_movetext <- function(movetext, metadata) {
     }
 }
 
-parser_default <- function(movetext = character(), metadata = list(), envir = NULL) {
+parser_default <- function(movetext = character(), metadata = list(), envir = NULL, scale_factor = NULL) {
     game_list <- list(metadata = metadata, movetext = movetext)
     df <- get_starting_df(metadata)
+    if (!is.null(scale_factor)) attr(df, "scale_factor") <- scale_factor
     state <- create_state(df)
     move_list <- parse_moves(movetext, df = df, state = state)
     game_list <- c(game_list, move_list)
@@ -368,16 +369,16 @@ get_algebraic_y <- function(text) {
     as.numeric(str_extract(text, "[[:digit:]]+"))
 }
 
-get_id_from_piece_id <- function(piece_id, df) {
+get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
     if (grepl("^#", piece_id)) {
         as.numeric(str_sub(piece_id, 2))
     } else {
         if (grepl("^[0-9]+", piece_id)) {
             n_pieces <- as.integer(gsub("(^[0-9]+)(.*)", "\\1", piece_id))
             location <- gsub("(^[0-9]+)(.*)", "\\2", piece_id)
-            get_id_from_coords(df, location, n_pieces)
+            get_id_from_coords(df, location, n_pieces, state)
         } else {
-            get_id_from_coords(df, piece_id)
+            get_id_from_coords(df, piece_id, 1, state)
         }
     }
 }
@@ -385,16 +386,16 @@ get_id_from_piece_id <- function(piece_id, df) {
 #### get index for piece restriction
 #' @importFrom dplyr near
 #' @importFrom utils tail
-get_id_from_coords <- function(df, coords, n_pieces = 1) {
-    xy <- get_xy(coords)
+get_id_from_coords <- function(df, coords, n_pieces = 1, state = create_state(df)) {
+    xy <- get_xy(coords, state)
     indices <- near(df$x, xy[1]) & near(df$y, xy[2])
     index <- utils::tail(which(indices), n_pieces)
     if (length(index) < n_pieces) stop(paste("Can't identify the piece(s) at", coords))
     df$id[index]
 }
 
-get_coords_from_piece_id <- function(piece_id, df) {
-    id_ <- get_id_from_piece_id(piece_id, df)
+get_coords_from_piece_id <- function(piece_id, df, state) {
+    id_ <- get_id_from_piece_id(piece_id, df, state)
     indices <- which(match(df$id, id_, nomatch = 0) > 0)
     index <- tail(indices, 1)
     list(x=df$x[index], y=df$y[index])
@@ -404,15 +405,15 @@ process_move <- function(df, text, state = create_state(df)) {
     if (text == "") {
         df
     } else if (grepl("@", text)) {
-        process_at_move(df, text, state = state)
+        process_at_move(df, text, state)
     } else if (grepl("\\*", text)) {
-        process_asterisk_move(df, text)
+        process_asterisk_move(df, text, state)
     } else if (grepl("-", text)) {
-        process_hyphen_move(df, text)
+        process_hyphen_move(df, text, state)
     } else if (grepl("=", text)) {
-        process_equal_move(df, text, state = state)
+        process_equal_move(df, text, state)
     } else if (str_detect(text, colon_token)) {
-        process_colon_move(df, text)
+        process_colon_move(df, text, state)
     } else {
         stop(paste("Don't know how to handle move", text))
     }
@@ -425,7 +426,7 @@ process_at_move <- function(df, text, state = create_state(df)) {
     df_piece <- parse_piece(piece_spec)
 
     location <- pc[2]
-    xy <- get_xy(location)
+    xy <- get_xy(location, state)
 
     df_piece$x <- xy[1]
     df_piece$y <- xy[2]
@@ -435,21 +436,21 @@ process_at_move <- function(df, text, state = create_state(df)) {
     insert_df(df, df_piece, index)
 }
 
-process_asterisk_move <- function(df, text) {
+process_asterisk_move <- function(df, text, state = create_state(df)) {
     piece_id <- gsub("\\*", "", text)
-    id_ <- get_id_from_piece_id(piece_id, df)
+    id_ <- get_id_from_piece_id(piece_id, df, state)
     index <- which(match(df$id, id_, nomatch = 0) > 0)
     df[-index,]
 }
 
-process_hyphen_move <- function(df, text) {
+process_hyphen_move <- function(df, text, state) {
     cc <- str_split(text, "-")[[1]]
     piece_id <- cc[1]
-    id_ <- get_id_from_piece_id(piece_id, df)
+    id_ <- get_id_from_piece_id(piece_id, df, state)
     indices <- which(match(df$id, id_, nomatch = 0) > 0)
 
     location <- cc[2]
-    new_xy <- get_xy(location)
+    new_xy <- get_xy(location, state)
 
     df[indices, "x"] <- new_xy[1]
     df[indices, "y"] <- new_xy[2]
@@ -457,14 +458,19 @@ process_hyphen_move <- function(df, text) {
 }
 
 create_state <- function(df) {
-    as.environment(list(max_id = nrow(df)))
+    if (!is.null(attr(df, "scale_factor"))) {
+        scale_factor <- attr(df, "scale_factor")
+    } else {
+        scale_factor <- 1.0
+    }
+    as.environment(list(max_id = nrow(df), scale_factor = as.numeric(scale_factor)))
 }
 
 process_equal_move <- function(df, text, state = create_state(df)) {
     cp <- str_split(text, "=")[[1]]
 
     piece_id <- cp[1]
-    id_ <- get_id_from_piece_id(piece_id, df)
+    id_ <- get_id_from_piece_id(piece_id, df, state)
 
     piece_spec <- cp[2]
     df_piece <- parse_piece(piece_spec)
@@ -483,16 +489,17 @@ process_equal_move <- function(df, text, state = create_state(df)) {
 }
 
 colon_token <- ":(?![^\\[]*])"
-process_colon_move <- function(df, text) {
+process_colon_move <- function(df, text, state = create_state(df)) {
     cc <- str_split(text, colon_token)[[1]]
 
     piece_id1 <- cc[1]
     piece_id2 <- cc[2]
-    coords <- get_coords_from_piece_id(piece_id2, df)
-    location <- stringr::str_glue("({coords$x},{coords$y})")
+    coords <- get_coords_from_piece_id(piece_id2, df, state)
+    location <- stringr::str_glue("({coords$x/scale},{coords$y/scale})",
+                                  coords = coords, scale = state$scale_factor)
 
-    df <- process_asterisk_move(df, paste0("*", piece_id2))
-    df <- process_hyphen_move(df, paste(piece_id1, location, sep = "-"))
+    df <- process_asterisk_move(df, paste0("*", piece_id2), state)
+    df <- process_hyphen_move(df, paste(piece_id1, location, sep = "-"), state)
     df
 }
 
@@ -508,8 +515,8 @@ insert_df <- function(df1, df2, index = nrow(df1)) {
     }
 }
 
-get_xy <- function(coords) {
-    c(get_x(coords), get_y(coords))
+get_xy <- function(coords, state = create_state(tibble())) {
+    state$scale_factor * c(get_x(coords), get_y(coords))
 }
 
 get_x <- function(coords) {
