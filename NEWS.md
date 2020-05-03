@@ -1,6 +1,8 @@
 ppgames 0.4.0
 =============
 
+* ``animate_game`` now has ``n_transitions`` argument that uses ``tweenr``
+  to try to interpolate transition frames (#32).
 * New starting board generators for specific games:
   - ``df_breakthrough``
   - ``df_crossings``

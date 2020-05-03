@@ -7,15 +7,15 @@
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
-#' @param nframes If over two (the default) uses \code{tweenr}
+#' @param n_transitions Integer, if over zero (the default) uses \code{tweenr}
 #'                package for enhanced animation transitions.
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
 animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
-                         cfg = NULL, envir = NULL, nframes = 2) {
+                         cfg = NULL, envir = NULL, n_transitions = 2) {
 
-    if (nframes > 2 && !requireNamespace("tweenr", quietly = TRUE)) {
-        stop("You need to install the suggested package 'tweenr' to use 'nframes > 2'.",
+    if (n_transitions > 0 && !requireNamespace("tweenr", quietly = TRUE)) {
+        stop("You need to install the suggested package 'tweenr' to use 'n_transitions > 2'.",
              "Use 'install.packages(\"tweenr\")'")
     }
 
@@ -25,8 +25,8 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
 
     dfs <- game$dfs
     ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
-    if (nframes > 2)
-        dfs <- get_tweenr_dfs(dfs, nframes, ..., cfg = cfg, envir = envir)
+    if (n_transitions > 0)
+        dfs <- get_tweenr_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
 
     #### Adjust if xmin under 0
     #### Add grid and comment annotations
@@ -44,7 +44,7 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
         pmap_piece(df, default.units = "in", ..., envir = envir)
         if (annotate) annotate_plot(xmax, ymax)
     }
-    animation_fn()(lapply(dfs, plot_fn, ...), file, width, height, 1 / (nframes - 1), res)
+    animation_fn()(lapply(dfs, plot_fn, ...), file, width, height, 1 / (n_transitions + 1), res)
     invisible(NULL)
 }
 #### How to handle empty tibbles??
@@ -71,12 +71,12 @@ to_zero <- function(df) {
     df$scale <- 0
     df
 }
-get_tweenr_dfs <- function(dfs, nframes = 2, ..., trans = NULL) {
+get_tweenr_dfs <- function(dfs, n_transitions = 0, ..., trans = NULL) {
     df_id_cfg <- get_id_cfg(dfs)
     dfs <- lapply(dfs, get_tweenr_df, trans, ...)
-    df <- Reduce(tweenr_reducer(nframes), dfs)
+    df <- Reduce(tweenr_reducer(n_transitions), dfs)
     df <- left_join(df, df_id_cfg, by = "id")
-    id_frames <- as.list(unique(df$.frame))
+    id_frames <- as.list(seq.int(max(df$.frame)))
     lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame))
 }
 get_id_cfg <- function(dfs) {
@@ -93,12 +93,17 @@ get_tweenr_df <- function(df, trans = NULL, ...) {
                  .data$scale, .data$alpha)
     as.data.frame(df)
 }
-tweenr_reducer <- function(nframes = 2) {
-    function(x1, x2) {
-        tweenr::tween_state(x1, x2, ease = "cubic-in-out", nframes = nframes,
+#' @importFrom utils packageVersion
+tweenr_reducer <- function(n_transitions = 0) {
+    function(df1, df2) {
+        # https://github.com/thomasp85/tweenr/issues/44
+        if (has_name(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+            n_transitions <- n_transitions - 1
+        tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2,
                             id = .data$id, enter = to_zero, exit = to_zero)
     }
 }
+has_name <- function(df, name) name %in% names(df)
 
 #### Option to generate postcard?
 

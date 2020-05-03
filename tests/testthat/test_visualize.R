@@ -7,6 +7,6 @@ filename <- "animation.gif"
 on.exit(unlink(filename))
 animate_game(game)
 size_noframes <- file.size(filename)
-animate_game(game, nframes=5, trans=op_transform, op_scale=0.5)
+animate_game(game, n_transitions=3, trans=op_transform, op_scale=0.5)
 size_frames <- file.size(filename)
 expect_true(size_frames > size_noframes)

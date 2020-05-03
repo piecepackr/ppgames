@@ -388,7 +388,7 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
 }
 
 #### get index for piece restriction
-#' @importFrom dplyr near
+#' @importFrom dplyr arrange desc near
 #' @importFrom utils tail
 get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state(df)) {
     xy <- get_xy(coords, df, state)
@@ -575,7 +575,7 @@ process_move <- function(df, text, state = create_state(df)) {
     df
 }
 
-# c("a b", "c d") -> c("a", "b", "c", "d")
+# nocov c("a b", "c d") -> c("a", "b", "c", "d")
 split_blanks <- function(text) c(str_split(text, "[[:blank:]]+"), recursive = TRUE)
 
 process_moves <- function(df, movelist, state = create_state(df)) {

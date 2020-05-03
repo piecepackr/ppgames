@@ -11,7 +11,7 @@ animate_game(
   ...,
   cfg = NULL,
   envir = NULL,
-  nframes = 2
+  n_transitions = 2
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ animate_game(
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
 
-\item{nframes}{If over two (the default) uses \code{tweenr}
+\item{n_transitions}{Integer, if over zero (the default) uses \code{tweenr}
 package for enhanced animation transitions.}
 }
 \value{
