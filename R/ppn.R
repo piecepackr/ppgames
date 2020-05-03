@@ -235,7 +235,7 @@ parse_piece <- function(text) {
         }
     }
     if (is.na(df$cfg)) {
-        if (df$piece == "pyramid" && grepl("[RKGBYW]", text)) {
+        if (df$piece == "pyramid" && str_detect(text, "[RKGBYW]")) {
             df$cfg <- "icehouse_pieces"
         } else {
             df$cfg <- "piecepack"
@@ -266,90 +266,90 @@ parse_simplified_piece <- function(text) {
     list(piece = piece, side = side, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 get_simplified_cfg <- function(text) {
-    if (grepl("\u25b3", text)) {
+    if (str_detect(text, "\u25b3")) {
         "icehouse_pieces"
-    } else if (grepl("\u2665|\u2660|\u2663|\u2666", text)) {
+    } else if (str_detect(text, "\u2665|\u2660|\u2663|\u2666")) {
         "playing_cards_expansion"
-    } else if (grepl("\u2661|\u2664|\u2667|\u2662", text)) {
+    } else if (str_detect(text, "\u2661|\u2664|\u2667|\u2662")) {
         "dual_piecepacks_expansion"
-    } else if (grepl("\u00b5|\u03bc|u", text)) {
+    } else if (str_detect(text, "\u00b5|\u03bc|u")) {
         "subpack"
-    } else if (grepl("\u2b22|\u2b21|\u2b23", text)) {
+    } else if (str_detect(text, "\u2b22|\u2b21|\u2b23")) {
         "hexpack"
     } else {
         NA_character_
     }
 }
 get_simplified_suit <- function(text) {
-    if (grepl("S|\u2665|R|\u2661", text)) {
+    if (str_detect(text, "S|\u2665|R|\u2661")) {
         1
-    } else if (grepl("M|\u2660|K|\u2664", text)) {
+    } else if (str_detect(text, "M|\u2660|K|\u2664")) {
         2
-    } else if (grepl("C|\u2663|G|\u2667", text)) {
+    } else if (str_detect(text, "C|\u2663|G|\u2667")) {
         3
-    } else if (grepl("A|\u2666|B|\u2662", text)) {
+    } else if (str_detect(text, "A|\u2666|B|\u2662")) {
         4
-    } else if (grepl("Y", text)) {
+    } else if (str_detect(text, "Y")) {
         5
-    } else if (grepl("W", text)) {
+    } else if (str_detect(text, "W")) {
         6
     } else {
         NA_integer_
     }
 }
 get_simplified_rank <- function(text) {
-    if (grepl("n", text)) {
+    if (str_detect(text, "n")) {
         1
-    } else if (grepl("a", text)) {
+    } else if (str_detect(text, "a")) {
         2
-    } else if (grepl("[[:digit:]]", text)) {
+    } else if (str_detect(text, "[[:digit:]]")) {
         as.numeric(str_extract(text, "[[:digit:]]")) + 1
     } else {
         NA_integer_
     }
 }
 get_simplified_angle <- function(text) {
-    if (grepl("\\^", text)) {
+    if (str_detect(text, "\\^")) {
         0
-    } else if (grepl("<", text)) {
+    } else if (str_detect(text, "<")) {
         90
-    } else if (grepl("v", text)) {
+    } else if (str_detect(text, "v")) {
         180
-    } else if (grepl(">", text)) {
+    } else if (str_detect(text, ">")) {
         270
     } else {
         NA_integer_
     }
 }
 get_simplified_piece <- function(text) {
-    if (grepl("t", text)) {
+    if (str_detect(text, "t")) {
         "tile"
-    } else if (grepl("c", text)) {
+    } else if (str_detect(text, "c")) {
         "coin"
-    } else if (grepl("d", text)) {
+    } else if (str_detect(text, "d")) {
         "die"
-    } else if (grepl("p", text)) {
+    } else if (str_detect(text, "p")) {
         "pawn"
-    } else if (grepl("m", text)) {
+    } else if (str_detect(text, "m")) {
         "matchstick"
-    } else if (grepl("s", text)) {
+    } else if (str_detect(text, "s")) {
         "saucer"
-    } else if (grepl("\u25b2|\u25b3", text)) { ####
+    } else if (str_detect(text, "\u25b2|\u25b3")) { ####
         "pyramid"
     } else {
         NA_character_
     }
 }
 get_simplified_side <- function(text, suit, rank) {
-    side <- if (grepl("f", text)) {
+    side <- if (str_detect(text, "f")) {
         "face"
-    } else if (grepl("b", text)) {
+    } else if (str_detect(text, "b")) {
         "back"
-    } else if (grepl("l", text)) {
+    } else if (str_detect(text, "l")) {
         "left"
-    } else if (grepl("r", text)) {
+    } else if (str_detect(text, "r")) {
         "right"
-    } else if (grepl("x", text)) {
+    } else if (str_detect(text, "x")) {
         "top"
     } else {
         NA_character_
@@ -370,10 +370,10 @@ get_algebraic_y <- function(text) {
 }
 
 get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
-    if (grepl("^#", piece_id)) {
+    if (str_detect(piece_id, "^#")) {
         as.numeric(str_sub(piece_id, 2))
     } else {
-        if (grepl("^[0-9]+", piece_id)) {
+        if (str_detect(piece_id, "^[0-9]+")) {
             n_pieces <- as.integer(gsub("(^[0-9]+)(.*)", "\\1", piece_id))
             location <- gsub("(^[0-9]+)(.*)", "\\2", piece_id)
             get_id_from_coords(df, location, n_pieces, state)
@@ -404,13 +404,13 @@ get_coords_from_piece_id <- function(piece_id, df, state) {
 process_move <- function(df, text, state = create_state(df)) {
     if (text == "") {
         df
-    } else if (grepl("@", text)) {
+    } else if (str_detect(text, "@")) {
         process_at_move(df, text, state)
-    } else if (grepl("\\*", text)) {
+    } else if (str_detect(text, "\\*")) {
         process_asterisk_move(df, text, state)
-    } else if (grepl("-", text)) {
+    } else if (str_detect(text, hyphen_token)) {
         process_hyphen_move(df, text, state)
-    } else if (grepl("=", text)) {
+    } else if (str_detect(text, "=")) {
         process_equal_move(df, text, state)
     } else if (str_detect(text, colon_token)) {
         process_colon_move(df, text, state)
@@ -443,8 +443,9 @@ process_asterisk_move <- function(df, text, state = create_state(df)) {
     df[-index,]
 }
 
+hyphen_token <- "-(?![[:digit:]]+)"  # a4-d4 but not (-4,-3)
 process_hyphen_move <- function(df, text, state) {
-    cc <- str_split(text, "-")[[1]]
+    cc <- str_split(text, hyphen_token)[[1]]
     piece_id <- cc[1]
     id_ <- get_id_from_piece_id(piece_id, df, state)
     indices <- which(match(df$id, id_, nomatch = 0) > 0)
@@ -488,7 +489,7 @@ process_equal_move <- function(df, text, state = create_state(df)) {
     df
 }
 
-colon_token <- ":(?![^\\[]*])"
+colon_token <- ":(?![^\\[]*])" # a4-d4 but not a4[1:4]
 process_colon_move <- function(df, text, state = create_state(df)) {
     cc <- str_split(text, colon_token)[[1]]
 
@@ -520,14 +521,14 @@ get_xy <- function(coords, state = create_state(tibble())) {
 }
 
 get_x <- function(coords) {
-    if (grepl(",", coords)) {
+    if (str_detect(coords, ",")) {
         as.numeric(gsub("\\(|,.*", "", coords))
     } else {
         get_algebraic_x(coords)
     }
 }
 get_y <- function(coords) {
-    if (grepl(",", coords)) {
+    if (str_detect(coords, ",")) {
         as.numeric(gsub(")|.*,", "", coords))
     } else {
         get_algebraic_y(coords)
