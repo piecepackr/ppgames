@@ -183,15 +183,15 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
         } else {
             i1 <- locations[1, 1]
             if (i1 > 1) {
-                moves_raw[[1]] <- str_sub(text, 1, i1-2)
+                moves_raw[[1]] <- str_sub(text, 1L, i1 - 2L)
             }
             for (ii in seq(nr)) {
                 is <- locations[ii, 1]
                 ie <- locations[ii, 2]
                 movenumber <- str_sub(text, is, ie)
-                is <- locations[ii, 2]+2
+                is <- locations[ii, 2] + 2L
                 if (ii < nr)
-                    ie <- locations[ii+1, 1]-2
+                    ie <- locations[ii+1, 1] - 2L
                 else
                     ie <- str_count(text)
                 moves_raw[[movenumber]] <- str_sub(text, is, ie)
@@ -370,15 +370,19 @@ get_algebraic_y <- function(text) {
 }
 
 get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
-    if (str_detect(piece_id, "^#")) {
-        as.numeric(str_sub(piece_id, 2))
+    # nocov piece_id <- gsub("'", "", piece_id)
+    if (str_detect(piece_id, "^\\^")) {
+        piece_id <- str_sub(piece_id, 2)
+        get_id_from_piece_id(piece_id, state$df_move_start, state)
     } else {
-        if (str_detect(piece_id, "^[0-9]+")) {
-            n_pieces <- as.integer(gsub("(^[0-9]+)(.*)", "\\1", piece_id))
-            location <- gsub("(^[0-9]+)(.*)", "\\2", piece_id)
+        if (str_detect(piece_id, "^[[:digit:]]+$")) {
+            as.numeric(piece_id)
+        } else if (str_detect(piece_id, "^[[:digit:]]+")) {
+            n_pieces <- as.integer(gsub("(^[[:digit:]]+)(.*)", "\\1", piece_id))
+            location <- gsub("(^[[:digit:]]+)(.*)", "\\2", piece_id)
             get_id_from_coords(df, location, n_pieces, state)
         } else {
-            get_id_from_coords(df, piece_id, 1, state)
+            get_id_from_coords(df, piece_id, NULL, state)
         }
     }
 }
@@ -386,24 +390,29 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
 #### get index for piece restriction
 #' @importFrom dplyr near
 #' @importFrom utils tail
-get_id_from_coords <- function(df, coords, n_pieces = 1, state = create_state(df)) {
-    xy <- get_xy(coords, state)
-    indices <- near(df$x, xy[1]) & near(df$y, xy[2])
-    index <- utils::tail(which(indices), n_pieces)
-    if (length(index) < n_pieces) stop(paste("Can't identify the piece(s) at", coords))
-    df$id[index]
+get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state(df)) {
+    xy <- get_xy(coords, df, state)
+    df <- mutate(df, dist_squared = round((.data$x - xy$x)^2 + (.data$y - xy$y)^2, 5))
+    indices <- arrange(df, desc(.data$dist_squared))$id
+    if (is.null(n_pieces)) {
+        if (sum(near(df$dist_squared, 0)) < 1) stop(paste("Can't identify the piece at", coords))
+        n_pieces <- 1
+    }
+    index <- utils::tail(indices, n_pieces)
+    index
 }
 
 get_coords_from_piece_id <- function(piece_id, df, state) {
-    id_ <- get_id_from_piece_id(piece_id, df, state)
-    indices <- which(match(df$id, id_, nomatch = 0) > 0)
+    indices <- get_indices_from_piece_id(piece_id, df, state)
     index <- tail(indices, 1)
-    list(x=df$x[index], y=df$y[index])
+    piecepackr:::Point$new(x=df$x[index], y=df$y[index])
 }
 
-process_move <- function(df, text, state = create_state(df)) {
+process_submove <- function(df, text, state = create_state(df)) {
     if (text == "") {
         df
+    } else if (str_detect(text, "@>")) {
+        process_rotate_move(df, text, state)
     } else if (str_detect(text, "@")) {
         process_at_move(df, text, state)
     } else if (str_detect(text, "\\*")) {
@@ -419,6 +428,17 @@ process_move <- function(df, text, state = create_state(df)) {
     }
 }
 
+process_rotate_move <- function(df, text, state = create_state(df), clockwise = TRUE) {
+    id_angle <- str_split(text, "@>")[[1]]
+    piece_id <- id_angle[1]
+    angle <- as.numeric(id_angle[2])
+    angle <- ifelse(clockwise, -angle, angle)
+
+    indices <- get_indices_from_piece_id(piece_id, df, state)
+    df$angle[indices] <- df$angle[indices] + angle
+    df
+}
+
 process_at_move <- function(df, text, state = create_state(df)) {
     pc <- str_split(text, "@")[[1]]
 
@@ -426,35 +446,38 @@ process_at_move <- function(df, text, state = create_state(df)) {
     df_piece <- parse_piece(piece_spec)
 
     location <- pc[2]
-    xy <- get_xy(location, state)
+    xy <- get_xy(location, df, state)
 
-    df_piece$x <- xy[1]
-    df_piece$y <- xy[2]
+    df_piece$x <- xy$x
+    df_piece$y <- xy$y
     df_piece$id <- state$max_id <- state$max_id + 1L
     #### get index for piece restriction
     index <- nrow(df)
     insert_df(df, df_piece, index)
 }
 
+get_indices_from_piece_id <- function(piece_id, df, state) {
+    id_ <- get_id_from_piece_id(piece_id, df, state)
+    which(match(df$id, id_, nomatch = 0) > 0)
+}
+
 process_asterisk_move <- function(df, text, state = create_state(df)) {
     piece_id <- gsub("\\*", "", text)
-    id_ <- get_id_from_piece_id(piece_id, df, state)
-    index <- which(match(df$id, id_, nomatch = 0) > 0)
-    df[-index,]
+    indices <- get_indices_from_piece_id(piece_id, df, state)
+    df[-indices,]
 }
 
 hyphen_token <- "-(?![[:digit:]]+)"  # a4-d4 but not (-4,-3)
 process_hyphen_move <- function(df, text, state) {
     cc <- str_split(text, hyphen_token)[[1]]
     piece_id <- cc[1]
-    id_ <- get_id_from_piece_id(piece_id, df, state)
-    indices <- which(match(df$id, id_, nomatch = 0) > 0)
+    indices <- get_indices_from_piece_id(piece_id, df, state)
 
     location <- cc[2]
-    new_xy <- get_xy(location, state)
+    new_xy <- get_xy(location, df, state)
 
-    df[indices, "x"] <- new_xy[1]
-    df[indices, "y"] <- new_xy[2]
+    df[indices, "x"] <- new_xy$x
+    df[indices, "y"] <- new_xy$y
     insert_df(df[-indices, ], df[indices, ])
 }
 
@@ -464,19 +487,19 @@ create_state <- function(df) {
     } else {
         scale_factor <- 1.0
     }
-    as.environment(list(max_id = nrow(df), scale_factor = as.numeric(scale_factor)))
+    as.environment(list(df_move_start = df,
+                        max_id = nrow(df),
+                        scale_factor = as.numeric(scale_factor)))
 }
 
 process_equal_move <- function(df, text, state = create_state(df)) {
     cp <- str_split(text, "=")[[1]]
 
     piece_id <- cp[1]
-    id_ <- get_id_from_piece_id(piece_id, df, state)
+    indices <- get_indices_from_piece_id(piece_id, df, state)
 
     piece_spec <- cp[2]
     df_piece <- parse_piece(piece_spec)
-
-    indices <- which(match(df$id, id_, nomatch = 0) > 0)
 
     new_id <- seq.int(state$max_id + 1, length.out = length(indices))
     state$max_id <- max(new_id)
@@ -516,8 +539,14 @@ insert_df <- function(df1, df2, index = nrow(df1)) {
     }
 }
 
-get_xy <- function(coords, state = create_state(tibble())) {
-    state$scale_factor * c(get_x(coords), get_y(coords))
+get_xy <- function(coords, df, state = create_state(tibble())) {
+    if (str_detect(coords, "^&")) {
+        piece_id <- str_sub(coords, 2L)
+        p <- get_coords_from_piece_id(piece_id, df, state)
+    } else {
+        p <- piecepackr:::Point$new(x = get_x(coords), y = get_y(coords))
+    }
+    p$dilate(state$scale_factor)
 }
 
 get_x <- function(coords) {
@@ -535,22 +564,26 @@ get_y <- function(coords) {
     }
 }
 
-process_moveline <- function(df, text, state = create_state(df)) {
-    text <- bracer::expand_braces(text)
+process_move <- function(df, text, state = create_state(df)) {
+    state$df_move_start <- df
+    text <- bracer::expand_braces(split_blanks(text))
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
-    moves <- c(str_split(text, "[[:blank:]]+"), recursive = TRUE)
+    moves <- split_blanks(text)
     for (move in moves) {
-        df <- process_move(df, move, state = state)
+        df <- process_submove(df, move, state = state)
     }
     df
 }
+
+# c("a b", "c d") -> c("a", "b", "c", "d")
+split_blanks <- function(text) c(str_split(text, "[[:blank:]]+"), recursive = TRUE)
 
 process_moves <- function(df, movelist, state = create_state(df)) {
     df_list <- list(SetupFn.=df)
     nms <- names(movelist)
     if (is.null(nms)) nms <- 1 + seq(movelist)
     for (ii in seq(movelist)) {
-        df <- process_moveline(df, movelist[[ii]], state = state)
+        df <- process_move(df, movelist[[ii]], state = state)
         df_list[[nms[ii]]] <- df
     }
     df_list

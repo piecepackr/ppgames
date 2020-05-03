@@ -164,24 +164,30 @@ test_that("parsing algebraic coordinates works as expected", {
     expect_equal(get_algebraic_y("aa12"), 12)
 })
 
-test_that("process_move works as expected", {
-    expect_equal(process_move(tibble(), ""), tibble())
+test_that("process_submove works as expected", {
+    expect_equal(process_submove(tibble(), ""), tibble())
 
     df <- df_four_field_kono()
     df$cfg <- "piecepack"
     df <- tibble::rowid_to_column(df, "id")
     expect_equal(nrow(df), 20)
 
-    df <- process_move(df, "*b4")
-    df <- process_move(df, "*d2")
+    df <- process_submove(df, "*b4")
+    df <- process_submove(df, "*d2")
     expect_equal(nrow(df), 18)
 
-    df <- process_move(df, "b2=dC4")
+    df <- process_submove(df, "b2=dC4")
     expect_equal(nrow(df), 18)
     expect_true(any(grepl("die_face", df$piece_side)))
 
-    expect_error(process_move(df, "!"))
+    expect_error(process_submove(df, "!"))
     expect_error(get_id_from_coords(df, "e5"))
+
+    df <- tibble::rowid_to_column(df_none(), "id")
+    state <- create_state(df)
+    df <- process_move(df, "S@a{1..6} M@a1 5a1-b1", state)
+    expect_equal(sum(near(df$x, 1)), 2)
+    expect_equal(sum(near(df$x, 2)), 5)
 })
 
 test_that("parse_moves works as expected", {
@@ -199,41 +205,63 @@ test_that("parse_moves works as expected", {
     expect_equal(df$suit, rep(1:2, each = 2))
 })
 
-test_that("# notation works as expected", {
+test_that("^ notation works as expected", {
+    # refer to piece by id
     df <- tibble::rowid_to_column(df_none(), "id")
     state <- create_state(df)
-    df <- process_move(tibble(), "S@b2", state)
+    df <- process_submove(df, "S@b2", state)
     expect_true(near(df$x, 2))
     expect_equal(nrow(df), 1)
     expect_equal(df$suit, 1)
-    df <- process_move(df, "#1=M", state)
+    df <- process_submove(df, "1=M", state)
     expect_equal(df$suit, 2)
-    df <- process_move(df, "#2-c3", state)
+    df <- process_submove(df, "2-c3", state)
     expect_true(near(df$x, 3))
     expect_equal(nrow(df), 1)
-    df <- process_move(df, "*#2", state)
+    df <- process_submove(df, "*2", state)
     expect_equal(nrow(df), 0)
+
+    # ^ notation
+    df <- tibble::rowid_to_column(df_none(), "id")
+    state <- create_state(df)
+    df <- process_move(df, "S@b2 M@d4", state)
+    df1 <- process_move(df, "&b2-d4 d4-f6", state)
+    expect_equal(df1$suit[2], 1)
+    expect_true(near(df1$x[2], 6))
+    df2 <- process_move(df, "b2-d4 ^d4-f6", state)
+    expect_equal(df2$suit[2], 2)
+    expect_true(near(df2$x[2], 6))
+})
+
+test_that("rotations work as expected", {
+    df <- tibble::rowid_to_column(df_none(), "id")
+    df <- process_move(df, "S@b2 b2@>45")
+    expect_equal(df$angle, -45)
+    df <- process_move(df, "b2@>-45")
+    expect_equal(df$angle, 0)
+    df <- process_move(df, "b2@>-90")
+    expect_equal(df$angle, 90)
 })
 
 test_that("Move multiple pieces works as expected", {
     df <- tail(process_moves(tibble(), c("S@b2", "S@b2", "S@b2")), 1)[[1]]
     expect_equal(sum(near(df$x, 2)), 3)
-    df <- process_move(df, "2b2-c3")
+    df <- process_submove(df, "2b2-c3")
     expect_equal(sum(near(df$x, 2)), 1)
     expect_equal(sum(near(df$x, 3)), 2)
     expect_equal(nrow(df), 3)
-    df <- process_move(df, "b2:2c3")
+    df <- process_submove(df, "b2:2c3")
     expect_equal(sum(near(df$x, 2)), 0)
     expect_equal(sum(near(df$x, 3)), 1)
     expect_equal(nrow(df), 1)
     df <- tail(process_moves(tibble(), c("S@b2", "S@b2", "S@b2")), 1)[[1]]
-    df <- process_move(df, "3b2-c3")
+    df <- process_submove(df, "3b2-c3")
     expect_equal(sum(near(df$x, 2)), 0)
     expect_equal(sum(near(df$x, 3)), 3)
-    df <- process_move(df, "c3-b2")
+    df <- process_submove(df, "c3-b2")
     expect_equal(sum(near(df$x, 2)), 1)
     expect_equal(sum(near(df$x, 3)), 2)
-    df <- process_move(df, "2c3:b2")
+    df <- process_submove(df, "2c3:b2")
     expect_equal(sum(near(df$x, 2)), 2)
     expect_equal(sum(near(df$x, 3)), 0)
     expect_equal(nrow(df), 2)

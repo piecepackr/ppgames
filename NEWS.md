@@ -17,6 +17,9 @@ ppgames 0.4.0
   - Can now specify ``SetUp: None`` (or ``GameType: None``).
   - Can now specify ``ScalingFactor`` in the default movetext parser or as
     an ``attribute`` of the starting data frame (#52).
+  - ``PieceId`` can now refer to piece at beginning of the move with ``^``.
+  - ``Location`` can now be ``&PieceId``.
+  - Can now rotate pieces with ``@>`` move token.
 
 Bug fixes and minor improvements
 --------------------------------
