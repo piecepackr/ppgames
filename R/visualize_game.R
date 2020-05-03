@@ -71,9 +71,9 @@ to_zero <- function(df) {
     df$scale <- 0
     df
 }
-get_tweenr_dfs <- function(dfs, n_transitions = 0, ..., trans = NULL) {
+get_tweenr_dfs <- function(dfs, n_transitions = 0, ...) {
     df_id_cfg <- get_id_cfg(dfs)
-    dfs <- lapply(dfs, get_tweenr_df, trans, ...)
+    dfs <- lapply(dfs, get_tweenr_df, ...)
     df <- Reduce(tweenr_reducer(n_transitions), dfs)
     df <- left_join(df, df_id_cfg, by = "id")
     id_frames <- as.list(seq.int(max(df$.frame)))
@@ -84,8 +84,7 @@ get_id_cfg <- function(dfs) {
     df <- select(df, .data$id, .data$cfg)
     unique(df)
 }
-get_tweenr_df <- function(df, trans = NULL, ...) {
-    if (!is.null(trans)) df <- trans(df, ...)
+get_tweenr_df <- function(df, ...) {
     df$scale <- 1
     df$alpha <- 1
     df <- select(df, .data$id, .data$piece_side, .data$suit, .data$rank,

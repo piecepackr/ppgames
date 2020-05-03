@@ -169,7 +169,7 @@ test_that("process_submove works as expected", {
 
     df <- df_four_field_kono()
     df$cfg <- "piecepack"
-    df <- tibble::rowid_to_column(df, "id")
+    df <- initialize_df(df)
     expect_equal(nrow(df), 20)
 
     df <- process_submove(df, "*b4")
@@ -183,7 +183,7 @@ test_that("process_submove works as expected", {
     expect_error(process_submove(df, "!"))
     expect_error(get_id_from_coords(df, "e5"))
 
-    df <- tibble::rowid_to_column(df_none(), "id")
+    df <- initialize_df(df_none())
     state <- create_state(df)
     df <- process_move(df, "S@a{1..6} M@a1 5a1-b1", state)
     expect_equal(sum(near(df$x, 1)), 2)
@@ -207,7 +207,7 @@ test_that("parse_moves works as expected", {
 
 test_that("^ notation works as expected", {
     # refer to piece by id
-    df <- tibble::rowid_to_column(df_none(), "id")
+    df <- initialize_df(df_none())
     state <- create_state(df)
     df <- process_submove(df, "S@b2", state)
     expect_true(near(df$x, 2))
@@ -222,7 +222,7 @@ test_that("^ notation works as expected", {
     expect_equal(nrow(df), 0)
 
     # ^ notation
-    df <- tibble::rowid_to_column(df_none(), "id")
+    df <- initialize_df(df_none())
     state <- create_state(df)
     df <- process_move(df, "S@b2 M@d4", state)
     df1 <- process_move(df, "&b2-d4 d4-f6", state)
@@ -234,7 +234,7 @@ test_that("^ notation works as expected", {
 })
 
 test_that("rotations work as expected", {
-    df <- tibble::rowid_to_column(df_none(), "id")
+    df <- initialize_df(df_none())
     df <- process_move(df, "S@b2 b2@>45")
     expect_equal(df$angle, -45)
     df <- process_move(df, "b2@>-45")

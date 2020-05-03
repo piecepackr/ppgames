@@ -104,7 +104,7 @@ get_starting_df <- function(metadata) {
     if (!is.null(game_type)) {
         return(get_starting_df_from_field(game_type))
     }
-    return(tibble::rowid_to_column(df_none(), "id"))
+    return(initialize_df(df_none()))
 }
 
 get_starting_df_from_field <- function(field) {
@@ -146,8 +146,14 @@ get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
     fn_name <- paste0("df_", to_varname(game_name))
     fn <- ppn_get(fn_name, package)
     df <- do.call(fn, .l)
-    df <- tibble::rowid_to_column(df, "id")
+    df <- initialize_df(df)
     if (is.null(df[["cfg"]])) df$cfg <- "piecepack"
+    df
+}
+
+initialize_df <- function(df) {
+    df <- tibble::rowid_to_column(df, "id")
+    if (!has_name(df, "angle")) df$angle <- 0
     df
 }
 
@@ -168,7 +174,7 @@ ppn_get <- function(name, package = NULL) {
 #     named list (by move number) of move text and element \code{comments}
 #     containing named list (by move number) of comments
 parse_moves <- function(text, df = NULL, state = create_state(df)) {
-    if (is.null(df)) df <- tibble::rowid_to_column(df_none(), "id")
+    if (is.null(df)) df <- initialize_df(df_none())
     #### Convert # comments into braces?
     if (length(text)>0) {
         text <- str_squish(paste(text, collapse = " "))
