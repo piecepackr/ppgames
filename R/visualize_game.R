@@ -7,15 +7,18 @@
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
-#' @param n_transitions Integer, if over zero (the default) uses \code{tweenr}
-#'                package for enhanced animation transitions.
+#' @param n_transitions Integer, if over zero (the default)
+#'                how many transition frames to add between moves.
+#' @param n_pauses Integer, how many paused frames per completed move.
+#' @param fps Double, frames per second.
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
 animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
-                         cfg = NULL, envir = NULL, n_transitions = 2) {
+                         cfg = NULL, envir = NULL,
+                         n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses) {
 
-    if (n_transitions > 0 && !requireNamespace("tweenr", quietly = TRUE)) {
-        stop("You need to install the suggested package 'tweenr' to use 'n_transitions > 2'.",
+    if (n_transitions > 0L && !requireNamespace("tweenr", quietly = TRUE)) {
+        stop("You need to install the suggested package 'tweenr' to use 'n_transitions > 0'.",
              "Use 'install.packages(\"tweenr\")'")
     }
 
@@ -25,7 +28,7 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
 
     dfs <- game$dfs
     ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
-    if (n_transitions > 0)
+    if (n_transitions > 0L)
         dfs <- get_tweenr_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
 
     #### Adjust if xmin under 0
@@ -44,7 +47,7 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
         pmap_piece(df, default.units = "in", ..., envir = envir)
         if (annotate) annotate_plot(xmax, ymax)
     }
-    animation_fn()(lapply(dfs, plot_fn, ...), file, width, height, 1 / (n_transitions + 1), res)
+    animation_fn()(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, res)
     invisible(NULL)
 }
 #### How to handle empty tibbles??
@@ -71,13 +74,14 @@ to_zero <- function(df) {
     df$scale <- 0
     df
 }
-get_tweenr_dfs <- function(dfs, n_transitions = 0, ...) {
+get_tweenr_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
     df_id_cfg <- get_id_cfg(dfs)
-    dfs <- lapply(dfs, get_tweenr_df, ...)
-    df <- Reduce(tweenr_reducer(n_transitions), dfs)
+    dfs <- rev(lapply(dfs, get_tweenr_df, ...)) # better transitions with 'rev'
+    dfs[[1]] <- keep_state(dfs[[1L]], n_pauses)
+    df <- Reduce(tweenr_reducer(n_transitions, n_pauses), dfs)
     df <- left_join(df, df_id_cfg, by = "id")
     id_frames <- as.list(seq.int(max(df$.frame)))
-    lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame))
+    rev(lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame)))
 }
 get_id_cfg <- function(dfs) {
     df <- do.call(bind_rows, dfs)
@@ -93,16 +97,25 @@ get_tweenr_df <- function(df, ...) {
     as.data.frame(df)
 }
 #' @importFrom utils packageVersion
-tweenr_reducer <- function(n_transitions = 0) {
+tweenr_reducer <- function(n_transitions = 0L, n_pauses = 1L) {
     function(df1, df2) {
-        # https://github.com/thomasp85/tweenr/issues/44
-        if (has_name(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
-            n_transitions <- n_transitions - 1
-        tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2,
-                            id = .data$id, enter = to_zero, exit = to_zero)
+        df <- tween_state(df1, df2, n_transitions)
+        keep_state(df, n_pauses)
     }
 }
 has_name <- function(df, name) name %in% names(df)
+tween_state <- function(df1, df2, n_transitions = 0L) {
+    # https://github.com/thomasp85/tweenr/issues/44
+    if (has_name(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+        n_transitions <- n_transitions - 1L
+    tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2L,
+                              id = .data$id, enter = to_zero, exit = to_zero)
+}
+keep_state <- function(df, n_pauses = 1L) {
+    if (has_name(df, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+        n_pauses <- n_pauses - 1L
+    tweenr::keep_state(df, nframes = n_pauses)
+}
 
 #### Option to generate postcard?
 

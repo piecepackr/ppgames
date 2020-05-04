@@ -11,7 +11,9 @@ animate_game(
   ...,
   cfg = NULL,
   envir = NULL,
-  n_transitions = 2
+  n_transitions = 0L,
+  n_pauses = 1L,
+  fps = n_transitions + n_pauses
 )
 }
 \arguments{
@@ -27,8 +29,12 @@ animate_game(
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
 
-\item{n_transitions}{Integer, if over zero (the default) uses \code{tweenr}
-package for enhanced animation transitions.}
+\item{n_transitions}{Integer, if over zero (the default)
+how many transition frames to add between moves.}
+
+\item{n_pauses}{Integer, how many paused frames per completed move.}
+
+\item{fps}{Double, frames per second.}
 }
 \value{
 Nothing, as a side effect saves an animation of ppn game
