@@ -421,6 +421,8 @@ process_submove <- function(df, text, state = create_state(df)) {
         process_rotate_move(df, text, state)
     } else if (str_detect(text, "@")) {
         process_at_move(df, text, state)
+    } else if (str_detect(text, "#")) {
+        process_hash_move(df, text, state)
     } else if (str_detect(text, "\\*")) {
         process_asterisk_move(df, text, state)
     } else if (str_detect(text, hyphen_token)) {
@@ -443,6 +445,24 @@ process_rotate_move <- function(df, text, state = create_state(df), clockwise = 
     indices <- get_indices_from_piece_id(piece_id, df, state)
     df$angle[indices] <- df$angle[indices] + angle
     df
+}
+
+process_hash_move <- function(df, text, state = create_state(df)) {
+    id1_id2 <- str_split(text, "#")[[1]]
+    piece_id1 <- id1_id2[1]
+    piece_id2 <- id1_id2[2]
+    coords1 <- get_coords_from_piece_id(piece_id1, df, state)
+    coords2 <- get_coords_from_piece_id(piece_id2, df, state)
+    indices1 <- get_indices_from_piece_id(piece_id1, df, state)
+    indices2 <- get_indices_from_piece_id(piece_id2, df, state)
+    df1 <- df[indices1, ]
+    df1$x <- coords2$x
+    df1$y <- coords2$y
+    df2 <- df[indices2, ]
+    df2$x <- coords1$x
+    df2$y <- coords1$y
+    dfo <- df[-c(indices1, indices2), ]
+    bind_rows(dfo, df1, df2)
 }
 
 process_at_move <- function(df, text, state = create_state(df)) {
@@ -524,13 +544,18 @@ process_colon_move <- function(df, text, state = create_state(df)) {
 
     piece_id1 <- cc[1]
     piece_id2 <- cc[2]
-    coords <- get_coords_from_piece_id(piece_id2, df, state)
-    location <- stringr::str_glue("({coords$x/scale},{coords$y/scale})",
-                                  coords = coords, scale = state$scale_factor)
+
+    location <- get_location_from_piece_id(piece_id2, df, state)
 
     df <- process_asterisk_move(df, paste0("*", piece_id2), state)
     df <- process_hyphen_move(df, paste(piece_id1, location, sep = "-"), state)
     df
+}
+
+get_location_from_piece_id <- function(piece_id, df, state) {
+    coords <- get_coords_from_piece_id(piece_id, df, state)
+    stringr::str_glue("({coords$x/scale},{coords$y/scale})",
+                      coords = coords, scale = state$scale_factor)
 }
 
 # Insert `df2` into `df1` after `index`

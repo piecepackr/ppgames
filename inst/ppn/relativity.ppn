@@ -1,0 +1,23 @@
+---
+Round: Night
+GameType: 
+    Name: Relativity
+    Seed: 42
+...
+1S. d3#e3 1T. d3#d1
+2S. c2#c3 2T. d2#b1 M2@e6
+3S. b2#a2 3T. e3#b2
+4S. f1#f4 4T. e2#a3 M3@e6
+5S. c4#d4 5T. f1#a1
+6S. c1#c4 M5@b6 6T. b3#a3
+7S. f3#a3 7T. d1#a3
+8S. f2#f3 8T. b1#d2
+9S. f3#a3 Mn@b6 9T. e2#c2
+10S. e1#f1 10T. f1#d4
+11S. c2#c3 11T. d4#c4
+12S. b2#c2 12T. c1#e2 Ma@e6
+
+{ Notes: Space has power of adjacency while Time has power of sequence
+         Completed so far: n, a, 2,3,5 
+         Un-completed: 4
+}

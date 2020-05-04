@@ -22,6 +22,7 @@ ppgames 0.4.0
   - ``PieceId`` can now refer to piece at beginning of the move with ``^``.
   - ``Location`` can now be ``&PieceId``.
   - Can now rotate pieces with ``@>`` move token.
+  - Can now "swap" pieces with ``#`` move token.
 
 Bug fixes and minor improvements
 --------------------------------

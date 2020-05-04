@@ -233,6 +233,17 @@ test_that("^ notation works as expected", {
     expect_true(near(df2$x[2], 6))
 })
 
+test_that("swap works as expected", {
+    df <- initialize_df(df_none())
+    state <- create_state(df)
+    df <- process_move(df, "S@b2 M@d4", state)
+    expect_equal(df$suit[which(df$x == 2)], 1)
+    expect_equal(df$suit[which(df$x == 4)], 2)
+    df <- process_move(df, "b2#d4", state)
+    expect_equal(df$suit[which(df$x == 4)], 1)
+    expect_equal(df$suit[which(df$x == 2)], 2)
+})
+
 test_that("rotations work as expected", {
     df <- initialize_df(df_none())
     df <- process_move(df, "S@b2 b2@>45")
