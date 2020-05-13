@@ -1,4 +1,4 @@
-ppgames 0.4.0
+ppgames 0.4.1
 =============
 
 * ``animate_game`` now has ``n_transitions`` argument that uses ``tweenr``
