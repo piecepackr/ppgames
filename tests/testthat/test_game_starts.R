@@ -7,47 +7,6 @@ mzero <- function(df) mutate(df, angle = 0)
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {
-    expect_doppelganger("alien_city", function() {
-        df <- df_alien_city(seed=42)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("alien_city_tiles", function() {
-        tiles <- "G^R^K^R^/R<B<GvB^/B<R^K<B</GvR^K>B>/G>K>G>K<"
-        df <- df_alien_city(seed=42, tiles=tiles)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("alien_city_tiles", function() {
-        tiles <- "G3^Rn^K3^R4^/R3<Ba<GnvB4^/B2<R2^Ka<Bn</G4vRa^K4>B3>/Ga>Kn>G2>K2<"
-        df <- df_alien_city(seed=42, tiles=tiles)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("backgammon", function() {
-        df <- df_backgammon()
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("cell_management", function() {
-        text <- "---\nGameType:\n  Name: Cell Management\n  Seed: 42\n..."
-        game <- read_ppn(textConnection(text))[[1]]
-        plot_move(game, new_device=FALSE)
-    })
-    expect_doppelganger("cribbage", function() {
-        df <- df_cribbage_board()
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("desfases", function() {
-        df <- df_desfases(seed=42)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("shogi", function() {
-        df <- df_shogi()
-        ee <- list(piecepack = cfg)
-        pmap_piece(df, default.units = "in", envir = ee)
-    })
-    expect_doppelganger("tablut", function() {
-        df <- df_tablut(cfg$get_width("die_face"))
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-
     verify_output("../text_diagrams/alice_chess", cat_piece(df_alice_chess()))
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
@@ -97,4 +56,47 @@ test_that("game diagrams work as expected", {
                   cat_piece(df_xiangqi(TRUE)))
 
     expect_error(process_tiles("&^&&"))
+
+    # graphic checks
+    skip_on_ci()
+    expect_doppelganger("alien_city", function() {
+        df <- df_alien_city(seed=42)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("alien_city_tiles", function() {
+        tiles <- "G^R^K^R^/R<B<GvB^/B<R^K<B</GvR^K>B>/G>K>G>K<"
+        df <- df_alien_city(seed=42, tiles=tiles)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("alien_city_tiles", function() {
+        tiles <- "G3^Rn^K3^R4^/R3<Ba<GnvB4^/B2<R2^Ka<Bn</G4vRa^K4>B3>/Ga>Kn>G2>K2<"
+        df <- df_alien_city(seed=42, tiles=tiles)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("backgammon", function() {
+        df <- df_backgammon()
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("cell_management", function() {
+        text <- "---\nGameType:\n  Name: Cell Management\n  Seed: 42\n..."
+        game <- read_ppn(textConnection(text))[[1]]
+        plot_move(game, new_device=FALSE)
+    })
+    expect_doppelganger("cribbage", function() {
+        df <- df_cribbage_board()
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("desfases", function() {
+        df <- df_desfases(seed=42)
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("shogi", function() {
+        df <- df_shogi()
+        ee <- list(piecepack = cfg)
+        pmap_piece(df, default.units = "in", envir = ee)
+    })
+    expect_doppelganger("tablut", function() {
+        df <- df_tablut(cfg$get_width("die_face"))
+        pmap_piece(df, cfg = cfg, default.units = "in")
+    })
 })

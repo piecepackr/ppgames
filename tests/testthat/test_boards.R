@@ -30,6 +30,7 @@ test_that("rectangular boards works as expected", {
 
     expect_error(df_rect_board_tiles(2, 3), "don't know how to draw this board")
 
+    skip_on_ci()
     df <- df_rect_board_tiles(nr = 8, nc = 8)
     expect_doppelganger("8x8", pmp(df))
 

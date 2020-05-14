@@ -19,12 +19,6 @@ test_that("parsing ppn files works as expected", {
     expect_equal(g1$moves[["setup."]], "t@b2")
     expect_equal(g1$moves[["1..."]], "M@a2")
     expect_equal(g1$comments[["1..."]], "? (1... M@a1)")
-    df1 <- tail(g1$dfs, 1)[[1]]
-    expect_doppelganger("tic-tac-toe", pp(df1))
-
-    df2 <- tail(g2$dfs, 1)[[1]]
-    expect_doppelganger("four-field-kono", pp(df2))
-
     verify_output("../text_diagrams/ppn-four-field-kono.txt", cat_move(g2))
 
     df3a <- tail(g3a$dfs, 1)[[1]]
@@ -51,6 +45,13 @@ test_that("parsing ppn files works as expected", {
     parser_default <- function(...) list()
     g <- read_ppn(textConnection(null))[[1]]
     expect_length(g, 0)
+
+    skip_on_ci()
+    df1 <- tail(g1$dfs, 1)[[1]]
+    expect_doppelganger("tic-tac-toe", pp(df1))
+
+    df2 <- tail(g2$dfs, 1)[[1]]
+    expect_doppelganger("four-field-kono", pp(df2))
 })
 
 test_that("parsing simplified piece notation works as expected", {
