@@ -411,7 +411,7 @@ get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state
 get_coords_from_piece_id <- function(piece_id, df, state) {
     indices <- get_indices_from_piece_id(piece_id, df, state)
     index <- tail(indices, 1)
-    piecepackr:::Point$new(x=df$x[index], y=df$y[index])
+    piecepackr:::Point2D$new(x=df$x[index], y=df$y[index])
 }
 
 process_submove <- function(df, text, state = create_state(df)) {
@@ -575,7 +575,7 @@ get_xy <- function(coords, df, state = create_state(tibble())) {
         piece_id <- str_sub(coords, 2L)
         p <- get_coords_from_piece_id(piece_id, df, state)
     } else {
-        p <- piecepackr:::Point$new(x = get_x(coords), y = get_y(coords))
+        p <- piecepackr:::Point2D$new(x = get_x(coords), y = get_y(coords))
     }
     p$dilate(state$scale_factor)
 }
