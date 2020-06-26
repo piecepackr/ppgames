@@ -1,13 +1,74 @@
 #' @rdname df_game
 #' @export
+df_alquerque <- function(has_matchsticks = FALSE) {
+    df_t <- df_rect_board_tiles(5, 5)
+    df_c <- tibble(piece_side = "coin_back",
+                   suit = c(rep(1:2, 6), rep(3:4, 6)),
+                   rank = rep(c(1:6, 1:6), each=2),
+                   x = c(1:5, 1:5, 1:2, 4:5, 1:5, 1:5),
+                   y = c(rep(5:4, each=5), rep(3, 4), rep(2:1, each=5)),
+                   angle = rep(c(180, 0), each = 12))
+    if (has_matchsticks) {
+        df_m <- tibble(piece_side = "matchstick_back",
+                       suit = rep(1:4, each=4),
+                       rank = 2,
+                       x = 0.5 + c(1,2,2,1, 3,4,4,3, 3,4,4,3, 1,2,2,1),
+                       y = 0.5 + c(4,4,3,3, 4,4,3,3, 2,2,1,1, 2,2,1,1),
+                       angle = rep(c(45, -45, -135, 135), 4))
+        df <- bind_rows(df_t, df_m, df_c)
+    } else {
+        df <- bind_rows(df_t, df_c)
+    }
+    df
+}
+
+#' @rdname df_game
+#' @export
 df_american_checkers <- function() {
     df_t <- df_rect_board_tiles(8,8)
-    df_c <- tibble(piece_side = "coin_back", suit = rep(1:4, each = 6),
+    df_c <- tibble(piece_side = "coin_back",
+                   suit = rep(1:4, each = 6),
+                   rank = rep(1:6, 4),
                    x = c(1,3,2,4,1,3,  5,7,6,8,5,7,
                        6,8,5,7,6,8,  2,4,1,3,2,4),
                    y = rep(c(8,7,6,8,7,6,3,2,1,3,2,1), each = 2),
                    angle = rep(c(180,0), each = 12))
     bind_rows(df_t, df_c)
+}
+
+#' @rdname df_game
+#' @export
+df_awithlaknannai_mosona <- function(has_matchsticks = FALSE) {
+    df_t <- tibble(piece_side = "tile_face",
+                   suit = rep(1:4, 2),
+                   rank = rep(1:2, each=4),
+                   x = sqrt(2) + sqrt(2) * seq(1, by=2, length.out=8),
+                   y = 2 * sqrt(2),
+                   angle = rep(c(45, -45), each=4))
+    df_c <- tibble(piece_side = "coin_back",
+                   suit = c(rep(1:2, 6), rep(3:4, 6)),
+                   rank = rep(c(1:6, 1:6), each=2),
+                   x = sqrt(2) * c(seq(2, by=2, length.out=8),
+                                   seq(17, by=-2, length.out=4),
+                                   seq(1, by=2, length.out=4),
+                                   seq(2, by=2, length.out=8)),
+                   y = sqrt(2) * c(rep(3:1, each=8)),
+                   angle = rep(c(180,0), each = 12))
+    if (has_matchsticks) {
+        bind_rows(df_t, df_c)
+        df_m1 <- tibble(piece_side = "matchstick_back",
+                        suit = c(rep(1:2, length.out=7), rep(3:4, length.out=7)),
+                        rank = 5, angle=90,
+                        x = sqrt(2) * rep(seq(3, by=2, length.out=7), 2),
+                        y = sqrt(2) * rep(c(3, 1), each=7))
+        df_m2 <- tibble(piece_side = "matchstick_back",
+                        suit = rep(1:4, 2), rank = 4, angle=90,
+                        x = sqrt(2) * seq(2, by=2, length.out=8),
+                        y = sqrt(2) * rep(2, each=8))
+        bind_rows(df_t, df_m1, df_m2, df_c)
+    } else {
+        bind_rows(df_t, df_c)
+    }
 }
 
 #' @rdname df_game

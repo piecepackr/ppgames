@@ -27,7 +27,9 @@
 \alias{df_ultima}
 \alias{df_baroque_chess}
 \alias{df_xiangqi}
+\alias{df_alquerque}
 \alias{df_american_checkers}
+\alias{df_awithlaknannai_mosona}
 \alias{df_english_draughts}
 \alias{df_checkers}
 \alias{df_backgammon}
@@ -92,7 +94,11 @@ df_baroque_chess(has_subpack = FALSE)
 
 df_xiangqi(has_subpack = FALSE)
 
+df_alquerque(has_matchsticks = FALSE)
+
 df_american_checkers()
+
+df_awithlaknannai_mosona(has_matchsticks = FALSE)
 
 df_english_draughts()
 
@@ -139,9 +145,9 @@ df_tablut(die_width = 0.63)
 
 \item{max_tiles}{Maximum number of (piecepack) tiles available to build boards}
 
-\item{suit_colors}{Character vector of the suit colors}
-
 \item{has_matchsticks}{Has matchsticks}
+
+\item{suit_colors}{Character vector of the suit colors}
 
 \item{die_width}{Width of dice}
 }
@@ -156,6 +162,8 @@ Here is some more information about the various games:
                      See \url{https://en.wikipedia.org/wiki/Alice_chess}.}
  \item{Alien City}{Awarding winning game by Michael Schoessow that is traditionally played with both a piecepack
                    and icehouse pieces.  See \url{http://www.ludism.org/ppwiki/AlienCity}.}
+ \item{Alquerque}{Traditional game also known as Qirkat.  See \url{https://en.wikipedia.org/wiki/Alquerque}.}
+ \item{Awithlaknannai Mosona}{Traditional Zuni Alquerque variant.  See \url{https://en.wikipedia.org/wiki/Awithlaknannai_Mosona}.}
  \item{Backgammon}{One of the oldest board games.  See \url{http://www.ludism.org/ppwiki/Backgammon}.}
  \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
                      that won the 2001 8x8 Game Design Competition.

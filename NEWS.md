@@ -1,3 +1,10 @@
+ppgames 0.5.0
+=============
+
+* New starting board generators for specific games:
+  - ``df_alquerque``
+  - ``df_awithlaknannai_mosona``
+
 ppgames 0.4.1
 =============
 
