@@ -163,7 +163,8 @@ Here is some more information about the various games:
  \item{Alien City}{Awarding winning game by Michael Schoessow that is traditionally played with both a piecepack
                    and icehouse pieces.  See \url{http://www.ludism.org/ppwiki/AlienCity}.}
  \item{Alquerque}{Traditional game also known as Qirkat.  See \url{https://en.wikipedia.org/wiki/Alquerque}.}
- \item{Awithlaknannai Mosona}{Traditional Zuni Alquerque variant.  See \url{https://en.wikipedia.org/wiki/Awithlaknannai_Mosona}.}
+ \item{Awithlaknannai Mosona}{Traditional Zuni Alquerque variant.
+                              See \url{https://en.wikipedia.org/wiki/Awithlaknannai_Mosona}.}
  \item{Backgammon}{One of the oldest board games.  See \url{http://www.ludism.org/ppwiki/Backgammon}.}
  \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
                      that won the 2001 8x8 Game Design Competition.

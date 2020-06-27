@@ -20,7 +20,7 @@ cat(sprintf("\\title{%s}", title(game)))
 \maketitle\vspace{-4\baselineskip}
 %% begin.rcode include, echo=FALSE, results='asis'
 game_data(game)
-cat(sprintf("\\input{%s}", game)) 
+cat(sprintf("\\input{%s}", game))
 %% end.rcode
 
 \subsection{External Links}

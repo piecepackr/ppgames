@@ -23,8 +23,8 @@ game_data(game)
 %% end.rcode
 \clearpage
 %% begin.rcode include, echo=FALSE, results='asis'
-cat(sprintf("\\section{%s}", title(game))) 
-cat(sprintf("\\input{%s}", game)) 
+cat(sprintf("\\section{%s}", title(game)))
+cat(sprintf("\\input{%s}", game))
 %% end.rcode
 \subsection{External Links}
 %% begin.rcode external-links, echo=FALSE, results='asis'
