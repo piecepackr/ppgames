@@ -2,8 +2,13 @@ ppgames 0.5.0
 =============
 
 * New starting board generators for specific games:
+
   - ``df_alquerque``
   - ``df_awithlaknannai_mosona``
+
+* Portable Piecepack Notation enhancements:
+
+  - Can now specify pieces within a stack of pieces with square brackets i.e. ``*b4[2:3]``
 
 ppgames 0.4.1
 =============
@@ -11,6 +16,7 @@ ppgames 0.4.1
 * ``animate_game`` now has ``n_transitions`` argument that uses ``tweenr``
   to try to interpolate transition frames (#32).
 * New starting board generators for specific games:
+
   - ``df_breakthrough``
   - ``df_crossings``
   - ``df_froggy_bottom``
@@ -18,7 +24,9 @@ ppgames 0.4.1
   - ``df_lines_of_action``
   - ``df_piecepackman``
   - ``df_turkish_draughts``
+
 * Portable Piecepack Notation enhancements:
+
   - Can now (re)move a stack of pieces i.e. ``2b2-d4``, ``*3d5``, ``b4:2d5``.
   - Default parser now uses both ``GameType`` and ``SetUp`` to create starting setup (#49).
   - Can now specify alternate movetext parsers with ``MovetextParser`` (#50).
@@ -35,6 +43,7 @@ Bug fixes and minor improvements
 --------------------------------
 
 * ``cat_piece`` now has basic support for the following ``game_systems``:
+
   - ``bit`` and ``board`` components from ``checkers1`` and ``checkers2``
   - ``tile``  component from ``dominoes``, ``dominoes_black``, ``dominoes_blue``
     ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``.
@@ -42,6 +51,7 @@ Bug fixes and minor improvements
   - ``die`` component from ``dice``
   - ``pyramid`` component from ``icehouse_pieces``
   - ``tile`` component from ``subpack``
+
 * ``cat_piece`` now also has basic support for (piecepack) matchsticks.
 
 Breaking changes
@@ -59,6 +69,7 @@ New features
   ``df_shogi``, ``df_ultima``, ``df_xiangqi``  now have a new argument 
   ``has_subpack`` which if ``TRUE`` will provide alternative piecepack "stackpack" diagrams.
 * New starting board generators for specific games:
+
   - ``df_alien_city`` (#8)
   - ``df_desfases``
   - ``df_ice_floe``
@@ -69,13 +80,18 @@ New features
   - ``df_the_in_crowd``
   - ``df_triactor`` (#36)
   - ``df_wormholes``
+
 * Aliases added for some existing starting board generators:
+
   - ``df_checkers`` and ``df_english_draughts`` for ``df_american_checkers``
   - ``df_chess`` for ``df_international_chess``
+
 * Portable Piecepack Notation enhancements:
+
   - Simplified piece notation now supports playing cards expansion (#30),
     icehouse pieces (#34), (stackpack) subpack,
     dual piecepacks expansion, and hexpack.
+
 * New function ``save_pamphlet`` which is an alternative to ``save_ruleset``
   that saves the ruleset as a trifold pamphlet.
 
@@ -113,10 +129,12 @@ New features
 * Added prototype "Portable Piecepack Notation utilities" ``read_ppn``, ``animate_game``,
   ``plot_move``, and ``cat_move`` (#11).
 * Starting board generators for specific games:
+
     - ``df_cell_management``
     - ``df_everest``
     - ``df_fujisan`` (#24)
     - ``df_twelve_mens_morris``
+
 * Fuji-san solver ``solve_fujisan`` (#22).
 
 Breaking changes
@@ -130,9 +148,12 @@ ppgames 0.1.0
 
 * Initial release of R package version.
 * Flexible rectangular starting board generators:
+
     - ``df_rect_board_tiles`` and ``grid.board_rect_tiles``
     - ``grid.board_rect_cells``and ``grid.board_rect_points``
+
 * Starting board generators for specific games:
+
     - ``df_alice_chess``
     - ``df_american_checkers``
     - ``df_backgammon``
@@ -146,19 +167,21 @@ ppgames 0.1.0
     - ``df_tablut`` (#10)
     - ``df_ultima_chess``
     - ``df_xiangqi``
+
 * Preliminary work on an GameKit class ``game_kit``
 * Prototype ruleset/rulebook generators ``save_ruleset`` and ``save_rulebook``
 * ``save_ruleset`` supports ruleset generation for:
-    * alice-chess
-    * american-checkers
-    * backgammon
-    * cribbage
-    * chaturaji
-    * fide-chess
-    * four-field-kono
-    * four-seasons-chess
-    * nine-mens-morris
-    * tablut
-    * twelve-mens-morris
-    * ultima-chess
-    * xiangqi
+
+    - alice-chess
+    - american-checkers
+    - backgammon
+    - cribbage
+    - chaturaji
+    - fide-chess
+    - four-field-kono
+    - four-seasons-chess
+    - nine-mens-morris
+    - tablut
+    - twelve-mens-morris
+    - ultima-chess
+    - xiangqi

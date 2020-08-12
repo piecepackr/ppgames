@@ -255,6 +255,21 @@ test_that("rotations work as expected", {
     expect_equal(df$angle, 90)
 })
 
+test_that("Identifying pieces with brackets works", {
+    expect_equal(get_indices_from_brackets("2:3"), 3:2)
+    expect_equal(get_indices_from_brackets("2:3,1"), c(1, 3, 2))
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@b2 M@b2 C@b2 A@b2")
+    expect_equal(df$suit, 1:4)
+    df <- process_move(df, "*b2[2:3]")
+    expect_equal(df$suit, c(1,4))
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@b2 M@b2 C@b2 A@b2 b2[2:3]-c2")
+    expect_equal(df$suit, c(1, 4, 2, 3))
+    df <- process_move(df, "b2[2]:c2")
+    expect_equal(df$suit, c(1, 2, 4))
+})
+
 test_that("Move multiple pieces works as expected", {
     df <- tail(process_moves(tibble(), c("S@b2", "S@b2", "S@b2")), 1)[[1]]
     expect_equal(sum(near(df$x, 2)), 3)

@@ -387,10 +387,24 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
             n_pieces <- as.integer(gsub("(^[[:digit:]]+)(.*)", "\\1", piece_id))
             location <- gsub("(^[[:digit:]]+)(.*)", "\\2", piece_id)
             get_id_from_coords(df, location, n_pieces, state)
+        } else if (str_detect(piece_id, "\\[.*\\]$")) {
+            brackets <- gsub(".*\\[(.*)\\]$", "\\1", piece_id)
+            beginning <- gsub("(.*)\\[.*\\]$", "\\1", piece_id)
+            indices <- get_indices_from_brackets(brackets)
+            get_id_from_coords(df, piece_id, Inf, state)[indices]
         } else {
             get_id_from_coords(df, piece_id, NULL, state)
         }
     }
+}
+
+get_indices_from_brackets <- function(bracket_contents) {
+    indices <- str_split(bracket_contents, ",")[[1]]
+    indices <- gsub(":", "..", indices)
+    indices <- paste0("{", indices, "}")
+    indices <- bracer::expand_braces(indices)
+    indices <- gsub("[\\{\\}]", "", indices)
+    rev(as.integer(indices))
 }
 
 #### get index for piece restriction
@@ -403,6 +417,8 @@ get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state
     if (is.null(n_pieces)) {
         if (sum(near(df$dist_squared, 0)) < 1) stop(paste("Can't identify the piece at", coords))
         n_pieces <- 1
+    } else if (is.infinite(n_pieces)) {
+        n_pieces <- sum(near(df$dist_squared, 0))
     }
     index <- utils::tail(indices, n_pieces)
     index
