@@ -690,11 +690,11 @@ insert_df <- function(df1, df2, index = nrow(df1)) {
 get_xy <- function(coords, df, state = create_state(tibble())) {
     if (str_detect(coords, "^&")) {
         piece_id <- str_sub(coords, 2L)
-        p <- get_coords_from_piece_id(piece_id, df, state)
+        get_coords_from_piece_id(piece_id, df, state)
     } else {
         p <- piecepackr:::Point2D$new(x = get_x(coords), y = get_y(coords))
+        p$dilate(state$scale_factor)
     }
-    p$dilate(state$scale_factor)
 }
 
 get_x <- function(coords) {

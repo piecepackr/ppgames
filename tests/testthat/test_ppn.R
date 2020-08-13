@@ -350,6 +350,27 @@ test_that("scale_factor works as expected", {
     df <- tail(read_ppn(textConnection(scale))[[1]]$dfs, 1)[[1]]
     expect_true(near(df$x, 8))
     expect_true(near(df$y, 6))
+
+    df <- initialize_df(df_none())
+    attr(df, "scale_factor") <- 2
+    state <- create_state(df)
+    df <- process_move(df, "S@b2 M@c3", state)
+    expect_equal(df$x, c(4, 6))
+    df <- process_move(df, "c3-b2", state)
+    expect_equal(df$x, c(4, 4))
+    expect_equal(df$suit, 1:2)
+    df <- process_move(df, "b2[2]-%b2", state)
+    expect_equal(df$x, c(4, 4))
+    expect_equal(df$suit, 2:1)
+    df <- process_move(df, "b2[2]_%b2[1]", state)
+    expect_equal(df$x, c(4, 4))
+    expect_equal(df$suit, 2:1)
+    df <- process_move(df, "C@%b2[1]", state)
+    expect_equal(df$x, c(4, 4, 4))
+    expect_equal(df$suit, c(2:1, 3))
+    df <- process_move(df, "A\\%b2[1]", state)
+    expect_equal(df$x, c(4, 4, 4, 4))
+    expect_equal(df$suit, c(2:1, 4, 3))
 })
 
 test_that("Setup and GameType work as expected", {
