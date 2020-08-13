@@ -8,7 +8,15 @@ ppgames 0.5.0
 
 * Portable Piecepack Notation enhancements:
 
-  - Can now specify pieces within a stack of pieces with square brackets i.e. ``*b4[2:3]``
+  - Can now identify pieces within a stack of pieces with square brackets e.g. ``*b4[2:3]`` (#18)
+  - Can now "drop" pieces beneath other pieces with backslash e.g. ``S\b2`` (#53)
+  - Can now "move" pieces beneath other pieces with underscore or combining double breve below e.g. ``b2_b4`` (#53)
+  - Can now restrict where in the piece order a piece will be after a drop/move with percent sign 
+    to indicate the piece it should go before (or after) in the internal piece ordering e.g.
+    ``b2@b3%e4[2]`` (#53)
+  - There are also new shortcut tokens ``@%``, ``\%``, ``-%``, ``_%`` for the common case
+    where you want to move/drop above/beneath a specific piece e.g. ``b4@%b5[2]`` 
+    is equivalent to ``S@&b5[2]%b5[2]`` which is equivalent to ``S@b5%b5[2]`` (#53)
 
 ppgames 0.4.1
 =============
@@ -27,7 +35,7 @@ ppgames 0.4.1
 
 * Portable Piecepack Notation enhancements:
 
-  - Can now (re)move a stack of pieces i.e. ``2b2-d4``, ``*3d5``, ``b4:2d5``.
+  - Can now (re)move a stack of pieces e.g. ``2b2-d4``, ``*3d5``, ``b4:2d5``.
   - Default parser now uses both ``GameType`` and ``SetUp`` to create starting setup (#49).
   - Can now specify alternate movetext parsers with ``MovetextParser`` (#50).
   - Can now specify game ``System`` in ``GameType``/``SetUp`` fields.

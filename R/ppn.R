@@ -377,22 +377,24 @@ get_algebraic_y <- function(text) {
 
 get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
     # nocov piece_id <- gsub("'", "", piece_id)
-    if (str_detect(piece_id, "^\\^")) {
+    if (str_detect(piece_id, "^\\^")) { # ^b4
         piece_id <- str_sub(piece_id, 2)
         get_id_from_piece_id(piece_id, state$df_move_start, state)
     } else {
-        if (str_detect(piece_id, "^[[:digit:]]+$")) {
+        if (str_detect(piece_id, "^[[:digit:]]+$")) { # 15
             as.numeric(piece_id)
-        } else if (str_detect(piece_id, "^[[:digit:]]+")) {
+        } else if (str_detect(piece_id, "^[[:digit:]]+")) { # 2b4
             n_pieces <- as.integer(gsub("(^[[:digit:]]+)(.*)", "\\1", piece_id))
             location <- gsub("(^[[:digit:]]+)(.*)", "\\2", piece_id)
             get_id_from_coords(df, location, n_pieces, state)
-        } else if (str_detect(piece_id, "\\[.*\\]$")) {
+        } else if (str_detect(piece_id, "\\[.*\\]$")) { # b4[2:3] # nolint
             brackets <- gsub(".*\\[(.*)\\]$", "\\1", piece_id)
             beginning <- gsub("(.*)\\[.*\\]$", "\\1", piece_id)
-            indices <- get_indices_from_brackets(brackets)
-            get_id_from_coords(df, piece_id, Inf, state)[indices]
-        } else {
+            sub_indices <- get_indices_from_brackets(brackets)
+            indices <- get_id_from_coords(df, piece_id, Inf, state)
+            sub_indices <- length(indices) - sub_indices + 1
+            indices[sub_indices]
+        } else { # b4
             get_id_from_coords(df, piece_id, NULL, state)
         }
     }
@@ -435,18 +437,30 @@ process_submove <- function(df, text, state = create_state(df)) {
         df
     } else if (str_detect(text, "@>")) {
         process_rotate_move(df, text, state)
+    } else if (str_detect(text, "@%")) {
+        process_at_percent_move(df, text, state)
     } else if (str_detect(text, "@")) {
         process_at_move(df, text, state)
-    } else if (str_detect(text, "#")) {
-        process_hash_move(df, text, state)
-    } else if (str_detect(text, "\\*")) {
-        process_asterisk_move(df, text, state)
+    } else if (str_detect(text, "-%")) {
+        process_hyphen_percent_move(df, text, state)
     } else if (str_detect(text, hyphen_token)) {
         process_hyphen_move(df, text, state)
+    } else if (str_detect(text, "\\*")) {
+        process_asterisk_move(df, text, state)
     } else if (str_detect(text, "=")) {
         process_equal_move(df, text, state)
     } else if (str_detect(text, colon_token)) {
         process_colon_move(df, text, state)
+    } else if (str_detect(text, "_%")) {
+        process_underscore_percent_move(df, text, state)
+    } else if (str_detect(text, "_")) {
+        process_underscore_move(df, text, state)
+    } else if (str_detect(text, "\\\\%")) {
+        process_backslash_percent_move(df, text, state)
+    } else if (str_detect(text, "\\\\")) {
+        process_backslash_move(df, text, state)
+    } else if (str_detect(text, "#")) {
+        process_hash_move(df, text, state)
     } else {
         stop(paste("Don't know how to handle move", text))
     }
@@ -483,19 +497,63 @@ process_hash_move <- function(df, text, state = create_state(df)) {
 
 process_at_move <- function(df, text, state = create_state(df)) {
     pc <- str_split(text, "@")[[1]]
-
     piece_spec <- pc[1]
+    l_i <- get_location_index(pc[2], df, state)
     df_piece <- parse_piece(piece_spec)
-
-    location <- pc[2]
-    xy <- get_xy(location, df, state)
-
+    xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
     df_piece$y <- xy$y
     df_piece$id <- state$max_id <- state$max_id + 1L
-    #### get index for piece restriction
-    index <- nrow(df)
+
+    insert_df(df, df_piece, l_i$index)
+}
+process_at_percent_move <- function(df, text, state = create_state(df)) {
+    pi <- str_split(text, "@%")[[1]]
+
+    piece_spec <- pi[1]
+    id_ <- pi[2]
+    text <- str_glue("{piece_spec}@&{id_}%{id_}")
+    process_at_move(df, text, state)
+}
+
+
+process_backslash_move <- function(df, text, state = create_state(df)) {
+    pc <- str_split(text, "\\\\")[[1]]
+    piece_spec <- pc[1]
+    l_i <- get_location_index(pc[2], df, state)
+    df_piece <- parse_piece(piece_spec)
+    xy <- get_xy(l_i$location, df, state)
+    df_piece$x <- xy$x
+    df_piece$y <- xy$y
+    df_piece$id <- state$max_id <- state$max_id + 1L
+    if (is.null(l_i$id))
+        index <- 0
+    else
+        index <- l_i$index - 1
+
     insert_df(df, df_piece, index)
+}
+process_backslash_percent_move <- function(df, text, state = create_state(df)) {
+    pi <- str_split(text, "\\\\%")[[1]]
+
+    piece_spec <- pi[1]
+    id_ <- pi[2]
+    text <- str_glue("{piece_spec}\\&{id_}%{id_}")
+    process_backslash_move(df, text, state)
+}
+
+get_location_index <- function(text, df, state) {
+    if (grepl("%", text)) {
+        c_id <- str_split(text, "%")[[1]]
+        location <- c_id[1]
+        index <- get_indices_from_piece_id(c_id[2], df, state)
+        id <- df$id[index]
+    } else {
+        location <- text
+        index <- nrow(df)
+        id <- NULL
+    }
+    list(location = location, index = index, id = id)
 }
 
 get_indices_from_piece_id <- function(piece_id, df, state) {
@@ -509,18 +567,61 @@ process_asterisk_move <- function(df, text, state = create_state(df)) {
     df[-indices,]
 }
 
+process_underscore_move <- function(df, text, state) {
+    cc <- str_split(text, "_")[[1]]
+    piece_id <- cc[1]
+    indices <- get_indices_from_piece_id(piece_id, df, state)
+    df_moving <- df[indices, ]
+    df_rest <- df[-indices, ]
+
+    l_i <- get_location_index(cc[2], df, state)
+    location <- l_i$location
+    new_xy <- get_xy(location, df, state)
+    if (is.null(l_i$id))
+        index <- 0
+    else
+        index <- which(df_rest$id %in% l_i$id) - 1
+
+    df_moving$x <- new_xy$x
+    df_moving$y <- new_xy$y
+    insert_df(df_rest, df_moving, index)
+}
+process_underscore_percent_move <- function(df, text, state) { # nolint
+    pi <- str_split(text, "_%")[[1]]
+
+    piece_spec <- pi[1]
+    id_ <- pi[2]
+    text <- str_glue("{piece_spec}_&{id_}%{id_}")
+    process_underscore_move(df, text, state)
+}
+
 hyphen_token <- "-(?![[:digit:]]+)"  # a4-d4 but not (-4,-3)
 process_hyphen_move <- function(df, text, state) {
     cc <- str_split(text, hyphen_token)[[1]]
     piece_id <- cc[1]
     indices <- get_indices_from_piece_id(piece_id, df, state)
+    df_moving <- df[indices, ]
+    df_rest <- df[-indices, ]
 
-    location <- cc[2]
+    l_i <- get_location_index(cc[2], df, state)
+    location <- l_i$location
     new_xy <- get_xy(location, df, state)
+    if (is.null(l_i$id))
+        index <- nrow(df_rest)
+    else
+        index <- which(df_rest$id %in% l_i$id)
 
-    df[indices, "x"] <- new_xy$x
-    df[indices, "y"] <- new_xy$y
-    insert_df(df[-indices, ], df[indices, ])
+    df_moving$x <- new_xy$x
+    df_moving$y <- new_xy$y
+    insert_df(df_rest, df_moving, index)
+}
+process_hyphen_percent_move <- function(df, text, state) {
+    pi <- str_split(text, "-%")[[1]]
+
+    piece_spec <- pi[1]
+    id_ <- pi[2]
+    text <- str_glue("{piece_spec}-&{id_}%{id_}")
+    process_hyphen_move(df, text, state)
 }
 
 create_state <- function(df) {
@@ -615,6 +716,7 @@ process_move <- function(df, text, state = create_state(df)) {
     state$df_move_start <- df
     text <- bracer::expand_braces(split_blanks(text))
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
+    text <- gsub("\u035c|\u203f", "_", text) # convert underties to underscore
     moves <- split_blanks(text)
     for (move in moves) {
         df <- process_submove(df, move, state = state)

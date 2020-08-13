@@ -234,6 +234,48 @@ test_that("^ notation works as expected", {
     expect_true(near(df2$x[2], 6))
 })
 
+test_that("at move works with piece index", {
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@b2 M@b2 C@b2")
+    expect_equal(get_id_from_piece_id("b2[3]", df), 1)
+    expect_equal(get_id_from_piece_id("b2[2]", df), 2)
+    expect_equal(get_id_from_piece_id("b2[1]", df), 3)
+    expect_equal(df$suit, 1:3)
+    df <- process_move(df, "A@d4%b2[3]")
+    expect_equal(df$suit, c(1, 4, 2, 3))
+    df <- process_move(df, "A@%b2[2]")
+    expect_equal(df$suit, c(1, 4, 2, 4, 3))
+})
+
+test_that("hyphen move works with piece index", {
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@b2 M@b2 C@b2 A@c3")
+    df <- process_move(df, "c3-%b2[2]")
+    expect_equal(df$suit, c(1, 2, 4, 3))
+})
+
+test_that("underscore move works", {
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@b2 M@b2 C@b2 A@c3")
+    df <- process_move(df, "b2[2]_c3")
+    expect_equal(df$suit, c(2, 1, 3, 4))
+    df <- process_move(df, "b2[1]_%c3[1]")
+    expect_equal(df$suit, c(2, 1, 3, 4))
+    df <- process_move(df, "c3_%b2")
+    expect_equal(df$suit, c(2, 4, 1, 3))
+})
+
+test_that("backslash move works", {
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@b2 M@b2")
+    df <- process_move(df, "C\\b2")
+    expect_equal(df$suit, c(3, 1, 2))
+    df <- process_move(df, "C\\b2%b2")
+    expect_equal(df$suit, c(3, 1, 3, 2))
+    df <- process_move(df, "A\\%b2[2]")
+    expect_equal(df$suit, c(3, 1, 4, 3, 2))
+})
+
 test_that("swap works as expected", {
     df <- initialize_df(df_none())
     state <- create_state(df)
@@ -267,7 +309,7 @@ test_that("Identifying pieces with brackets works", {
     df <- process_move(df, "S@b2 M@b2 C@b2 A@b2 b2[2:3]-c2")
     expect_equal(df$suit, c(1, 4, 2, 3))
     df <- process_move(df, "b2[2]:c2")
-    expect_equal(df$suit, c(1, 2, 4))
+    expect_equal(df$suit, c(4, 2, 1))
 })
 
 test_that("Move multiple pieces works as expected", {
