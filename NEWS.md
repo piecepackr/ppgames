@@ -18,6 +18,15 @@ ppgames 0.5.0
     where you want to move/drop above/beneath a specific piece e.g. ``b4@%b5[2]`` 
     is equivalent to ``S@&b5[2]%b5[2]`` which is equivalent to ``S@b5%b5[2]`` (#53)
 
+* ``plot_move`` and ``animate_game`` improvements:
+
+  - Both ``plot_move`` and ``animate_game`` will now automatically adjust dimensions and coordinates 
+    if (parts of) pieces would otherwise be drawn too close (or past) zero on either the
+    x or y axes.
+  - If ``file == NULL`` then ``animate_game`` will set ``devAskNewPage(TRUE)``
+    and then will plot each move of the game in a new graphics device (if ``new_device=TRUE``) or
+    the current graphics device asking user to press enter before drawing the next move (#41).
+
 ppgames 0.4.1
 =============
 

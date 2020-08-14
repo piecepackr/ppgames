@@ -20,8 +20,8 @@ plot_move(
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
-\item{file}{Filename to save graphic to unless \code{NULL} and \code{new_device==TRUE}
-in which case it opens a new graphics device.}
+\item{file}{Filename to save graphic to unless \code{NULL}
+in which case it uses the current graphics device.}
 
 \item{move}{Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 unless \code{NULL} in which case will plot the game state after the last move.}

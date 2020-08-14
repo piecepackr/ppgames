@@ -2,7 +2,8 @@
 #'
 #' Animate a ppn game
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
-#' @param file Filename to save animation
+#' @param file Filename to save animation unless \code{NULL}
+#'             in which case it uses the current graphics device.
 #' @param annotate If \code{TRUE} annotate the plot
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
@@ -11,11 +12,13 @@
 #'                how many transition frames to add between moves.
 #' @param n_pauses Integer, how many paused frames per completed move.
 #' @param fps Double, frames per second.
+#' @param new_device If \code{file} is \code{NULL} should we open up a new graphics device?
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
 animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
                          cfg = NULL, envir = NULL,
-                         n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses) {
+                         n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses,
+                         new_device = TRUE) {
 
     if (n_transitions > 0L && !requireNamespace("tweenr", quietly = TRUE)) {
         stop("You need to install the suggested package 'tweenr' to use 'n_transitions > 0'.",
@@ -31,36 +34,65 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
     if (n_transitions > 0L)
         dfs <- get_tweenr_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
 
-    #### Adjust if xmin under 0
     #### Add grid and comment annotations
-
     xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm = TRUE)
-    ymax_op <- max(sapply(ranges, function(y) y$ymax_op), na.rm = TRUE)
+    ymax_op <- max(sapply(ranges, function(x) x$ymax_op), na.rm = TRUE)
+    xmin_op <- min(sapply(ranges, function(x) x$xmin_op), na.rm = TRUE)
+    ymin_op <- min(sapply(ranges, function(x) x$ymin_op), na.rm = TRUE)
     xmax <- max(sapply(ranges, function(x) x$xmax), na.rm = TRUE)
-    ymax <- max(sapply(ranges, function(y) y$ymax), na.rm = TRUE)
-    m <- max(xmax, ymax) + 0.5
+    ymax <- max(sapply(ranges, function(x) x$ymax), na.rm = TRUE)
+    if (xmin_op < 0.25) {
+        xoffset <- 0.25 - xmin_op
+    } else {
+        xoffset <- 0
+    }
+    if (ymin_op < 0.25) {
+        yoffset <- 0.25 - ymin_op
+    } else {
+        yoffset <- 0
+    }
+    width <- xmax_op + xoffset + 0.25
+    height <- ymax_op + yoffset + 0.25
+    m <- max(width, height)
     res <- round(600 / m, 0)
-    height <- res * (ymax_op+0.5)
-    width <- res * (xmax_op+0.5)
+    height <- res * height
+    width <- res * width
     plot_fn <- function(df, ...) {
+        df$x <- df$x + xoffset
+        df$y <- df$y + yoffset
         grid::grid.newpage()
         pmap_piece(df, default.units = "in", ..., envir = envir)
-        if (annotate) annotate_plot(xmax, ymax)
+        if (annotate) annotate_plot(xmax, ymax, xoffset, yoffset)
     }
-    animation_fn()(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, res)
+    animation_fn(file, new_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, res)
     invisible(NULL)
 }
 #### How to handle empty tibbles??
-animation_fn <- function() {
-    if (requireNamespace("gifski", quietly = TRUE)) {
+animation_fn <- function(file, new_device = TRUE) {
+    if (is.null(file)) {
+        function(expr, file, width, height, delay, res) {
+            if (new_device) dev.new(width = width / res, height = height / res, unit = "in", noRstudioGD = TRUE)
+            devAskNewPage(TRUE)
+            eval(expr)
+            devAskNewPage(getOption("device.ask.default"))
+        }
+    } else if (grepl(".html$", file)) {
+        if (!requireNamespace("animation")) stop("You need to install the suggested package 'animation'")
+        function(expr, file, width, height, delay, res) {
+            animation::saveHTML(expr, htmlfile = file, interval = delay,
+                                ani.height = height, ani.width = width, ani.res = res,
+                                ani.dev = "png", ani.type = "png",
+                                title = "Animated game", verbose = FALSE)
+        }
+    } else if (requireNamespace("gifski", quietly = TRUE)) {
         function(expr, file, width, height, delay, res) {
             gifski::save_gif(expr, file, width, height, delay, res = res, progress = FALSE)
         }
     } else if (requireNamespace("animation", quietly = TRUE)) {
         function(expr, file, width, height, delay, res) {
             animation::saveGIF(expr, movie.name = file, interval = delay,
-                               ani.height = height, ani.width = width,
-                               ani.dev = "png", ani.type = "png", ani.res = res)
+                               ani.height = height, ani.width = width, ani.res = res,
+                               ani.dev = "png", ani.type = "png")
         }
     } else {
         stop("You need to install either the suggested package 'animation' or 'gifski' to use 'animate_game'.",
@@ -131,8 +163,8 @@ get_df_from_move <- function(game, move = NULL) {
 #'
 #' Plot game move
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
-#' @param file Filename to save graphic to unless \code{NULL} and \code{new_device==TRUE}
-#'        in which case it opens a new graphics device.
+#' @param file Filename to save graphic to unless \code{NULL}
+#'             in which case it uses the current graphics device.
 #' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 #'             unless \code{NULL} in which case will plot the game state after the last move.
 #' @param annotate If \code{TRUE} annotate the plot
@@ -154,8 +186,20 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg 
 
     df <- get_df_from_move(game, move)
     dfr <- range_true(df, cfg = cfg, envir = envir, ...)
-    width <- dfr$xmax_op + 0.5
-    height <- dfr$ymax_op + 0.5
+    if (dfr$xmin_op < 0.25) {
+        xoffset <- 0.25 - dfr$xmin_op
+    } else {
+        xoffset <- 0
+    }
+    if (dfr$ymin_op < 0.25) {
+        yoffset <- 0.25 - dfr$ymin_op
+    } else {
+        yoffset <- 0
+    }
+    width <- dfr$xmax_op + xoffset + 0.25
+    height <- dfr$ymax_op + yoffset + 0.25
+    df$x <- df$x + xoffset
+    df$y <- df$y + yoffset
 
     if (is.null(file)) {
         if (new_device) dev.new(width = width, height = height, unit = "in", noRstudioGD = TRUE)
@@ -171,20 +215,20 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg 
                tiff = tiff(file, width, height, "in", res = res, bg = bg))
     }
     pmap_piece(df, default.units = "in", ..., envir = envir)
-    if (annotate) annotate_plot(dfr$xmax, dfr$ymax)
+    if (annotate) annotate_plot(dfr$xmax, dfr$ymax, xoffset, yoffset)
     if (!is.null(file)) dev.off()
     invisible(NULL)
 }
 
-annotate_plot <- function(xmax, ymax) {
+annotate_plot <- function(xmax, ymax, xoffset = 0, yoffset = 0) {
         gp <- gpar(fontsize = 18, fontface = "bold")
         x_indices <- seq(floor(xmax))
         l <- letters[x_indices]
         l <- stringr::str_pad(l, max(stringr::str_count(l)))
-        grid.text(l, x = x_indices, y = 0.25, default.units = "in", gp = gp)
+        grid.text(l, x = x_indices + xoffset, y = 0.25, default.units = "in", gp = gp)
         y_indices <- seq(floor(ymax))
         n <- as.character(y_indices)
         n <- stringr::str_pad(n, max(stringr::str_count(n)))
-        grid.text(n, x = 0.25, y = y_indices, default.units = "in", gp = gp)
+        grid.text(n, x = 0.25, y = y_indices + yoffset, default.units = "in", gp = gp)
         invisible(NULL)
 }

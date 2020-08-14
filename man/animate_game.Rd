@@ -13,13 +13,15 @@ animate_game(
   envir = NULL,
   n_transitions = 0L,
   n_pauses = 1L,
-  fps = n_transitions + n_pauses
+  fps = n_transitions + n_pauses,
+  new_device = TRUE
 )
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
-\item{file}{Filename to save animation}
+\item{file}{Filename to save animation unless \code{NULL}
+in which case it uses the current graphics device.}
 
 \item{annotate}{If \code{TRUE} annotate the plot}
 
@@ -35,6 +37,8 @@ how many transition frames to add between moves.}
 \item{n_pauses}{Integer, how many paused frames per completed move.}
 
 \item{fps}{Double, frames per second.}
+
+\item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
 }
 \value{
 Nothing, as a side effect saves an animation of ppn game
