@@ -179,7 +179,8 @@ df_cell_management <- function(seed = NULL) {
 df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     set.seed(seed)
     df_txy <- tibble(piece_side = "tile_face",
-                     x = 2+rep(seq(1,9,2), 5), y = 2+rep(seq(1,9,2), each=5))
+                     x = 2+rep(seq(1, by=3, length.out=5), 5),
+                     y = 2+rep(seq(1, by=3, length.out=5), each=5))
     df_txy <- df_txy[-13, ]
     if (is.null(tiles)) {
         df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
@@ -190,8 +191,8 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     df_t <- bind_cols(df_txy, df_tsr)
 
     df_c <- tibble(piece_side = "coin_face",
-                   x = c(11:6, rep(13, 6), 3:8, rep(1, 6)),
-                   y = c(rep(13, 6), 3:8, rep(1, 6), 11:6),
+                   x = c(14:9, rep(17, 6), 4:9, rep(1, 6)),
+                   y = c(rep(17, 6), 4:9, rep(1, 6), 14:9),
                    suit = rep(1:4, each=6), rank = rep(1:6, 4),
                    angle = rep(c(180, 90, 0, -90), each=6))
 
@@ -201,7 +202,7 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
         dice <- process_ranks(dice)
     }
     df_d <- tibble(piece_side = "die_face",
-                   x = c(3, 13, 11, 1), y = c(13, 11, 1, 3),
+                   x = c(7, 17, 11, 1), y = c(17, 11, 1, 7),
                    angle = c(180, 90, 0, -90), suit = 1:4,
                    rank = dice)
 
@@ -214,7 +215,7 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
         df_c[index, "x"] <- df_d$x[i]
         df_c[index, "y"] <- df_d$y[i]
 
-        # Move pawns un top of their respective dice
+        # Move pawns on top of their respective tiles
         index <- which(df_t$rank == dice[i] & df_t$suit == i)
         df_p[i, "x"] <- df_t$x[index]
         df_p[i, "y"] <- df_t$y[index]
