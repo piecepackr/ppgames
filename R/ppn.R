@@ -225,8 +225,13 @@ remove_comments <- function(text) {
     str_squish(str_remove_all(text, comment_token))
 }
 
-parse_piece <- function(text) {
+parse_piece_incomplete <- function(text) {
+    #### complex #35
     df <- parse_simplified_piece(text)
+    df
+}
+
+complete_piece <- function(df, text) {
     if (is.na(df$angle))
         df$angle <- 0
     if (is.na(df$piece)) {
@@ -260,6 +265,13 @@ parse_piece <- function(text) {
     }
     df$piece_side <- paste0(df$piece, "_", df$side)
     tibble::as_tibble(df[c("piece_side", "suit", "rank", "angle", "cfg")])
+
+}
+
+parse_piece <- function(text) {
+    df <- parse_piece_incomplete(text)
+    df <- complete_piece(df, text)
+    df
 }
 
 parse_simplified_piece <- function(text) {
@@ -387,6 +399,12 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
             n_pieces <- as.integer(gsub("(^[[:digit:]]+)(.*)", "\\1", piece_id))
             location <- gsub("(^[[:digit:]]+)(.*)", "\\2", piece_id)
             get_id_from_coords(df, location, n_pieces, state)
+        } else if (str_detect(piece_id, "^\\?")) { # ?S4
+            piece_spec <- str_sub(piece_id, 2)
+            non_greedy_match(df, piece_spec)
+        } else if (str_detect(piece_id, "^/")) { # /S4
+            piece_spec <- str_sub(piece_id, 2)
+            greedy_match(df, piece_spec)
         } else if (str_detect(piece_id, "\\[.*\\]$")) { # b4[2:3] # nolint
             brackets <- gsub(".*\\[(.*)\\]$", "\\1", piece_id)
             beginning <- gsub("(.*)\\[.*\\]$", "\\1", piece_id)
@@ -409,7 +427,6 @@ get_indices_from_brackets <- function(bracket_contents) {
     rev(as.integer(indices))
 }
 
-#### get index for piece restriction
 #' @importFrom dplyr arrange desc near
 #' @importFrom utils tail
 get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state(df)) {
@@ -516,7 +533,6 @@ process_at_percent_move <- function(df, text, state = create_state(df)) {
     process_at_move(df, text, state)
 }
 
-
 process_backslash_move <- function(df, text, state = create_state(df)) {
     pc <- str_split(text, "\\\\")[[1]]
     piece_spec <- pc[1]
@@ -543,7 +559,7 @@ process_backslash_percent_move <- function(df, text, state = create_state(df)) {
 }
 
 get_location_index <- function(text, df, state) {
-    if (grepl("%", text)) {
+    if (str_detect(text, "%")) {
         c_id <- str_split(text, "%")[[1]]
         location <- c_id[1]
         index <- get_indices_from_piece_id(c_id[2], df, state)
@@ -633,6 +649,48 @@ create_state <- function(df) {
     as.environment(list(df_move_start = df,
                         max_id = nrow(df),
                         scale_factor = as.numeric(scale_factor)))
+}
+
+ngm_helper <- function(na_check, value) {
+    if (is.na(na_check))
+        TRUE
+    else
+        value
+}
+
+greedy_match <- function(df, piece_spec) {
+    dfi <- parse_piece_incomplete(piece_spec)
+    with_incomplete <- which(ngm_helper(dfi$piece, str_detect(df$piece_side, paste0("^", dfi$piece))) &
+                             ngm_helper(dfi$side, str_detect(df$piece_side, paste0(dfi$side, "$"))) &
+                             ngm_helper(dfi$suit, df$suit == dfi$suit) &
+                             ngm_helper(dfi$rank, df$rank == dfi$rank) &
+                             ngm_helper(dfi$cfg, df$cfg == dfi$cfg) &
+                             ngm_helper(dfi$angle, df$angle == dfi$angle))
+    with_incomplete
+}
+
+non_greedy_match <- function(df, piece_spec) {
+    dfi <- parse_piece_incomplete(piece_spec)
+    with_incomplete <- which(ngm_helper(dfi$piece, str_detect(df$piece_side, paste0("^", dfi$piece))) &
+                             ngm_helper(dfi$side, str_detect(df$piece_side, paste0(dfi$side, "$"))) &
+                             ngm_helper(dfi$suit, df$suit == dfi$suit) &
+                             ngm_helper(dfi$rank, df$rank == dfi$rank) &
+                             ngm_helper(dfi$cfg, df$cfg == dfi$cfg) &
+                             ngm_helper(dfi$angle, df$angle == dfi$angle))
+    if (length(with_incomplete) == 1) return (with_incomplete)
+    dff  <- complete_piece(dfi, piece_spec)
+    with_angle <- which(df$piece_side == dff$piece_side &
+                        ngm_helper(dff$suit, df$suit == dff$suit) &
+                        ngm_helper(dff$rank, df$rank == dff$rank) &
+                        df$cfg == dff$cfg &
+                        near(df$angle, dff$angle))
+    if (length(with_angle)) return (tail(with_angle, 1))
+    without_angle <- which(df$piece_side == dff$piece_side &
+                           ngm_helper(dff$suit, df$suit == dff$suit) &
+                           ngm_helper(dff$rank, df$rank == dff$rank) &
+                           df$cfg == dff$cfg)
+    if (length(without_angle)) return (tail(without_angle, 1))
+    stop("Couldn't find a match")
 }
 
 process_equal_move <- function(df, text, state = create_state(df)) {

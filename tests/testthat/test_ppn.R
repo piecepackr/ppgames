@@ -341,6 +341,25 @@ test_that("move multiple pieces works as expected", {
     verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))
 })
 
+test_that("non-greedy search works as expected", {
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S4@b2 M3@b4 dS4@b2")
+    expect_equal(nrow(df), 3)
+    df <- process_move(df, "*?S4")
+    expect_equal(nrow(df), 2)
+    df <- process_move(df, "*?dS")
+    expect_equal(nrow(df), 1)
+})
+test_that("greedy search works as expected", {
+    df <- initialize_df(df_none())
+    df <- process_move(df, "S@{a..f}2")
+    expect_equal(nrow(df), 6)
+    df <- process_move(df, "*?S")
+    expect_equal(nrow(df), 5)
+    df <- process_move(df, "*/S")
+    expect_equal(nrow(df), 0)
+})
+
 test_that("scale_factor works as expected", {
     scale <- "MovetextParser:\n  Name: Default\n  ScaleFactor: 2\n...\n1. S@a2"
     df <- tail(read_ppn(textConnection(scale))[[1]]$dfs, 1)[[1]]
