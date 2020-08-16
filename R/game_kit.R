@@ -35,7 +35,6 @@ GameKit <- R6Class("game_kit",
 #' \code{game_kit} creates a game kit R6 object.
 #'
 #' @param cfgs A named list of \code{pp_cfg} configuration list R6 objects.
-#' @exportClass game_kit
 #' @export
 game_kit <- function(cfgs = list(cfg = pp_cfg())) {
     GameKit$new(cfgs)

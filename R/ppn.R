@@ -677,19 +677,19 @@ non_greedy_match <- function(df, piece_spec) {
                              ngm_helper(dfi$rank, df$rank == dfi$rank) &
                              ngm_helper(dfi$cfg, df$cfg == dfi$cfg) &
                              ngm_helper(dfi$angle, df$angle == dfi$angle))
-    if (length(with_incomplete) == 1) return (with_incomplete)
+    if (length(with_incomplete) == 1) return(with_incomplete)
     dff  <- complete_piece(dfi, piece_spec)
     with_angle <- which(df$piece_side == dff$piece_side &
                         ngm_helper(dff$suit, df$suit == dff$suit) &
                         ngm_helper(dff$rank, df$rank == dff$rank) &
                         df$cfg == dff$cfg &
                         near(df$angle, dff$angle))
-    if (length(with_angle)) return (tail(with_angle, 1))
+    if (length(with_angle)) return(tail(with_angle, 1))
     without_angle <- which(df$piece_side == dff$piece_side &
                            ngm_helper(dff$suit, df$suit == dff$suit) &
                            ngm_helper(dff$rank, df$rank == dff$rank) &
                            df$cfg == dff$cfg)
-    if (length(without_angle)) return (tail(without_angle, 1))
+    if (length(without_angle)) return(tail(without_angle, 1))
     stop("Couldn't find a match")
 }
 
