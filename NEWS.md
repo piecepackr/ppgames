@@ -21,6 +21,7 @@ New features
     where you want to move/drop above/beneath a specific piece e.g. ``b4@%b5[2]`` 
     is equivalent to ``S@&b5[2]%b5[2]`` which is equivalent to ``S@b5%b5[2]`` (#53)
   - Can now identify pieces with a "non-greedy" search ``?`` (#55) or a "greedy" search ``/``.
+  - Can now partially update specification of a piece with ``~`` (#57)
 
 Bug fixes and minor improvements
 --------------------------------

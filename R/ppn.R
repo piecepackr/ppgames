@@ -263,9 +263,10 @@ complete_piece <- function(df, text) {
     if (df$cfg == "icehouse_pieces") {
         df$rank <- df$rank - 1
     }
+    if (is.na(df$suit)) df$suit <- 1
+    if (is.na(df$rank)) df$rank <- 1
     df$piece_side <- paste0(df$piece, "_", df$side)
     tibble::as_tibble(df[c("piece_side", "suit", "rank", "angle", "cfg")])
-
 }
 
 parse_piece <- function(text) {
@@ -464,6 +465,8 @@ process_submove <- function(df, text, state = create_state(df)) {
         process_hyphen_move(df, text, state)
     } else if (str_detect(text, "\\*")) {
         process_asterisk_move(df, text, state)
+    } else if (str_detect(text, "~")) {
+        process_tilde_move(df, text, state)
     } else if (str_detect(text, "=")) {
         process_equal_move(df, text, state)
     } else if (str_detect(text, colon_token)) {
@@ -691,6 +694,49 @@ non_greedy_match <- function(df, piece_spec) {
                            df$cfg == dff$cfg)
     if (length(without_angle)) return(tail(without_angle, 1))
     stop("Couldn't find a match")
+}
+
+process_tilde_move <- function(df, text, state = create_state(df)) {
+    cp <- str_split(text, "~")[[1]]
+    piece_id <- cp[1]
+    indices <- get_indices_from_piece_id(piece_id, df, state)
+    to_change_id <- rep(FALSE, length(indices))
+
+    piece_spec <- cp[2]
+    dfp <- parse_piece_incomplete(piece_spec)
+
+    if (!is.na(dfp$piece) || !is.na(dfp$side)) {
+        psm <- str_split_fixed(df$piece_side, "_", 2)
+        if (!is.na(dfp$piece)) {
+            to_change <- psm[indices, 1] != dfp$piece
+            to_change_id[to_change] <- TRUE
+            psm[indices, 1] <- dfp$piece
+        }
+        if (!is.na(dfp$side)) {
+            to_change <- psm[indices, 2] != dfp$side
+            to_change_id[to_change] <- TRUE
+            psm[indices, 2] <- dfp$side
+        }
+        df$piece_side <- paste0(psm[, 1], "_", psm[, 2])
+    }
+    if (!is.na(dfp$suit)) {
+        to_change <- is.na(df$suit[indices]) | df$suit[indices] != dfp$suit
+        to_change_id[to_change] <- TRUE
+        df$suit[indices] <- dfp$suit
+    }
+    if (!is.na(dfp$rank)) {
+        to_change <- is.na(df$rank[indices]) | df$rank[indices] != dfp$rank
+        to_change_id[to_change] <- TRUE
+        df$rank[indices] <- dfp$rank
+    }
+    if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
+
+    if (sum(to_change_id)) {
+        new_id <- seq.int(state$max_id + 1, length.out = sum(to_change_id))
+        state$max_id <- max(new_id)
+        df[indices[to_change_id], "id"] <- new_id
+    }
+    df
 }
 
 process_equal_move <- function(df, text, state = create_state(df)) {
