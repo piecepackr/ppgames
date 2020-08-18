@@ -336,6 +336,13 @@ test_that("Move multiple pieces works as expected", {
     expect_equal(nrow(df), 2)
 })
 
+test_that("move numbers work as expected", {
+    ppn <- "---\n...\n1. S@b2;M@b3 {what happens ; here?}"
+    game <- read_ppn(textConnection(ppn))[[1]]
+    expect_equal(names(game$moves), c("SetupFn.", "1.", "."))
+    expect_equal(game$comments$., "what happens ; here?")
+})
+
 test_that("move multiple pieces works as expected", {
     checkers <- read_ppn(system.file("ppn/checkers.ppn", package = "ppgames"))[[1]]
     verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))

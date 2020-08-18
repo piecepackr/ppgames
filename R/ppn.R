@@ -177,10 +177,12 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
     if (is.null(df)) df <- initialize_df(df_none())
     #### Convert # comments into braces?
     if (length(text)>0) {
-        text <- str_squish(paste(text, collapse = " "))
         # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
         # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
-        move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_]+\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
+        move_number_semicolon <- ";(?![^\\{]*\\})"
+        text <- str_replace_all(text, move_number_semicolon, " . ")
+        text <- str_squish(paste(text, collapse = " "))
+        move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_\\.]*\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
         locations <- str_locate_all(text, move_number_token)[[1]]
         nr <- nrow(locations)
         moves_raw <- list()

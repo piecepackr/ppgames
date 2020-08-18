@@ -22,6 +22,7 @@ New features
     is equivalent to ``S@&b5[2]%b5[2]`` which is equivalent to ``S@b5%b5[2]`` (#53)
   - Can now identify pieces with a "non-greedy" search ``?`` (#55) or a "greedy" search ``/``.
   - Can now partially update specification of a piece with ``~`` (#57)
+  - ``;`` can now be used to indicate the insertion of the minimal move number `` . ``.
 
 Bug fixes and minor improvements
 --------------------------------
