@@ -671,7 +671,7 @@ greedy_match <- function(df, piece_spec) {
                              ngm_helper(dfi$rank, df$rank == dfi$rank) &
                              ngm_helper(dfi$cfg, df$cfg == dfi$cfg) &
                              ngm_helper(dfi$angle, df$angle == dfi$angle))
-    with_incomplete
+    df$id[with_incomplete]
 }
 
 non_greedy_match <- function(df, piece_spec) {
@@ -682,19 +682,19 @@ non_greedy_match <- function(df, piece_spec) {
                              ngm_helper(dfi$rank, df$rank == dfi$rank) &
                              ngm_helper(dfi$cfg, df$cfg == dfi$cfg) &
                              ngm_helper(dfi$angle, df$angle == dfi$angle))
-    if (length(with_incomplete) == 1) return(with_incomplete)
+    if (length(with_incomplete) == 1) return(df$id[with_incomplete])
     dff  <- complete_piece(dfi, piece_spec)
     with_angle <- which(df$piece_side == dff$piece_side &
                         ngm_helper(dff$suit, df$suit == dff$suit) &
                         ngm_helper(dff$rank, df$rank == dff$rank) &
                         df$cfg == dff$cfg &
                         near(df$angle, dff$angle))
-    if (length(with_angle)) return(tail(with_angle, 1))
+    if (length(with_angle)) return(df$id[tail(with_angle, 1)])
     without_angle <- which(df$piece_side == dff$piece_side &
                            ngm_helper(dff$suit, df$suit == dff$suit) &
                            ngm_helper(dff$rank, df$rank == dff$rank) &
                            df$cfg == dff$cfg)
-    if (length(without_angle)) return(tail(without_angle, 1))
+    if (length(without_angle)) return(df$id[tail(without_angle, 1)])
     stop("Couldn't find a match")
 }
 
@@ -729,7 +729,7 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     if (!is.na(dfp$rank)) {
         to_change <- is.na(df$rank[indices]) | df$rank[indices] != dfp$rank
         to_change_id[to_change] <- TRUE
-        df$rank[indices] <- dfp$rank
+        df$rank[indices] <- ifelse(df$cfg[indices] == "icehouse_pieces", dfp$rank - 1, dfp$rank)
     }
     if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
 
@@ -757,6 +757,7 @@ process_equal_move <- function(df, text, state = create_state(df)) {
     df[indices, "suit"] <- df_piece$suit
     df[indices, "rank"] <- df_piece$rank
     df[indices, "angle"] <- df_piece$angle
+    df[indices, "cfg"] <- df_piece$cfg
     df[indices, "id"] <- new_id
     df
 }

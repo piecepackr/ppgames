@@ -382,6 +382,15 @@ test_that("partial piece update", {
     expect_equal(df$suit, 2)
     expect_equal(df$id, 2)
     expect_equal(df$angle, 90)
+    expect_equal(df$rank, 1)
+    df <- process_move(df, "?M~2", state)
+    expect_equal(df$rank, 3)
+    df <- process_move(df, "?M=R\u25b32", state)
+    expect_equal(df$rank, 2)
+    expect_equal(df$angle, 0)
+    expect_equal(df$cfg, "icehouse_pieces")
+    df <- process_move(df, "?R\u25b3~1", state)
+    expect_equal(df$rank, 1)
 })
 
 test_that("scale_factor works as expected", {
