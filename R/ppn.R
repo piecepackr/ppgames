@@ -843,12 +843,16 @@ process_move <- function(df, text, state = create_state(df)) {
 split_blanks <- function(text) c(str_split(text, "[[:blank:]]+"), recursive = TRUE)
 
 process_moves <- function(df, movelist, state = create_state(df)) {
-    df_list <- list(SetupFn.=df)
-    nms <- names(movelist)
-    if (is.null(nms)) nms <- 1 + seq(movelist)
-    for (ii in seq(movelist)) {
-        df <- process_move(df, movelist[[ii]], state = state)
-        df_list[[nms[ii]]] <- df
+    df_list <- vector("list", 1L + length(movelist))
+    df_list[[1L]] <- df
+    for (i in seq_along(movelist)) {
+        df <- process_move(df, movelist[[i]], state = state)
+        df_list[[i + 1L]] <- df
     }
+
+    nms <- vector("character", 1L + length(movelist))
+    nms[1] <- "SetupFn."
+    if (!is.null(names(movelist))) nms[seq_along(movelist) + 1L] <- names(movelist)
+    names(df_list) <- nms
     df_list
 }
