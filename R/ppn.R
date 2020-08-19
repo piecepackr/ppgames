@@ -186,24 +186,32 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
         locations <- str_locate_all(text, move_number_token)[[1]]
         nr <- nrow(locations)
         moves_raw <- list()
-        if (nr == 0) {
-            moves_raw[[1]] <- text
+        if (nr == 0L) {
+            moves_raw[[1L]] <- text
         } else {
-            i1 <- locations[1, 1]
-            if (i1 > 1) {
+            i1 <- locations[1L, 1L]
+            if (i1 > 1L) {
+                moves_raw <- vector("list", nr + 1)
+                moves_names <- vector("character", nr + 1)
+                offset <- 1L
                 moves_raw[[1]] <- str_sub(text, 1L, i1 - 2L)
+            } else {
+                offset <- 0L
+                moves_names <- vector("character", nr)
+                moves_raw <- vector("list", nr)
             }
             for (ii in seq(nr)) {
-                is <- locations[ii, 1]
-                ie <- locations[ii, 2]
-                movenumber <- str_sub(text, is, ie)
-                is <- locations[ii, 2] + 2L
+                is <- locations[ii, 1L]
+                ie <- locations[ii, 2L]
+                moves_names[ii + offset] <- str_sub(text, is, ie)
+                is <- locations[ii, 2L] + 2L
                 if (ii < nr)
-                    ie <- locations[ii+1, 1] - 2L
+                    ie <- locations[ii+1L, 1L] - 2L
                 else
                     ie <- str_count(text)
-                moves_raw[[movenumber]] <- str_sub(text, is, ie)
+                moves_raw[[ii + offset]] <- str_sub(text, is, ie)
             }
+            names(moves_raw) <- moves_names
         }
         moves <- lapply(moves_raw, remove_comments)
         comments <- lapply(moves_raw, extract_comments)

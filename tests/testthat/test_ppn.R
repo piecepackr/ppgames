@@ -337,10 +337,12 @@ test_that("Move multiple pieces works as expected", {
 })
 
 test_that("move numbers work as expected", {
-    ppn <- "---\n...\n1. S@b2;M@b3 {what happens ; here?}"
+    ppn <- "---\n...\n1. S@b2;M@b3;C@b4 {what happens ; here?}"
     game <- read_ppn(textConnection(ppn))[[1]]
-    expect_equal(names(game$moves), c("SetupFn.", "1.", "."))
-    expect_equal(game$comments$., "what happens ; here?")
+    expect_equal(names(game$moves), c("SetupFn.", "1.", ".", "."))
+    expect_equal(game$moves[[3]], "M@b3")
+    expect_equal(game$moves[[4]], "C@b4")
+    expect_equal(game$comments[[4]], "what happens ; here?")
 })
 
 test_that("move multiple pieces works as expected", {
@@ -350,12 +352,18 @@ test_that("move multiple pieces works as expected", {
 
 test_that("non-greedy search works as expected", {
     df <- initialize_df(df_none())
-    df <- process_move(df, "S4@b2 M3@b4 dS4@b2")
+    state <- create_state(df)
+    df <- process_move(df, "S4@b2 M3v@b4 dS4@b2", state)
     expect_equal(nrow(df), 3)
-    df <- process_move(df, "*?S4")
+    df <- process_move(df, "*?S4", state)
     expect_equal(nrow(df), 2)
-    df <- process_move(df, "*?dS")
+    df <- process_move(df, "*?dS", state)
     expect_equal(nrow(df), 1)
+    expect_equal(df$angle, 180)
+    df <- process_move(df, "M3>@b2 *?M3", state)
+    expect_equal(nrow(df), 1)
+    expect_equal(df$angle, 180)
+    expect_error(process_move(df, "*?A3"), "Couldn't find a match")
 })
 test_that("greedy search works as expected", {
     df <- initialize_df(df_none())
@@ -367,7 +375,7 @@ test_that("greedy search works as expected", {
     expect_equal(nrow(df), 0)
 })
 
-test_that("partial piece update", {
+test_that("partial piece update (tilde)", {
     df <- initialize_df(df_none())
     state <- create_state(df)
     df <- process_move(df, "S@b2", state)
@@ -385,12 +393,16 @@ test_that("partial piece update", {
     expect_equal(df$rank, 1)
     df <- process_move(df, "?M~2", state)
     expect_equal(df$rank, 3)
+    df <- process_move(df, "?M~t", state)
+    expect_equal(df$piece_side, "tile_back")
     df <- process_move(df, "?M=R\u25b32", state)
     expect_equal(df$rank, 2)
     expect_equal(df$angle, 0)
     expect_equal(df$cfg, "icehouse_pieces")
     df <- process_move(df, "?R\u25b3~1", state)
     expect_equal(df$rank, 1)
+    df <- process_move(df, "?R\u25b3~f", state)
+    expect_equal(df$piece_side, "pyramid_face")
 })
 
 test_that("scale_factor works as expected", {
