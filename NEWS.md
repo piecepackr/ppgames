@@ -37,7 +37,7 @@ Bug fixes and minor improvements
     and then will plot each move of the game in a new graphics device (if ``new_device=TRUE``) or
     the current graphics device asking user to press enter before drawing the next move (#41).
 
-* Tiles are now spread out more in ``df_desfases()``. 
+* Tiles are now spread out more in ``df_desfases()`` and its "scale factor" attribute has been set to 3. 
 
 ppgames 0.4.1
 =============

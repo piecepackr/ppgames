@@ -221,7 +221,9 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
         df_p[i, "y"] <- df_t$y[index]
     }
 
-    bind_rows(df_t, df_c, df_d, df_p)
+    df <- bind_rows(df_t, df_c, df_d, df_p)
+    attr(df, "scale_factor") <- 3
+    df
 }
 
 #' @rdname df_game
