@@ -223,6 +223,9 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
     }
     moves <- c(list(SetupFn.=""), moves)
     comments <- c(list(SetupFn.=""), comments)
+    if (any(duplicated(names(dfs)))) warning("Non-unique MoveNumbers")
+    names(moves) <- names(dfs)
+    names(comments) <- names(dfs)
     list(moves = moves, comments = comments, dfs = dfs)
 }
 
@@ -853,6 +856,13 @@ process_moves <- function(df, movelist, state = create_state(df)) {
     nms <- vector("character", 1L + length(movelist))
     nms[1] <- "SetupFn."
     if (!is.null(names(movelist))) nms[seq_along(movelist) + 1L] <- names(movelist)
-    names(df_list) <- nms
+    names(df_list) <- clean_comments(nms)
     df_list
+}
+
+clean_comments <- function(nms) {
+    for (i in which(str_detect(nms, "^\\.$"))) {
+        nms[[i]] <- paste0(nms[[i-1]], ".")
+    }
+    nms
 }

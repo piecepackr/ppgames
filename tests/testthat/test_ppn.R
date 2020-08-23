@@ -339,7 +339,7 @@ test_that("Move multiple pieces works as expected", {
 test_that("move numbers work as expected", {
     ppn <- "---\n...\n1. S@b2;M@b3;C@b4 {what happens ; here?}"
     game <- read_ppn(textConnection(ppn))[[1]]
-    expect_equal(names(game$moves), c("SetupFn.", "1.", ".", "."))
+    expect_equal(names(game$moves), c("SetupFn.", "1.", "1..", "1..."))
     expect_equal(game$moves[[3]], "M@b3")
     expect_equal(game$moves[[4]], "C@b4")
     expect_equal(game$comments[[4]], "what happens ; here?")
