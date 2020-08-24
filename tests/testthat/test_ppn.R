@@ -297,6 +297,18 @@ test_that("rotations work as expected", {
     expect_equal(df$angle, 90)
 })
 
+test_that("address works as expected", {
+    dfn <- initialize_df(df_none())
+    df <- process_move(dfn, "t@(1.5,1.5) S@{a,b}{1,2}")
+    expect_equal(mean(df$x), 1.5)
+    expect_equal(get_xy("&5(1.5,1.5)", df)$x, 1.5)
+
+    df <- process_move(dfn, "S@b2 d@b2")
+    expect_equal(df$piece_side, c("coin_back", "die_face"))
+    df <- process_move(df, "&?d[2]-c3")
+    expect_equal(df$x, c(2,3))
+})
+
 test_that("Identifying pieces with brackets works", {
     expect_equal(get_indices_from_brackets("2:3"), 3:2)
     expect_equal(get_indices_from_brackets("2:3,1"), c(1, 3, 2))

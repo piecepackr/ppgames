@@ -421,9 +421,9 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
             greedy_match(df, piece_spec)
         } else if (str_detect(piece_id, "\\[.*\\]$")) { # b4[2:3] # nolint
             brackets <- gsub(".*\\[(.*)\\]$", "\\1", piece_id)
-            beginning <- gsub("(.*)\\[.*\\]$", "\\1", piece_id)
+            coords <- gsub("(.*)\\[.*\\]$", "\\1", piece_id)
             sub_indices <- get_indices_from_brackets(brackets)
-            indices <- get_id_from_coords(df, piece_id, Inf, state)
+            indices <- get_id_from_coords(df, coords, Inf, state)
             sub_indices <- length(indices) - sub_indices + 1
             indices[sub_indices]
         } else { # b4
@@ -457,10 +457,15 @@ get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state
     index
 }
 
-get_coords_from_piece_id <- function(piece_id, df, state) {
-    indices <- get_indices_from_piece_id(piece_id, df, state)
-    index <- tail(indices, 1)
-    piecepackr:::Point2D$new(x=df$x[index], y=df$y[index])
+get_coords_from_piece_id <- function(piece_id, df, state = create_state(df)) {
+    if (str_detect(piece_id, "^[[:digit:]]+")) {
+        coords <- gsub("^[[:digit:]]+", "", piece_id)
+        get_xy(coords, df, state)
+    } else {
+        indices <- get_indices_from_piece_id(piece_id, df, state)
+        index <- tail(indices, 1)
+        piecepackr:::Point2D$new(x=df$x[index], y=df$y[index])
+    }
 }
 
 process_submove <- function(df, text, state = create_state(df)) {
