@@ -83,7 +83,7 @@ This package provides several starting boards in the data frame format accepted 
         invert_colors.suited = TRUE, edge_color.coin="tan", edge_color.tile="tan",
         shape.pawn="convex6", depth.pawn=1.0, height.pawn=0.75, width.pawn=0.75, dm_text.pawn=""
     ))
-    pmap_piece(df_tablut(cfg), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
+    pmap_piece(df_tablut(die_width=0.5), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
 
 .. image:: https://www.trevorldavis.com/piecepackr/share/rules/tablut.png
     :alt: Diagram for a game of Tablut
