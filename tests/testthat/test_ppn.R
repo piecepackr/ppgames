@@ -30,6 +30,10 @@ test_that("parsing ppn files works as expected", {
     expect_equal(g4$metadata, list())
     expect_equal(g4$movetext, "0. c5@b3 t@(2.5,2.5)")
 
+    ppn_warning <- "---\n...\n1. S@b2 1. b2-b3"
+    expect_warning(read_ppn(textConnection(ppn_warning)),
+                   "Non-unique MoveNumbers")
+
     no_parse <- "---\nSetUp: Chess\n...\n1. b2-d2 1... g2-e2"
     g <- read_ppn(textConnection(no_parse), parse = FALSE)[[1]]
     expect_length(g, 2)
@@ -60,6 +64,13 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(t$rank, 1)
     expect_equal(t$angle, 0)
     expect_equal(t$piece_side, "tile_back")
+    expect_equal(t$cfg, "piecepack")
+    t <- parse_piece("t,a45,subpack'")
+    expect_equal(t$suit, 1)
+    expect_equal(t$rank, 1)
+    expect_equal(t$angle, 45)
+    expect_equal(t$piece_side, "tile_back")
+    expect_equal(t$cfg, "subpack")
     cC <- parse_piece("cC^")
     expect_equal(cC$suit, 3)
     expect_equal(cC$rank, 1)

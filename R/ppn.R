@@ -19,10 +19,10 @@ read_ppn <- function(file, parse = TRUE) {
 parse_ppn_file <- function(file) {
     text <- readLines(file)
     game_starts <- grep("^-{3}", text)
-    if (length(game_starts) == 0 || game_starts[1] != 1) {
-        game_starts <- c(1, game_starts)
+    if (length(game_starts) == 0L || game_starts[1L] != 1L) {
+        game_starts <- c(1L, game_starts)
     }
-    game_ends <- c(game_starts[-1]-1, length(text))
+    game_ends <- c(game_starts[-1L]-1L, length(text))
     contents <- list()
     for (ii in seq(game_starts)) {
         contents[[ii]] <- text[game_starts[ii]:game_ends[ii]]
@@ -38,13 +38,13 @@ parse_ppn_file <- function(file) {
 #         and character vector element named \code{Movetext}
 parse_ppn_game <- function(text, parse = TRUE) {
     yaml_end <- grep("^\\.{3}", text)
-    if (length(yaml_end) == 0) {
+    if (length(yaml_end) == 0L) {
         yaml_end <- grep("^[[:blank:]]+|^$", text)
     }
-    if (length(yaml_end) > 0) {
-        metadata <- yaml::yaml.load(text[1:yaml_end[1]])
+    if (length(yaml_end) > 0L) {
+        metadata <- yaml::yaml.load(text[1L:yaml_end[1L]])
         if (yaml_end[1]<length(text)) {
-            movetext <- text[(yaml_end[1]+1):length(text)]
+            movetext <- text[(yaml_end[1L]+1L):length(text)]
         } else {
             movetext <- character()
         }
@@ -91,8 +91,10 @@ parser_default <- function(movetext = character(), metadata = list(), envir = NU
 }
 
 df_none <- function() {
-    tibble::tibble(piece_side = character(0), suit = numeric(0), rank = numeric(0),
-                   cfg = character(0), x = numeric(0), y = numeric(0), angle = numeric(0))
+    tibble::tibble(piece_side = character(0L),
+                   suit = integer(0L), rank = integer(0L),
+                   cfg = character(0),
+                   x = numeric(0), y = numeric(0), angle = numeric(0))
 }
 
 get_starting_df <- function(metadata) {
@@ -231,7 +233,7 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
 
 comment_token <- "(?<![[:alnum:][:punct:]])\\{[^}]*\\}(?![[:alnum:][:punct:]])"
 extract_comments <- function(text) {
-    text <- paste(str_extract_all(text, comment_token)[[1]], collapse = " ")
+    text <- paste(str_extract_all(text, comment_token)[[1L]], collapse = " ")
     str_squish(str_remove_all(text, "\\{|\\}"))
 }
 remove_comments <- function(text) {
@@ -239,10 +241,28 @@ remove_comments <- function(text) {
 }
 
 parse_piece_incomplete <- function(text) {
-    #### complex #35
-    df <- parse_simplified_piece(text)
+    piece_spec <- str_split(text, ",")[[1L]]
+    simple <- piece_spec[1L]
+    df <- parse_simplified_piece(simple)
+    if (length(piece_spec) > 1L) {
+        df <- c(parse_complex_piece(tail(piece_spec, -1L)), df)
+    }
     df
 }
+
+parse_complex_piece <- function(elements) {
+    angle <- grep("^a-*[[:digit:]]", elements, value = TRUE)
+    angle <- ifelse(length(angle), as.numeric(str_sub(angle, 2L)), NA_real_)
+    rank <- grep("^r[[:digit:]]", elements, value = TRUE)
+    rank <- ifelse(length(rank), as.integer(str_sub(rank, 2L)), NA_integer_)
+    suit <- grep("^s[[:digit:]]", elements, value = TRUE)
+    suit <- ifelse(length(suit), as.integer(str_sub(suit, 2L)), NA_integer_)
+    cfg <- grep("'$", elements, value = TRUE)
+    cfg <- ifelse(length(cfg), str_sub(cfg, 1L, -2L), NA_character_)
+    list(suit = suit, rank = rank, angle = angle, cfg = cfg)
+}
+
+index_by_zero <- c("piecepack", "playing_cards_expansion", "dual_piecepacks_expansion", "subpack", "hexpack")
 
 complete_piece <- function(df, text) {
     if (is.na(df$angle))
@@ -273,11 +293,9 @@ complete_piece <- function(df, text) {
                pyramid = "top",
                "face")
     }
-    if (df$cfg == "icehouse_pieces") {
-        df$rank <- df$rank - 1
-    }
-    if (is.na(df$suit)) df$suit <- 1
-    if (is.na(df$rank)) df$rank <- 1
+    if (is.na(df$suit)) df$suit <- 1L
+    if (is.na(df$rank)) df$rank <- 1L
+    if (!df$cfg %in% index_by_zero) df$rank <- df$rank - 1L
     df$piece_side <- paste0(df$piece, "_", df$side)
     tibble::as_tibble(df[c("piece_side", "suit", "rank", "angle", "cfg")])
 }
@@ -298,7 +316,7 @@ parse_simplified_piece <- function(text) {
     list(piece = piece, side = side, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 get_simplified_cfg <- function(text) {
-    if (str_detect(text, "\u25b3")) {
+    if (str_detect(text, "\u25b3")) { ####
         "icehouse_pieces"
     } else if (str_detect(text, "\u2665|\u2660|\u2663|\u2666")) {
         "playing_cards_expansion"
@@ -314,28 +332,28 @@ get_simplified_cfg <- function(text) {
 }
 get_simplified_suit <- function(text) {
     if (str_detect(text, "S|\u2665|R|\u2661")) {
-        1
+        1L
     } else if (str_detect(text, "M|\u2660|K|\u2664")) {
-        2
+        2L
     } else if (str_detect(text, "C|\u2663|G|\u2667")) {
-        3
+        3L
     } else if (str_detect(text, "A|\u2666|B|\u2662")) {
-        4
+        4L
     } else if (str_detect(text, "Y")) {
-        5
+        5L
     } else if (str_detect(text, "W")) {
-        6
+        6L
     } else {
         NA_integer_
     }
 }
 get_simplified_rank <- function(text) {
     if (str_detect(text, "n")) {
-        1
+        1L
     } else if (str_detect(text, "a")) {
-        2
+        2L
     } else if (str_detect(text, "[[:digit:]]")) {
-        as.numeric(str_extract(text, "[[:digit:]]")) + 1
+        as.integer(str_extract(text, "[[:digit:]]")) + 1L
     } else {
         NA_integer_
     }
@@ -350,7 +368,7 @@ get_simplified_angle <- function(text) {
     } else if (str_detect(text, ">")) {
         270
     } else {
-        NA_integer_
+        NA_real_
     }
 }
 get_simplified_piece <- function(text) {
@@ -404,7 +422,7 @@ get_algebraic_y <- function(text) {
 get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
     # nocov piece_id <- gsub("'", "", piece_id)
     if (str_detect(piece_id, "^\\^")) { # ^b4
-        piece_id <- str_sub(piece_id, 2)
+        piece_id <- str_sub(piece_id, 2L)
         get_id_from_piece_id(piece_id, state$df_move_start, state)
     } else {
         if (str_detect(piece_id, "^[[:digit:]]+$")) { # 15
@@ -414,17 +432,17 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
             location <- gsub("(^[[:digit:]]+)(.*)", "\\2", piece_id)
             get_id_from_coords(df, location, n_pieces, state)
         } else if (str_detect(piece_id, "^\\?")) { # ?S4
-            piece_spec <- str_sub(piece_id, 2)
+            piece_spec <- str_sub(piece_id, 2L)
             non_greedy_match(df, piece_spec)
         } else if (str_detect(piece_id, "^/")) { # /S4
-            piece_spec <- str_sub(piece_id, 2)
+            piece_spec <- str_sub(piece_id, 2L)
             greedy_match(df, piece_spec)
         } else if (str_detect(piece_id, "\\[.*\\]$")) { # b4[2:3] # nolint
             brackets <- gsub(".*\\[(.*)\\]$", "\\1", piece_id)
             coords <- gsub("(.*)\\[.*\\]$", "\\1", piece_id)
             sub_indices <- get_indices_from_brackets(brackets)
             indices <- get_id_from_coords(df, coords, Inf, state)
-            sub_indices <- length(indices) - sub_indices + 1
+            sub_indices <- length(indices) - sub_indices + 1L
             indices[sub_indices]
         } else { # b4
             get_id_from_coords(df, piece_id, NULL, state)
@@ -449,7 +467,7 @@ get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state
     indices <- arrange(df, desc(.data$dist_squared))$id
     if (is.null(n_pieces)) {
         if (sum(near(df$dist_squared, 0)) < 1) stop(paste("Can't identify the piece at", coords))
-        n_pieces <- 1
+        n_pieces <- 1L
     } else if (is.infinite(n_pieces)) {
         n_pieces <- sum(near(df$dist_squared, 0))
     }
@@ -463,7 +481,7 @@ get_coords_from_piece_id <- function(piece_id, df, state = create_state(df)) {
         get_xy(coords, df, state)
     } else {
         indices <- get_indices_from_piece_id(piece_id, df, state)
-        index <- tail(indices, 1)
+        index <- tail(indices, 1L)
         piecepackr:::Point2D$new(x=df$x[index], y=df$y[index])
     }
 }
@@ -506,7 +524,7 @@ process_submove <- function(df, text, state = create_state(df)) {
 
 process_rotate_move <- function(df, text, state = create_state(df), clockwise = TRUE) {
     id_angle <- str_split(text, "@>")[[1]]
-    piece_id <- id_angle[1]
+    piece_id <- id_angle[1L]
     angle <- as.numeric(id_angle[2])
     angle <- ifelse(clockwise, -angle, angle)
 
@@ -517,8 +535,8 @@ process_rotate_move <- function(df, text, state = create_state(df), clockwise = 
 
 process_hash_move <- function(df, text, state = create_state(df)) {
     id1_id2 <- str_split(text, "#")[[1]]
-    piece_id1 <- id1_id2[1]
-    piece_id2 <- id1_id2[2]
+    piece_id1 <- id1_id2[1L]
+    piece_id2 <- id1_id2[2L]
     coords1 <- get_coords_from_piece_id(piece_id1, df, state)
     coords2 <- get_coords_from_piece_id(piece_id2, df, state)
     indices1 <- get_indices_from_piece_id(piece_id1, df, state)
@@ -534,9 +552,9 @@ process_hash_move <- function(df, text, state = create_state(df)) {
 }
 
 process_at_move <- function(df, text, state = create_state(df)) {
-    pc <- str_split(text, "@")[[1]]
-    piece_spec <- pc[1]
-    l_i <- get_location_index(pc[2], df, state)
+    pc <- str_split(text, "@")[[1L]]
+    piece_spec <- pc[1L]
+    l_i <- get_location_index(pc[2L], df, state)
     df_piece <- parse_piece(piece_spec)
     xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
@@ -546,44 +564,44 @@ process_at_move <- function(df, text, state = create_state(df)) {
     insert_df(df, df_piece, l_i$index)
 }
 process_at_percent_move <- function(df, text, state = create_state(df)) {
-    pi <- str_split(text, "@%")[[1]]
+    pi <- str_split(text, "@%")[[1L]]
 
-    piece_spec <- pi[1]
-    id_ <- pi[2]
+    piece_spec <- pi[1L]
+    id_ <- pi[2L]
     text <- str_glue("{piece_spec}@&{id_}%{id_}")
     process_at_move(df, text, state)
 }
 
 process_backslash_move <- function(df, text, state = create_state(df)) {
-    pc <- str_split(text, "\\\\")[[1]]
-    piece_spec <- pc[1]
-    l_i <- get_location_index(pc[2], df, state)
+    pc <- str_split(text, "\\\\")[[1L]]
+    piece_spec <- pc[1L]
+    l_i <- get_location_index(pc[2L], df, state)
     df_piece <- parse_piece(piece_spec)
     xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
     df_piece$y <- xy$y
     df_piece$id <- state$max_id <- state$max_id + 1L
     if (is.null(l_i$id))
-        index <- 0
+        index <- 0L
     else
-        index <- l_i$index - 1
+        index <- l_i$index - 1L
 
     insert_df(df, df_piece, index)
 }
 process_backslash_percent_move <- function(df, text, state = create_state(df)) {
-    pi <- str_split(text, "\\\\%")[[1]]
+    pi <- str_split(text, "\\\\%")[[1L]]
 
-    piece_spec <- pi[1]
-    id_ <- pi[2]
+    piece_spec <- pi[1L]
+    id_ <- pi[2L]
     text <- str_glue("{piece_spec}\\&{id_}%{id_}")
     process_backslash_move(df, text, state)
 }
 
 get_location_index <- function(text, df, state) {
     if (str_detect(text, "%")) {
-        c_id <- str_split(text, "%")[[1]]
-        location <- c_id[1]
-        index <- get_indices_from_piece_id(c_id[2], df, state)
+        c_id <- str_split(text, "%")[[1L]]
+        location <- c_id[1L]
+        index <- get_indices_from_piece_id(c_id[2L], df, state)
         id <- df$id[index]
     } else {
         location <- text
@@ -605,42 +623,42 @@ process_asterisk_move <- function(df, text, state = create_state(df)) {
 }
 
 process_underscore_move <- function(df, text, state) {
-    cc <- str_split(text, "_")[[1]]
-    piece_id <- cc[1]
+    cc <- str_split(text, "_")[[1L]]
+    piece_id <- cc[1L]
     indices <- get_indices_from_piece_id(piece_id, df, state)
     df_moving <- df[indices, ]
     df_rest <- df[-indices, ]
 
-    l_i <- get_location_index(cc[2], df, state)
+    l_i <- get_location_index(cc[2L], df, state)
     location <- l_i$location
     new_xy <- get_xy(location, df, state)
     if (is.null(l_i$id))
-        index <- 0
+        index <- 0L
     else
-        index <- which(df_rest$id %in% l_i$id) - 1
+        index <- which(df_rest$id %in% l_i$id) - 1L
 
     df_moving$x <- new_xy$x
     df_moving$y <- new_xy$y
     insert_df(df_rest, df_moving, index)
 }
 process_underscore_percent_move <- function(df, text, state) { # nolint
-    pi <- str_split(text, "_%")[[1]]
+    pi <- str_split(text, "_%")[[1L]]
 
-    piece_spec <- pi[1]
-    id_ <- pi[2]
+    piece_spec <- pi[1L]
+    id_ <- pi[2L]
     text <- str_glue("{piece_spec}_&{id_}%{id_}")
     process_underscore_move(df, text, state)
 }
 
 hyphen_token <- "-(?![[:digit:]]+)"  # a4-d4 but not (-4,-3)
 process_hyphen_move <- function(df, text, state) {
-    cc <- str_split(text, hyphen_token)[[1]]
-    piece_id <- cc[1]
+    cc <- str_split(text, hyphen_token)[[1L]]
+    piece_id <- cc[1L]
     indices <- get_indices_from_piece_id(piece_id, df, state)
     df_moving <- df[indices, ]
     df_rest <- df[-indices, ]
 
-    l_i <- get_location_index(cc[2], df, state)
+    l_i <- get_location_index(cc[2L], df, state)
     location <- l_i$location
     new_xy <- get_xy(location, df, state)
     if (is.null(l_i$id))
@@ -653,10 +671,10 @@ process_hyphen_move <- function(df, text, state) {
     insert_df(df_rest, df_moving, index)
 }
 process_hyphen_percent_move <- function(df, text, state) {
-    pi <- str_split(text, "-%")[[1]]
+    pi <- str_split(text, "-%")[[1L]]
 
-    piece_spec <- pi[1]
-    id_ <- pi[2]
+    piece_spec <- pi[1L]
+    id_ <- pi[2L]
     text <- str_glue("{piece_spec}-&{id_}%{id_}")
     process_hyphen_move(df, text, state)
 }
@@ -705,12 +723,12 @@ non_greedy_match <- function(df, piece_spec) {
                         ngm_helper(dff$rank, df$rank == dff$rank) &
                         df$cfg == dff$cfg &
                         near(df$angle, dff$angle))
-    if (length(with_angle)) return(df$id[tail(with_angle, 1)])
+    if (length(with_angle)) return(df$id[tail(with_angle, 1L)])
     without_angle <- which(df$piece_side == dff$piece_side &
                            ngm_helper(dff$suit, df$suit == dff$suit) &
                            ngm_helper(dff$rank, df$rank == dff$rank) &
                            df$cfg == dff$cfg)
-    if (length(without_angle)) return(df$id[tail(without_angle, 1)])
+    if (length(without_angle)) return(df$id[tail(without_angle, 1L)])
     stop("Couldn't find a match")
 }
 
@@ -724,18 +742,18 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     dfp <- parse_piece_incomplete(piece_spec)
 
     if (!is.na(dfp$piece) || !is.na(dfp$side)) {
-        psm <- str_split_fixed(df$piece_side, "_", 2)
+        psm <- str_split_fixed(df$piece_side, "_", 2L)
         if (!is.na(dfp$piece)) {
             to_change <- psm[indices, 1] != dfp$piece
             to_change_id[to_change] <- TRUE
-            psm[indices, 1] <- dfp$piece
+            psm[indices, 1L] <- dfp$piece
         }
         if (!is.na(dfp$side)) {
-            to_change <- psm[indices, 2] != dfp$side
+            to_change <- psm[indices, 2L] != dfp$side
             to_change_id[to_change] <- TRUE
-            psm[indices, 2] <- dfp$side
+            psm[indices, 2L] <- dfp$side
         }
-        df$piece_side <- paste0(psm[, 1], "_", psm[, 2])
+        df$piece_side <- paste0(psm[, 1L], "_", psm[, 2L])
     }
     if (!is.na(dfp$suit)) {
         to_change <- is.na(df$suit[indices]) | df$suit[indices] != dfp$suit
@@ -745,12 +763,12 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     if (!is.na(dfp$rank)) {
         to_change <- is.na(df$rank[indices]) | df$rank[indices] != dfp$rank
         to_change_id[to_change] <- TRUE
-        df$rank[indices] <- ifelse(df$cfg[indices] == "icehouse_pieces", dfp$rank - 1, dfp$rank)
+        df$rank[indices] <- ifelse(!df$cfg[indices] %in% index_by_zero, dfp$rank - 1L, dfp$rank)
     }
     if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
 
     if (sum(to_change_id)) {
-        new_id <- seq.int(state$max_id + 1, length.out = sum(to_change_id))
+        new_id <- seq.int(state$max_id + 1L, length.out = sum(to_change_id))
         state$max_id <- max(new_id)
         df[indices[to_change_id], "id"] <- new_id
     }
@@ -758,15 +776,15 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
 }
 
 process_equal_move <- function(df, text, state = create_state(df)) {
-    cp <- str_split(text, "=")[[1]]
+    cp <- str_split(text, "=")[[1L]]
 
-    piece_id <- cp[1]
+    piece_id <- cp[1L]
     indices <- get_indices_from_piece_id(piece_id, df, state)
 
-    piece_spec <- cp[2]
+    piece_spec <- cp[2L]
     df_piece <- parse_piece(piece_spec)
 
-    new_id <- seq.int(state$max_id + 1, length.out = length(indices))
+    new_id <- seq.int(state$max_id + 1L, length.out = length(indices))
     state$max_id <- max(new_id)
 
     df[indices, "piece_side"] <- df_piece$piece_side
@@ -782,8 +800,8 @@ colon_token <- ":(?![^\\[]*])" # a4-d4 but not a4[1:4]
 process_colon_move <- function(df, text, state = create_state(df)) {
     cc <- str_split(text, colon_token)[[1]]
 
-    piece_id1 <- cc[1]
-    piece_id2 <- cc[2]
+    piece_id1 <- cc[1L]
+    piece_id2 <- cc[2L]
 
     location <- get_location_from_piece_id(piece_id2, df, state)
 
@@ -801,7 +819,7 @@ get_location_from_piece_id <- function(piece_id, df, state) {
 # Insert `df2` into `df1` after `index`
 # index = 0 means instead at beginning
 insert_df <- function(df1, df2, index = nrow(df1)) {
-    if (index == 0) {
+    if (index == 0L) {
         bind_rows(df2, df1)
     } else if (index == nrow(df1)) {
         bind_rows(df1, df2)
@@ -867,7 +885,7 @@ process_moves <- function(df, movelist, state = create_state(df)) {
 
 clean_comments <- function(nms) {
     for (i in which(str_detect(nms, "^\\.$"))) {
-        nms[[i]] <- paste0(nms[[i-1]], ".")
+        nms[[i]] <- paste0(nms[[i-1L]], ".")
     }
     nms
 }
