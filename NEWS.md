@@ -29,6 +29,7 @@ New features
   - Can now specify the following game systems (#59):
 
     + standard six-sided dice (in six colors)
+    + piecepack dice cards
 
 Bug fixes and minor improvements
 --------------------------------
@@ -43,6 +44,12 @@ Bug fixes and minor improvements
     the current graphics device asking user to press enter before drawing the next move (#41).
 
 * Tiles are now spread out more in ``df_desfases()`` and its "scale factor" attribute has been set to 3. 
+
+Breaking Changes
+----------------
+
+* ``△`` (U+25b3) no longer part of PPN.  
+  Instead use ``▲`` (U+25b2) or ``/\`` plus a color "suit" (RKGBYW) to indicate Icehouse pyramids.
 
 ppgames 0.4.1
 =============

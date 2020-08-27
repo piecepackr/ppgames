@@ -242,7 +242,7 @@ remove_comments <- function(text) {
 
 parse_piece_incomplete <- function(text) {
     piece_spec <- str_split(text, ",")[[1L]]
-    simple <- piece_spec[1L]
+    simple <- standardize_simple(piece_spec[1L])
     df <- parse_simplified_piece(simple)
     if (length(piece_spec) > 1L) {
         df <- c(parse_complex_piece(tail(piece_spec, -1L)), df)
@@ -263,9 +263,31 @@ parse_complex_piece <- function(elements) {
 }
 
 index_rank_by_one <- c("dice", "icehouse_pieces")
+index_suit_by_zero <- paste0("dominoes", c("", "_black", "_blue", "green", "red", "white", "yellow"))
+character_class <- function(characters) {
+    paste(characters, collapse = "|")
+}
+unicode_dice <- intToUtf8(9856L + 0:5, multiple = TRUE)
+standardize_simple <- function(x) {
+    x <- gsub("\u00b5|\u03bc", "u", x) # micro sign
+    x <- gsub("/\\\\", "\u25b2", x) # triangle
+    x <- gsub("\\[]", "\U0001f0a0", x) # card back
+    x <- gsub("n", "0", x)
+    x <- gsub("a", "1", x)
+    if (!is.na(die <- str_extract(x, character_class(unicode_dice)))) {
+        rank <- switch(die, "\u2680" = 1L, "\u2681" = 2L, "\u2682" = 3L,
+                       "\u2683" = 4L, "\u2684" = 5L, "\u2685" = 6L)
+        if (str_detect(x, "[RKGBYW]")) {
+            x <- gsub(die, paste0("d", rank), x)
+        } else {
+            x <- gsub(die, paste0("Wd", rank), x)
+        }
+    }
+    x
+}
 
 complete_piece <- function(df, text) {
-    simple <- str_split(text, ",")[[1L]][1]
+    simple <- standardize_simple(str_split(text, ",")[[1L]][1])
     if (is.na(df$angle))
         df$angle <- 0
     if (is.na(df$piece)) {
@@ -289,7 +311,7 @@ complete_piece <- function(df, text) {
             df$cfg <- "piecepack"
         }
     }
-    if (str_detect(simple, "\u00b5|\u03bc|u")) {
+    if (str_detect(simple, "u")) {
         df$cfg <- switch(df$cfg,
                          checkers2 = "checkers1",
                          piecepack = "subpack",
@@ -301,6 +323,7 @@ complete_piece <- function(df, text) {
                coin = ifelse(is.na(df$suit), "face", "back"),
                saucer = ifelse(is.na(df$suit), "face", "back"),
                pyramid = "top",
+               card = ifelse(is.na(df$suit) || is.na(df$rank), "back", "face"),
                "face")
     }
     if (is.na(df$suit)) {
@@ -329,21 +352,13 @@ parse_simplified_piece <- function(text) {
     cfg <- get_simplified_cfg(text)
     list(piece = piece, side = side, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
-character_class <- function(characters) {
-    paste(characters, collapse = "|")
-}
-unicode_dice <- intToUtf8(9856L + 0:5, multiple = TRUE)
 get_simplified_cfg <- function(text) {
-    if (str_detect(text, "\u25b3")) { ####
-        "icehouse_pieces"
-    } else if (str_detect(text, "\u2665|\u2660|\u2663|\u2666")) {
+    if (str_detect(text, "\u2665|\u2660|\u2663|\u2666")) {
         "playing_cards_expansion"
     } else if (str_detect(text, "\u2661|\u2664|\u2667|\u2662")) {
         "dual_piecepacks_expansion"
-    } else if (str_detect(text, "\u2b22|\u2b21|\u2b23")) {
+    } else if (str_detect(text, "\u2b22")) {
         "hexpack"
-    } else if (str_detect(text, character_class(unicode_dice))) {
-        "dice"
     } else {
         NA_character_
     }
@@ -366,22 +381,8 @@ get_simplified_suit <- function(text) {
     }
 }
 get_simplified_rank <- function(text) {
-    if (str_detect(text, "n")) {
-        1L
-    } else if (str_detect(text, "a|\u2680")) {
-        2L
-    } else if (str_detect(text, "[[:digit:]]")) {
+    if (str_detect(text, "[[:digit:]]")) {
         as.integer(str_extract(text, "[[:digit:]]")) + 1L
-    } else if (str_detect(text, "\u2681")) {
-        3L
-    } else if (str_detect(text, "\u2682")) {
-        4L
-    } else if (str_detect(text, "\u2683")) {
-        5L
-    } else if (str_detect(text, "\u2684")) {
-        6L
-    } else if (str_detect(text, "\u2685")) {
-        7L
     } else {
         NA_integer_
     }
@@ -404,7 +405,7 @@ get_simplified_piece <- function(text) {
         "tile"
     } else if (str_detect(text, "c")) {
         "coin"
-    } else if (str_detect(text, character_class(c("d", unicode_dice)))) {
+    } else if (str_detect(text, "d")) {
         "die"
     } else if (str_detect(text, "p")) {
         "pawn"
@@ -412,7 +413,9 @@ get_simplified_piece <- function(text) {
         "matchstick"
     } else if (str_detect(text, "s")) {
         "saucer"
-    } else if (str_detect(text, "\u25b2|\u25b3")) { ####
+    } else if (str_detect(text, "\U0001f0a0")) {
+        "card"
+    } else if (str_detect(text, "\u25b2")) {
         "pyramid"
     } else {
         NA_character_
