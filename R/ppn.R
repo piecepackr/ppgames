@@ -267,7 +267,7 @@ index_suit_by_zero <- paste0("dominoes", c("", "_black", "_blue", "green", "red"
 character_class <- function(characters) {
     paste(characters, collapse = "|")
 }
-unicode_dice <- intToUtf8(9856L + 0:5, multiple = TRUE)
+unicode_dice <- c("\u2680", "\u2681", "\u2682", "\u2683", "\u2684", "\u2685")
 standardize_simple <- function(x) {
     x <- gsub("\u00b5|\u03bc", "u", x) # micro sign
     x <- gsub("/\\\\", "\u25b2", x) # triangle
@@ -275,8 +275,7 @@ standardize_simple <- function(x) {
     x <- gsub("n", "0", x)
     x <- gsub("a", "1", x)
     if (!is.na(die <- str_extract(x, character_class(unicode_dice)))) {
-        rank <- switch(die, "\u2680" = 1L, "\u2681" = 2L, "\u2682" = 3L,
-                       "\u2683" = 4L, "\u2684" = 5L, "\u2685" = 6L)
+        rank <- str_which(unicode_dice, die)
         if (str_detect(x, "[RKGBYW]")) {
             x <- gsub(die, paste0("d", rank), x)
         } else {
