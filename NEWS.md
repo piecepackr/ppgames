@@ -26,6 +26,9 @@ New features
     has been interpreted to mean the previous move number with an extra ``.`` tacked to the end.
   - Can now have identical ``MoveNumbers`` but will emit a warning if identical ``MoveNumbers`` are found.
   - Can now directly set piece attributes for suit, rank, angle, and configuration (#35)
+  - Can now specify the following game systems (#59):
+
+    + standard six-sided dice (in six colors)
 
 Bug fixes and minor improvements
 --------------------------------

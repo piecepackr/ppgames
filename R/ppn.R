@@ -262,9 +262,10 @@ parse_complex_piece <- function(elements) {
     list(suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 
-index_by_zero <- c("piecepack", "playing_cards_expansion", "dual_piecepacks_expansion", "subpack", "hexpack")
+index_rank_by_one <- c("dice", "icehouse_pieces")
 
 complete_piece <- function(df, text) {
+    simple <- str_split(text, ",")[[1L]][1]
     if (is.na(df$angle))
         df$angle <- 0
     if (is.na(df$piece)) {
@@ -279,11 +280,20 @@ complete_piece <- function(df, text) {
         }
     }
     if (is.na(df$cfg)) {
-        if (df$piece == "pyramid" && str_detect(text, "[RKGBYW]")) {
-            df$cfg <- "icehouse_pieces"
+        if (str_detect(simple, "[RKGBYW]")) {
+            df$cfg <- switch(df$piece,
+                             pyramid = "icehouse_pieces",
+                             die = "dice",
+                             stop("Don't know how to handle this case"))
         } else {
             df$cfg <- "piecepack"
         }
+    }
+    if (str_detect(simple, "\u00b5|\u03bc|u")) {
+        df$cfg <- switch(df$cfg,
+                         checkers2 = "checkers1",
+                         piecepack = "subpack",
+                         stop("Don't know how to handle this case"))
     }
     if (is.na(df$side)) {
         df$side <- switch(df$piece,
@@ -293,9 +303,13 @@ complete_piece <- function(df, text) {
                pyramid = "top",
                "face")
     }
-    if (is.na(df$suit)) df$suit <- 1L
+    if (is.na(df$suit)) {
+        df$suit <- switch(df$cfg,
+                          dice = 6L,
+                          1L)
+    }
     if (is.na(df$rank)) df$rank <- 1L
-    if (!df$cfg %in% index_by_zero) df$rank <- df$rank - 1L
+    if (df$cfg %in% index_rank_by_one) df$rank <- df$rank - 1L
     df$piece_side <- paste0(df$piece, "_", df$side)
     tibble::as_tibble(df[c("piece_side", "suit", "rank", "angle", "cfg")])
 }
@@ -315,6 +329,10 @@ parse_simplified_piece <- function(text) {
     cfg <- get_simplified_cfg(text)
     list(piece = piece, side = side, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
+character_class <- function(characters) {
+    paste(characters, collapse = "|")
+}
+unicode_dice <- intToUtf8(9856L + 0:5, multiple = TRUE)
 get_simplified_cfg <- function(text) {
     if (str_detect(text, "\u25b3")) { ####
         "icehouse_pieces"
@@ -322,10 +340,10 @@ get_simplified_cfg <- function(text) {
         "playing_cards_expansion"
     } else if (str_detect(text, "\u2661|\u2664|\u2667|\u2662")) {
         "dual_piecepacks_expansion"
-    } else if (str_detect(text, "\u00b5|\u03bc|u")) {
-        "subpack"
     } else if (str_detect(text, "\u2b22|\u2b21|\u2b23")) {
         "hexpack"
+    } else if (str_detect(text, character_class(unicode_dice))) {
+        "dice"
     } else {
         NA_character_
     }
@@ -350,10 +368,20 @@ get_simplified_suit <- function(text) {
 get_simplified_rank <- function(text) {
     if (str_detect(text, "n")) {
         1L
-    } else if (str_detect(text, "a")) {
+    } else if (str_detect(text, "a|\u2680")) {
         2L
     } else if (str_detect(text, "[[:digit:]]")) {
         as.integer(str_extract(text, "[[:digit:]]")) + 1L
+    } else if (str_detect(text, "\u2681")) {
+        3L
+    } else if (str_detect(text, "\u2682")) {
+        4L
+    } else if (str_detect(text, "\u2683")) {
+        5L
+    } else if (str_detect(text, "\u2684")) {
+        6L
+    } else if (str_detect(text, "\u2685")) {
+        7L
     } else {
         NA_integer_
     }
@@ -376,7 +404,7 @@ get_simplified_piece <- function(text) {
         "tile"
     } else if (str_detect(text, "c")) {
         "coin"
-    } else if (str_detect(text, "d")) {
+    } else if (str_detect(text, character_class(c("d", unicode_dice)))) {
         "die"
     } else if (str_detect(text, "p")) {
         "pawn"
@@ -763,7 +791,7 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     if (!is.na(dfp$rank)) {
         to_change <- is.na(df$rank[indices]) | df$rank[indices] != dfp$rank
         to_change_id[to_change] <- TRUE
-        df$rank[indices] <- ifelse(!df$cfg[indices] %in% index_by_zero, dfp$rank - 1L, dfp$rank)
+        df$rank[indices] <- ifelse(df$cfg[indices] %in% index_rank_by_one, dfp$rank - 1L, dfp$rank)
     }
     if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
 
