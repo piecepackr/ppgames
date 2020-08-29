@@ -25,6 +25,7 @@ r180[["\u2202"]] <- "\u03f1"
 r180[["\u0ed1"]] <- "\u0ed2" ## Spirals (Lao Digit One)
 r180[["\u0ed2"]] <- "\u0ed1" ## Spirals (Lao Digit One)
 r180[["n"]] <- "u"
+r270[["n"]] <- "\u1d59"
 r180[["N"]] <- "N"
 r180[["0"]] <- "0"
 ## Ace
@@ -93,7 +94,7 @@ r90[["\u25d8"]] <- "\u25d8"
 r180[["\u25d8"]] <- "\u25d8"
 r270[["\u25d8"]] <- "\u25d8"
 r180[["\u263e"]] <- "\u263d"
-r180[["\u263d"]] <- "\u263e" 
+r180[["\u263d"]] <- "\u263e"
 
 ## Crowns
 r180[["\u2641"]] <- "\u2640" # Earth
@@ -126,11 +127,11 @@ r180[["\u2664"]] <- "\u2661\u030d"
 ## Diamonds
 # Black
 r90[["\u2666"]] <- "\u25c6"
-r180[["\u2666"]] <- "\u2666" 
+r180[["\u2666"]] <- "\u2666"
 r270[["\u2666"]] <- "\u25c6"
 # White
 r90[["\u2662"]] <- "\u25c7"
-r180[["\u2662"]] <- "\u2662" 
+r180[["\u2662"]] <- "\u2662"
 r270[["\u2662"]] <- "\u25c7"
 ## Clubs
 # Black
@@ -139,7 +140,7 @@ r180[["\u2663"]] <- "\u2235\u0304"
 r180[["\u2667"]] <- "\u2235\u0304"
 
 ### Chess symbols
-# https://www.unicode.org/charts/PDF/U1FA00.pdf 
+# https://www.unicode.org/charts/PDF/U1FA00.pdf
 # Note Unicode rotates clockwise whereas we rotate counter-clockwise
 # Could add "neutral chess"
 r45[["\u2658"]] <- "\U1fa45" # N
@@ -344,7 +345,7 @@ r315[["\u00d7"]] <- "\u002b"
 # Smash Product
 r45[["\u2a33"]] <- "\u0023" # \ufe5f \u22d5
 r90[["\u2a33"]] <- "\u2a33"
-r135[["\u2a33"]] <- "\u0023" # \ufe5f \u22d5 
+r135[["\u2a33"]] <- "\u0023" # \ufe5f \u22d5
 r180[["\u2a33"]] <- "\u2a33"
 r225[["\u2a33"]] <- "\u0023" # \ufe5f \u22d5
 r270[["\u2a33"]] <- "\u2a33"
@@ -598,9 +599,66 @@ license_names <- list(`CC-BY-SA-4` = "Creative Commons Attribution-ShareAlike 4.
 # license_names <- list(`CC-BY-SA-4` = "CC BY-SA 4.0")
 license_urls <- list(`CC-BY-SA-4` = "https://creativecommons.org/licenses/by-sa/4.0")
 
+unicode_dice <- c("\u2680", "\u2681", "\u2682", "\u2683", "\u2684", "\u2685")
+# excludes card back
+unicode_cards <- c(intToUtf8(utf8ToInt("\U0001f0a1") + 0:13, multiple = TRUE), # spades
+                   intToUtf8(utf8ToInt("\U0001f0b1") + 0:13, multiple = TRUE), # hearts
+                   intToUtf8(utf8ToInt("\U0001f0c1") + 0:13, multiple = TRUE), # diamonds
+                   intToUtf8(utf8ToInt("\U0001f0d1") + 0:13, multiple = TRUE), # clubs
+                   "\U0001f0bf", "\U0001f0cf", "\U0001f0df", # jokers
+                   intToUtf8(utf8ToInt("\U0001f0e0") + 0:21, multiple = TRUE)) # trumps
+card2rank <- list()
+for (r in 1:14) {
+    card2rank[[unicode_cards[r]]] <- r
+    card2rank[[unicode_cards[r+14]]] <- r
+    card2rank[[unicode_cards[r+28]]] <- r
+    card2rank[[unicode_cards[r+42]]] <- r
+}
+card2rank[[unicode_cards[57]]] <- 15
+card2rank[[unicode_cards[58]]] <- 15
+card2rank[[unicode_cards[59]]] <- 15
+card2rank[[unicode_cards[60]]] <- 22
+for (r in 1:21) {
+    card2rank[[unicode_cards[r+60]]] <- r
+}
+card2suit <- list()
+for (r in 1:14) {
+    card2suit[[unicode_cards[r]]] <- 2
+    card2suit[[unicode_cards[r+14]]] <- 1
+    card2suit[[unicode_cards[r+28]]] <- 4
+    card2suit[[unicode_cards[r+42]]] <- 3
+}
+card2suit[[unicode_cards[57]]] <- 4
+card2suit[[unicode_cards[58]]] <- 2
+card2suit[[unicode_cards[59]]] <- 1
+card2suit[[unicode_cards[60]]] <- 5
+for (r in 1:21) {
+    card2suit[[unicode_cards[r+60]]] <- 5
+}
+
+# built-in macros
+macros <- list(H = "\u2665", S = "\u2660", C = "\u2663", D = "\u2666",
+               WH = "\u2664", WS = "\u2661", WD = "\u2662", WC = "\u2667",
+               RJ = unicode_cards[57], BJ = unicode_cards[58],
+               WJ = unicode_cards[59], TF = unicode_cards[60])
+card_macros <- paste0(rep(c("S", "H", "D", "C"), each = 14),
+                      rep(c("A", 2:9, "T", "J", "C", "Q", "K"), 4))
+trump_macros <- paste0("T", 1:21)
+#### Add macros for jokers and trumps
+for (i in seq_along(card_macros)) {
+    c <- card_macros[i]
+    macros[[c]] <- unicode_cards[i]
+}
+for (i in seq_along(trump_macros)) {
+    c <- trump_macros[i]
+    macros[[c]] <- unicode_cards[i+60]
+}
 
 save(r45, r90, r135, r180, r225, r270, r315,
      die_subs, top_subs,
      box2char, char2bi,
      license_names, license_urls,
+     unicode_dice,
+     unicode_cards, card2rank, card2suit,
+     macros,
      file="R/sysdata.rda", version=2)

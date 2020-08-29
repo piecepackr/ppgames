@@ -240,12 +240,10 @@ remove_comments <- function(text) {
     str_squish(str_remove_all(text, comment_token))
 }
 
-parse_piece_incomplete <- function(text) {
-    piece_spec <- str_split(text, ",")[[1L]]
-    simple <- standardize_simple(piece_spec[1L])
-    df <- parse_simplified_piece(simple)
-    if (length(piece_spec) > 1L) {
-        df <- c(parse_complex_piece(tail(piece_spec, -1L)), df)
+parse_piece_incomplete <- function(std_piece_spec) {
+    df <- parse_simplified_piece(std_piece_spec$simple)
+    if (length(std_piece_spec$complex)) {
+        df <- c(parse_complex_piece(std_piece_spec$complex), df)
     }
     df
 }
@@ -254,7 +252,7 @@ parse_complex_piece <- function(elements) {
     angle <- grep("^a-*[[:digit:]]", elements, value = TRUE)
     angle <- ifelse(length(angle), as.numeric(str_sub(angle, 2L)), NA_real_)
     rank <- grep("^r[[:digit:]]", elements, value = TRUE)
-    rank <- ifelse(length(rank), as.integer(str_sub(rank, 2L)), NA_integer_)
+    rank <- ifelse(length(rank), as.integer(str_sub(rank, 2L)) + 1, NA_integer_) # index by 0
     suit <- grep("^s[[:digit:]]", elements, value = TRUE)
     suit <- ifelse(length(suit), as.integer(str_sub(suit, 2L)), NA_integer_)
     cfg <- grep("'$", elements, value = TRUE)
@@ -262,13 +260,15 @@ parse_complex_piece <- function(elements) {
     list(suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 
-index_rank_by_one <- c("dice", "icehouse_pieces")
-index_suit_by_zero <- paste0("dominoes", c("", "_black", "_blue", "green", "red", "white", "yellow"))
+index_rank_by_one <- c("dice", "icehouse_pieces", "playing_cards", "playing_cards_colored", "playing_cards_tarot")
+index_suit_by_zero <- paste0("dominoes", c("", "_black", "_blue", "_green", "_red", "_white", "_yellow"))
 character_class <- function(characters) {
     paste(characters, collapse = "|")
 }
-unicode_dice <- c("\u2680", "\u2681", "\u2682", "\u2683", "\u2684", "\u2685")
-standardize_simple <- function(x) {
+standardize_piece_spec <- function(piece_spec) {
+    simple_complex <- str_split(piece_spec, ",")[[1L]]
+    complex <- tail(simple_complex, -1L)
+    x <- simple_complex[1]
     x <- gsub("\u00b5|\u03bc", "u", x) # micro sign
     x <- gsub("/\\\\", "\u25b2", x) # triangle
     x <- gsub("\\[]", "\U0001f0a0", x) # card back
@@ -282,11 +282,17 @@ standardize_simple <- function(x) {
             x <- gsub(die, paste0("Wd", rank), x)
         }
     }
-    x
+    if (!is.na(card <- str_extract(x, character_class(unicode_cards)))) {
+        rank <- card2rank[[card]]
+        suit <- card2suit[[card]]
+        x <- gsub(card, "\U0001f0a0", x)
+        complex <- append(complex, c(paste0("r", rank), paste0("s", suit)))
+    }
+    list(simple = x, complex = complex)
 }
 
-complete_piece <- function(df, text) {
-    simple <- standardize_simple(str_split(text, ",")[[1L]][1])
+complete_piece <- function(df, std_piece_spec) {
+    simple <- std_piece_spec$simple
     if (is.na(df$angle))
         df$angle <- 0
     if (is.na(df$piece)) {
@@ -306,6 +312,8 @@ complete_piece <- function(df, text) {
                              pyramid = "icehouse_pieces",
                              die = "dice",
                              stop("Don't know how to handle this case"))
+        } else if (df$piece == "card") {
+            df$cfg <- "playing_cards_tarot"
         } else {
             df$cfg <- "piecepack"
         }
@@ -337,8 +345,9 @@ complete_piece <- function(df, text) {
 }
 
 parse_piece <- function(text) {
-    df <- parse_piece_incomplete(text)
-    df <- complete_piece(df, text)
+    std_piece_spec <- standardize_piece_spec(text)
+    df <- parse_piece_incomplete(std_piece_spec)
+    df <- complete_piece(df, std_piece_spec)
     df
 }
 
@@ -709,13 +718,14 @@ process_hyphen_percent_move <- function(df, text, state) {
     process_hyphen_move(df, text, state)
 }
 
-create_state <- function(df) {
+create_state <- function(df, metadata = list()) {
     if (!is.null(attr(df, "scale_factor"))) {
         scale_factor <- attr(df, "scale_factor")
     } else {
         scale_factor <- 1.0
     }
     as.environment(list(df_move_start = df,
+                        macros = c(metadata$Macros, attr(df, "macros"), macros),
                         max_id = nrow(df),
                         scale_factor = as.numeric(scale_factor)))
 }
@@ -728,7 +738,8 @@ ngm_helper <- function(na_check, value) {
 }
 
 greedy_match <- function(df, piece_spec) {
-    dfi <- parse_piece_incomplete(piece_spec)
+    std_piece_spec <- standardize_piece_spec(piece_spec)
+    dfi <- parse_piece_incomplete(std_piece_spec)
     with_incomplete <- which(ngm_helper(dfi$piece, str_detect(df$piece_side, paste0("^", dfi$piece))) &
                              ngm_helper(dfi$side, str_detect(df$piece_side, paste0(dfi$side, "$"))) &
                              ngm_helper(dfi$suit, df$suit == dfi$suit) &
@@ -739,7 +750,8 @@ greedy_match <- function(df, piece_spec) {
 }
 
 non_greedy_match <- function(df, piece_spec) {
-    dfi <- parse_piece_incomplete(piece_spec)
+    std_piece_spec <- standardize_piece_spec(piece_spec)
+    dfi <- parse_piece_incomplete(std_piece_spec)
     with_incomplete <- which(ngm_helper(dfi$piece, str_detect(df$piece_side, paste0("^", dfi$piece))) &
                              ngm_helper(dfi$side, str_detect(df$piece_side, paste0(dfi$side, "$"))) &
                              ngm_helper(dfi$suit, df$suit == dfi$suit) &
@@ -747,7 +759,7 @@ non_greedy_match <- function(df, piece_spec) {
                              ngm_helper(dfi$cfg, df$cfg == dfi$cfg) &
                              ngm_helper(dfi$angle, df$angle == dfi$angle))
     if (length(with_incomplete) == 1) return(df$id[with_incomplete])
-    dff  <- complete_piece(dfi, piece_spec)
+    dff  <- complete_piece(dfi, std_piece_spec)
     with_angle <- which(df$piece_side == dff$piece_side &
                         ngm_helper(dff$suit, df$suit == dff$suit) &
                         ngm_helper(dff$rank, df$rank == dff$rank) &
@@ -768,8 +780,8 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     indices <- get_indices_from_piece_id(piece_id, df, state)
     to_change_id <- rep(FALSE, length(indices))
 
-    piece_spec <- cp[2]
-    dfp <- parse_piece_incomplete(piece_spec)
+    std_piece_spec <- standardize_piece_spec(cp[2])
+    dfp <- parse_piece_incomplete(std_piece_spec)
 
     if (!is.na(dfp$piece) || !is.na(dfp$side)) {
         psm <- str_split_fixed(df$piece_side, "_", 2L)
@@ -883,8 +895,19 @@ get_y <- function(coords) {
     }
 }
 
+replace_macros <- function(df, text, state = create_state(df)) {
+    ml <- str_locate_all(text, "`[^']+'")[[1]]
+    for (r in rev(seq_len(nrow(ml)))) {
+        mtext <- str_sub(text, ml[r, 1] + 1, ml[r, 2] - 1)
+        if (is.null(state$macros[[mtext]])) stop("Macro ", mtext, " is unknown")
+        str_sub(text, ml[r, 1], ml[r, 2]) <- state$macros[[mtext]]
+    }
+    text
+}
+
 process_move <- function(df, text, state = create_state(df)) {
     state$df_move_start <- df
+    text <- replace_macros(df, text, state)
     text <- bracer::expand_braces(split_blanks(text))
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
     text <- gsub("\u035c|\u203f", "_", text) # convert underties to underscore

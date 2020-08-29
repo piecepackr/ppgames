@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: ppgames
 Type: Package
 Title: Piecepack Games
-Version: 0.5.0-16
+Version: 0.5.0-17
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: This is an R package designed to make piecepack game diagrams.
@@ -17,7 +17,7 @@ Imports:
     grid,
     grDevices,
     knitr,
-    piecepackr (>= 1.4.1),
+    piecepackr (>= 1.5.2),
     R6,
     rlang,
     snakecase,

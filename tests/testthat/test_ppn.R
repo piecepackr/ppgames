@@ -91,7 +91,7 @@ test_that("parsing simplified piece notation works as expected", {
     cR <- parse_piece("[]")
     expect_equal(cR$suit, 1)
     expect_equal(cR$piece_side, "card_back")
-    expect_equal(cR$cfg, "piecepack")
+    expect_equal(cR$cfg, "playing_cards_tarot")
     cn2 <- parse_piece("0")
     expect_equal(cn, cn2)
     ca <- parse_piece("af<")
@@ -196,6 +196,23 @@ test_that("parsing simplified piece notation works as expected", {
     d <- parse_piece("G\u2685")
     expect_equal(d$rank, 6L)
     expect_equal(d$suit, 3L)
+    # playing cards
+    c <- parse_piece("\U0001f0cd") # queen of diamonds
+    expect_equal(c$rank, 13)
+    expect_equal(c$suit, 4)
+    expect_equal(c$cfg, "playing_cards_tarot")
+    c <- parse_piece("\U0001f0e6") # trump-6
+    expect_equal(c$rank, 6)
+    expect_equal(c$suit, 5)
+    expect_equal(c$cfg, "playing_cards_tarot")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "`SJ'@b4")
+    expect_equal(df$rank, 11)
+    expect_equal(df$suit, 2)
+    expect_equal(df$cfg, "playing_cards_tarot")
+    expect_error(process_move(df, "`boobear'@b4"),
+                 "Macro boobear is unknown")
 })
 
 test_that("parsing algebraic coordinates works as expected", {

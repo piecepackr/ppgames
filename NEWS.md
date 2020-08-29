@@ -30,6 +30,10 @@ New features
 
     + standard six-sided dice (in six colors)
     + piecepack dice cards
+    + (French) Tarot playing cards (plus 3 types of Jokers),
+      this is a superset of the standard deck of playing cards
+
+  - Can now define and use macros (#60)
 
 Bug fixes and minor improvements
 --------------------------------
