@@ -19,12 +19,20 @@ cat_piece <- function(df, color = NULL, ..., file = "") {
         return(invisible(NULL))
     }
     nn <- names(df)
-    if (!("rank" %in% nn)) df$rank <- NA
-    if (!("suit" %in% nn)) df$suit <- NA
-    if (!("angle" %in% nn)) df$angle <- NA
-    df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
     if (!("cfg" %in% nn)) df$cfg <- "piecepack"
     df$cfg <- ifelse(is.na(df$cfg), "piecepack", df$cfg)
+    if (!("rank" %in% nn)) df$rank <- NA_integer_
+    df$rank <- ifelse(is.na(df$rank), 1L, df$rank)
+    # checkers/chess boards rank is number of cells
+    df$rank <- ifelse(df$rank == 1L & str_detect(df$piece_side, "^board") & str_detect(df$cfg, "[12]$"), 8L, df$rank)
+    # go board rank is number of lines
+    df$rank <- ifelse(str_detect(df$piece_side, "^board") & df$cfg == "go",
+                      ifelse(df$rank == 1L, 18, df$rank - 1),
+                      df$rank)
+    if (!("suit" %in% nn)) df$suit <- NA_integer_
+    df$suit <- ifelse(is.na(df$suit), 1L, df$suit)
+    if (!("angle" %in% nn)) df$angle <- NA_real_
+    df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
 
     lr <- range_heuristic(df)
     nc <- 2*lr$xmax+1
@@ -76,10 +84,10 @@ cat_move <- function(game, move = NULL, ...) {
 dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
 piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
-# darkgreen sometimes shows up as black?
+#### darkgreen sometimes shows up as black?
+#### black instead of grey sometimes?
 checkers_colors <- c("darkred", "grey", "green", "darkblue", "darkorange3", "black")
-piecepack_colors <- checkers_colors
-dice_colors <- checkers_colors
+piecepack_colors <- dice_colors <- chess_colors <- go_colors <- checkers_colors
 dice_colors[2] <- "grey"
 ss_list <- list(piecepack = piecepack_suits,
                 playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
@@ -87,6 +95,8 @@ ss_list <- list(piecepack = piecepack_suits,
                 subpack = piecepack_suits,
                 checkers1 = c(rep("\u26c2", 5), "\u26c0"),
                 checkers2 = c(rep("\u26c2", 5), "\u26c0"),
+                chess1 = "",
+                chess2 = "",
                 dice = rep(" ", 6),
                 dominoes = dominoes_ranks,
                 dominoes_black = dominoes_ranks,
@@ -95,6 +105,7 @@ ss_list <- list(piecepack = piecepack_suits,
                 dominoes_red = dominoes_ranks,
                 dominoes_white = dominoes_ranks,
                 dominoes_yellow = dominoes_ranks,
+                go = c(rep("\u25cf", 5), "\u25cb"),
                 icehouse_pieces = c(rep("\u25b2", 5), "\u25b3"))
 rs_list <- list(piecepack = piecepack_ranks,
                 playing_cards_expansion = piecepack_ranks,
@@ -102,6 +113,8 @@ rs_list <- list(piecepack = piecepack_ranks,
                 subpack = piecepack_ranks,
                 checkers1 = rep("\u26c2", 6),
                 checkers2 = rep("\u26c2", 6),
+                chess1 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
+                chess2 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
                 dice = dominoes_ranks[-1],
                 dominoes = dominoes_ranks,
                 dominoes_black = dominoes_ranks,
@@ -110,11 +123,14 @@ rs_list <- list(piecepack = piecepack_ranks,
                 dominoes_red = dominoes_ranks,
                 dominoes_white = dominoes_ranks,
                 dominoes_yellow = dominoes_ranks,
-                icehouse_pieces = rep(" ", 6))
+                icehouse_pieces = rep(" ", 6),
+                go = rep("\u25cf", 6))
 fg_list <- list(piecepack = piecepack_colors,
                 dual_piecepacks_expansion = piecepack_colors,
                 playing_cards_expansion = piecepack_colors[c(1, 2, 2, 1)],
                 subpack = piecepack_colors,
+                chess1 = chess_colors,
+                chess2 = chess_colors,
                 checkers1 = checkers_colors,
                 checkers2 = checkers_colors,
                 dice = dice_colors,
@@ -125,11 +141,11 @@ fg_list <- list(piecepack = piecepack_colors,
                 dominoes_red = rep(dice_colors[1], 7),
                 dominoes_white = rep(dice_colors[6], 7),
                 dominoes_yellow = rep(dice_colors[5], 7),
-                icehouse_pieces = dice_colors)
+                icehouse_pieces = dice_colors,
+                go = go_colors)
 
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_suit(piece_side)) {
-        if (is.na(suit)) suit <- 1
         ss <- ss_list[[cfg]][suit]
         if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
         if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle)
@@ -138,8 +154,8 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
         fg <- "black"
     }
     if (piecepackr:::has_rank(piece_side)) {
-        if (is.na(rank)) rank <- 1
         rs <- rs_list[[cfg]][rank]
+        if (grepl("chess", cfg) && suit == 6L) rs <- unicode_chess_white[rank]
         if (!grepl("matchstick", piece_side)) rs <- rotate(rs, angle)
     }
     if (grepl("2", cfg)) {

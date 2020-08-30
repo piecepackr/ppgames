@@ -26,12 +26,17 @@ New features
     has been interpreted to mean the previous move number with an extra ``.`` tacked to the end.
   - Can now have identical ``MoveNumbers`` but will emit a warning if identical ``MoveNumbers`` are found.
   - Can now directly set piece attributes for suit, rank, angle, and configuration (#35)
-  - Can now specify the following game systems (#59):
+  - Can now specify the following additional game systems (#59):
 
     + standard six-sided dice (in six colors)
-    + piecepack dice cards
     + (French) Tarot playing cards (plus 3 types of Jokers),
       this is a superset of the standard deck of playing cards
+    + (double-6) dominoes ('standard' set plus sets in six colors)
+    + checkers (for 1" and 2" cell sizes, in six colors)
+    + chess (for 1" and 2" cell sizes, in six colors)
+    + go (with stones in six colors)
+    + meeples (in six colors)
+    + piecepack dice cards
 
   - Can now define and use macros (#60)
 

@@ -213,6 +213,149 @@ test_that("parsing simplified piece notation works as expected", {
     expect_equal(df$cfg, "playing_cards_tarot")
     expect_error(process_move(df, "`boobear'@b4"),
                  "Macro boobear is unknown")
+
+    # dominoes
+    df <- initialize_df(df_none())
+    df <- process_move(df, "`4-3'@b4")
+    expect_equal(df$rank, 4L)
+    expect_equal(df$suit, 5L)
+    expect_equal(df$angle, 180)
+    expect_equal(df$cfg, "dominoes")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "R`6-3'<@b4")
+    expect_equal(df$rank, 4L)
+    expect_equal(df$suit, 7L)
+    expect_equal(df$angle, 270)
+    expect_equal(df$cfg, "dominoes_red")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Y`5-2',a45@b4")
+    expect_equal(df$rank, 3L)
+    expect_equal(df$suit, 6L)
+    expect_equal(df$angle, 225)
+    expect_equal(df$cfg, "dominoes_yellow")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "B\U0001f062@b4")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 1L)
+    expect_equal(df$angle, 0)
+    expect_equal(df$piece_side, "tile_back")
+    expect_equal(df$cfg, "dominoes_blue")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Wt@b4")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 6L)
+    expect_equal(df$piece_side, "tile_back")
+    expect_equal(df$cfg, "dominoes_white")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Bt,r12,s10@b4")
+    expect_equal(df$rank, 13L)
+    expect_equal(df$suit, 11L)
+    expect_equal(df$piece_side, "tile_face")
+    expect_equal(df$cfg, "dominoes_blue")
+
+    # chess
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Rb`q'@b4")
+    expect_equal(df$rank, 5L)
+    expect_equal(df$suit, 1L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "chess2")
+    df <- initialize_df(df_none())
+    df <- process_move(df, "uBb`N'@b4")
+    expect_equal(df$rank, 2L)
+    expect_equal(df$suit, 4L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "chess1")
+    df <- initialize_df(df_none())
+    df <- process_move(df, "u`n'@b4")
+    expect_equal(df$rank, 2L)
+    expect_equal(df$suit, 2L)
+    expect_equal(df$piece_side, "bit_face")
+    expect_equal(df$cfg, "chess1")
+    df <- initialize_df(df_none())
+    df <- process_move(df, "`K'@b4")
+    expect_equal(df$rank, 6L)
+    expect_equal(df$suit, 6L)
+    expect_equal(df$piece_side, "bit_face")
+    expect_equal(df$cfg, "chess2")
+
+    # checkers
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Gc@e5")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 3L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "checkers2")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "u\u26c0@e5")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 6L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "checkers1")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "\u26c2@e5")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 2L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "checkers2")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "G\u26c2@e5")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 3L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "checkers2")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "[X]@e5")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 3L)
+    expect_equal(df$piece_side, "board_face")
+    expect_equal(df$cfg, "checkers2")
+
+    # go
+    df <- initialize_df(df_none())
+    df <- process_move(df, "[#]@i9")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 2L)
+    expect_equal(df$piece_side, "board_face")
+    expect_equal(df$cfg, "go")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Y[#]@i9")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 5L)
+    expect_equal(df$piece_side, "board_face")
+    expect_equal(df$cfg, "go")
+
+    df <- initialize_df(df_none())
+    df <- process_move(df, "()@b4")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 2L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "go")
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Ys@b4")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 5L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "go")
+
+    # meeples
+    df <- initialize_df(df_none())
+    df <- process_move(df, "Gm@b4")
+    expect_equal(df$rank, 1L)
+    expect_equal(df$suit, 3L)
+    expect_equal(df$piece_side, "bit_back")
+    expect_equal(df$cfg, "meeples")
+
 })
 
 test_that("parsing algebraic coordinates works as expected", {
@@ -533,6 +676,12 @@ test_that("Setup and GameType work as expected", {
     chess9 <- "GameType:\n  Name: Chess\n  Has Subpack: true\n...\n"
     df9 <- read_ppn(textConnection(chess9))[[1]]$dfs[[1]]
     expect_true(identical(df8, df9))
+
+    text_macros <- "---\nMacros:\n  p: Sp\n...\n1. `p'@b2\n"
+    df <- read_ppn(textConnection(text_macros))[[1]]$dfs[[2]]
+    expect_equal(df$cfg, "piecepack")
+    expect_equal(df$suit, 1)
+    expect_equal(df$piece_side, "pawn_face")
 
     none1 <- ""
     df1 <- read_ppn(textConnection(none1))[[1]]$dfs[[1]]

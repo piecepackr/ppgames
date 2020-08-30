@@ -7,7 +7,8 @@ mzero <- function(df) mutate(df, angle = 0)
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {
-    verify_output("../text_diagrams/alice_chess", cat_piece(df_alice_chess()))
+    verify_output("../text_diagrams/alice_chess.txt", cat_piece(df_alice_chess()))
+    verify_output("../text_diagrams/alquerque.txt", cat_piece(df_alquerque()))
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))

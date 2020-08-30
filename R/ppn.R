@@ -84,7 +84,7 @@ parser_default <- function(movetext = character(), metadata = list(), envir = NU
     game_list <- list(metadata = metadata, movetext = movetext)
     df <- get_starting_df(metadata)
     if (!is.null(scale_factor)) attr(df, "scale_factor") <- scale_factor
-    state <- create_state(df)
+    state <- create_state(df, metadata)
     move_list <- parse_moves(movetext, df = df, state = state)
     game_list <- c(game_list, move_list)
     game_list
@@ -242,53 +242,126 @@ remove_comments <- function(text) {
 
 parse_piece_incomplete <- function(std_piece_spec) {
     df <- parse_simplified_piece(std_piece_spec$simple)
-    if (length(std_piece_spec$complex)) {
-        df <- c(parse_complex_piece(std_piece_spec$complex), df)
+    if (!is.na(std_piece_spec$angle)) {
+        if (!is.na(df$angle))
+            df$angle <- (df$angle + std_piece_spec$angle) %% 360
+        else
+            df$angle <- std_piece_spec$angle
     }
+    if (!is.na(std_piece_spec$rank))
+        df$rank <- std_piece_spec$rank
+    if (!is.na(std_piece_spec$suit))
+        df$suit <- std_piece_spec$suit
+    if (!is.na(std_piece_spec$cfg))
+        df$cfg <- std_piece_spec$cfg
     df
 }
 
-parse_complex_piece <- function(elements) {
-    angle <- grep("^a-*[[:digit:]]", elements, value = TRUE)
-    angle <- ifelse(length(angle), as.numeric(str_sub(angle, 2L)), NA_real_)
-    rank <- grep("^r[[:digit:]]", elements, value = TRUE)
-    rank <- ifelse(length(rank), as.integer(str_sub(rank, 2L)) + 1, NA_integer_) # index by 0
-    suit <- grep("^s[[:digit:]]", elements, value = TRUE)
-    suit <- ifelse(length(suit), as.integer(str_sub(suit, 2L)), NA_integer_)
-    cfg <- grep("'$", elements, value = TRUE)
-    cfg <- ifelse(length(cfg), str_sub(cfg, 1L, -2L), NA_character_)
-    list(suit = suit, rank = rank, angle = angle, cfg = cfg)
-}
-
-index_rank_by_one <- c("dice", "icehouse_pieces", "playing_cards", "playing_cards_colored", "playing_cards_tarot")
-index_suit_by_zero <- paste0("dominoes", c("", "_black", "_blue", "_green", "_red", "_white", "_yellow"))
+index_rank_by_one <- c("checkers1", "checkers2", "chess1", "chess2", "go", "dice", "icehouse_pieces",
+                       "playing_cards", "playing_cards_colored", "playing_cards_tarot")
 character_class <- function(characters) {
     paste(characters, collapse = "|")
 }
 standardize_piece_spec <- function(piece_spec) {
     simple_complex <- str_split(piece_spec, ",")[[1L]]
-    complex <- tail(simple_complex, -1L)
+    # complex
+    elements <- tail(simple_complex, -1L)
+    angle <- grep("^a-*[[:digit:]]", elements, value = TRUE)
+    angle <- ifelse(length(angle), as.numeric(str_sub(angle, 2L)) %% 360, NA_real_)
+    rank <- grep("^r[[:digit:]]", elements, value = TRUE)
+    rank <- ifelse(length(rank), as.integer(str_sub(rank, 2L)) + 1L, NA_integer_) # index by 0
+    suit <- grep("^s[[:digit:]]", elements, value = TRUE)
+    suit <- ifelse(length(suit), as.integer(str_sub(suit, 2L)) + 1L, NA_integer_) # index by 0
+    cfg <- grep("'$", elements, value = TRUE)
+    cfg <- ifelse(length(cfg), str_sub(cfg, 1L, -2L), NA_character_)
+
+    # simple
     x <- simple_complex[1]
     x <- gsub("\u00b5|\u03bc", "u", x) # micro sign
     x <- gsub("/\\\\", "\u25b2", x) # triangle
     x <- gsub("\\[]", "\U0001f0a0", x) # card back
+    x <- gsub("\\()", "\u25cf", x) # circle
+    x <- gsub("\u25cb", "W\u25cf", x) # white circle
+    x <- gsub("\\[X]", "\u25a0", x) # square
+    # piecepack ranks
     x <- gsub("n", "0", x)
     x <- gsub("a", "1", x)
-    if (!is.na(die <- str_extract(x, character_class(unicode_dice)))) {
-        rank <- str_which(unicode_dice, die)
+    # checkers
+    if (str_detect(x, "\u26c2|\u26c0") && str_detect(x, "[RKGBYW]")) {
+        x <- gsub("\u26c2|\u26c0", "c", x)
+    } else if (str_detect(x, "\u26c2")) {
+        x <- gsub("\u26c2", "Kc", x)
+    } else if (str_detect(x, "\u26c0")) {
+        x <- gsub("\u26c0", "Wc", x)
+    }
+    # go
+    if (!is.na(board <- str_extract(x, "\\[#]|\u25a6"))) {
         if (str_detect(x, "[RKGBYW]")) {
-            x <- gsub(die, paste0("d", rank), x)
+            x <- gsub(board, "\u25a0", x)
         } else {
-            x <- gsub(die, paste0("Wd", rank), x)
+            x <- gsub(board, "K\u25a0", x)
+        }
+        cfg <- "go"
+    }
+    if (!is.na(die <- str_extract(x, character_class(unicode_dice)))) {
+        rank <- str_which(unicode_dice, die) + 1L
+        if (str_detect(x, "[RKGBYW]")) {
+            x <- gsub(die, "d", x)
+        } else {
+            x <- gsub(die, "Wd", x)
         }
     }
     if (!is.na(card <- str_extract(x, character_class(unicode_cards)))) {
-        rank <- card2rank[[card]]
+        rank <- card2rank[[card]] + 1L
         suit <- card2suit[[card]]
         x <- gsub(card, "\U0001f0a0", x)
-        complex <- append(complex, c(paste0("r", rank), paste0("s", suit)))
     }
-    list(simple = x, complex = complex)
+    if (!is.na(piece <- str_extract(x, character_class(unicode_chess_black)))) {
+        rank <- str_which(unicode_chess_black, piece) + 1
+        if (!str_detect(x, "[RKGBYW]")) {
+            suit <- 2
+        }
+        cfg <- "chess2"
+        if (str_detect(x, "b")) {
+            x <- gsub(piece, "\u25cf", x)
+        } else {
+            x <- gsub(piece, "f\u25cf", x)
+        }
+    }
+    if (!is.na(piece <- str_extract(x, character_class(unicode_chess_white)))) {
+        rank <- str_which(unicode_chess_white, piece) + 1
+        if (!str_detect(x, "[RKGBYW]")) {
+            suit <- 6
+        }
+        cfg <- "chess2"
+        if (str_detect(x, "b")) {
+            x <- gsub(piece, "\u25cf", x)
+        } else {
+            x <- gsub(piece, "f\u25cf", x)
+        }
+    }
+    if (!is.na(tile <- str_extract(x, character_class(unicode_dominoes)))) {
+        if (tile %in% c("\U0001f030", "\U0001f062"))
+            x <- gsub(tile, "b", x)
+        else
+            x <- gsub(tile, "", x)
+        rank <- tile2rank[[tile]] + 1L
+        suit <- tile2suit[[tile]] + 1L
+        if (!is.na(angle))
+            angle <- (angle + tile2angle[[tile]]) %% 360
+        else
+            angle <- tile2angle[[tile]]
+        if (!is.na(col <- str_extract(x, "[RKGBYW]"))) {
+            x <- gsub(col, "", x)
+            if (is.na(cfg)) {
+                cfg <- paste0("dominoes_",
+                              switch(col, R = "red", K = "black", G = "green", B = "blue", Y = "yellow", W = "white"))
+            }
+        } else {
+            if (is.na(cfg)) cfg <- "dominoes"
+        }
+    }
+    list(simple = x, suit = suit, rank = rank, angle = angle, cfg = cfg)
 }
 
 complete_piece <- function(df, std_piece_spec) {
@@ -309,17 +382,29 @@ complete_piece <- function(df, std_piece_spec) {
     if (is.na(df$cfg)) {
         if (str_detect(simple, "[RKGBYW]")) {
             df$cfg <- switch(df$piece,
-                             pyramid = "icehouse_pieces",
+                             bit = switch(str_extract(simple, "[smc]"),
+                                          s = "go", c = "checkers2", m = "meeples",
+                                          stop("Unknown cfg")),
                              die = "dice",
+                             pyramid = "icehouse_pieces",
+                             tile = paste0("dominoes_",
+                                           switch(str_extract(simple, "[RKGBYW]"),
+                                                  R = "red", K = "black", G = "green",
+                                                  B = "blue", Y = "yellow", W = "white")),
                              stop("Don't know how to handle this case"))
         } else if (df$piece == "card") {
             df$cfg <- "playing_cards_tarot"
+        } else if (df$piece == "bit") {
+            df$cfg <- "go"
+        } else if (df$piece == "board") {
+            df$cfg <- "checkers2"
         } else {
             df$cfg <- "piecepack"
         }
     }
     if (str_detect(simple, "u")) {
         df$cfg <- switch(df$cfg,
+                         chess2 = "chess1",
                          checkers2 = "checkers1",
                          piecepack = "subpack",
                          stop("Don't know how to handle this case"))
@@ -330,16 +415,24 @@ complete_piece <- function(df, std_piece_spec) {
                coin = ifelse(is.na(df$suit), "face", "back"),
                saucer = ifelse(is.na(df$suit), "face", "back"),
                pyramid = "top",
+               bit = "back",
                card = ifelse(is.na(df$suit) || is.na(df$rank), "back", "face"),
                "face")
     }
     if (is.na(df$suit)) {
         df$suit <- switch(df$cfg,
+                          go = 2L,
+                          checkers1 = 3L,
+                          checkers2 = 3L,
                           dice = 6L,
                           1L)
     }
-    if (is.na(df$rank)) df$rank <- 1L
-    if (df$cfg %in% index_rank_by_one) df$rank <- df$rank - 1L
+    if (is.na(df$rank)) {
+        if (df$piece == "board") df$rank <- switch(df$cfg, go = 19L, 8L)
+        df$rank <- 1L
+    } else if (df$cfg %in% index_rank_by_one) {
+        df$rank <- df$rank - 1L
+    }
     df$piece_side <- paste0(df$piece, "_", df$side)
     tibble::as_tibble(df[c("piece_side", "suit", "rank", "angle", "cfg")])
 }
@@ -412,19 +505,32 @@ get_simplified_piece <- function(text) {
     if (str_detect(text, "t")) {
         "tile"
     } else if (str_detect(text, "c")) {
-        "coin"
+        if (str_detect(text, "[RKGBYW]"))
+            "bit"
+        else
+            "coin"
     } else if (str_detect(text, "d")) {
         "die"
     } else if (str_detect(text, "p")) {
         "pawn"
     } else if (str_detect(text, "m")) {
-        "matchstick"
+        if (str_detect(text, "[RKGBYW]"))
+            "bit"
+        else
+            "matchstick"
     } else if (str_detect(text, "s")) {
-        "saucer"
+        if (str_detect(text, "[RKGBYW]"))
+            "bit"
+        else
+            "saucer"
     } else if (str_detect(text, "\U0001f0a0")) {
         "card"
     } else if (str_detect(text, "\u25b2")) {
         "pyramid"
+    } else if (str_detect(text, "\u25cf")) {
+        "bit"
+    } else if (str_detect(text, "\u25a0")) {
+        "board"
     } else {
         NA_character_
     }

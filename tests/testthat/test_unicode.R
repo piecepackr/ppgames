@@ -109,7 +109,7 @@ test_that("text diagrams", {
     df <- dplyr::bind_rows(dff, dfb)
     verify_output("../text_diagrams/dominoes_horizontal.txt", cat_piece(df))
 
-    # matsticks
+    # matchsticks
     dft <- tibble(piece_side = "tile_back",
                   x=rep(seq(1, 9, 2), 7), y = rep(seq(1, 13, 2), each = 5))
     for (angle in seq(0, 315, 45)) {
@@ -130,4 +130,16 @@ test_that("text diagrams", {
     for (rank in 1:6) {
         expect_error(cat_piece(tibble(piece_side = "matchstick_face", x=1, y=1, rank=rank, angle=30)))
     }
+
+    # chess
+    dfb <- tibble(piece_side = "board_face", x = 4.5, y = 4.5, suit = 2, cfg = "chess1")
+    dfp <- tibble(piece_side = "bit_face", x = 1:6, y = 1, rank = 1:6, suit = 1:6, cfg = "chess1")
+    df <- dplyr::bind_rows(dfb, dfp)
+    verify_output("../text_diagrams/unicode_chess.txt", cat_piece(df))
+
+    # go
+    dfb <- tibble(piece_side = "board_face", x = 10, y = 10, suit = 2, cfg = "go")
+    dfs <- tibble(piece_side = "bit_back", x = 1:19, y = 1:19, suit = 1:19 %% 6 + 1, cfg = "go")
+    df <- dplyr::bind_rows(dfb, dfs)
+    verify_output("../text_diagrams/unicode_go.txt", cat_piece(df))
 })
