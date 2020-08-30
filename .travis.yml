@@ -1,11 +1,11 @@
 language: r
-cache: packages
+# cache: packages
 r:
     - release
     - devel 
 os:
     - linux
-sudo: false
+dist: xenial
 latex: false
 warnings_are_errors: true
 cran: https://cran.rstudio.com
