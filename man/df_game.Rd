@@ -10,6 +10,7 @@
 \alias{df_froggy_bottom}
 \alias{df_fujisan}
 \alias{df_ice_floe}
+\alias{df_japan}
 \alias{df_ley_lines}
 \alias{df_piecepackman}
 \alias{df_plans_of_action}
@@ -59,6 +60,8 @@ df_froggy_bottom()
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
 df_ice_floe()
+
+df_japan(seed = NULL)
 
 df_ley_lines()
 
@@ -198,6 +201,8 @@ Here is some more information about the various games:
                 See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
                  See \url{http://www.ludism.org/ppwiki/IceFloe}.}
+ \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.
+              See \url{http://www.ludism.org/ppwiki/Japan}.}
  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
                   See \url{http://www.ludism.org/ppwiki/LeyLines}.}
  \item{Lines of Action}{An abstract designed by Claude Soucie.

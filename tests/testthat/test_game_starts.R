@@ -15,6 +15,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/froggy_bottom.txt", cat_piece(df_froggy_bottom()))
     verify_output("../text_diagrams/ice_floe.txt", cat_piece(df_ice_floe()))
     verify_output("../text_diagrams/international_chess.txt", cat_piece(df_international_chess()))
+    verify_output("../text_diagrams/japan.txt", cat_piece(df_japan(seed=42)))
     verify_output("../text_diagrams/ley_lines.txt", cat_piece(df_ley_lines()))
     verify_output("../text_diagrams/lines_of_action.txt",
                   cat_piece(mzero(df_lines_of_action())))

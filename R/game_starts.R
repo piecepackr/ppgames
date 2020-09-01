@@ -45,6 +45,8 @@
 #'                 See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
 #'  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
 #'                  See \url{http://www.ludism.org/ppwiki/IceFloe}.}
+#'  \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.
+#'               See \url{http://www.ludism.org/ppwiki/Japan}.}
 #'  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
 #'                   See \url{http://www.ludism.org/ppwiki/LeyLines}.}
 #'  \item{Lines of Action}{An abstract designed by Claude Soucie.
@@ -285,6 +287,47 @@ df_ice_floe <- function() {
            suit = c(1,1,3,2,2, 1,1,4,2,2, 2,3,NA,1,4, 4,4,2,3,3, 4,4,1,3,3),
            rank = c(2,3,1,2,3, 4,5,1,4,5, 0,0,NA,0,0, 2,3,1,2,3, 4,5,1,4,5) + 1)
     df[-13, ]
+}
+
+#' @rdname df_game
+#' @export
+df_japan <- function(seed = NULL) {
+    set.seed(seed)
+    df_tiles <- tibble(piece_side = "tile_back",
+                       x = 0.5 + c(rep(seq(1, by=4, length.out=4), each = 3),
+                                   rep(seq(3, by=4, length.out=3), each = 4)),
+                       y = 0.5 + c(rep(seq(2, by=2, length.out=3), 4),
+                                   rep(seq(1, by=2, length.out=4), 3)),
+                       suit = rep(1:4, each=6), rank = rep(1:6, 4))
+
+    # data frame of possible coin coordinates
+    xy <- xy_ll <- xy_ul <- xy_lr <- xy_ur <- df_tiles[, c("x", "y")]
+    xy_ll$x <- xy$x - 0.5
+    xy_ul$x <- xy$x - 0.5
+    xy_lr$x <- xy$x + 0.5
+    xy_ur$x <- xy$x + 0.5
+    xy_ll$y <- xy$y - 0.5
+    xy_ul$y <- xy$y + 0.5
+    xy_lr$y <- xy$y - 0.5
+    xy_ur$y <- xy$y + 0.5
+    xy <- bind_rows(xy_ll, xy_ul, xy_lr, xy_ur)
+    # find 24 random "non-orthogonal" coordinates
+    xy_coins <- tibble()
+    for (i in 1:24) {
+        i_new <- sample.int(nrow(xy), 1)
+        xy_coins <- bind_rows(xy_coins, xy[i_new,])
+        i_remove <- c(i_new,
+                      which(xy$x == xy$x[i_new] & xy$y == xy$y[i_new] + 1),
+                      which(xy$x == xy$x[i_new] & xy$y == xy$y[i_new] - 1),
+                      which(xy$x == xy$x[i_new] + 1 & xy$y == xy$y[i_new]),
+                      which(xy$x == xy$x[i_new] - 1 & xy$y == xy$y[i_new]))
+        xy <- xy[-i_remove,]
+    }
+    df_coins <- tibble(piece_side = "coin_face",
+                       x = xy_coins$x, y = xy_coins$y,
+                       suit = rep(1:4, each=6), rank = rep(1:6, 4))
+
+    bind_rows(df_tiles, df_coins)
 }
 
 #' @rdname df_game
