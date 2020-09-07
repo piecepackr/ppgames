@@ -4,7 +4,9 @@
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
 #' @param file Filename to save animation unless \code{NULL}
 #'             in which case it uses the current graphics device.
-#' @param annotate If \code{TRUE} annotate the plot
+#' @param annotate If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
+#'                 if \code{FALSE} don't annotate,
+#'                 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.
 #' @param ... Arguments to \code{pmap_piece}
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
@@ -41,28 +43,31 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
     ymin_op <- min(sapply(ranges, function(x) x$ymin_op), na.rm = TRUE)
     xmax <- max(sapply(ranges, function(x) x$xmax), na.rm = TRUE)
     ymax <- max(sapply(ranges, function(x) x$ymax), na.rm = TRUE)
-    if (xmin_op < 0.25) {
-        xoffset <- 0.25 - xmin_op
+    if (xmin_op < 0.50) {
+        xoffset <- 0.50 - xmin_op
     } else {
         xoffset <- 0
     }
-    if (ymin_op < 0.25) {
-        yoffset <- 0.25 - ymin_op
+    if (ymin_op < 0.50) {
+        yoffset <- 0.50 - ymin_op
     } else {
         yoffset <- 0
     }
-    width <- xmax_op + xoffset + 0.25
-    height <- ymax_op + yoffset + 0.25
+    width <- xmax_op + xoffset + 0.50
+    height <- ymax_op + yoffset + 0.50
     m <- max(width, height)
     res <- round(600 / m, 0)
-    height <- res * height
-    width <- res * width
+    # mp4 needs even height / weight
+    height <- ceiling(res * height)
+    width <- ceiling(res * width)
+    height <- height + (height %% 2)
+    width <- width + (width %% 2)
     plot_fn <- function(df, ...) {
         df$x <- df$x + xoffset
         df$y <- df$y + yoffset
         grid::grid.newpage()
         pmap_piece(df, default.units = "in", ..., envir = envir)
-        if (annotate) annotate_plot(xmax, ymax, xoffset, yoffset)
+        annotate_plot(annotate, xmax, ymax, xoffset, yoffset)
     }
     animation_fn(file, new_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, res)
     invisible(NULL)
@@ -84,19 +89,29 @@ animation_fn <- function(file, new_device = TRUE) {
                                 ani.dev = "png", ani.type = "png",
                                 title = "Animated game", verbose = FALSE)
         }
-    } else if (requireNamespace("gifski", quietly = TRUE)) {
-        function(expr, file, width, height, delay, res) {
-            gifski::save_gif(expr, file, width, height, delay, res = res, progress = FALSE)
-        }
-    } else if (requireNamespace("animation", quietly = TRUE)) {
-        function(expr, file, width, height, delay, res) {
-            animation::saveGIF(expr, movie.name = file, interval = delay,
-                               ani.height = height, ani.width = width, ani.res = res,
-                               ani.dev = "png", ani.type = "png")
+    } else if (grepl(".gif$", file)) {
+        if (requireNamespace("gifski", quietly = TRUE)) {
+            function(expr, file, width, height, delay, res) {
+                gifski::save_gif(expr, file, width, height, delay, res = res, progress = FALSE)
+            }
+        } else if (requireNamespace("animation", quietly = TRUE)) {
+            function(expr, file, width, height, delay, res) {
+                animation::saveGIF(expr, movie.name = file, interval = delay,
+                                   ani.height = height, ani.width = width, ani.res = res,
+                                   ani.dev = "png", ani.type = "png")
+            }
+        } else {
+            stop("You need to install either the suggested package 'animation' or 'gifski' to use 'animate_game'.",
+                 "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")'")
         }
     } else {
-        stop("You need to install either the suggested package 'animation' or 'gifski' to use 'animate_game'.",
-             "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")'")
+        if (!requireNamespace("animation")) stop("You need to install the suggested package 'animation'")
+        function(expr, file, width, height, delay, res) {
+            animation::saveVideo(expr, video.name = file, interval = delay,
+                                ani.height = height, ani.width = width, ani.res = res,
+                                ani.dev = "png", ani.type = "png",
+                                title = "Animated game", verbose = FALSE)
+        }
     }
 }
 
@@ -167,7 +182,9 @@ get_df_from_move <- function(game, move = NULL) {
 #'             in which case it uses the current graphics device.
 #' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 #'             unless \code{NULL} in which case will plot the game state after the last move.
-#' @param annotate If \code{TRUE} annotate the plot
+#' @param annotate If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
+#'                 if \code{FALSE} don't annotate,
+#'                 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.
 #' @param bg Background color (\code{"transparent")} for transparent
 #' @param res For bitmap image formats the resolution
 #' @param ... Arguments to \code{pmap_piece}
@@ -186,18 +203,18 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg 
 
     df <- get_df_from_move(game, move)
     dfr <- range_true(df, cfg = cfg, envir = envir, ...)
-    if (dfr$xmin_op < 0.25) {
-        xoffset <- 0.25 - dfr$xmin_op
+    if (dfr$xmin_op < 0.50) {
+        xoffset <- 0.50 - dfr$xmin_op
     } else {
         xoffset <- 0
     }
-    if (dfr$ymin_op < 0.25) {
-        yoffset <- 0.25 - dfr$ymin_op
+    if (dfr$ymin_op < 0.50) {
+        yoffset <- 0.50 - dfr$ymin_op
     } else {
         yoffset <- 0
     }
-    width <- dfr$xmax_op + xoffset + 0.25
-    height <- dfr$ymax_op + yoffset + 0.25
+    width <- dfr$xmax_op + xoffset + 0.50
+    height <- dfr$ymax_op + yoffset + 0.50
     df$x <- df$x + xoffset
     df$y <- df$y + yoffset
 
@@ -215,15 +232,19 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ..., bg 
                tiff = tiff(file, width, height, "in", res = res, bg = bg))
     }
     pmap_piece(df, default.units = "in", ..., envir = envir)
-    if (annotate) annotate_plot(dfr$xmax, dfr$ymax, xoffset, yoffset)
+    annotate_plot(annotate, dfr$xmax, dfr$ymax, xoffset, yoffset)
     if (!is.null(file)) dev.off()
     invisible(NULL)
 }
 
-annotate_plot <- function(xmax, ymax, xoffset = 0, yoffset = 0) {
+annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0) {
+        if (isFALSE(annotate)) return(invisible(NULL))
         gp <- gpar(fontsize = 18, fontface = "bold")
         x_indices <- seq(floor(xmax))
-        l <- letters[x_indices]
+        if (annotate == "cartesian")
+            l <- as.character(x_indices)
+        else
+            l <- letters[x_indices]
         l <- stringr::str_pad(l, max(stringr::str_count(l)))
         grid.text(l, x = x_indices + xoffset, y = 0.25, default.units = "in", gp = gp)
         y_indices <- seq(floor(ymax))

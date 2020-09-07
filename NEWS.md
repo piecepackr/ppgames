@@ -46,12 +46,18 @@ Bug fixes and minor improvements
 
 * ``plot_move()`` and ``animate_game()`` improvements:
 
+  - The ``annotate`` option can now also be set to ``"cartesian"``.
   - Both ``plot_move()`` and ``animate_game()`` will now automatically adjust dimensions and coordinates 
     if (parts of) pieces would otherwise be drawn too close (or past) zero on either the
     x or y axes.
   - If ``file == NULL`` then ``animate_game()`` will set ``devAskNewPage(TRUE)``
     and then will plot each move of the game in a new graphics device (if ``new_device=TRUE``) or
     the current graphics device asking user to press enter before drawing the next move (#41).
+  - If ``file`` ends in ``.html`` then ``animate_game()`` will use ``animation::saveHTML()``.
+  - If ``file`` ends in an file format that isn't ``.gif`` or ``.html`` (such as ``.mp4``)
+    then ``animate_game()`` will use ``animation::saveMovie()``.
+  - Pixel dimensions of ``animate_game()`` are now always adjusted to be an even number
+    (a requirement of ``.mp4`` animations).
 
 * Tiles are now spread out more in ``df_desfases()`` and its "scale factor" attribute has been set to 3. 
 
