@@ -10,17 +10,20 @@ plot_move(
   move = NULL,
   annotate = TRUE,
   ...,
-  bg = "white",
-  res = 72,
+  .f = piecepackr::grid.piece,
   cfg = NULL,
   envir = NULL,
+  width = NULL,
+  height = NULL,
+  ppi = 72,
+  bg = "white",
   new_device = TRUE
 )
 }
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
-\item{file}{Filename to save graphic to unless \code{NULL}
+\item{file}{Filename to save animation unless \code{NULL}
 in which case it uses the current graphics device.}
 
 \item{move}{Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
@@ -32,13 +35,20 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{...}{Arguments to \code{pmap_piece}}
 
-\item{bg}{Background color (\code{"transparent")} for transparent}
-
-\item{res}{For bitmap image formats the resolution}
+\item{.f}{Low level graphics function to use e.g. \code{grid.piece}, \code{piece3d}, or \code{piece}.}
 
 \item{cfg}{A piecepackr configuration list}
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
+
+\item{width}{Width of animation (in inches).  Inferred by default.}
+
+\item{height}{Height of animation (in inches).  Inferred by default.}
+
+\item{ppi}{Resolution of animation in pixels per inch.
+By default set so image max 600 pixels wide or tall.}
+
+\item{bg}{Background color (\code{"transparent")} for transparent}
 
 \item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
 }

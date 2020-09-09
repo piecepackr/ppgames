@@ -58,12 +58,16 @@ Bug fixes and minor improvements
     then ``animate_game()`` will use ``animation::saveMovie()``.
   - Pixel dimensions of ``animate_game()`` are now always adjusted to be an even number
     (a requirement of ``.mp4`` animations).
+  - Can now manually set ``width``, ``height``, and ``ppi`` arguments.
+  - New argument ``.f`` that allows different graphic functions to be used
+    (in particular ``piecepackr::piece3d()`` and ``piecepackr::piece()`` (#54).
 
 * Tiles are now spread out more in ``df_desfases()`` and its "scale factor" attribute has been set to 3. 
 
 Breaking Changes
 ----------------
 
+* ``res`` argument in ``plot_move()`` renamed to ``ppi`` (to avoid possible clash with ``res`` argument in ``piece3d`` or ``piece``).
 * ``△`` (U+25b3) no longer part of PPN.  
   Instead use ``▲`` (U+25b2) or ``/\`` plus a color "suit" (RKGBYW) to indicate Icehouse pyramids.
 

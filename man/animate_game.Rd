@@ -9,11 +9,15 @@ animate_game(
   file = "animation.gif",
   annotate = TRUE,
   ...,
+  .f = piecepackr::grid.piece,
   cfg = NULL,
   envir = NULL,
   n_transitions = 0L,
   n_pauses = 1L,
   fps = n_transitions + n_pauses,
+  width = NULL,
+  height = NULL,
+  ppi = NULL,
   new_device = TRUE
 )
 }
@@ -29,6 +33,8 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{...}{Arguments to \code{pmap_piece}}
 
+\item{.f}{Low level graphics function to use e.g. \code{grid.piece}, \code{piece3d}, or \code{piece}.}
+
 \item{cfg}{A piecepackr configuration list}
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
@@ -39,6 +45,13 @@ how many transition frames to add between moves.}
 \item{n_pauses}{Integer, how many paused frames per completed move.}
 
 \item{fps}{Double, frames per second.}
+
+\item{width}{Width of animation (in inches).  Inferred by default.}
+
+\item{height}{Height of animation (in inches).  Inferred by default.}
+
+\item{ppi}{Resolution of animation in pixels per inch.
+By default set so image max 600 pixels wide or tall.}
 
 \item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
 }
