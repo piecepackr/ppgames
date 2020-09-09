@@ -1,5 +1,5 @@
 language: r
-# cache: packages
+cache: packages
 r:
     - release
     - devel 
@@ -20,6 +20,8 @@ addons:
     apt:
        packages:
             - cargo
+            - libgl1-mesa-dev 
+            - libglu1-mesa-dev
             - libmagick++-dev
             - lmodern
             - texlive-math-extra
