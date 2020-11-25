@@ -7,6 +7,10 @@ cat(sprintf("\\documentclass[%spaper,onecolumn]{article}\n",
 % \usepackage{fancyhdr}
 \usepackage{enumitem}
 
+%% begin.rcode metadata, echo=FALSE, results='asis'
+pdf_metadata(game)
+%% end.rcode
+
 \setcounter{secnumdepth}{0}
 % \setlist{noitemsep} % \setlist{nosep}
 % \pagenumbering{gobble}

@@ -7,9 +7,12 @@ cat(sprintf("\\documentclass[%spaper]{leaflet}\n",
 % \usepackage{fancyhdr}
 \usepackage{etoolbox}
 
+%% begin.rcode metadata, echo=FALSE, results='asis'
+pdf_metadata(game)
+%% end.rcode
+
 \setcounter{secnumdepth}{0}
 \pagenumbering{gobble}
-
 
 %% begin.rcode title, echo=FALSE, results='asis'
 cat(sprintf("\\title{%s}", title(game)))

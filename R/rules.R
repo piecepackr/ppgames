@@ -173,7 +173,7 @@ game_credits <- function(game) {
     license_text <- sprintf("\\href{%s}{%s}", license_urls[[license]], license_names[[license]])
     copyright <- paste0("\\copyright~", info$copyright, "\\newline")
     license <- paste(copyright, "Some Rights Reserved.\\newline",
-                     paste("Licensed under the", license_text, "\\newline"),
+                     paste("License: ", license_text, "\\newline"),
                      collapse="\n")
     cat(paste(c("\\begin{description}",
                 sprintf("\\item[%s] %s", names(items), as.character(items)),
@@ -190,17 +190,66 @@ game_length <- function(gl) {
 }
 
 get_game_info <- function(game) {
+    if (is.null(game)) return(list())
     game <- gsub("-", "_", game)
     game_info[[game]]
 }
 
 title <- function(game) {
+    if (is.null(game)) return(NULL)
     info <- get_game_info(game)
     if (is.null(info$title)) {
         stringr::str_to_title(gsub("_|-", " ", game))
     } else {
         info$title
     }
+}
+author <- function(game) {
+    info <- get_game_info(game)
+    if (is.null(info$author)) {
+        "Trevor L. Davis"
+    } else {
+        info$author
+    }
+}
+keywords <- function(game) {
+    info <- get_game_info(game)
+    if (is.null(info$author)) {
+        "piecepack,board games"
+    } else {
+        info$keywords
+    }
+}
+subject <- function(game) {
+    info <- get_game_info(game)
+    if (is.null(info$subject)) {
+        paste0("Learn how to play the board game ", title(game), ".")
+    } else {
+        info$subject
+    }
+}
+
+pdf_key <- function(name, value) {
+    if (is.null(value)) {
+        NULL
+    } else {
+        paste0(name, "={", value, "},%")
+    }
+}
+
+pdf_metadata <- function(game = NULL, ...,
+                         pdftitle = NULL, pdfauthor = NULL,
+                         pdfsubject = NULL, pdfkeywords = NULL) {
+    if (is.null(pdftitle)) pdftitle <- title(game)
+    if (is.null(pdfauthor)) pdfauthor <- author(game)
+    if (is.null(pdfsubject)) pdfsubject <- subject(game)
+    if (is.null(pdfkeywords)) pdfkeywords <- keywords(game)
+cat(paste0("\\hypersetup{", pdf_key("pdftitle", pdftitle)),
+    pdf_key("pdfauthor", pdfauthor),
+    pdf_key("pdfcreator", paste0("ppgames (v", packageVersion("ppgames"), ")")),
+    pdf_key("pdfsubject", pdfsubject),
+    pdf_key("pdfkeywords", pdfkeywords),
+    "}", sep = "\n")
 }
 
 external_links <- function(game, list_type = "itemize") {
