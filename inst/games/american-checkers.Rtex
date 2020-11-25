@@ -19,7 +19,7 @@ pmap_piece(df_american_checkers(), cfg=cfg, default.units="in")
 
 \subsection{The Order Of Play}
 
-Decide by random selection which player will make the first move.\footnote{Traditional methods are 1) a coin toss or 2) one player hiding a piece from each player in their hands and having the other player pick a hand (the player whose piece is in that hand will make the first move).}  In subsequent games alternate which player makes the first move.  Within a game players alternate moves, during their move each player's moves a single piece.
+Decide by random selection which player will make the first move.\footnote{Traditional methods are 1) a coin toss or 2) one player hiding a piece from each player in their hands and having the other player pick a hand (the player whose piece is in that hand will make the first move).}  In subsequent games alternate which player makes the first move.  Within a game players alternate moves, during their move each player moves a single piece.
 
 \subsection{The Moves}
 
