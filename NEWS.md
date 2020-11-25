@@ -64,6 +64,12 @@ Bug fixes and minor improvements
 
 * Tiles are now spread out more in ``df_desfases()`` and its "scale factor" attribute has been set to 3. 
 
+* ``save_ruleset() / save_pamphlet()`` can now set PDF metadata (Title, Author, Subject, Keywords, Creator) (#69)
+
+* ``save_ruleset`` supports ruleset generation for:
+
+    - alquerque
+
 Breaking Changes
 ----------------
 
