@@ -14,15 +14,17 @@ A player wins if they capture all of the other player's coins or if the other pl
 
 Make an 5\texttimes 5 board with the backs of 4 tiles (using the lines/edges instead of the square cells).  Give each player all the coins of two suits\footnote{For example ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits.} and place them on the ``points'' (where lines/edges intersect) of the board as in Figure \ref{fig:alquerque-starting-diagram}.  
 
-%% begin.rcode starting-diagram, fig.width=6, fig.height=6, out.extra="trim=2cm 2cm 2cm 2cm", out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Alquerque starting diagram", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=5, fig.height=5, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Alquerque starting diagram", echo=FALSE
 cfg <- gk$get_piecepacks(1)[[1]]
+pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in"))) # crop effect
 pmap_piece(df_alquerque(), cfg=cfg, default.units="in")
 %% end.rcode
 
 The points of an Alquerque board are connected to each other by the orthogonal lines/edges of the board.  Additionally the central point of each tile is connected diagonally to the corner points of that tile (and vice versa).  See Figure \ref{fig:alquerque-network} for the points and connections of the Alquerque board.
 
-%% begin.rcode network, fig.width=6, fig.height=6, out.extra="trim=2cm 2cm 2cm 2cm", out.width="1.0\\linewidth", out.height="1.0\\linewidth", fig.cap="Alquerque network", echo=FALSE
+%% begin.rcode network, fig.width=5, fig.height=5, out.width="1.0\\linewidth", out.height="1.0\\linewidth", fig.cap="Alquerque network", echo=FALSE
 df_tile <- tibble(piece_side="tile_back", x = c(2, 2, 4, 4), y = c(2, 4, 2, 4))
+pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in"))) # crop effect
 pmap_piece(df_tile, cfg=cfg, default.units="in")
 grid.segments(x0 = c(1:5, rep(1, 5), 1, 1, 3, 3, 5, 5),
               y0 = c(rep(1, 5), 1:5, 3, 1, 1, 1, 1, 3),
