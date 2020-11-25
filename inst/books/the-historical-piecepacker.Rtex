@@ -1,9 +1,14 @@
 %% begin.rcode documentclass, echo=FALSE, results='asis'
-% cat(sprintf("\\documentclass[%spaper, onecolumn]{report}\n", tolower(size))) # book
+cat(sprintf("\\documentclass[%spaper, onecolumn]{report}\n", tolower(size))) # book
 %% end.rcode
 
 \usepackage[colorlinks]{hyperref}
 \usepackage{fancyhdr}
+
+%% begin.rcode metadata, echo=FALSE, results='asis'
+pdf_metadata(pdftitle = "The Historical Piecepacker",
+             pdfsubject = "Learn how to play historical board games using the piecepack game system.")
+%% end.rcode
 
 % Add Copyright Page
 \def\secondpage{\clearpage\null\vfill
@@ -11,7 +16,7 @@
 \begin{minipage}[b]{0.9\textwidth}
 \footnotesize\raggedright
 \setlength{\parskip}{0.5\baselineskip}
-Copyright \copyright 2016--2019 Trevor L Davis\par
+Copyright \copyright 2016--2020 Trevor L. Davis\par
 Some Rights Reserved.\par
 This collective work is released under a \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
 \end{minipage}
@@ -29,7 +34,7 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \begin{document}
 %\frontmatter
 \title{The Historical Piecepacker}
-\author{Trevor L Davis}
+\author{Trevor L. Davis}
 \maketitle
 \tableofcontents
 \listoffigures
@@ -46,7 +51,12 @@ This collective work is released under a \href{https://creativecommons.org/licen
 
 \part{Game Rules}
 
-\chapter{Traditional Board Games}
+\chapter{Alquerque Games}
+
+\include{alquerque-chapter}
+% \include{awithlaknannai-chapter}
+
+\chapter{Other Traditional Board Games}
 
 \include{american-checkers-chapter}
 \include{four-field-kono-chapter}

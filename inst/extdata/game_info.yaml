@@ -13,6 +13,18 @@ alice_chess:
     chessvariants: "other.dir/alice.html"
     wikipedia: "Alice_Chess"
     copyright: "2019 Trevor L. Davis"
+alquerque:
+    players: 2
+    length: [10, 20]
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Jessica Eccles and Trevor L. Davis"
+    copyright: "2020 Trevor L. Davis"
+    version: "1.0"
+    version_date: "2020-11-24"
+    ppwiki: "Alquerque"
+    boardgamegeek: "11464"
+    cyningstan: "17"
+    wikipedia: "Alquerque"
 american_checkers:
     title: "(American) Checkers"
     players: 2
@@ -20,14 +32,25 @@ american_checkers:
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Mark A. Biggar and Trevor L. Davis"
     copyright: "2019 Trevor L. Davis"
-    version: "1.2"
-    version_date: "2019-12-19"
+    version: "1.2.1"
+    version_date: "2020-11-24"
     ppwiki: "Checkers"
     boardgamegeek: "2083"
     cyningstan: "399"
     wikipedia: "English_draughts"
     external_links:
         WCDF: "http://www.wcdf.net/rules.htm"
+awithlaknannai:
+    title: "Awithlaknannai"
+    players: 2
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    copyright: "2020 Trevor L. Davis"
+    version: "1.0"
+    version_data: "2020-11-21"
+    boardgamegeek: 13766
+    cyningstan: "113"
+    wikipedia: "Awithlaknannai_Mosona"
 backgammon:
     players: 2
     length: [5, 60]
@@ -56,7 +79,7 @@ chaturaji:
 cribbage:
     players: 2
     length: [10, 180]
-    equipment: "one standard piecepack and one deck of playing cards"
+    equipment: "one standard piecepack, one deck of playing cards"
     designer: "Traditional (Sir John Suckling), adapted by Trevor L. Davis"
     version: "2.0"
     version_date: "2019-05-16"
@@ -113,6 +136,15 @@ nine_mens_morris:
     cyningstan: "12"
     wikipedia: "Nine_men%27s_morris"
     copyright: "2019 Trevor L. Davis"
+quirky_qirkat:
+    title: "Qirky Qirkat"
+    players: 2
+    equipment: "one standard piecepack, one set of piecepack matchsticks"
+    designer: "Trevor L. Davis"
+    ppwiki: "QirkyQirkat"
+    copyright: "2020 Trevor L. Davis"
+    version: "0.1"
+    version_date: "2020-11-21"
 tablut:
     players: 2
     length: 45
