@@ -4,7 +4,7 @@ set_knitr_opts(game)
 
 \subsection{Description}
 
-Alquerque (aka Qirkat) is a traditional board game over a thousand years old\footnote{It is mentioned in the in Abu al-Faraj al-Isfahani's \emph{Book of Songs} (10th century) and its rules are contained in Alfonso X's \emph{Libro de los juegos} (1283)} and considered to be an ancestor of checkers (aka draughts) and fox \& geese.
+Alquerque (aka Qirkat) is a traditional board game over a thousand years old\footnote{It is mentioned in Abu al-Faraj al-Isfahani's \emph{Book of Songs} (10th century) and its rules are contained in Alfonso X's \emph{Libro de los juegos} (1283)} and considered to be an ancestor of checkers (aka draughts) and fox \& geese.
 
 \subsection{Objective}
 
@@ -20,7 +20,7 @@ pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in"))) # crop effect
 pmap_piece(df_alquerque(), cfg=cfg, default.units="in")
 %% end.rcode
 
-The points of an Alquerque board are connected to each other by the orthogonal lines/edges of the board.  Additionally the central point of each tile is connected diagonally to the corner points of that tile (and vice versa).  See Figure \ref{fig:alquerque-network} for the points and connections of the Alquerque board.
+The points of an Alquerque board are connected to each other by the orthogonal lines/edges of the board.  Additionally the central point of each tile is connected diagonally to the corner points of that tile (and vice versa).\footnote{If you own a set of Piecepack Matchsticks (\url{http://ludism.org/ppwiki/PiecepackMatchsticks}) you may wish to mark these diagonal connections with the ``2'' sticks.}  See Figure \ref{fig:alquerque-network} for the points and connections of the Alquerque board.
 
 %% begin.rcode network, fig.width=5, fig.height=5, out.width="1.0\\linewidth", out.height="1.0\\linewidth", fig.cap="Alquerque network", echo=FALSE
 df_tile <- tibble(piece_side="tile_back", x = c(2, 2, 4, 4), y = c(2, 4, 2, 4))
