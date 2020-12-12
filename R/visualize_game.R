@@ -184,6 +184,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         function(df, ..., scale = 1) {
             df$scale <- if (has_name(df, "scale")) scale * df$scale else scale
             rgl::rgl.clear()
+            rgl::points3d(x = rep(c(0, xmax), 2), y = rep(c(0, ymax), each = 2), z = 0, alpha = 0)
             pmap_piece(df, piece3d, ..., envir = envir)
             Sys.sleep(2)
             rgl::rgl.snapshot(f, top = FALSE)
@@ -192,20 +193,26 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         }
     } else if (identical(.f, piece)) {
         if (!requireNamespace("rayrender")) stop("You need to install the suggested package 'rayrender'")
-        function(df, ..., scale = 1) {
+        function(df, ..., scale = 1,
+                 fov = 20, samples=100, lookat = NULL, lookfrom = NULL, clamp_value = Inf,
+                 table = NA) {
             df$scale <- if (has_name(df, "scale")) scale * df$scale else scale
             df$x <- df$x + xoffset
             df$y <- df$y + yoffset
             l <- pmap_piece(df, piece, ..., envir = envir)
-            table <- rayrender::sphere(z=-1e3, radius=1e3, material=rayrender::diffuse(color="green"))
-            light <- rayrender::sphere(x=0.5*width/ppi, y=-4, z=max(1.5*m+1, 20),
-                                       material=rayrender::light(intensity=420))
-            table <- rayrender::add_object(table, light)
+            if (all(is.na(table))) {
+                table <- rayrender::sphere(z=-1e3, radius=1e3, material=rayrender::diffuse(color="green"))
+                light <- rayrender::sphere(x=0.5*width/ppi, y=-4, z=max(1.5*m+1, 20),
+                                           material=rayrender::light(intensity=420))
+                table <- rayrender::add_object(table, light)
+            }
             scene <- Reduce(rayrender::add_object, l, init=table)
+            if (is.null(lookat)) lookat <- c(0.5*width/ppi, 0.5*height/ppi, 0)
+            if (is.null(lookfrom)) lookfrom <- c(0.5*width/ppi, -7, 1.5*m)
             rayrender::render_scene(scene,
-                                    lookat = c(0.5*width/ppi, 0.5*height/ppi, 0),
-                                    lookfrom = c(0.5*width/ppi, -7, 1.5*m),
-                                    width = width, height = height, samples=200)
+                                    fov = fov, samples = samples,
+                                    lookat = lookat, lookfrom = lookfrom, clamp_value = clamp_value,
+                                    width = width, height = height)
         }
     } else {
         .f
