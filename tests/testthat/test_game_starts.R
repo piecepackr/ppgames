@@ -37,6 +37,7 @@ test_that("game diagrams work as expected", {
                   cat_piece(mzero(df_tablut())))
     verify_output("../text_diagrams/triactor.txt",
                   cat_piece(mzero(df_triactor())))
+    verify_output("../text_diagrams/tula.txt", cat_piece(df_tula()))
     verify_output("../text_diagrams/turkish_draughts.txt", cat_piece(df_turkish_draughts()))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
     verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))

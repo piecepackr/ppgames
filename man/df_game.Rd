@@ -18,6 +18,7 @@
 \alias{df_the_in_crowd}
 \alias{df_san_andreas}
 \alias{df_triactor}
+\alias{df_tula}
 \alias{df_wormholes}
 \alias{df_alice_chess}
 \alias{df_chaturaji}
@@ -76,6 +77,8 @@ df_the_in_crowd()
 df_san_andreas()
 
 df_triactor(seed = NULL, cfg2 = "playing_cards_expansion")
+
+df_tula(seed = NULL, tiles = NULL)
 
 df_wormholes()
 
@@ -164,47 +167,47 @@ Here is some more information about the various games:
   \item{Alice Chess}{Popular chess variant invented by V. R. Parton.
                      See \url{https://en.wikipedia.org/wiki/Alice_chess}.}
  \item{Alien City}{Awarding winning game by Michael Schoessow that is traditionally played with both a piecepack
-                   and icehouse pieces.  See \url{http://www.ludism.org/ppwiki/AlienCity}.}
+                   and icehouse pieces.  See \url{https://www.ludism.org/ppwiki/AlienCity}.}
  \item{Alquerque}{Traditional game also known as Qirkat.  See \url{https://en.wikipedia.org/wiki/Alquerque}.}
  \item{Awithlaknannai Mosona}{Traditional Zuni Alquerque variant.
                               See \url{https://en.wikipedia.org/wiki/Awithlaknannai_Mosona}.}
- \item{Backgammon}{One of the oldest board games.  See \url{http://www.ludism.org/ppwiki/Backgammon}.}
+ \item{Backgammon}{One of the oldest board games.  See \url{https://www.ludism.org/ppwiki/Backgammon}.}
  \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
                      that won the 2001 8x8 Game Design Competition.
                      See \url{https://en.wikipedia.org/wiki/Breakthrough_(board_game)}.}
  \item{Cell Management}{Solitaire game for the piecepack by Mark Goadrich.
-                        See \url{http://www.ludism.org/ppwiki/CellManagement}.}
+                        See \url{https://www.ludism.org/ppwiki/CellManagement}.}
  \item{Chaturaji}{An old 4-player chess variant.
-                  See \url{http://www.ludism.org/ppwiki/Chaturaji}.}
+                  See \url{https://www.ludism.org/ppwiki/Chaturaji}.}
  \item{(American) Checkers}{A traditional board game also known as \dQuote{(English) Draughts}.
                  First adapted to the piecepack by Mark A. Biggar.
-                 See \url{http://www.ludism.org/ppwiki/Checkers}.}
+                 See \url{https://www.ludism.org/ppwiki/Checkers}.}
  \item{(International) Chess}{Very popular board game first adapted to the piecepack by Ron Hale-Evans.
-                              See \url{http://www.ludism.org/ppwiki/Chess}.}
+                              See \url{https://www.ludism.org/ppwiki/Chess}.}
  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
                  but one can use a piecepack as a cribbage board instead.
-                 See \url{http://www.ludism.org/ppwiki/Cribbage}.}
+                 See \url{https://www.ludism.org/ppwiki/Cribbage}.}
  \item{Crossings}{An abstract invented by Robert Abbot.
                   See \url{https://en.wikipedia.org/wiki/Crossings_(game)}}
  \item{Desfases}{Game by Antonio Recuenco Muñoz.
                  Runner-up for best game in the eighth community piecepack game design contest.
-                 See \url{http://www.ludism.org/ppwiki/Desfases}.}
+                 See \url{https://www.ludism.org/ppwiki/Desfases}.}
  \item{Everest}{Game by Mark A. Biggar that features a Roborally programmed movement system.
-                See \url{http://www.ludism.org/ppwiki/Everest}.}
+                See \url{https://www.ludism.org/ppwiki/Everest}.}
  \item{Four Field Kono}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
-                        See \url{http://www.ludism.org/ppwiki/FourFieldKono}.}
+                        See \url{https://www.ludism.org/ppwiki/FourFieldKono}.}
  \item{Four Seasons Chess}{A traditional four person chess variant recorded in \emph{Libro del Acedrex}.
                            See \url{https://www.chessvariants.com/historic.dir/4seiz.html}.}
  \item{Froggy Bottom}{Game by Clay Blankenship.
-                      See \url{http://www.ludism.org/ppwiki/FroggyBottom}.}
+                      See \url{https://www.ludism.org/ppwiki/FroggyBottom}.}
  \item{Fujisan}{Popular solitaire game for the piecepack by James \dQuote{Kyle} Droscha.
-                See \url{http://www.ludism.org/ppwiki/Fuji-san}.}
+                See \url{https://www.ludism.org/ppwiki/Fuji-san}.}
  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
-                 See \url{http://www.ludism.org/ppwiki/IceFloe}.}
+                 See \url{https://www.ludism.org/ppwiki/IceFloe}.}
  \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.
-              See \url{http://www.ludism.org/ppwiki/Japan}.}
+              See \url{https://www.ludism.org/ppwiki/Japan}.}
  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
-                  See \url{http://www.ludism.org/ppwiki/LeyLines}.}
+                  See \url{https://www.ludism.org/ppwiki/LeyLines}.}
  \item{Lines of Action}{An abstract designed by Claude Soucie.
                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
  \item{Nine Men's Morris}{Traditional board game.
@@ -212,21 +215,23 @@ Here is some more information about the various games:
  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
                      Pac-Man, designed for Namco by Toru Iwatani}
  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
-       See \url{http://www.ludism.org/ppwiki/PlansOfAction}.}
+       See \url{https://www.ludism.org/ppwiki/PlansOfAction}.}
  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.
-                   See \url{http://www.ludism.org/ppwiki/Relativity}.}
+                   See \url{https://www.ludism.org/ppwiki/Relativity}.}
  \item{Salta}{Two-player abstract invented in 1899 by Konrad Heinrich Büttgenbach.
               See \url{https://en.wikipedia.org/wiki/Salta_(game)}.}
  \item{San Andreas}{Piecepack game about the big earthquake that will hit California.
-                   See \url{http://www.ludism.org/ppwiki/SanAndreas}.}
+                   See \url{https://www.ludism.org/ppwiki/SanAndreas}.}
  \item{Shogi}{AKA \dQuote{Japanese chess} is a major chess variant.
-              See \url{http://www.ludism.org/ppwiki/Shogi}.}
+              See \url{https://www.ludism.org/ppwiki/Shogi}.}
  \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
-               See \url{http://www.ludism.org/ppwiki/Tablut}.}
+               See \url{https://www.ludism.org/ppwiki/Tablut}.}
  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
-       See \url{http://www.ludism.org/ppwiki/TheInCrowd}.}
+       See \url{https://www.ludism.org/ppwiki/TheInCrowd}.}
  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
-                 See \url{http://www.ludism.org/ppwiki/Triactor}.}
+                 See \url{https://www.ludism.org/ppwiki/Triactor}.}
+ \item{Tula}{Solitaire piecepack game by James \dQuote{Kyle} Droscha.
+             See \url{https://www.ludism.org/ppwiki/Tula}.}
  \item{Turkish Draughts}{AKA \dQuote{Dama} is a traditional checkers variant played in the Mediterranean.
                          See \url{https://en.wikipedia.org/wiki/Turkish_draughts}.}
  \item{Twelve Men's Morris}{Traditional two-player abstract.
@@ -234,8 +239,8 @@ Here is some more information about the various games:
  \item{Ultima}{AKA \dQuote{Baroque chess}, a chess variant by Robert Abbott.
                See \url{https://en.wikipedia.org/wiki/Baroque_chess}.}
  \item{Xiangqi}{AKA \dQuote{Chinese chess}, a major chess variant.
-                See \url{http://www.ludism.org/ppwiki/Xiangqi}.}
+                See \url{https://www.ludism.org/ppwiki/Xiangqi}.}
  \item{Wormholes}{Piecepack game by Marty and Ron Hale-Evans.
-                  See \url{http://www.ludism.org/ppwiki/Wormholes}.}
+                  See \url{https://www.ludism.org/ppwiki/Wormholes}.}
 }
 }

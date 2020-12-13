@@ -9,6 +9,7 @@ New features
   - ``df_alquerque()``
   - ``df_awithlaknannai_mosona()``
   - ``df_japan()``
+  - ``df_tula()``
 
 * Portable Piecepack Notation enhancements:
 
