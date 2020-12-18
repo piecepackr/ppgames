@@ -1,4 +1,4 @@
-ppgames 0.5.0
+ppgames 0.5.1
 =============
 
 New features
