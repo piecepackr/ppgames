@@ -19,6 +19,7 @@ addons:
     apt:
        packages:
             - cargo
+            - libgit2-dev
             - libgl1-mesa-dev 
             - libglu1-mesa-dev
             - libmagick++-dev
