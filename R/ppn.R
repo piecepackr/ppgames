@@ -155,7 +155,7 @@ get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
 
 initialize_df <- function(df) {
     df <- tibble::rowid_to_column(df, "id")
-    if (!has_name(df, "angle")) df$angle <- 0
+    if (!hasName(df, "angle")) df$angle <- 0
     df
 }
 

@@ -135,23 +135,22 @@ get_tweenr_df <- function(df, ...) {
                  .data$scale, .data$alpha)
     as.data.frame(df)
 }
-#' @importFrom utils packageVersion
+#' @importFrom utils hasName packageVersion
 tweenr_reducer <- function(n_transitions = 0L, n_pauses = 1L) {
     function(df1, df2) {
         df <- tween_state(df1, df2, n_transitions)
         keep_state(df, n_pauses)
     }
 }
-has_name <- function(df, name) name %in% names(df)
 tween_state <- function(df1, df2, n_transitions = 0L) {
     # https://github.com/thomasp85/tweenr/issues/44
-    if (has_name(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+    if (hasName(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
         n_transitions <- n_transitions - 1L
     tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2L,
                               id = .data$id, enter = to_zero, exit = to_zero)
 }
 keep_state <- function(df, n_pauses = 1L) {
-    if (has_name(df, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+    if (hasName(df, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
         n_pauses <- n_pauses - 1L
     tweenr::keep_state(df, nframes = n_pauses)
 }
@@ -172,7 +171,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         function(df, ..., scale = 1) {
             df$x <- df$x + xoffset
             df$y <- df$y + yoffset
-            df$scale <- if (has_name(df, "scale")) scale * df$scale else scale
+            df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
             grid::grid.newpage()
             pmap_piece(df, default.units = "in", ..., envir = envir)
             annotate_plot(annotate, xmax, ymax, xoffset, yoffset)
@@ -182,7 +181,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         if (Sys.which("wmctrl") != "") system(paste0("wmctrl -r RGL -e 0,-1,-1,", width, ",", height))
         f <- tempfile(fileext=".png")
         function(df, ..., scale = 1) {
-            df$scale <- if (has_name(df, "scale")) scale * df$scale else scale
+            df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
             rgl::rgl.clear()
             rgl::points3d(x = rep(c(0, xmax), 2), y = rep(c(0, ymax), each = 2), z = 0, alpha = 0)
             pmap_piece(df, piece3d, ..., envir = envir)
@@ -196,7 +195,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         function(df, ..., scale = 1,
                  fov = 20, samples=100, lookat = NULL, lookfrom = NULL, clamp_value = Inf,
                  table = NA) {
-            df$scale <- if (has_name(df, "scale")) scale * df$scale else scale
+            df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
             df$x <- df$x + xoffset
             df$y <- df$y + yoffset
             l <- pmap_piece(df, piece, ..., envir = envir)
@@ -217,8 +216,6 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
     } else {
         .f
     }
-
-
 }
 
 #' Plot game move
