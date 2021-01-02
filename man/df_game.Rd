@@ -5,6 +5,7 @@
 \alias{df_game}
 \alias{df_alien_city}
 \alias{df_cell_management}
+\alias{df_chinese_checkers}
 \alias{df_desfases}
 \alias{df_everest}
 \alias{df_froggy_bottom}
@@ -52,6 +53,8 @@
 df_alien_city(seed = NULL, tiles = NULL)
 
 df_cell_management(seed = NULL)
+
+df_chinese_checkers()
 
 df_desfases(seed = NULL, tiles = NULL, dice = NULL)
 
@@ -187,6 +190,8 @@ Here is some more information about the various games:
                  See \url{https://www.ludism.org/ppwiki/Checkers}.}
  \item{(International) Chess}{Very popular board game first adapted to the piecepack by Ron Hale-Evans.
                               See \url{https://www.ludism.org/ppwiki/Chess}.}
+ \item{Chinese Checkers}{A port of Chinese Checkers by Mark A. Biggar.
+                         See \url{https://www.ludism.org/ppwiki/ChineseCheckers}.}
  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
                  but one can use a piecepack as a cribbage board instead.
                  See \url{https://www.ludism.org/ppwiki/Cribbage}.}
@@ -231,6 +236,8 @@ Here is some more information about the various games:
                See \url{https://www.ludism.org/ppwiki/Tablut}.}
  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
        See \url{https://www.ludism.org/ppwiki/TheInCrowd}.}
+ \item{Tower of Babel}{Solitaire piecepack game by Mark A. Biggar.
+       See \url{https://www.ludism.org/ppwiki/TowerOfBabel}.}
  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
                  See \url{https://www.ludism.org/ppwiki/Triactor}.}
  \item{Tula}{Solitaire piecepack game by James \dQuote{Kyle} Droscha.

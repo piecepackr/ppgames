@@ -11,6 +11,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/alquerque.txt", cat_piece(df_alquerque()))
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
+    verify_output("../text_diagrams/chinese_checkers.txt", cat_piece(df_chinese_checkers()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/froggy_bottom.txt", cat_piece(df_froggy_bottom()))
     verify_output("../text_diagrams/ice_floe.txt", cat_piece(df_ice_floe()))

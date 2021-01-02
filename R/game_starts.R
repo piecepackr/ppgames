@@ -25,6 +25,8 @@
 #'                  See \url{https://www.ludism.org/ppwiki/Checkers}.}
 #'  \item{(International) Chess}{Very popular board game first adapted to the piecepack by Ron Hale-Evans.
 #'                               See \url{https://www.ludism.org/ppwiki/Chess}.}
+#'  \item{Chinese Checkers}{A port of Chinese Checkers by Mark A. Biggar.
+#'                          See \url{https://www.ludism.org/ppwiki/ChineseCheckers}.}
 #'  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
 #'                  but one can use a piecepack as a cribbage board instead.
 #'                  See \url{https://www.ludism.org/ppwiki/Cribbage}.}
@@ -178,6 +180,17 @@ df_cell_management <- function(seed = NULL) {
     df_p <- tibble(piece_side = "pawn_face", suit = 1:2, x = x0+c(4,5), y = y0)
 
     bind_rows(df_t, df_tm, df_c, df_p)
+}
+
+#' @rdname df_game
+#' @export
+df_chinese_checkers <- function() {
+    df_t <- df_rect_board_tiles(8, 8)
+    df_c <- tibble(piece_side = "coin_back",
+                   x = c(1:3, 1:2, 1, 6:8, 7:8, 8, 8, 7:8, 6:8, 1, 1:2, 1:3),
+                   y = c(8,8,8, 7,7, 6, 8,8,8, 7,7, 6, 3, 2,2, 1,1,1, 3, 2,2, 1,1,1),
+                   suit = rep(1:4, each=6), rank = rep(1:6, 4), angle = 0)
+    bind_rows(df_t, df_c)
 }
 
 #' @rdname df_game

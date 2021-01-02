@@ -6,6 +6,7 @@ New features
 
 * New starting board generators for specific games:
 
+  - ``df_chinese_checkers()``
   - ``df_tower_of_babel()``
 
 ppgames 0.5.1
