@@ -35,6 +35,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
     verify_output("../text_diagrams/tablut.txt",
                   cat_piece(mzero(df_tablut())))
+    verify_output("../text_diagrams/tower_of_babel_seed.txt", cat_piece(df_tower_of_babel(seed=42)))
     verify_output("../text_diagrams/triactor.txt",
                   cat_piece(mzero(df_triactor())))
     verify_output("../text_diagrams/tula.txt", cat_piece(df_tula()))

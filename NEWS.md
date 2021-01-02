@@ -1,3 +1,13 @@
+ppgames 0.6.0
+=============
+
+New features
+------------
+
+* New starting board generators for specific games:
+
+  - ``df_tower_of_babel()``
+
 ppgames 0.5.1
 =============
 

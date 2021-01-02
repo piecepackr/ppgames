@@ -17,6 +17,7 @@
 \alias{df_relativity}
 \alias{df_the_in_crowd}
 \alias{df_san_andreas}
+\alias{df_tower_of_babel}
 \alias{df_triactor}
 \alias{df_tula}
 \alias{df_wormholes}
@@ -75,6 +76,8 @@ df_relativity(seed = NULL, coins = NULL)
 df_the_in_crowd()
 
 df_san_andreas()
+
+df_tower_of_babel(seed = NULL, tiles = NULL)
 
 df_triactor(seed = NULL, cfg2 = "playing_cards_expansion")
 

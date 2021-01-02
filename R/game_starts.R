@@ -69,6 +69,8 @@
 #'                See \url{https://www.ludism.org/ppwiki/Tablut}.}
 #'  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
 #'        See \url{https://www.ludism.org/ppwiki/TheInCrowd}.}
+#'  \item{Tower of Babel}{Solitaire piecepack game by Mark A. Biggar.
+#'        See \url{https://www.ludism.org/ppwiki/TowerOfBabel}.}
 #'  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
 #'                  See \url{https://www.ludism.org/ppwiki/Triactor}.}
 #'  \item{Tula}{Solitaire piecepack game by James \dQuote{Kyle} Droscha.
@@ -460,6 +462,22 @@ df_san_andreas <- function() {
            suit = rep(1:4, each=6, length.out=23), rank = rep(1:6, 4, length.out=23))
 }
 
+#' @rdname df_game
+#' @export
+df_tower_of_babel <- function(seed = NULL, tiles = NULL) {
+    set.seed(seed)
+    df_txy <- tibble(piece_side = "tile_back", x = 2, y = 4)
+    if (is.null(tiles)) {
+        df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+    } else {
+        df_tsr <- process_tiles(tiles)
+    }
+    df <- bind_cols(df_txy, df_tsr)
+    df[24, "y"] <- 2
+    df[24, "piece_side"] <- "tile_face"
+    attr(df, "scale_factor") <- 2
+    df
+}
 
 #' @rdname df_game
 #' @export
