@@ -45,10 +45,14 @@
 #'                       See \url{https://www.ludism.org/ppwiki/FroggyBottom}.}
 #'  \item{Fujisan}{Popular solitaire game for the piecepack by James \dQuote{Kyle} Droscha.
 #'                 See \url{https://www.ludism.org/ppwiki/Fuji-san}.}
+#'  \item{Grasshopper}{Two-player Halma variant playable on a draughts board.
+#'                     See \url{http://www.cyningstan.com/game/71/grasshopper}.}
 #'  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
 #'                  See \url{https://www.ludism.org/ppwiki/IceFloe}.}
 #'  \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.
 #'               See \url{https://www.ludism.org/ppwiki/Japan}.}
+#'  \item{Jul-Gonu}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
+#'                         See \url{https://www.ludism.org/ppwiki/JulGonu}.}
 #'  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
 #'                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
 #'  \item{Lines of Action}{An abstract designed by Claude Soucie.

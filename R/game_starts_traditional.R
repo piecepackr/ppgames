@@ -200,6 +200,32 @@ df_four_field_kono <- function() {
 
 #' @rdname df_game
 #' @export
+df_grasshopper <- function() {
+    df_t <- df_rect_board_tiles(8, 8)
+    df_c <- tibble(piece_side = "coin_back",
+                   x = c(5:8, 6:8, 7:8, 8, 1, 1:2, 1:3, 1:4),
+                   y = c(8,8,8,8, 7,7,7, 6,6, 5, 4, 3,3, 2,2,2, 1,1,1,1),
+                   suit = c(1,2,1,2,1,2,1,1,2,1, 3,4,3,3,4,3,4,3,4,3),
+                   rank = c(1,1,2,2,3,3,4,5,4,6, 1,1,2,3,2,4,3,5,4,6),
+                   angle = rep(c(180, 0), each = 10))
+    bind_rows(df_t, df_c)
+}
+
+#' @rdname df_game
+#' @export
+df_jul_gono <- function() {
+    df_t <- df_rect_board_tiles(4, 4)
+    df_c <- tibble(piece_side = "coin_back",
+                   suit = rep(1:2, each = 4),
+                   rank = rep(3:6, 2),
+                   x = c(1:4, 1:4),
+                   y = rep(c(4,1), each = 4),
+                   angle = rep(c(180,0), each = 4))
+    bind_rows(df_t, df_c)
+}
+
+#' @rdname df_game
+#' @export
 df_lines_of_action <- function() {
     df_t <- df_rect_board_tiles(8, 8)
     df_c <- tibble(piece_side = "coin_back",

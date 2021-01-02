@@ -42,6 +42,8 @@
 \alias{textGrob_cribbage_board}
 \alias{df_crossings}
 \alias{df_four_field_kono}
+\alias{df_grasshopper}
+\alias{df_jul_gono}
 \alias{df_lines_of_action}
 \alias{df_nine_mens_morris}
 \alias{df_turkish_draughts}
@@ -128,6 +130,10 @@ df_crossings()
 
 df_four_field_kono()
 
+df_grasshopper()
+
+df_jul_gono()
+
 df_lines_of_action()
 
 df_nine_mens_morris(has_matchsticks = FALSE)
@@ -210,10 +216,14 @@ Here is some more information about the various games:
                       See \url{https://www.ludism.org/ppwiki/FroggyBottom}.}
  \item{Fujisan}{Popular solitaire game for the piecepack by James \dQuote{Kyle} Droscha.
                 See \url{https://www.ludism.org/ppwiki/Fuji-san}.}
+ \item{Grasshopper}{Two-player Halma variant playable on a draughts board.
+                    See \url{http://www.cyningstan.com/game/71/grasshopper}.}
  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
                  See \url{https://www.ludism.org/ppwiki/IceFloe}.}
  \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.
               See \url{https://www.ludism.org/ppwiki/Japan}.}
+ \item{Jul-Gonu}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
+                        See \url{https://www.ludism.org/ppwiki/JulGonu}.}
  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
  \item{Lines of Action}{An abstract designed by Claude Soucie.
