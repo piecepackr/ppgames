@@ -193,7 +193,8 @@ df_chinese_checkers <- function() {
     df_c <- tibble(piece_side = "coin_back",
                    x = c(1:3, 1:2, 1, 6:8, 7:8, 8, 8, 7:8, 6:8, 1, 1:2, 1:3),
                    y = c(8,8,8, 7,7, 6, 8,8,8, 7,7, 6, 3, 2,2, 1,1,1, 3, 2,2, 1,1,1),
-                   suit = rep(1:4, each=6), rank = rep(1:6, 4), angle = 0)
+                   suit = rep(1:4, each=6), rank = rep(1:6, 4),
+                   angle = 45 + rep(c(180, 90, 0, -90), each=6))
     bind_rows(df_t, df_c)
 }
 
