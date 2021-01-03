@@ -13,6 +13,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/chinese_checkers.txt",
                   cat_piece(mzero(df_chinese_checkers())))
+    verify_output("../text_diagrams/evade.txt", cat_piece(df_evade()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/froggy_bottom.txt", cat_piece(df_froggy_bottom()))
     verify_output("../text_diagrams/grasshopper.txt", cat_piece(df_grasshopper()))

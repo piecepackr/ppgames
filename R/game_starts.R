@@ -35,6 +35,8 @@
 #'  \item{Desfases}{Game by Antonio Recuenco Muñoz.
 #'                  Runner-up for best game in the eighth community piecepack game design contest.
 #'                  See \url{https://www.ludism.org/ppwiki/Desfases}.}
+#'  \item{Evade}{Adaption by Mark A. Biggar of a game by Alex Randolph.
+#'                 See \url{https://www.ludism.org/ppwiki/Evade}.}
 #'  \item{Everest}{Game by Mark A. Biggar that features a Roborally programmed movement system.
 #'                 See \url{https://www.ludism.org/ppwiki/Everest}.}
 #'  \item{Four Field Kono}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
@@ -249,6 +251,10 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     attr(df, "scale_factor") <- 3
     df
 }
+
+#' @rdname df_game
+#' @export
+df_evade <- function() df_rect_board_tiles(ncols = 6, nrows = 6)
 
 #' @rdname df_game
 #' @export

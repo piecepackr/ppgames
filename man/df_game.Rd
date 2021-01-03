@@ -7,6 +7,7 @@
 \alias{df_cell_management}
 \alias{df_chinese_checkers}
 \alias{df_desfases}
+\alias{df_evade}
 \alias{df_everest}
 \alias{df_froggy_bottom}
 \alias{df_fujisan}
@@ -59,6 +60,8 @@ df_cell_management(seed = NULL)
 df_chinese_checkers()
 
 df_desfases(seed = NULL, tiles = NULL, dice = NULL)
+
+df_evade()
 
 df_everest()
 
@@ -206,6 +209,8 @@ Here is some more information about the various games:
  \item{Desfases}{Game by Antonio Recuenco Muñoz.
                  Runner-up for best game in the eighth community piecepack game design contest.
                  See \url{https://www.ludism.org/ppwiki/Desfases}.}
+ \item{Evade}{Adaption by Mark A. Biggar of a game by Alex Randolph.
+                See \url{https://www.ludism.org/ppwiki/Evade}.}
  \item{Everest}{Game by Mark A. Biggar that features a Roborally programmed movement system.
                 See \url{https://www.ludism.org/ppwiki/Everest}.}
  \item{Four Field Kono}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.

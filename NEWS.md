@@ -7,6 +7,7 @@ New features
 * New starting board generators for specific games:
 
   - ``df_chinese_checkers()``
+  - ``df_evade()``
   - ``df_grasshopper()``
   - ``df_jul_gono()``
   - ``df_tower_of_babel()``
