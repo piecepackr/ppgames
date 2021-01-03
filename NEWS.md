@@ -8,6 +8,7 @@ New features
 
   - ``df_chinese_checkers()``
   - ``df_evade()``
+  - ``df_iceberg()``
   - ``df_grasshopper()``
   - ``df_jul_gono()``
   - ``df_tower_of_babel()``

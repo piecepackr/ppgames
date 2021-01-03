@@ -11,6 +11,7 @@
 \alias{df_everest}
 \alias{df_froggy_bottom}
 \alias{df_fujisan}
+\alias{df_iceberg}
 \alias{df_ice_floe}
 \alias{df_japan}
 \alias{df_ley_lines}
@@ -68,6 +69,8 @@ df_everest()
 df_froggy_bottom()
 
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
+
+df_iceberg(seed = NULL, tiles = NULL)
 
 df_ice_floe()
 
@@ -223,6 +226,8 @@ Here is some more information about the various games:
                 See \url{https://www.ludism.org/ppwiki/Fuji-san}.}
  \item{Grasshopper}{Two-player Halma variant playable on a draughts board.
                     See \url{http://www.cyningstan.com/game/71/grasshopper}.}
+ \item{Iceberg}{Game by Ken Leyhe.
+                See \url{https://www.ludism.org/ppwiki/Iceberg}.}
  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
                  See \url{https://www.ludism.org/ppwiki/IceFloe}.}
  \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.

@@ -49,6 +49,8 @@
 #'                 See \url{https://www.ludism.org/ppwiki/Fuji-san}.}
 #'  \item{Grasshopper}{Two-player Halma variant playable on a draughts board.
 #'                     See \url{http://www.cyningstan.com/game/71/grasshopper}.}
+#'  \item{Iceberg}{Game by Ken Leyhe.
+#'                 See \url{https://www.ludism.org/ppwiki/Iceberg}.}
 #'  \item{Ice Floe}{Game by Tim Schutz requiring a piecepack and piecepack pyramids.
 #'                  See \url{https://www.ludism.org/ppwiki/IceFloe}.}
 #'  \item{Japan}{Game by Daniel Ajoy and María Fernanda Ausay.
@@ -308,6 +310,22 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
 
 #' @rdname df_game
 #' @export
+df_iceberg <- function(seed = NULL, tiles = NULL) {
+    set.seed(seed)
+    df_txy <- tibble(piece_side = "tile_back",
+                     x = rep(seq(1,9,2), 5),
+                     y = rep(seq(9,1,-2), each=5))
+    df_txy <- df_txy[-13, ]
+    if (is.null(tiles)) {
+        df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+    } else {
+        df_tsr <- process_tiles(tiles)
+    }
+    bind_cols(df_txy, df_tsr)
+}
+
+#' @rdname df_game
+#' @export
 df_ice_floe <- function() {
     df <- tibble(piece_side = "tile_face",
            x = rep(seq(1,9,2), 5),
@@ -541,7 +559,7 @@ df_tula <- function(seed = NULL, tiles = NULL) {
     } else {
         df_tsr <- process_tiles(tiles)
     }
-    df <- bind_cols(df_txy, df_tsr)
+    bind_cols(df_txy, df_tsr)
 }
 
 
