@@ -13,6 +13,12 @@ New features
   - ``df_jul_gono()``
   - ``df_tower_of_babel()``
 
+Bug fixes and minor improvements
+--------------------------------
+
+* Checkers set-up is now "mirrored" (pieces on bottom-left instead of bottom-right)
+  to match traditional Checkers set-up.
+
 ppgames 0.5.1
 =============
 

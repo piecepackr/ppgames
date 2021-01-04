@@ -558,7 +558,7 @@ test_that("move numbers work as expected", {
 })
 
 test_that("move multiple pieces works as expected", {
-    checkers <- read_ppn(system.file("ppn/checkers.ppn", package = "ppgames"))[[1]]
+    checkers <- read_ppn(system.file("ppn/american-checkers.ppn", package = "ppgames"))[[1]]
     verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))
 })
 

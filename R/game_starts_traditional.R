@@ -29,8 +29,8 @@ df_american_checkers <- function() {
     df_c <- tibble(piece_side = "coin_back",
                    suit = rep(1:4, each = 6),
                    rank = rep(1:6, 4),
-                   x = c(1,3,2,4,1,3,  5,7,6,8,5,7,
-                       6,8,5,7,6,8,  2,4,1,3,2,4),
+                   x = c(2,4,1,3,2,4,  6,8,5,7,6,8,
+                       5,7,6,8,5,7,  1,3,2,4,1,3),
                    y = rep(c(8,7,6,8,7,6,3,2,1,3,2,1), each = 2),
                    angle = rep(c(180,0), each = 12))
     bind_rows(df_t, df_c)
