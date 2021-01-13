@@ -1,6 +1,6 @@
 plot_canonical_image <- function(game, gk = game_kit(), file = NULL) {
     game <- gsub("-", "_", game)
-    if (is.null(file)) file <- paste0(game, "_canonical.png")
+    if (is.null(file)) file <- paste0(game, "_canonical.pdf")
     switch(game,
            pass_the_food = {
                cfg <- gk$get_piecepacks(1)[[1]]

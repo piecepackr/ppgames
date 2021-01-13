@@ -90,7 +90,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
     output <- normalizePath(output)
 
     # create canonical image
-    cfile <- file.path(tempdir(), paste0(gsub("-", "_", game), "_canonical.png"))
+    cfile <- file.path(tempdir(), paste0(gsub("-", "_", game), "_canonical.pdf"))
     cwhf <- plot_canonical_image(game, gk, cfile)
 
     wd <- getwd()
