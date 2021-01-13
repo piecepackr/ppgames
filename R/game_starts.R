@@ -63,8 +63,11 @@
 #'                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
 #'  \item{Nine Men's Morris}{Traditional board game.
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
+#'  \item{Pass the Food}{A dexterity game by Trevor L Davis.
+#'                       See \url{https://www.ludism.org/ppwiki/PassTheFood}}
 #'  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
-#'                      Pac-Man, designed for Namco by Toru Iwatani}
+#'                      Pac-Man, designed for Namco by Toru Iwatani.
+#'                      See \url{https://www.ludism.org/ppwiki/Piecepackman}}
 #'  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
 #'        See \url{https://www.ludism.org/ppwiki/PlansOfAction}.}
 #'  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.
@@ -445,6 +448,16 @@ df_roundabout <- function() {
                      suit = c(rep(2, 5), rep(3, 4), rep(1, 6), rep(4, 4)))
 
     bind_rows(df_c, df_p, df_n, df_mav, df_mah, df_m3v, df_m3h)
+}
+
+#' @rdname df_game
+#' @export
+df_pass_the_food <- function() {
+    tibble(piece_side = "tile_face", angle = 0,
+           suit = rep(1:4, each = 6),
+           rank = rep(c(1, 3:6, 2), 4),
+           x = rep(2 * 1:4 - 0.5, each = 6),
+           y = rep(2 * 1:6 - 0.5, 4))
 }
 
 #' @rdname df_game

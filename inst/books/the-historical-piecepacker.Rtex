@@ -10,6 +10,10 @@ pdf_metadata(pdftitle = "The Historical Piecepacker",
              pdfsubject = "Learn how to play historical board games using the piecepack game system.")
 %% end.rcode
 
+%% begin.rcode graphicspath, echo=FALSE, results='asis'
+cat(sprintf("\\graphicspath{{%s/}}", system.file("images", package = "ppgames")))
+%% end.rcode
+
 % Add Copyright Page
 \def\secondpage{\clearpage\null\vfill
 \thispagestyle{empty}

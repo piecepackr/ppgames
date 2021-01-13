@@ -136,6 +136,16 @@ nine_mens_morris:
     cyningstan: "12"
     wikipedia: "Nine_men%27s_morris"
     copyright: "2019 Trevor L. Davis"
+pass_the_food:
+    title: "Pass the Food"
+    players: [1, 2, 3, 4]
+    length: 20
+    equipment: "one standard piecepack"
+    designer: "Trevor L. Davis"
+    version: "0.1"
+    version_date: "2020-01-11"
+    copyright: "2020 Trevor L. Davis"
+    ppwiki: "PassTheFood"
 quirky_qirkat:
     title: "Qirky Qirkat"
     players: 2

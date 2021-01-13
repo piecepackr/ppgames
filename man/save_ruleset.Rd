@@ -23,7 +23,7 @@ save_pamphlet(
 )
 
 save_rulebook(
-  book = "the-historical-piecepacker",
+  book = "The Historical Piecepacker",
   gk = game_kit(),
   output = NULL,
   quietly = TRUE,

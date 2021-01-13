@@ -1,4 +1,3 @@
-context("test make rules")
 gk <- game_kit()
 dir <- tempfile()
 on.exit(unlink(dir))
@@ -18,6 +17,13 @@ test_that("game books work as expected", {
     skip_if(Sys.which("xelatex") == "", "Doesn't have xelatex binary")
 
     output <- file.path(dir, "the-historical-piecepacker.pdf")
-    save_rulebook("the-historical-piecepacker", gk, output)
+    save_rulebook("the historical piecepacker", gk, output)
     expect_true(file.exists(output))
+})
+
+test_that("rule utils work as expected", {
+    expect_equal(clean_n_players(2), "2")
+    expect_equal(clean_n_players(c(2, 4)), "2, 4")
+    expect_equal(clean_n_players(1:4), "1--4")
+    expect_equal(clean_n_players(c(2:4, 6)), "2--4, 6")
 })

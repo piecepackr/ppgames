@@ -16,6 +16,7 @@
 \alias{df_japan}
 \alias{df_ley_lines}
 \alias{df_piecepackman}
+\alias{df_pass_the_food}
 \alias{df_plans_of_action}
 \alias{df_relativity}
 \alias{df_the_in_crowd}
@@ -79,6 +80,8 @@ df_japan(seed = NULL)
 df_ley_lines()
 
 df_piecepackman(seed = NULL, variant = 1)
+
+df_pass_the_food()
 
 df_plans_of_action(seed = NULL, coins = NULL)
 
@@ -240,8 +243,11 @@ Here is some more information about the various games:
                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
  \item{Nine Men's Morris}{Traditional board game.
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
+ \item{Pass the Food}{A dexterity game by Trevor L Davis.
+                      See \url{https://www.ludism.org/ppwiki/PassTheFood}}
  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
-                     Pac-Man, designed for Namco by Toru Iwatani}
+                     Pac-Man, designed for Namco by Toru Iwatani.
+                     See \url{https://www.ludism.org/ppwiki/Piecepackman}}
  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
        See \url{https://www.ludism.org/ppwiki/PlansOfAction}.}
  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.

@@ -9,7 +9,6 @@ others
 raw-data
 tmp
 .*.gif
-.*.png
 .*.pdf
 ^.appveyor.yml$
 ^codecov.yml$

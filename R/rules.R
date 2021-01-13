@@ -39,6 +39,10 @@ set_knitr_opts <- function(name) {
                   fig.lp = paste0("fig:", name, "-"))
 }
 
+clean_game <- function(game) {
+    gsub("_", "-", to_varname(game))
+}
+
 #' Save ruleset and/or rulebook
 #'
 #' \code{save_ruleset} save ruleset of a game,
@@ -56,6 +60,7 @@ set_knitr_opts <- function(name) {
 save_ruleset <- function(game, gk = game_kit(), output = NULL,
                          quietly = TRUE, size = "letter") {
 
+    game <- clean_game(game)
     if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
@@ -79,9 +84,14 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
 save_pamphlet <- function(game, gk = game_kit(), output = NULL,
                           quietly = TRUE, size = "letter") {
 
+    game <- clean_game(game)
     if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
+
+    # create canonical image
+    cfile <- file.path(tempdir(), paste0(gsub("-", "_", game), "_canonical.png"))
+    cwhf <- plot_canonical_image(game, gk, cfile)
 
     wd <- getwd()
     on.exit(setwd(wd))
@@ -125,9 +135,10 @@ knit_game <- function(game, gk, quietly = TRUE) {
 #' @param book Book name
 #' @rdname save_ruleset
 #' @export
-save_rulebook <- function(book = "the-historical-piecepacker", gk = game_kit(), output = NULL,
+save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), output = NULL,
                           quietly = TRUE, size = "letter") {
 
+    book <- clean_game(book)
     if (is.null(output)) output <- paste0(book, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
@@ -150,10 +161,31 @@ save_rulebook <- function(book = "the-historical-piecepacker", gk = game_kit(), 
     invisible(NULL)
 }
 
+clean_fn <- function(cleaned, x) {
+    if (cleaned$prev == -1) # initialize
+        return(list(prev = x, val = as.character(x)))
+    if (near(x - cleaned$prev, 1)) { # sequence
+        if (str_sub(cleaned$val, -2L, -2L) != "-") {
+            return(list(prev = x, val = paste0(cleaned$val, "--", x)))
+        } else {
+            str_sub(cleaned$val, -1L, -1L) <- x
+            cleaned$prev <- x
+            return(cleaned)
+        }
+    }
+    list(prev = x, val = paste0(cleaned$val, ", ", x))
+}
+
+clean_n_players <- function(players) {
+    players <- unique(players)
+    cleaned <- list(prev = -1, val = "")
+    Reduce(clean_fn, players, cleaned)$val
+}
+
 game_data <- function(game) {
     info <- get_game_info(game)
     items <- list()
-    items$Players <- paste(info$players, collapse=", ")
+    items$Players <- clean_n_players(info$players)
     items$Length <- game_length(info$length)
     equipment <- if (is.null(info$equipment)) "one standard piecepack" else info$equipment
     items$Equipment <- equipment

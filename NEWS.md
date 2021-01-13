@@ -11,13 +11,25 @@ New features
   - ``df_iceberg()``
   - ``df_grasshopper()``
   - ``df_jul_gono()``
+  - ``df_pass_the_food()``
   - ``df_tower_of_babel()``
+
+* ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
+
+    - "pass the food"
 
 Bug fixes and minor improvements
 --------------------------------
 
 * Checkers set-up is now "mirrored" (pieces on bottom-left instead of bottom-right)
-  to match traditional Checkers set-up.
+  to match traditional checkers set-up.
+
+Breaking Changes
+----------------
+
+* Interpretation of the ``game`` / ``book`` argument in ``save_ruleset``, ``save_pamphlet``, ``save_rulebook`` now
+  follows similar rules as the ``GameType`` argument in PPN,
+  in particular now use arguments like ``"American Checkers"`` instead of ``"american-checkers"``.
 
 ppgames 0.5.1
 =============
@@ -205,7 +217,7 @@ Bug fixes and minor improvements
   "playing_cards_expansion" and "dual_piecepacks_expansion".
 * Minor improvements to ``save_ruleset()``/``save_rulebook()`` output.  
   In particular in addition to the default "letter" paper size can now specify "A4" output.
-* Improved rulesets for "american-checkers".
+* Improved rulesets for "american checkers".
 
 ppgames 0.2.1
 =============
@@ -261,16 +273,16 @@ ppgames 0.1.0
 * Prototype ruleset/rulebook generators ``save_ruleset`` and ``save_rulebook``
 * ``save_ruleset`` supports ruleset generation for:
 
-    - alice-chess
-    - american-checkers
+    - alice chess
+    - american checkers
     - backgammon
     - cribbage
     - chaturaji
-    - fide-chess
-    - four-field-kono
-    - four-seasons-chess
-    - nine-mens-morris
+    - fide chess
+    - four field kono
+    - four seasons chess
+    - nine mens morris
     - tablut
-    - twelve-mens-morris
-    - ultima-chess
+    - twelve mens morris
+    - ultima chess
     - xiangqi

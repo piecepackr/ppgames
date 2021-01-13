@@ -27,6 +27,7 @@ test_that("game diagrams work as expected", {
                   cat_piece(mzero(df_lines_of_action())))
     verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt",
                   cat_piece(df_nine_mens_morris(has_matchsticks = TRUE)))
+    verify_output("../text_diagrams/pass_the_food.txt", cat_piece(df_pass_the_food()))
     verify_output("../text_diagrams/piecepackmen.txt",
                   cat_piece(df_piecepackman(seed = 42)))
     expect_error(df_piecepackman(seed = 42, variant = 2))

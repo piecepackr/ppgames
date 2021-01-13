@@ -233,11 +233,21 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ...,
                       width = NULL, height = NULL, ppi = 72,
                       bg = "white",  new_device = TRUE) {
 
+    df <- get_df_from_move(game, move)
+    plot_df(df, file = file, annotate = annotate, ...,
+            .f = .f, cfg = cfg, envir = envir,
+            width = width, height = height, ppi = ppi, bg = bg, new_device = new_device)
+    invisible(NULL)
+}
+
+plot_df <- function(df, file = NULL, annotate = TRUE, ...,
+                    .f = piecepackr::grid.piece, cfg = NULL, envir = NULL,
+                    width = NULL, height = NULL, ppi = 72,
+                    bg = "white",  new_device = TRUE) {
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
     envir <- ce$envir
 
-    df <- get_df_from_move(game, move)
     dfr <- range_true(df, cfg = cfg, envir = envir, ...)
     xmax <- dfr$xmax
     ymax <- dfr$ymax
@@ -264,8 +274,9 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ...,
     height <- ppi * height
     plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir, annotate)(df, ...)
     if (!is.null(file)) dev.off()
-    invisible(NULL)
+    invisible(list(width=width, height=height))
 }
+
 
 min2offset <- function(min) {
     if (min < 0.50) {
