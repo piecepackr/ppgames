@@ -69,7 +69,7 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
     on.exit(setwd(wd))
     setwd(tempdir())
 
-    knit_game(game, gk, quietly)
+    knit_game(game, gk, quietly, size)
 
     of <- system.file("extdata/ruleset.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
@@ -97,7 +97,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
     on.exit(setwd(wd))
     setwd(tempdir())
 
-    knit_game(game, gk, quietly)
+    knit_game(game, gk, quietly, size, is_pamphlet = TRUE)
 
     of <- system.file("extdata/pamphlet.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
@@ -116,7 +116,7 @@ knit_chapter <- function(game, gk = game_kit(), quietly = TRUE) {
     on.exit(setwd(wd))
     setwd(tempdir())
 
-    knit_game(game, gk, quietly)
+    knit_game(game, gk, quietly, size)
 
     of <- system.file("extdata/chapter.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
@@ -125,7 +125,7 @@ knit_chapter <- function(game, gk = game_kit(), quietly = TRUE) {
     invisible(NULL)
 }
 
-knit_game <- function(game, gk, quietly = TRUE) {
+knit_game <- function(game, gk, quietly = TRUE, size = "letter", is_pamphlet = FALSE) {
     game_files <- list.files(system.file("games", package = "ppgames"),
                              full.names = TRUE)
     of <- game_files[grep(game, game_files)]

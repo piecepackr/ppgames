@@ -142,8 +142,8 @@ pass_the_food:
     length: 20
     equipment: "one standard piecepack"
     designer: "Trevor L. Davis"
-    version: "0.2"
-    version_date: "2021-01-13"
+    version: "0.3"
+    version_date: "2021-01-15"
     copyright: "2021 Trevor L. Davis"
     ppwiki: "PassTheFood"
 quirky_qirkat:

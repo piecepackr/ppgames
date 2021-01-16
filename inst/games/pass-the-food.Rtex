@@ -1,22 +1,25 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+if (is_pamphlet) {
+    knitr::opts_chunk$set(out.width = "0.54\\linewidth", out.height = "0.81\\linewidth", out.extra = "trim = {0 3cm 0 0 }")
+} else {
+    knitr::opts_chunk$set(out.width = "0.40\\linewidth", out.height = "0.54\\linewidth", out.extra = "trim = {0 3cm 0 0 }")
+}
 %% end.rcode
 
 \subsection{Description}
 
-\emph{You and your partner are contestants in a cooking competition and speed is of the essence.  Drawing inspiration from the ``flying fish'' of Pike Place Market and egg tossing competitions you have realized you'll be able to get a speed edge on your competitors if just one of you goes to the pantry and passes the food across the room to their partner.  Soon every team is passing food to stay competitive\ldots}
-
-\emph{Pass the Food} is a dexterity game for the piecepack that involves tossing coins onto tiles.
+\emph{You and your partner are contestants in a cooking competition and speed is of the essence.  Drawing inspiration from egg tossing competitions and the ``flying fish'' of Pike Place Market you realized you'll be able to get a speed advantage over your competitors if one of you goes to the pantry and throws the food across the room to their partner.  Soon every team is throwing food to stay competitive.}
 
 \subsection{Objective}
 
-To score the most points by tossing coins onto combinations of tiles (these represent the most successful combinations of foods in the competition).
+To score the most points by tossing coins onto combinations of tiles (these represent the most successful combinations of foods in the cooking contest).
 
 \subsection{Setup}
 
 Setup the tiles as in Figure \ref{fig:pass-the-food-starting-diagram} with the null tiles near the edge of the table\footnote{The farther away from the edge of the table the more challenging the game will get.  To start out with try a modest six inches or so.}.  Give every player six coins of the same suit.
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=14, out.width="0.35\\linewidth", out.height="0.54\\linewidth", fig.cap="Starting arrangement of tiles", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=9, fig.height=13.5, fig.cap="Starting arrangement of tiles", echo=FALSE
 pushViewport(viewport(width=inch(8), height=inch(12)))
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_pass_the_food(), cfg=cfg, default.units="in")
@@ -49,10 +52,10 @@ Null (garnish) & 0 & 1 & 0 & 0 \\
 \end{tabular}
 \caption{Points scored given how many coins landed on tiles of a particular rank}
 \label{tab:ptf:rank}
-\end{table}
-
-\begin{table}
-\centering
+\vspace{0.5cm}
+% \end{table}
+% \begin{table}
+% \centering
 \begin{tabular}{|l|c|c|c|c|}
 \hline
 Suit & 0 & 1 & 2 & 3+ \\
@@ -69,9 +72,9 @@ Arms (sour) & 0 & 3 & 5 & 0 \\
 
 After all the coins have been thrown we then score based on which suits and ranks of the tiles they landed on\footnote{If a coin is on two tiles assign it to the tile which it covers more.  If there is a dispute and there is no ``neutral'' judge handy then assign the player who last washed dishes as the judge.  If part of the bottom (``face'' or ``back'') of the coin touches the top (``face'') of a tile then it is considered ``on'' the tile.  Before scoring one may flip over coins backs up and re-arrange them squarely on their respective tiles.} using Tables \ref{tab:ptf:rank} and \ref{tab:ptf:suit}.  The judges reward a balance of flavors and ingredients but will reward ``edgier'' dishes a bit more.
 
-Figure \ref{fig:pass-the-food-starting-diagram} shows the end state of an example game.  Suns threw coins on 1 Null, 1 Two, and 2 Three tiles and 2 Suns and 2 Arms tiles for a score of (1 + 5 + 8) + (5 + 5) = 24 points.  Moons threw coins on 1 Null, 1 Four, and 2 Ace tiles and 1 Suns, 1 Moons, 1 Crowns, and 1 Arms tiles for a score of (1 + 5 + 16) + (3 + 2 + 2 + 3) = 32 points.  Clubs threw coins on 2 Two, 1 Three, 1 Four, 1 Five, and 1 Ace tiles and 1 Suns and 5 Moons tiles for a score of (7 + 5 + 5 + 5 + 10) + (3 + 0) = 35 points.  With three of their coins barely ``on'' their tiles, Arms threw coins on 2 Null, 1 Two, and 1 Ace tiles and 3 Suns and 1 Arms tiles for a score of (0 + 5 + 10) + (0 + 3) = 18 points.  
+Figure \ref{fig:pass-the-food-scoring} shows the end state of an example game.  Suns threw coins on one null, one 2, and two 3 tiles $(1 + 5 + 8)$ plus two Suns and two Arms tiles $(5 + 5)$ for a score of $24$ points.  Moons threw coins on one null, one 4, and two ace tiles $(1 + 5 + 16)$ plus one Suns, one Moons, one Crowns, and one Arms tiles $(3 + 2 + 2 + 3)$ for a score of $32$ points.  Crowns threw coins on two 2, one 3, one 4, one 5, and one ace tiles $(7 + 5 + 5 + 5 + 10)$ plus one Suns and five Moons tiles $(3 + 0)$ for a score of $35$ points.  With three of their coins barely ``on'' their tiles, Arms threw coins on two null, one 2, and one ace tiles $(0 + 5 + 10)$ plus three Suns and one Arms tiles $(0 + 3)$ for a score of $18$ points.  
 
-%% begin.rcode scoring, fig.width=10, fig.height=15, out.width="0.36\\linewidth", out.height="0.54\\linewidth", fig.cap="Example game", echo=FALSE
+%% begin.rcode scoring, fig.width=10, fig.height=15, fig.cap="Example game end state", echo=FALSE
 pushViewport(viewport(width=inch(8), height=inch(12)))
 pmap_piece(df_pass_the_food(), cfg=cfg, default.units="in")
 set.seed(12)
@@ -80,3 +83,7 @@ df_coins <- tibble(piece_side = "coin_back", rank = rep(1:6, 4), suit = rep(1:4,
 pmap_piece(df_coins, cfg=cfg, default.units="in")
 upViewport()
 %% end.rcode
+
+\subsection{Strategy}
+
+The scoring system encourages you to spread your coins across suits and ranks: throwing a coin on a new suit or rank is usually worth more than throwing a coin on a previous suit or rank plus part of your score will be zeroed out if you throw more than two coins on a suit or rank.  Additionally, the riskier throws onto the tiles at the back and sides of the board are usually rewarded with higher points.  Be aware of how your opponent is doing and vary the riskiness of your throws accordingly.  Particularly skilled or desperate throwers may even seek to knock opponent's coins onto lower scoring tiles or off the board entirely.
