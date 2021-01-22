@@ -1,7 +1,7 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
 if (is_pamphlet) {
-    knitr::opts_chunk$set(out.width = "0.54\\linewidth", out.height = "0.81\\linewidth", 
+    knitr::opts_chunk$set(out.width = "0.54\\linewidth", out.height = "0.81\\linewidth",
                           out.extra = "trim = {0 3cm 0 0 }")
 } else {
     knitr::opts_chunk$set(out.width = "0.40\\linewidth", out.height = "0.54\\linewidth",
