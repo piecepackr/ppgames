@@ -55,6 +55,9 @@ clean_game <- function(game) {
 #'        If \code{NULL} the function will guess a default.
 #' @param size Paper size (either "letter", or "A4")
 #' @param quietly Whether to hide document compilation output.
+#' @param duplex_edge String specifying the desired duplex printing edge.
+#'       If "short" match the second page along its short edge (second page flipped up, easier to preview on computer)
+#'       and if "long" match along its long edge (second page flipped upside down, usual printer default).
 #' @rdname save_ruleset
 #' @export
 save_ruleset <- function(game, gk = game_kit(), output = NULL,
@@ -82,7 +85,7 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
 #' @rdname save_ruleset
 #' @export
 save_pamphlet <- function(game, gk = game_kit(), output = NULL,
-                          quietly = TRUE, size = "letter") {
+                          quietly = TRUE, size = "letter", duplex_edge = "short") {
 
     game <- clean_game(game)
     if (is.null(output)) output <- paste0(game, ".pdf")
@@ -109,7 +112,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
 
 game_info <- yaml::yaml.load_file(system.file("extdata", "game_info.yaml", package = "ppgames"))
 
-knit_chapter <- function(game, gk = game_kit(), quietly = TRUE) {
+knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter") {
     output <- paste0(game, "-chapter.tex")
 
     wd <- getwd()
@@ -150,7 +153,7 @@ save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), 
     games <- list.files(system.file("games", package = "ppgames"), pattern = ".Rtex")
     games <- gsub(".Rtex", "", games)
     for (game in games) {
-        knit_chapter(game, gk, quietly = quietly)
+        knit_chapter(game, gk, quietly, size)
     }
 
     of <- system.file(sprintf("books/%s.Rtex", book), package = "ppgames")

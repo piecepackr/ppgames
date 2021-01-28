@@ -1,6 +1,7 @@
 %% begin.rcode documentclass, echo=FALSE, results='asis'
-cat(sprintf("\\documentclass[%spaper]{leaflet}\n",
-            tolower(size)))
+tumble <- switch(duplex_edge, short = "notumble", "tumble")
+cat(sprintf("\\documentclass[%s,%spaper]{leaflet}\n",
+            tumble, tolower(size)))
 %% end.rcode
 
 \usepackage[colorlinks]{hyperref}

@@ -19,7 +19,8 @@ save_pamphlet(
   gk = game_kit(),
   output = NULL,
   quietly = TRUE,
-  size = "letter"
+  size = "letter",
+  duplex_edge = "short"
 )
 
 save_rulebook(
@@ -41,6 +42,10 @@ If \code{NULL} the function will guess a default.}
 \item{quietly}{Whether to hide document compilation output.}
 
 \item{size}{Paper size (either "letter", or "A4")}
+
+\item{duplex_edge}{String specifying the desired duplex printing edge.
+If "short" match the second page along its short edge (second page flipped up, easier to preview on computer)
+and if "long" match along its long edge (second page flipped upside down, usual printer default).}
 
 \item{book}{Book name}
 }

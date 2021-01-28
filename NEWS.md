@@ -18,6 +18,11 @@ New features
 
     - "pass the food"
 
+* ``save_pamphlet()`` now supports the argument ``duplex_edge`` (desired two-sided printing edge)
+  that controls how the second page is oriented.  
+  If "short" it is flipped up (the new default, easier to preview on computer) 
+  and if "long" it is flipped down (common two-sided printer setting) (#74).
+
 Bug fixes and minor improvements
 --------------------------------
 
@@ -30,6 +35,8 @@ Breaking Changes
 * Interpretation of the ``game`` / ``book`` argument in ``save_ruleset``, ``save_pamphlet``, ``save_rulebook`` now
   follows similar rules as the ``GameType`` argument in PPN,
   in particular now use arguments like ``"American Checkers"`` instead of ``"american-checkers"``.
+* By default ``save_pamphlet()`` now orients the second page up instead of down.
+  To restore prior behaviour (second page flipped down) manually set the argument ``duplex_edge`` to "long".
 
 ppgames 0.5.1
 =============
