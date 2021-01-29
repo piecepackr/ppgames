@@ -64,6 +64,7 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
                          quietly = TRUE, size = "letter") {
 
     game <- clean_game(game)
+    size <- tolower(size)
     if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
@@ -88,6 +89,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
                           quietly = TRUE, size = "letter", duplex_edge = "short") {
 
     game <- clean_game(game)
+    size <- tolower(size)
     if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
@@ -141,6 +143,7 @@ knit_game <- function(game, gk, quietly = TRUE, size = "letter", is_pamphlet = F
 save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), output = NULL,
                           quietly = TRUE, size = "letter") {
 
+    size <- tolower(size)
     book <- clean_game(book)
     if (is.null(output)) output <- paste0(book, ".pdf")
     if (!exists(output)) file.create(output)

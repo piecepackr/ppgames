@@ -1,5 +1,5 @@
 %% begin.rcode documentclass, echo=FALSE, results='asis'
-cat(sprintf("\\documentclass[%spaper, onecolumn]{report}\n", tolower(size))) # book
+cat(sprintf("\\documentclass[%spaper, onecolumn]{report}\n", size)) # book
 %% end.rcode
 
 \usepackage[colorlinks]{hyperref}
