@@ -1,4 +1,4 @@
-> cat_piece(mzero(df_triactor()))
+> cat_piece(df_triactor(), reorient = "all")
      ┌───┬─┰─┬─┰─┬─┰─┬─┰─┬─┰─┬─┰─┬───┐    
      │☀  │ ┃ │ ┃ │ ┃ │ ┃ │ ┃ │ ┃ │☾  │    
      │ n ┝━☀⃝━┿━╋━┿━╋━┿━╋━┿━╋━┿━☾⃝━┥ n │    

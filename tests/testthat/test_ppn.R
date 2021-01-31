@@ -1,6 +1,4 @@
 library("dplyr")
-library("piecepackr")
-library("vdiffr")
 context("test ppn")
 ppn1 <- read_ppn(system.file("ppn/tic-tac-toe.ppn", package = "ppgames"))
 ppn2 <- read_ppn(system.file("ppn/four-field-kono.ppn", package = "ppgames"))
@@ -11,14 +9,13 @@ g2 <- ppn2[[1]]
 g3a <- ppn3[[1]]
 g3b <- ppn3[[2]]
 g4 <- ppn4[[1]]
-pp <- function(df) {
-    function() pmap_piece(df, envir = list(piecepack = pp_cfg()), default.units = "in")
-}
 test_that("parsing ppn files works as expected", {
     expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
     expect_equal(g1$moves[["setup."]], "t@b2")
     expect_equal(g1$moves[["1..."]], "M@a2")
     expect_equal(g1$comments[["1..."]], "? (1... M@a1)")
+    verify_output("../text_diagrams/ppn-tic-tac-toe.txt", cat_move(g1))
+
     verify_output("../text_diagrams/ppn-four-field-kono.txt", cat_move(g2))
 
     df3a <- tail(g3a$dfs, 1)[[1]]
@@ -50,12 +47,6 @@ test_that("parsing ppn files works as expected", {
     g <- read_ppn(textConnection(null))[[1]]
     expect_length(g, 0)
 
-    skip_on_ci()
-    df1 <- tail(g1$dfs, 1)[[1]]
-    expect_doppelganger("tic-tac-toe", pp(df1))
-
-    df2 <- tail(g2$dfs, 1)[[1]]
-    expect_doppelganger("four-field-kono", pp(df2))
 })
 
 test_that("parsing simplified piece notation works as expected", {

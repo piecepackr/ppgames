@@ -1,12 +1,8 @@
-library("piecepackr")
-library("vdiffr")
-cfg <- pp_cfg()
-pmp <- function(df) {
-    function() {
-        pmap_piece(df, default.units = "in", cfg = cfg)
-        grid.piece("coin_face", rank = 1:6, x = 1:6, y = 1:6, cfg = cfg, default.units = "in")
-    }
+add_coins <- function(df) {
+    dfc <- tibble(piece_side = "coin_face", x=1:6, y = 1:6, angle = 0, suit = 1, rank = 1:6)
+    rbind(df, dfc)
 }
+cpiece <- function(df) cat_piece(add_coins(df))
 
 context("test rectangular boards")
 test_that("rectangular boards works as expected", {
@@ -30,35 +26,35 @@ test_that("rectangular boards works as expected", {
 
     expect_error(df_rect_board_tiles(2, 3), "don't know how to draw this board")
 
-    skip_on_ci()
     df <- df_rect_board_tiles(nr = 8, nc = 8)
-    expect_doppelganger("8x8", pmp(df))
+    verify_output("../text_diagrams/8x8.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 10, nc = 10)
-    expect_doppelganger("10x10", pmp(df))
+    verify_output("../text_diagrams/10x10.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 8, nc = 4)
-    expect_doppelganger("4x8", pmp(df))
+    verify_output("../text_diagrams/4x8.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 6, nc = 2)
-    expect_doppelganger("2x6", pmp(df))
+    verify_output("../text_diagrams/2x6.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 5, nc = 3)
-    expect_doppelganger("3x5", pmp(df))
+    verify_output("../text_diagrams/3x5.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 5, nc = 7)
-    expect_doppelganger("7x5", pmp(df))
+    verify_output("../text_diagrams/7x5.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 5, nc = 6)
-    expect_doppelganger("6x5", pmp(df))
+    verify_output("../text_diagrams/6x5.txt", cpiece(df))
 
     df <- df_rect_board_tiles(nr = 8, nc = 8, max_tiles = 12)
-    expect_doppelganger("8x8_12t", pmp(df))
+    verify_output("../text_diagrams/8x8_12t.txt", cpiece(df))
 
+    skip_on_ci()
+    library("vdiffr")
     expect_doppelganger("8x8_grid", grid.board_rect_tiles)
     expect_doppelganger("8x8_cells", grid.board_rect_cells)
     expect_doppelganger("5x5_cells_checkers", function()
             grid.board_rect_cells(5, 5, gp = gpar(fill = c("black", "red"), col = NA)))
     expect_doppelganger("8x8_points", grid.board_rect_points)
-
 })

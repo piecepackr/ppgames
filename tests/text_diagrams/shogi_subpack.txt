@@ -1,4 +1,4 @@
-> cat_piece(mzero(df_shogi(TRUE)))
+> cat_piece(df_shogi(TRUE), reorient = "all")
  ┌─┬─┬─┐     ┌─┬─┬─┐
  │4│a│5├5⃞─♛⃟─5⃞┤5│a│4│
  └┬┼─┼┬┘┃ │ ┃└┬┼─┼┬┘

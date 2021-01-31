@@ -1,17 +1,25 @@
 #' Generate plaintext piecepack diagrams
 #'
-#' \code{format_piece} generates plaintext piecepack diagrams and
-#'  outputs them using \code{cat}.
+#' \code{cat_piece()} generates plaintext piecepack diagrams and
+#'  outputs them using \code{base::cat()}.  \code{cat_move()} generates
+#' a plaintext diagram for a move within a game.
 #'
 #' @param df Data frame containing piece info.
 #' @param color How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
 #'       will colorize output for the terminal.  If \code{FALSE} won't colorize output.
+#' @param reorient Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
+#'        \item{The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.}
+#'        \item{"all" (or \code{TRUE}) means setting the angle to zero for all pieces
+#'              (reorienting them all \dQuote{up}).}
+#'        \item{"symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
+#'              In particular, in contrast with "all" this preserves the location
+#'              of the upper-left "corner" of piecepack tile faces.}}
 #' @param ... Passed to \code{cat}
 #' @param file \code{file} argument of \code{cat}.
 #'             Default (\code{""}) is to print to standard output.
 #' @return None (invisible \code{NULL})
 #' @export
-cat_piece <- function(df, color = NULL, ..., file = "") {
+cat_piece <- function(df, color = NULL, reorient = "none", ..., file = "") {
     if (is.null(color)) color <- TRUE
     if (file != "") color <- FALSE
     if (nrow(df) == 0) {
@@ -33,6 +41,7 @@ cat_piece <- function(df, color = NULL, ..., file = "") {
     df$suit <- ifelse(is.na(df$suit), 1L, df$suit)
     if (!("angle" %in% nn)) df$angle <- NA_real_
     df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
+    if (isTRUE(reorient) || reorient == "all") df$angle <- 0
 
     lr <- range_heuristic(df)
     nc <- 2*lr$xmax+1
@@ -49,7 +58,7 @@ cat_piece <- function(df, color = NULL, ..., file = "") {
         y <- 2*as.numeric(df[rr, "y"])+1
         angle <- as.numeric(df[rr, "angle"])
         cfg <- as.character(df[rr, "cfg"])
-        cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg)
+        cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg, reorient)
     }
 
     if (isTRUE(color) || color == "crayon") {
@@ -144,11 +153,11 @@ fg_list <- list(piecepack = piecepack_colors,
                 icehouse_pieces = dice_colors,
                 go = go_colors)
 
-add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
+add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg, reorient = "none") {
     if (piecepackr:::has_suit(piece_side)) {
         ss <- ss_list[[cfg]][suit]
         if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
-        if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle)
+        if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle, reorient)
         fg <- fg_list[[cfg]][suit]
     } else {
         fg <- "black"
@@ -156,7 +165,7 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg) {
     if (piecepackr:::has_rank(piece_side)) {
         rs <- rs_list[[cfg]][rank]
         if (grepl("chess", cfg) && suit == 6L) rs <- unicode_chess_white[rank]
-        if (!grepl("matchstick", piece_side)) rs <- rotate(rs, angle)
+        if (!grepl("matchstick", piece_side)) rs <- rotate(rs, angle, reorient)
     }
     if (grepl("2", cfg)) {
         cell <- 2
@@ -427,7 +436,6 @@ add_tile_face_subpack <- function(cm, rs, x, y, fg) {
     cm
 }
 add_tile_face_dominoes <- function(cm, ss, rs, x, y, angle, fg) {
-    ss <- rotate(ss, 180)
     if (angle == 0) {
         cm$fg[y+-2:2, x+-1:1] <- "black"
         cm <- add_border(cm, x, y, width = 1, height = 2)
@@ -534,8 +542,8 @@ add_box_edge <- function(cm, x, y, box_info) {
     cm
 }
 
-rotate <- function(char, angle) {
-    if (angle == 0) {
+rotate <- function(char, angle, reorient = "none") {
+    if (angle == 0 || reorient == "symbols") {
         rchar <- char
     } else if (angle == 45) {
         rchar <- r45[[char]]

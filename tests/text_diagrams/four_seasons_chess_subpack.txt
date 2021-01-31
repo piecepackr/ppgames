@@ -1,4 +1,4 @@
-> cat_piece(mzero(df_four_seasons_chess(TRUE)))
+> cat_piece(df_four_seasons_chess(TRUE), reorient = "all")
  ┌─┬─┬─┰─┬─┰─┬─┬─┐
  │5│3│☀⃝┃ │ ┃⸸⃝│3│5│
  ├─┼─┾━╋━┿━╋━┽─┼─┤

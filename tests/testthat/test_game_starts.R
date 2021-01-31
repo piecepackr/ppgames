@@ -3,16 +3,25 @@ library("piecepackr")
 library("vdiffr")
 cfg <- pp_cfg()
 
-mzero <- function(df) mutate(df, angle = 0)
-
 context("test game diagrams")
 test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/alice_chess.txt", cat_piece(df_alice_chess()))
+    verify_output("../text_diagrams/alien_city.txt",
+                  cat_piece(df_alien_city(seed=42), reorient="symbols"))
+    tiles <- "G^R^K^R^/R<B<GvB^/B<R^K<B</GvR^K>B>/G>K>G>K<"
+    df <- df_alien_city(seed=42, tiles=tiles)
+    verify_output("../text_diagrams/alien_city_tiles.txt", cat_piece(df, reorient="symbols"))
+    tiles <- "G3^Rn^K3^R4^/R3<Ba<GnvB4^/B2<R2^Ka<Bn</G4vRa^K4>B3>/Ga>Kn>G2>K2<"
+    df <- df_alien_city(seed=42, tiles=tiles)
+    verify_output("../text_diagrams/alien_city_tiles.txt", cat_piece(df, reorient="symbols"))
     verify_output("../text_diagrams/alquerque.txt", cat_piece(df_alquerque()))
+    verify_output("../text_diagrams/backgammon.txt", cat_piece(df_backgammon()))
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
-    verify_output("../text_diagrams/chinese_checkers.txt",
-                  cat_piece(mzero(df_chinese_checkers())))
+    verify_output("../text_diagrams/chinese_checkers.txt", cat_piece(df_chinese_checkers(), reorient="all"))
+    verify_output("../text_diagrams/cribbage.txt", cat_piece(df_cribbage_board()))
+    verify_output("../text_diagrams/desfases_seed.txt",
+                  cat_piece(df_desfases(seed=42), reorient="symbols"))
     verify_output("../text_diagrams/evade.txt", cat_piece(df_evade()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/froggy_bottom.txt", cat_piece(df_froggy_bottom()))
@@ -24,7 +33,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/jul_gono.txt", cat_piece(df_jul_gono()))
     verify_output("../text_diagrams/ley_lines.txt", cat_piece(df_ley_lines()))
     verify_output("../text_diagrams/lines_of_action.txt",
-                  cat_piece(mzero(df_lines_of_action())))
+                  cat_piece(df_lines_of_action(), reorient="all"))
     verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt",
                   cat_piece(df_nine_mens_morris(has_matchsticks = TRUE)))
     verify_output("../text_diagrams/pass_the_food.txt", cat_piece(df_pass_the_food()))
@@ -41,10 +50,10 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
     verify_output("../text_diagrams/tablut.txt",
-                  cat_piece(mzero(df_tablut())))
+                  cat_piece(df_tablut(), reorient="all"))
     verify_output("../text_diagrams/tower_of_babel_seed.txt", cat_piece(df_tower_of_babel(seed=42)))
     verify_output("../text_diagrams/triactor.txt",
-                  cat_piece(mzero(df_triactor())))
+                  cat_piece(df_triactor(), reorient="all"))
     verify_output("../text_diagrams/tula.txt", cat_piece(df_tula()))
     verify_output("../text_diagrams/turkish_draughts.txt", cat_piece(df_turkish_draughts()))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
@@ -52,15 +61,15 @@ test_that("game diagrams work as expected", {
 
     # subpack
     verify_output("../text_diagrams/chaturaji_subpack.txt",
-                  cat_piece(mzero(df_chaturaji(TRUE))))
+                  cat_piece(df_chaturaji(TRUE), reorient="all"))
     verify_output("../text_diagrams/four_seasons_chess_subpack.txt",
-                  cat_piece(mzero(df_four_seasons_chess(TRUE))))
+                  cat_piece(df_four_seasons_chess(TRUE), reorient="all"))
     verify_output("../text_diagrams/international_chess_subpack.txt",
                   cat_piece(df_international_chess(TRUE)))
     verify_output("../text_diagrams/salta_subpack.txt",
                   cat_piece(df_salta(TRUE)))
     verify_output("../text_diagrams/shogi_subpack.txt",
-                  cat_piece(mzero(df_shogi(TRUE))))
+                  cat_piece(df_shogi(TRUE), reorient="all"))
     verify_output("../text_diagrams/ultima_subpack.txt",
                   cat_piece(df_ultima(TRUE)))
     verify_output("../text_diagrams/xiangqi_subpack.txt",
@@ -70,36 +79,10 @@ test_that("game diagrams work as expected", {
 
     # graphic checks
     skip_on_ci()
-    expect_doppelganger("alien_city", function() {
-        df <- df_alien_city(seed=42)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("alien_city_tiles", function() {
-        tiles <- "G^R^K^R^/R<B<GvB^/B<R^K<B</GvR^K>B>/G>K>G>K<"
-        df <- df_alien_city(seed=42, tiles=tiles)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("alien_city_tiles", function() {
-        tiles <- "G3^Rn^K3^R4^/R3<Ba<GnvB4^/B2<R2^Ka<Bn</G4vRa^K4>B3>/Ga>Kn>G2>K2<"
-        df <- df_alien_city(seed=42, tiles=tiles)
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("backgammon", function() {
-        df <- df_backgammon()
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
     expect_doppelganger("cell_management", function() {
         text <- "---\nGameType:\n  Name: Cell Management\n  Seed: 42\n..."
         game <- read_ppn(textConnection(text))[[1]]
         plot_move(game, new_device=FALSE)
-    })
-    expect_doppelganger("cribbage", function() {
-        df <- df_cribbage_board()
-        pmap_piece(df, cfg = cfg, default.units = "in")
-    })
-    expect_doppelganger("desfases", function() {
-        df <- df_desfases(seed=42)
-        pmap_piece(df, cfg = cfg, default.units = "in")
     })
     expect_doppelganger("shogi", function() {
         df <- df_shogi()

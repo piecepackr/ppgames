@@ -5,7 +5,7 @@
 \alias{cat_move}
 \title{Generate plaintext piecepack diagrams}
 \usage{
-cat_piece(df, color = NULL, ..., file = "")
+cat_piece(df, color = NULL, reorient = "none", ..., file = "")
 
 cat_move(game, move = NULL, ...)
 }
@@ -14,6 +14,14 @@ cat_move(game, move = NULL, ...)
 
 \item{color}{How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
 will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
+
+\item{reorient}{Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
+\item{The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.}
+\item{"all" (or \code{TRUE}) means setting the angle to zero for all pieces
+      (reorienting them all \dQuote{up}).}
+\item{"symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
+      In particular, in contrast with "all" this preserves the location
+      of the upper-left "corner" of piecepack tile faces.}}}
 
 \item{...}{Passed to \code{cat}}
 
@@ -29,6 +37,7 @@ unless \code{NULL} in which case will cat the game state after the last move.}
 None (invisible \code{NULL})
 }
 \description{
-\code{format_piece} generates plaintext piecepack diagrams and
- outputs them using \code{cat}.
+\code{cat_piece()} generates plaintext piecepack diagrams and
+ outputs them using \code{base::cat()}.  \code{cat_move()} generates
+a plaintext diagram for a move within a game.
 }

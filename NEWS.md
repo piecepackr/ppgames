@@ -23,6 +23,13 @@ New features
   If "short" it is flipped up (the new default, easier to preview on computer) 
   and if "long" it is flipped down (common two-sided printer setting) (#74).
 
+* ``cat_piece()`` now supports the argument ``reorient`` which allows it to first reorient all pieces or just the rank/suit symbols:
+
+    * The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.
+    * "all" (or \code{TRUE}) means setting the angle to zero for all pieces.
+    * "symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
+      In particular, in contrast with "all" this preserves the location of the upper-left "corner" of piecepack tile faces.
+
 Bug fixes and minor improvements
 --------------------------------
 
