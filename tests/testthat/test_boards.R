@@ -1,11 +1,11 @@
-add_coins <- function(df) {
-    dfc <- tibble(piece_side = "coin_face", x=1:6, y = 1:6, angle = 0, suit = 1, rank = 1:6)
-    rbind(df, dfc)
-}
-cpiece <- function(df) cat_piece(add_coins(df))
-
 context("test rectangular boards")
 test_that("rectangular boards works as expected", {
+    add_coins <- function(df) {
+        dfc <- tibble(piece_side = "coin_face", x=1:6, y = 1:6, angle = 0, suit = 1, rank = 1:6)
+        rbind(df, dfc)
+    }
+    cpiece <- function(df) cat_piece(add_coins(df))
+
     expect_equal(min_line_tiles(6), 2)
     expect_equal(min_line_tiles(7), 3)
     expect_equal(min_line_tiles(8), 3)
@@ -50,11 +50,8 @@ test_that("rectangular boards works as expected", {
     df <- df_rect_board_tiles(nr = 8, nc = 8, max_tiles = 12)
     verify_output("../text_diagrams/8x8_12t.txt", cpiece(df))
 
-    skip_on_ci()
-    library("vdiffr")
-    expect_doppelganger("8x8_grid", grid.board_rect_tiles)
-    expect_doppelganger("8x8_cells", grid.board_rect_cells)
-    expect_doppelganger("5x5_cells_checkers", function()
-            grid.board_rect_cells(5, 5, gp = gpar(fill = c("black", "red"), col = NA)))
-    expect_doppelganger("8x8_points", grid.board_rect_points)
+
+    expect_error(grid.board_rect_cells(), "use the board pieces")
+    expect_error(grid.board_rect_points(), "use the board pieces")
+    expect_error(grid.board_rect_tiles(), "use piecepackr::pmap_piece")
 })

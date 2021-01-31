@@ -44,6 +44,11 @@ Breaking Changes
   in particular now use arguments like ``"American Checkers"`` instead of ``"american-checkers"``.
 * By default ``save_pamphlet()`` now orients the second page up instead of down.
   To restore prior behaviour (second page flipped down) manually set the argument ``duplex_edge`` to "long".
+* The following rectangular board utility functions have been removed and marked Defunct:
+
+  1. ``grid.board_rect_cells()``, use the "board" pieces from ``piecepackr::game_systems()$checkers1``  with ``piecepackr::grid.piece()``instead
+  2. ``grid.board_rect_points()``, use the "board" picees from ``piecepackr::game_systems()$go`` with ``piecepackr::grid.piece()`` instead
+  3. ``grid.board_rect_tiles()``, use ``piecepackr::pmap_piece(df_rect_board_tiles())`` instead
 
 ppgames 0.5.1
 =============

@@ -1,84 +1,17 @@
-even <- function(x) x %% 2 == 0
-
-#' Various game boards
+#' Compute rectangular game boards using piecepack tiles
 #'
-#' \code{grid.board_rect_tiles} draws a rectangular board using the back of piecepack tiles,
-#' it applies \code{pmap_piece} to the \code{tibble} data frame returned by \code{df_rect_board_tiles}.
-#' \code{grid.board_rect_cells} draws a rectangular board where pieces are placed in the cells of the board.
-#' \code{grid.board_rect_points} draws a rectangular board where pieces are placed in the points of the board.
+#' \code{df_rect_board_tiles} returns a tibble \code{data_frame} of a rectangular board of desired size
+#' made using a maximum number of piecepack tiles.
+#' It will use either \dQuote{cells}, \dQuote{points}, and/or \dQuote{rivers} as necessary.
 #'
 #' @param nrows Number of rows in game board
 #' @param ncols Number of columns in game board
 #' @param x0 X coordinate for the center of the first cell/point
 #' @param y0 Y coordinate for the center of the first cell/point
 #' @param max_tiles Maximum number of tiles that can be used
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object,
-#'        a list of \code{pp_cfg} objects,
-#'        or a character vector of \code{pp_cfg} objects
-#' @param envir Environment (or named list) containing configuration list(s).
-#' @param name A character identifier (for grid)
-#' @param gp An object of class ‘gpar’, typically the output from a call
-#'        to the function ‘gpar’.  This is basically a list of
-#'        graphical parameter settings.
-#' @param default.units A string indicating the default \code{grid} units to use.
-#' @param draw A logical value indicating whether graphics output should be produced.
-#' @param vp A \code{grid} viewport object (or NULL).
-#'
-#' @rdname boards
-#' @name boards
-NULL
-
-#' @rdname boards
-#' @export
-grid.board_rect_cells <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, default.units = "inches", # nolint
-                                  draw = TRUE, name = NULL, gp = gpar(), vp = NULL) {
-    fill <- gp$fill
-    x <- seq(x0, length.out = ncols)
-    y <- seq(y0, length.out = nrows)
-    gl <- gList()
-    for (ii in seq(y)) {
-        rgp <- gp
-        rgp$fill <- cycle_elements(fill, ii-1)
-        gl[[ii]] <- rectGrob(x, y[ii], width = 1, height = 1, gp = rgp, default.units = "inches")
-    }
-    grob <- gTree(children = gl, name = name, vp = vp)
-    if (draw)
-        grid.draw(grob)
-    invisible(grob)
-}
-
-#' @rdname boards
-#' @export
-grid.board_rect_points <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, default.units = "inches", # nolint
-                                  draw = TRUE, name = NULL, gp = gpar(), vp = NULL) {
-    grid.board_rect_cells(nrows-1, ncols-1, x0+0.5, y0+0.5,
-                          default.units, draw, name, gp, vp)
-}
-
-cycle_elements <- function(x, n = 1) {
-    l <- length(x)
-    if (l < 2 || n == l || n == 0) {
-        x
-    } else if (n < l) {
-        c(x[(n+1):l], x[1:n])
-    } else {
-        cycle_elements(cycle_elements(x, l), n-l)
-    }
-}
-
-#' @rdname boards
-#' @export
-grid.board_rect_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles = 24, # nolint
-                                cfg = pp_cfg(), envir = NULL,
-                                draw = TRUE, name = NULL, gp = NULL, vp = NULL) {
-    df <- df_rect_board_tiles(nrows, ncols, x0, y0, max_tiles)
-    pmap_piece(df, cfg = cfg, envir = envir, default.units = "in",
-               draw = draw, name = name, gp = gp, vp = vp)
-}
-
-#' @rdname boards
 #' @param suit Vector of suit values to use for tile back (will be repeated).
 #' @param rank Vector of rank values to use for tile back (will be repeated).
+#' @rdname boards
 #' @export
 df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles = 24,
                                suit = rep(1:4, 6), rank = rep(1:6, each = 4)) {
@@ -115,6 +48,19 @@ df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles 
     df$suit <- rep(suit, length.out = nrow(df))
     df$rank <- rep(rank, length.out = nrow(df))
     df
+}
+
+even <- function(x) x %% 2 == 0
+
+cycle_elements <- function(x, n = 1) {
+    l <- length(x)
+    if (l < 2 || n == l || n == 0) {
+        x
+    } else if (n < l) {
+        c(x[(n+1):l], x[1:n])
+    } else {
+        cycle_elements(cycle_elements(x, l), n-l)
+    }
 }
 
 can_use_squares <- function(nrows, ncols, max_tiles) {
