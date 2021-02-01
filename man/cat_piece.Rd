@@ -3,11 +3,21 @@
 \name{cat_piece}
 \alias{cat_piece}
 \alias{cat_move}
+\alias{cat_game}
 \title{Generate plaintext piecepack diagrams}
 \usage{
-cat_piece(df, color = NULL, reorient = "none", ..., file = "")
+cat_piece(
+  df,
+  color = NULL,
+  reorient = "none",
+  annotate = FALSE,
+  ...,
+  file = ""
+)
 
 cat_move(game, move = NULL, ...)
+
+cat_game(game, ..., fps = 1)
 }
 \arguments{
 \item{df}{Data frame containing piece info.}
@@ -23,21 +33,29 @@ will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
       In particular, in contrast with "all" this preserves the location
       of the upper-left "corner" of piecepack tile faces.}}}
 
+\item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
+if \code{FALSE} don't annotate,
+if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
+
 \item{...}{Passed to \code{cat}}
 
 \item{file}{\code{file} argument of \code{cat}.
-Default (\code{""}) is to print to standard output.}
+Default (\code{""}) is to print to standard output.
+\code{NULL} means we don't \code{cat()}}
 
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
 \item{move}{Which move to cat game state (after the move, will use \code{game$dfs[[move]]})
 unless \code{NULL} in which case will cat the game state after the last move.}
+
+\item{fps}{Frames per second.}
 }
 \value{
-None (invisible \code{NULL})
+Character vector of text diagram (returned invisibly).
 }
 \description{
 \code{cat_piece()} generates plaintext piecepack diagrams and
  outputs them using \code{base::cat()}.  \code{cat_move()} generates
-a plaintext diagram for a move within a game.
+a plaintext diagram for a move within a game.  \code{cat_game()}
+renders an animation of a game in the terminal.
 }

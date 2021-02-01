@@ -16,7 +16,7 @@ test_that("parsing ppn files works as expected", {
     expect_equal(g1$comments[["1..."]], "? (1... M@a1)")
     verify_output("../text_diagrams/ppn-tic-tac-toe.txt", cat_move(g1))
 
-    verify_output("../text_diagrams/ppn-four-field-kono.txt", cat_move(g2))
+    verify_output("../text_diagrams/ppn-four-field-kono.txt", cat_move(g2, annotate=TRUE))
 
     df3a <- tail(g3a$dfs, 1)[[1]]
     expect_equal(g3a$metadata$GameType, "Ultima")

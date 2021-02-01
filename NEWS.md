@@ -4,6 +4,8 @@ ppgames 0.6.0
 New features
 ------------
 
+* New function ``cat_game()`` renders a plaintext animation of a game within the terminal.
+
 * New starting board generators for specific games:
 
   - ``df_chinese_checkers()``
@@ -29,12 +31,17 @@ New features
     * "all" (or \code{TRUE}) means setting the angle to zero for all pieces.
     * "symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
       In particular, in contrast with "all" this preserves the location of the upper-left "corner" of piecepack tile faces.
+* ``cat_piece()`` now supports the argument ``annotate`` which allows one to add coordinate information to plaintext diagrams.
+  It is a bit more limited than the support in ``plot_move()`` / ``animate_game()``.
 
 Bug fixes and minor improvements
 --------------------------------
 
 * Checkers set-up is now "mirrored" (pieces on bottom-left instead of bottom-right)
   to match traditional checkers set-up.
+* ``cat_piece()`` now returns the text diagram as a character vector invisibly.
+* Now if ``cat_piece()``'s argument ``file`` is ``NULL`` we don't call ``cat()`` 
+  (and return the text diagram as a character vector).
 
 Breaking Changes
 ----------------

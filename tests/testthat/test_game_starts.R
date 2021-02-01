@@ -57,7 +57,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/tula.txt", cat_piece(df_tula()))
     verify_output("../text_diagrams/turkish_draughts.txt", cat_piece(df_turkish_draughts()))
     verify_output("../text_diagrams/wormholes.txt", cat_piece(df_wormholes()))
-    verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi()))
+    verify_output("../text_diagrams/xiangqi.txt", cat_piece(df_xiangqi(), annotate="cartesian"))
 
     # subpack
     verify_output("../text_diagrams/chaturaji_subpack.txt",

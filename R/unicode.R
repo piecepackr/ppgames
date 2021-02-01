@@ -2,7 +2,8 @@
 #'
 #' \code{cat_piece()} generates plaintext piecepack diagrams and
 #'  outputs them using \code{base::cat()}.  \code{cat_move()} generates
-#' a plaintext diagram for a move within a game.
+#' a plaintext diagram for a move within a game.  \code{cat_game()}
+#' renders an animation of a game in the terminal.
 #'
 #' @param df Data frame containing piece info.
 #' @param color How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
@@ -14,14 +15,18 @@
 #'        \item{"symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
 #'              In particular, in contrast with "all" this preserves the location
 #'              of the upper-left "corner" of piecepack tile faces.}}
+#' @param annotate If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
+#'                 if \code{FALSE} don't annotate,
+#'                 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.
 #' @param ... Passed to \code{cat}
 #' @param file \code{file} argument of \code{cat}.
 #'             Default (\code{""}) is to print to standard output.
-#' @return None (invisible \code{NULL})
+#'             \code{NULL} means we don't \code{cat()}
+#' @return Character vector of text diagram (returned invisibly).
 #' @export
-cat_piece <- function(df, color = NULL, reorient = "none", ..., file = "") {
+cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ..., file = "") {
     if (is.null(color)) color <- TRUE
-    if (file != "") color <- FALSE
+    if (!is.null(file) && file != "") color <- FALSE
     if (nrow(df) == 0) {
         cat(..., file = file)
         return(invisible(NULL))
@@ -61,6 +66,24 @@ cat_piece <- function(df, color = NULL, reorient = "none", ..., file = "") {
         cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg, reorient)
     }
 
+    if (!isFALSE(annotate)) {
+       x <- seq(3, nc, by=2)
+       if (annotate == "cartesian") {
+           x <- utils::head(x, 9)
+           xt <- as.character(seq_along(x))
+           cm$char[1, x] <- xt
+       } else {
+           if (length(x) > 26) x <- x[1:26]
+           cm$char[1, x] <- letters[seq_along(x)]
+       }
+       y <- seq(3, nr, by=2)
+       yt <- as.character(seq_along(y))
+       if (length(yt) > 9) {
+           yt <- stringr::str_pad(yt, 2, "right")
+           cm$char[y, 2] <- substr(yt, 2, 2)
+       }
+       cm$char[y, 1] <- substr(yt, 1, 1)
+    }
     if (isTRUE(color) || color == "crayon") {
         for (rr in seq(nrow(cm$char))) {
             for (cc in seq(ncol(cm$char))) {
@@ -73,8 +96,8 @@ cat_piece <- function(df, color = NULL, reorient = "none", ..., file = "") {
     }
 
     text <- rev(apply(cm$char, 1, function(x) paste(x, collapse = "")))
-    cat(text, ..., file = file, sep = "\n")
-    invisible(NULL)
+    if (!is.null(file)) cat(text, ..., file = file, sep = "\n")
+    invisible(text)
 }
 
 #' @rdname cat_piece
@@ -86,6 +109,22 @@ cat_move <- function(game, move = NULL, ...) {
     df <- get_df_from_move(game, move)
     cat_piece(df, ...)
 }
+
+#' @rdname cat_piece
+#' @param fps Frames per second.
+#' @export
+cat_game <- function(game, ..., fps = 1) {
+    for (ii in seq_along(game$dfs)) {
+        prev <- system.time(out <- cat_piece(game$dfs[[ii]], ..., file=NULL))[["elapsed"]]
+        dur <- ifelse(1/fps - prev > 0, 1/fps - prev, 0)
+        Sys.sleep(dur)
+        switch(.Platform$OS.type,
+               unix = system("clear"),
+               windows = system("cls"))
+        cat(out, sep="\n")
+    }
+}
+
 # nolint start
 # Use Half-circle for Moons? \u25d0
 # Use Arrows for Arms?
