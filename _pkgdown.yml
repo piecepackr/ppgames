@@ -10,6 +10,7 @@ reference:
         - plot_move
         - animate_game
         - cat_move
+        - view_game
     - title: "Plaintext game diagrams"
       desc: "Functions to generate plaintext game diagrams"
       contents:
@@ -28,3 +29,7 @@ reference:
       contents:
           - df_backgammon
           - df_rect_board_tiles
+    - title: "Defunct functions"
+      desc: "Functions that are now defunct"
+      contents:
+          - grid.board_rect_cells

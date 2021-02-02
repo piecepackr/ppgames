@@ -15,6 +15,7 @@ test_that("game diagrams work as expected", {
     df <- df_alien_city(seed=42, tiles=tiles)
     verify_output("../text_diagrams/alien_city_tiles.txt", cat_piece(df, reorient="symbols"))
     verify_output("../text_diagrams/alquerque.txt", cat_piece(df_alquerque()))
+    verify_output("../text_diagrams/alquerque_matchsticks.txt", cat_piece(df_alquerque(TRUE)))
     verify_output("../text_diagrams/backgammon.txt", cat_piece(df_backgammon()))
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
@@ -79,6 +80,11 @@ test_that("game diagrams work as expected", {
 
     # graphic checks
     skip_on_ci()
+    ee <- list(piecepack = cfg)
+    expect_doppelganger("awithlaknannai_mosona", function() {
+        df <- df_awithlaknannai_mosona(TRUE)
+        pmap_piece(df, default.units = "in", envir = ee)
+    })
     expect_doppelganger("cell_management", function() {
         text <- "---\nGameType:\n  Name: Cell Management\n  Seed: 42\n..."
         game <- read_ppn(textConnection(text))[[1]]
@@ -86,7 +92,6 @@ test_that("game diagrams work as expected", {
     })
     expect_doppelganger("shogi", function() {
         df <- df_shogi()
-        ee <- list(piecepack = cfg)
         pmap_piece(df, default.units = "in", envir = ee)
     })
     expect_doppelganger("tablut", function() {

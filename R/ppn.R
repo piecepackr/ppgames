@@ -11,8 +11,8 @@
 #'  file <- system.file("ppn/tic-tac-toe.ppn", package = "ppgames")
 #'  games <- read_ppn(file)
 #'  tmp <- tempfile(fileext = ".ppn")
-#'  on.exit(unlink(tmp))
 #'  write_ppn(games, tmp)
+#'  unlink(tmp)
 #' @export
 #' @seealso [plot_move()], [animate_game()], and [cat_move()] for visualizing parsed ppn games.
 read_ppn <- function(file, parse = TRUE) {

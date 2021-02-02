@@ -4,8 +4,9 @@ ppgames 0.6.0
 New features
 ------------
 
+* New function ``view_game()`` provides a simple command-line PPN viewer/editor.
 * New function ``cat_game()`` renders a plaintext animation of a game within the terminal.
-
+* New function ``write_ppn()`` takes a list of parsed PPN files and writes it to a file.
 * New starting board generators for specific games:
 
   - ``df_chinese_checkers()``
