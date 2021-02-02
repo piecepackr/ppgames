@@ -43,6 +43,7 @@ Bug fixes and minor improvements
 * ``cat_piece()`` now returns the text diagram as a character vector invisibly.
 * Now if ``cat_piece()``'s argument ``file`` is ``NULL`` we don't call ``cat()`` 
   (and return the text diagram as a character vector).
+* ``cat_piece()`` now has very basic support for non-icehouse pyramids (#81)
 
 Breaking Changes
 ----------------

@@ -32,7 +32,7 @@ test_that("text diagrams", {
     expect_null(cat_piece(tibble(), file = f))
     unlink(f)
     expect_warning(capture.output(cat_piece(tibble(piece_side = "saucer_face", x=2, y=2))))
-    expect_error(cat_piece(tibble(piece_side = "pyramid_top", x=2, y=2, rank=4, cfg="icehouse_pieces")))
+    expect_error(cat_piece(tibble(piece_side = "pyramid_top", x=2, y=2, rank=7, cfg="icehouse_pieces")))
     expect_error(suppressWarnings(cat_piece(tibble(piece_side = "tile_face", x=2, y=2, angle=45))))
     expect_error(cat_piece(tibble(piece_side = "tile_back", x=2, y=2, angle=45)))
 
@@ -61,6 +61,9 @@ test_that("text diagrams", {
                    cfg="icehouse_pieces")
     df <- dplyr::bind_rows(dfb, dfpt, dfpf)
     verify_output("../text_diagrams/icehouse.txt", cat_piece(df))
+    expect_equal(get_dots(4), "\u0324\u0308")
+    expect_equal(get_dots(5), "\u20e8\u0308")
+    expect_equal(get_dots(6), "\u20e8\u20db")
 
     # stackpack
     dfpt <- tibble(piece_side = "tile_back", x = c(1.5, 3.5, 1.5, 3.5),

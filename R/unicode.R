@@ -198,6 +198,7 @@ fg_list <- list(piecepack = piecepack_colors,
 
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg, reorient = "none") {
     if (piecepackr:::has_suit(piece_side)) {
+        if (grepl("pyramid", piece_side)) cfg <- "icehouse_pieces"
         ss <- ss_list[[cfg]][suit]
         if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
         if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle, reorient)
@@ -403,10 +404,7 @@ add_pyramid_face <- function(cm, ss, x, y, angle, fg, rank = 1) {
 # top dots U+0307 U+0308 U+20db U+20dc
 # bottom dots U+0323 U+0324 U+20ef
 get_dots <- function(rank) {
-    switch(rank,
-           "\u0323",
-           "\u0324",
-           "\u20e8",
+    switch(rank, "\u0323", "\u0324", "\u20e8", "\u0324\u0308", "\u20e8\u0308", "\u20e8\u20db",
            stop("Doesn't support ", rank, " dots"))
 }
 add_pyramid_top <- function(cm, ss, x, y, angle, fg, rank = 1) {
