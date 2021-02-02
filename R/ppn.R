@@ -1,14 +1,31 @@
-#' Read ppn files
+#' Read PPN files
 #'
-#' Read in ppn files
-#' @param file Filename
+#' Read/write Portable Piecepack Notation (PPN) files
+#' @param file Filename, if "" will use \code{stdout()}
 #' @param parse Logical of whether to parse the moves in the ppn file
+#' @param games A list of parsed PPN games (as returned by \code{read_ppn()})
 #' @return A list, for each game in the file a list containing info about the game
 #' @import stringr
+#' @examples
+#'  list.files(system.file("ppn", package = "ppgames"))
+#'  file <- system.file("ppn/tic-tac-toe.ppn", package = "ppgames")
+#'  games <- read_ppn(file)
+#'  tmp <- tempfile(fileext = ".ppn")
+#'  on.exit(unlink(tmp))
+#'  write_ppn(games, tmp)
 #' @export
+#' @seealso [plot_move()], [animate_game()], and [cat_move()] for visualizing parsed ppn games.
 read_ppn <- function(file, parse = TRUE) {
     list_ppns <- parse_ppn_file(file)
     lapply(list_ppns, parse_ppn_game, parse = parse)
+}
+
+#' @rdname read_ppn
+#' @export
+write_ppn <- function(games = list(), file = "") {
+    ppn <- unlist(lapply(games, as_ppn))
+    if (file == "") file <- stdout()
+    writeLines(ppn, file)
 }
 
 # Parse ppn files

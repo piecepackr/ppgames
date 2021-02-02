@@ -2,18 +2,34 @@
 % Please edit documentation in R/ppn.R
 \name{read_ppn}
 \alias{read_ppn}
-\title{Read ppn files}
+\alias{write_ppn}
+\title{Read PPN files}
 \usage{
 read_ppn(file, parse = TRUE)
+
+write_ppn(games = list(), file = "")
 }
 \arguments{
-\item{file}{Filename}
+\item{file}{Filename, if "" will use \code{stdout()}}
 
 \item{parse}{Logical of whether to parse the moves in the ppn file}
+
+\item{games}{A list of parsed PPN games (as returned by \code{read_ppn()})}
 }
 \value{
 A list, for each game in the file a list containing info about the game
 }
 \description{
-Read in ppn files
+Read/write Portable Piecepack Notation (PPN) files
+}
+\examples{
+ list.files(system.file("ppn", package = "ppgames"))
+ file <- system.file("ppn/tic-tac-toe.ppn", package = "ppgames")
+ games <- read_ppn(file)
+ tmp <- tempfile(fileext = ".ppn")
+ on.exit(unlink(tmp))
+ write_ppn(games, tmp)
+}
+\seealso{
+[plot_move()], [animate_game()], and [cat_move()] for visualizing parsed ppn games.
 }
