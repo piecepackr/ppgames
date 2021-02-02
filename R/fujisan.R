@@ -215,10 +215,7 @@ first_move_needs_dice <- function(coins) {
 #'  g2 <- read_ppn(textConnection(s2$ppn))[[1]]
 #' @export
 solve_fujisan <- function(coins = random_fujisan_coins(), dice = random_dice() - 1) {
-    if (!requireNamespace("igraph", quietly = TRUE)) {
-        stop("You need to install the suggested package 'igraph' to use 'solve_fujisan'.",
-             "Use 'install.packages(\"igraph\")'")
-    }
+    piecepackr:::assert_suggested("igraph")
     if (is.vector(coins)) {
         coins <- process_ranks(coins) - 1
         coins <- matrix(coins, nrow = 2, byrow = TRUE)

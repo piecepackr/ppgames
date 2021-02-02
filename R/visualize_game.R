@@ -28,9 +28,8 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
                          width = NULL, height = NULL, ppi = NULL,
                          new_device = TRUE) {
 
-    if (n_transitions > 0L && !requireNamespace("tweenr", quietly = TRUE)) {
-        stop("You need to install the suggested package 'tweenr' to use 'n_transitions > 0'.",
-             "Use 'install.packages(\"tweenr\")'")
+    if (n_transitions > 0L) {
+        piecepackr:::assert_suggested("tweenr")
     }
 
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
@@ -74,7 +73,7 @@ animation_fn <- function(file, new_device = TRUE) {
             devAskNewPage(getOption("device.ask.default"))
         }
     } else if (grepl(".html$", file)) {
-        if (!requireNamespace("animation")) stop("You need to install the suggested package 'animation'")
+        piecepackr:::assert_suggested("animation")
         function(expr, file, width, height, delay, res) {
             animation::saveHTML(expr, htmlfile = file, interval = delay, img.name = file,
                                 ani.height = height, ani.width = width, ani.res = res,
@@ -93,11 +92,11 @@ animation_fn <- function(file, new_device = TRUE) {
                                    ani.dev = "png", ani.type = "png")
             }
         } else {
-            stop("You need to install either the suggested package 'animation' or 'gifski' to use 'animate_game'.",
+            stop("You need to install either the suggested package 'gifski' or 'animation' to use 'animate_game()'.",
                  "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")'")
         }
     } else {
-        if (!requireNamespace("animation")) stop("You need to install the suggested package 'animation'")
+        piecepackr:::assert_suggested("animation")
         function(expr, file, width, height, delay, res) {
             animation::saveVideo(expr, video.name = file, interval = delay, img.name = file,
                                 ani.height = height, ani.width = width, ani.res = res,
@@ -177,7 +176,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
             annotate_plot(annotate, xmax, ymax, xoffset, yoffset)
         }
     } else if (identical(.f, piece3d)) {
-        if (!requireNamespace("rgl")) stop("You need to install the suggested package 'rgl'")
+        piecepackr:::assert_suggested("rgl")
         if (Sys.which("wmctrl") != "") system(paste0("wmctrl -r RGL -e 0,-1,-1,", width, ",", height))
         f <- tempfile(fileext=".png")
         function(df, ..., scale = 1) {
@@ -191,7 +190,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
             grid::grid.raster(png::readPNG(f))
         }
     } else if (identical(.f, piece)) {
-        if (!requireNamespace("rayrender")) stop("You need to install the suggested package 'rayrender'")
+        piecepackr:::assert_suggested("rayrender")
         function(df, ..., scale = 1,
                  fov = 20, samples=100, lookat = NULL, lookfrom = NULL, clamp_value = Inf,
                  table = NA) {
