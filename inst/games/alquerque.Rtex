@@ -14,7 +14,7 @@ A player wins if they capture all of the other player's coins or if the other pl
 
 Make an 5\texttimes 5 board with the backs of 4 tiles (using the lines/edges instead of the square cells).  Give each player all the coins of two suits\footnote{For example ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits.} and place them on the ``points'' (where lines/edges intersect) of the board as in Figure \ref{fig:alquerque-starting-diagram}.  
 
-%% begin.rcode starting-diagram, fig.width=5, fig.height=5, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Alquerque starting diagram", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=5, fig.height=5, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Alquerque starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in"))) # crop effect
 pmap_piece(df_alquerque(), cfg=cfg, default.units="in")
@@ -22,7 +22,7 @@ pmap_piece(df_alquerque(), cfg=cfg, default.units="in")
 
 The points of an Alquerque board are connected to each other by the orthogonal lines/edges of the board.  Additionally the central point of each tile is connected diagonally to the corner points of that tile (and vice versa).\footnote{If you own a set of Piecepack Matchsticks (\url{http://ludism.org/ppwiki/PiecepackMatchsticks}) you may wish to mark these diagonal connections with the ``2'' sticks.}  See Figure \ref{fig:alquerque-network} for the points and connections of the Alquerque board.
 
-%% begin.rcode network, fig.width=5, fig.height=5, out.width="1.0\\linewidth", out.height="1.0\\linewidth", fig.cap="Alquerque network", echo=FALSE
+%% begin.rcode network, fig.width=5, fig.height=5, out.width="1.0\\linewidth", out.height="1.0\\linewidth", fig.cap="Alquerque network"
 df_tile <- tibble(piece_side="tile_back", x = c(2, 2, 4, 4), y = c(2, 4, 2, 4))
 pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in"))) # crop effect
 pmap_piece(df_tile, cfg=cfg, default.units="in")
@@ -45,5 +45,3 @@ Decide by random selection which player will make the first move.  In subsequent
 Coins each have a non-capturing \emph{simple move} and a capturing \emph{jump} move.  For the \emph{simple move} slide to an adjacent empty point that is forward or sideways (but not backwards), but a coin cannot undo its previous (simple) move.  For the capturing \emph{jump} move in a straight line diagonally or orthogonally two points over a point occupied by an opponent's coin onto an empty point Multiple jumps in a turn are possible, if after a jump a piece is in a position to make another jump (possibly in another direction) then they can (and in fact must) do so until they are no longer in a position to do so.
 
 If possible a player must choose to do a jump instead of a simple move.  After making a jump a piece must continue to jump until it can no longer do so.  If multiple pieces can make a jump and/or a piece may jump in multiple directions then the player may choose which piece and which jumps to make---they need not maximize the number of possible jumps (but any jumping piece must continue to make jumps until it can no longer do so).
-
-

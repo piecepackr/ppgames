@@ -21,7 +21,7 @@ To score the most points by tossing coins onto combinations of tiles (these repr
 
 Setup the tiles as in Figure \ref{fig:pass-the-food-starting-diagram} with the null tiles near the edge of the table\footnote{The farther away from the edge of the table the more challenging the game will get.  To start out with try a modest six inches or so.}.  Give every player six coins of the same suit.
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=13.5, fig.cap="Starting arrangement of tiles", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=9, fig.height=13.5, fig.cap="Starting arrangement of tiles"
 pushViewport(viewport(width=inch(8), height=inch(12)))
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_pass_the_food(), cfg=cfg, default.units="in")
@@ -76,7 +76,7 @@ After all the coins have been thrown we then score based on which suits and rank
 
 Figure \ref{fig:pass-the-food-scoring} shows the end state of an example game.  Suns threw coins on one null, one 2, and two 3 tiles $(1 + 5 + 8)$ plus two Suns and two Arms tiles $(5 + 5)$ for a score of $24$ points.  Moons threw coins on one null, one 4, and two ace tiles $(1 + 5 + 16)$ plus one Suns, one Moons, one Crowns, and one Arms tiles $(3 + 2 + 2 + 3)$ for a score of $32$ points.  Crowns threw coins on two 2, one 3, one 4, one 5, and one ace tiles $(7 + 5 + 5 + 5 + 10)$ plus one Suns and five Moons tiles $(3 + 0)$ for a score of $35$ points.  With three of their coins barely ``on'' their tiles, Arms threw coins on two null, one 2, and one ace tiles $(0 + 5 + 10)$ plus three Suns and one Arms tiles $(0 + 3)$ for a score of $18$ points.  
 
-%% begin.rcode scoring, fig.width=10, fig.height=15, fig.cap="Example game end state", echo=FALSE
+%% begin.rcode scoring, fig.width=10, fig.height=15, fig.cap="Example game end state"
 pushViewport(viewport(width=inch(8), height=inch(12)))
 pmap_piece(df_pass_the_food(), cfg=cfg, default.units="in")
 set.seed(12)

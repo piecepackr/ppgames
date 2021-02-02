@@ -12,7 +12,7 @@ set_knitr_opts(game)
 
 Make an 8\texttimes 8 board with the backs of 16 tiles.  Give each player all the coins of two suits\footnote{For example ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits.}---these 12 coins will initially serve as each player's (uncrowned) \emph{men}---and place them as in Figure \ref{fig:american-checkers-starting-diagram}.  
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) Checkers starting diagram", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(American) Checkers starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_american_checkers(), cfg=cfg, default.units="in")
 %% end.rcode

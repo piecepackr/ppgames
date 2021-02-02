@@ -10,14 +10,14 @@ Twelve Men's Morris is an ancient game that used to be very popular.
 
 Figure \ref{fig:twelve-mens-morris-starting-diagram} shows the recommended setup of the board.  Give each player twelve of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits).  Before a player is reduced to three pieces there moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  One can also move diagonally from ``3'' valued tile faces to either the ``ace'' or ``five'' valued tile faces (and vice versa).  Figure \ref{fig:twelve-mens-morris-possible-moves} shows the moves of the pieces. If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} use them to connect tiles where orthogonal moves are possible.
 
-%% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Twelve Men's Morris starting diagram", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Twelve Men's Morris starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pushViewport(viewport(width=inch(14), height=inch(14)))
 pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 popViewport()
 %% end.rcode
 
-%% begin.rcode possible-moves, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Moves of the pieces in Twelve Men's Morris.  Once a player has been reduced to three pieces their movements are no longer restricted.", echo=FALSE
+%% begin.rcode possible-moves, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Moves of the pieces in Twelve Men's Morris.  Once a player has been reduced to three pieces their movements are no longer restricted."
 pushViewport(viewport(width=inch(14), height=inch(14)))
 pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 grid.piece("coin_back", suit=1, cfg=cfg, default.units="in",

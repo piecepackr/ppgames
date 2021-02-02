@@ -27,16 +27,19 @@ xelatex <- function(tex, quietly = TRUE) {
 # nolint end
 
 set_knitr_opts <- function(name) {
-    hook_plot <- knit_hooks$get("plot")
-    knit_hooks$set(plot = function(x, options) {
-      x <- paste(c(x, "whatever"), collapse = ".")
-      hook_plot(x, options)
-    })
+    # nolint start
+    # hook_plot <- knit_hooks$get("plot")
+    # knit_hooks$set(plot = function(x, options) {
+    #   x <- paste(c(x, "whatever"), collapse = ".")
+    #   hook_plot(x, options)
+    # })
+    # nolint end
     opts_chunk$set(dev = "cairo_pdf",
-                  fig.align = "center",
-                  fig.path = paste0(name, "-"),
-                  fig.pos = "ht!",
-                  fig.lp = paste0("fig:", name, "-"))
+                   echo = FALSE,
+                   fig.align = "center",
+                   fig.path = paste0(name, "-"),
+                   fig.pos = "ht!",
+                   fig.lp = paste0("fig:", name, "-"))
 }
 
 clean_game <- function(game) {

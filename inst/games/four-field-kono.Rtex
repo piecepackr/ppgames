@@ -18,7 +18,7 @@ turn. All movements are orthogonal. Captures are made by jumping over a friendly
 to land on and capture an enemy piece just beyond. Non-capturing moves consist of
 moving one space onto an empty square.
 
-%% begin.rcode starting-diagram, fig.width=5, fig.height=5, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Four Field Kono starting diagram", echo=FALSE
+%% begin.rcode starting-diagram, fig.width=5, fig.height=5, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Four Field Kono starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_four_field_kono(), cfg=cfg, default.units="in")
 %% end.rcode
