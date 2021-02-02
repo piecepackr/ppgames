@@ -118,11 +118,15 @@ cat_game <- function(game, ..., fps = 1) {
         prev <- system.time(out <- cat_piece(game$dfs[[ii]], ..., file=NULL))[["elapsed"]]
         dur <- ifelse(1/fps - prev > 0, 1/fps - prev, 0)
         Sys.sleep(dur)
-        switch(.Platform$OS.type,
-               unix = system("clear"),
-               windows = system("cls"))
+        clear_screen()
         cat(out, sep="\n")
     }
+}
+
+clear_screen <- function() {
+    switch(.Platform$OS.type,
+           unix = system("clear"),
+           windows = system("cls"))
 }
 
 # nolint start
