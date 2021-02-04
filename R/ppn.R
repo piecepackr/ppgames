@@ -793,7 +793,7 @@ process_underscore_move <- function(df, text, state) {
 
     l_i <- get_location_index(cc[2L], df, state)
     location <- l_i$location
-    new_xy <- get_xy(location, df, state)
+    new_xy <- get_xy(location, df, state, indices)
     if (is.null(l_i$id))
         index <- 0L
     else
@@ -803,6 +803,7 @@ process_underscore_move <- function(df, text, state) {
     df_moving$y <- new_xy$y
     insert_df(df_rest, df_moving, index)
 }
+
 process_underscore_percent_move <- function(df, text, state) { # nolint
     pi <- str_split(text, "_%")[[1L]]
 
@@ -812,7 +813,7 @@ process_underscore_percent_move <- function(df, text, state) { # nolint
     process_underscore_move(df, text, state)
 }
 
-hyphen_token <- "-(?![[:digit:]]+)"  # a4-d4 but not (-4,-3)
+hyphen_token <- "(?<![(<,])-"  # a4-d4 and a4-2E but not (-4,-3) or <-4,-3>
 process_hyphen_move <- function(df, text, state) {
     cc <- str_split(text, hyphen_token)[[1L]]
     piece_id <- cc[1L]
@@ -822,7 +823,7 @@ process_hyphen_move <- function(df, text, state) {
 
     l_i <- get_location_index(cc[2L], df, state)
     location <- l_i$location
-    new_xy <- get_xy(location, df, state)
+    new_xy <- get_xy(location, df, state, indices)
     if (is.null(l_i$id))
         index <- nrow(df_rest)
     else
@@ -993,15 +994,61 @@ insert_df <- function(df1, df2, index = nrow(df1)) {
     }
 }
 
-get_xy <- function(coords, df, state = create_state(tibble())) {
+get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = NULL) {
     if (str_detect(coords, "^&")) {
         piece_id <- str_sub(coords, 2L)
         get_coords_from_piece_id(piece_id, df, state)
+    } else if (str_detect(coords, "^<")) { # relative moves
+        if (str_detect(coords, "\\$")) {
+            coords_anchor <- str_split(coords, "\\$")[[1]]
+            coords <- coords_anchor[1]
+            anchor_indices <- get_indices_from_piece_id(coords_anchor[2], df, state)
+        }
+        xy <- as.numeric(str_extract_all(coords, "[0-9.-]+")[[1]]) * state$scale_factor
+        if (is.null(anchor_indices)) stop("Don't know which pieces this location is relative to")
+        list(x = xy[1] + df$x[anchor_indices], y = xy[2] + df$y[anchor_indices])
+    } else if (str_detect(coords, "^[0-9]")) { # alternative relative moves
+        coords <- convert_relative(coords)
+        get_xy(coords, df, state, anchor_indices)
     } else {
         p <- piecepackr:::Point2D$new(x = get_x(coords), y = get_y(coords))
         p$dilate(state$scale_factor)
     }
 }
+
+convert_relative <- function(coords) {
+    if (str_detect(coords, "\\$")) {
+        coords_anchor <- str_split(coords, "\\$")[[1]]
+        coords <- convert_relative_helper(coords_anchor[1])
+        paste0(coords, "$", coords_anchor[2])
+    } else {
+        convert_relative_helper(coords)
+    }
+}
+convert_relative_helper <- function(coords) {
+    number <- as.numeric(str_extract(coords, "[0-9.]+"))
+    direction <- str_extract(coords, "[A-Z]+")
+    multiplier <- switch(EXPR = direction,
+                         N = c(0, 1),
+                         E = c(1, 0),
+                         S = c(0, -1),
+                         W = c(-1, 0),
+                         NE = c(1, 1),
+                         SE = c(1, -1),
+                         SW = c(-1, -1),
+                         NW = c(-1, 1),
+                         NNE = hex_xy(60, number),
+                         ENE = hex_xy(30, number),
+                         ESE = hex_xy(330, number),
+                         SSE = hex_xy(300, number),
+                         SSW = hex_xy(240, number),
+                         WSW = hex_xy(210, number),
+                         WNW = hex_xy(150, number),
+                         NNW = hex_xy(120, number),
+                         stop("Don't know direction"))
+    paste0("<", number * multiplier[1], ",", number * multiplier[2], ">")
+}
+hex_xy <- function(angle, number) c(to_x(angle, number), to_y(angle, number))
 
 get_x <- function(coords) {
     if (str_detect(coords, ",")) {

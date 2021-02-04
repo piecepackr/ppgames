@@ -4,6 +4,22 @@ ppgames 0.6.0
 New features
 ------------
 
+* Portable Piecepack Notation enhancements:
+
+  - There is now support for "relative" locations (#56):
+
+    - ``<x,y>`` means ``x`` units to the right and ``y`` units up to the pieces' current location(s)
+    - ``<x,y>$PieceId`` means ``x`` units to the right and ``y`` units up of ``PieceId``'s current location
+    - ``nDirection`` means moving ``n`` units in the ``Direction`` direction (where "Up" is considered "North")
+      from the pieces's current location(s)
+
+      - N, E, S, W are orthogonal moves for a rectangular board or a hexagonal board
+      - NE, SE, SW, NW are diagonal moves for a rectangular board
+      - NNE, ENE, ESE, SSE, SSW, WSW, WNW, NNW are diagonal moves for a hexagonal board
+
+    - ``nDirection$PieceId`` means moving ``n`` units in the ``Direction`` 
+      direction starting from ``PieceId``'s current location
+
 * New function ``view_game()`` provides a simple command-line PPN viewer/editor.
 * New function ``cat_game()`` renders a plaintext animation of a game within the terminal.
 * New function ``write_ppn()`` takes a list of parsed PPN files and writes it to a file.
