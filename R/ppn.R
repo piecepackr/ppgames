@@ -1024,7 +1024,7 @@ get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = 
         p <- piecepackr:::Point2D$new(x = get_x(coords), y = get_y(coords))
         p$dilate(state$scale_factor)
     }
-    if (is.na(xy$x) || is.na(xy$y)) stop("Failed to parse coordinates: ", coords)
+    if (any(is.na(xy$x) | is.na(xy$y))) stop("Failed to parse coordinates: ", coords)
     xy
 }
 

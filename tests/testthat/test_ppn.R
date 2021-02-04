@@ -571,6 +571,7 @@ test_that("non-greedy search works as expected", {
     expect_equal(df$x, c(1.5, 1, 2))
     df <- process_move(df, "3?tf-2R", state)
     expect_equal(df$x, c(3.5, 3, 4))
+    expect_error(process_move(df, "3/tf-2R", state), "Failed to parse coordinates: /tf")
 })
 test_that("greedy search works as expected", {
     df <- initialize_df(df_none())
