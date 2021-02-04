@@ -995,18 +995,28 @@ insert_df <- function(df1, df2, index = nrow(df1)) {
 }
 
 get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = NULL) {
-    if (str_detect(coords, "^&")) {
+    xy <- if (str_detect(coords, "^&")) {
         piece_id <- str_sub(coords, 2L)
         get_coords_from_piece_id(piece_id, df, state)
     } else if (str_detect(coords, "^<")) { # relative moves
-        if (str_detect(coords, "\\$")) {
-            coords_anchor <- str_split(coords, "\\$")[[1]]
+        if (str_detect(coords, "\\|")) {
+            coords_anchor <- str_split(coords, "\\|", n=2)[[1]]
             coords <- coords_anchor[1]
-            anchor_indices <- get_indices_from_piece_id(coords_anchor[2], df, state)
+            location <- get_xy(coords_anchor[2], df, state, anchor_indices)
+        } else if (str_detect(coords, "\\$")) {
+            coords_anchor <- str_split(coords, "\\$", n=2)[[1]]
+            coords <- coords_anchor[1]
+            location <- get_xy(paste0("&", coords_anchor[2]), df, state, anchor_indices)
+        } else {
+            location <- NULL
         }
         xy <- as.numeric(str_extract_all(coords, "[0-9.-]+")[[1]]) * state$scale_factor
-        if (is.null(anchor_indices)) stop("Don't know which pieces this location is relative to")
-        list(x = xy[1] + df$x[anchor_indices], y = xy[2] + df$y[anchor_indices])
+        if (is.null(location)) {
+            if (is.null(anchor_indices)) stop("Don't know where this location is relative to")
+            list(x = xy[1] + df$x[anchor_indices], y = xy[2] + df$y[anchor_indices])
+        } else {
+            list(x = xy[1] + location$x, y = xy[2] + location$y)
+        }
     } else if (str_detect(coords, "^[0-9]")) { # alternative relative moves
         coords <- convert_relative(coords)
         get_xy(coords, df, state, anchor_indices)
@@ -1014,13 +1024,19 @@ get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = 
         p <- piecepackr:::Point2D$new(x = get_x(coords), y = get_y(coords))
         p$dilate(state$scale_factor)
     }
+    if (is.na(xy$x) || is.na(xy$y)) stop("Failed to parse coordinates: ", coords)
+    xy
 }
 
 convert_relative <- function(coords) {
     if (str_detect(coords, "\\$")) {
-        coords_anchor <- str_split(coords, "\\$")[[1]]
+        coords_anchor <- str_split(coords, "\\$", n=2)[[1]]
         coords <- convert_relative_helper(coords_anchor[1])
         paste0(coords, "$", coords_anchor[2])
+    } else if (str_detect(coords, "\\|")) {
+        coords_anchor <- str_split(coords, "\\|", n=2)[[1]]
+        coords <- convert_relative_helper(coords_anchor[1])
+        paste0(coords, "|", coords_anchor[2])
     } else {
         convert_relative_helper(coords)
     }
@@ -1029,22 +1045,18 @@ convert_relative_helper <- function(coords) {
     number <- as.numeric(str_extract(coords, "[0-9.]+"))
     direction <- str_extract(coords, "[A-Z]+")
     multiplier <- switch(EXPR = direction,
-                         N = c(0, 1),
-                         E = c(1, 0),
-                         S = c(0, -1),
-                         W = c(-1, 0),
-                         NE = c(1, 1),
-                         SE = c(1, -1),
-                         SW = c(-1, -1),
-                         NW = c(-1, 1),
-                         NNE = hex_xy(60, number),
-                         ENE = hex_xy(30, number),
-                         ESE = hex_xy(330, number),
-                         SSE = hex_xy(300, number),
-                         SSW = hex_xy(240, number),
-                         WSW = hex_xy(210, number),
-                         WNW = hex_xy(150, number),
-                         NNW = hex_xy(120, number),
+                         N = c(0, 1), E = c(1, 0), S = c(0, -1), W = c(-1, 0),
+                         U = c(0, 1), R = c(1, 0), D = c(0, -1), L = c(-1, 0),
+                         NE = c(1, 1), SE = c(1, -1), SW = c(-1, -1), NW = c(-1, 1),
+                         UR = c(1, 1), DR = c(1, -1), DL = c(-1, -1), UL = c(-1, 1),
+                         NNE = hex_xy(60, number), ENE = hex_xy(30, number),
+                         ESE = hex_xy(330, number), SSE = hex_xy(300, number),
+                         SSW = hex_xy(240, number), WSW = hex_xy(210, number),
+                         WNW = hex_xy(150, number), NNW = hex_xy(120, number),
+                         UUR = hex_xy(60, number), RUR = hex_xy(30, number),
+                         RDR = hex_xy(330, number), DDR = hex_xy(300, number),
+                         DDL = hex_xy(240, number), LDL = hex_xy(210, number),
+                         LUL = hex_xy(150, number), UUL = hex_xy(120, number),
                          stop("Don't know direction"))
     paste0("<", number * multiplier[1], ",", number * multiplier[2], ">")
 }
@@ -1081,6 +1093,7 @@ process_move <- function(df, text, state = create_state(df)) {
     text <- bracer::expand_braces(split_blanks(text))
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
     text <- gsub("\u035c|\u203f", "_", text) # convert underties to underscore
+    text <- gsub("([0-9]+)\\?", "\\1&?", text) # convert n? to n&?
     moves <- split_blanks(text)
     for (move in moves) {
         df <- process_submove(df, move, state = state)

@@ -8,17 +8,21 @@ New features
 
   - There is now support for "relative" locations (#56):
 
-    - ``<x,y>`` means ``x`` units to the right and ``y`` units up to the pieces' current location(s)
-    - ``<x,y>$PieceId`` means ``x`` units to the right and ``y`` units up of ``PieceId``'s current location
-    - ``nDirection`` means moving ``n`` units in the ``Direction`` direction (where "Up" is considered "North")
-      from the pieces's current location(s)
+    * ``<x,y>`` means ``x`` units to the right and ``y`` units up from the pieces' current location(s)
+    * ``<x,y>|Location`` means ``x`` units to the right and ``y`` units up from ``Location``
+    * ``<x,y>$PieceId`` is a shortcut for ``<x,y>|&PieceId``
+    * ``nDirection`` means moving ``n`` units in the ``Direction`` direction
+    * from the pieces's current location(s)
+    * ``nDirection|Location`` means moving ``n`` units in the ``Direction`` direction from ``Location``
+    * ``nDirection$PieceId`` is a shortcut for ``nDirection|&PieceId``
+    * These are the supported direction (where "North" is considered "Up"):
 
-      - N, E, S, W are orthogonal moves for a rectangular board or a hexagonal board
-      - NE, SE, SW, NW are diagonal moves for a rectangular board
-      - NNE, ENE, ESE, SSE, SSW, WSW, WNW, NNW are diagonal moves for a hexagonal board
+      - N, E, S, W, U, R, D, L are orthogonal moves for a rectangular board or a hexagonal board
+      - NE, SE, SW, NW, UR, DR, DL, UL are diagonal moves for a rectangular board
+      - NNE, ENE, ESE, SSE, SSW, WSW, WNW, NNW, 
+        UUR, RUR, RDR, DDR, DDL, LDL, LUL, UUL are diagonal moves for a hexagonal board
 
-    - ``nDirection$PieceId`` means moving ``n`` units in the ``Direction`` 
-      direction starting from ``PieceId``'s current location
+  - ``N?PieceSpec`` is now a shortcut for ``N&?PieceSpec``
 
 * New function ``view_game()`` provides a simple command-line PPN viewer/editor.
 * New function ``cat_game()`` renders a plaintext animation of a game within the terminal.
@@ -60,6 +64,7 @@ Bug fixes and minor improvements
 * Now if ``cat_piece()``'s argument ``file`` is ``NULL`` we don't call ``cat()`` 
   (and return the text diagram as a character vector).
 * ``cat_piece()`` now has very basic support for non-icehouse pyramids (#81)
+* The tiles in ``df_ice_floe()`` have been shifted slightly.
 
 Breaking Changes
 ----------------

@@ -567,6 +567,10 @@ test_that("non-greedy search works as expected", {
     expect_equal(nrow(df), 1)
     expect_equal(df$angle, 180)
     expect_error(process_move(df, "*?A3"), "Couldn't find a match")
+    df <- process_move(df, "?tf-(1.5,1.5) S@a1 M@b2", state)
+    expect_equal(df$x, c(1.5, 1, 2))
+    df <- process_move(df, "3?tf-2R", state)
+    expect_equal(df$x, c(3.5, 3, 4))
 })
 test_that("greedy search works as expected", {
     df <- initialize_df(df_none())
@@ -580,7 +584,7 @@ test_that("greedy search works as expected", {
 
 test_that("relative moves work as expected", {
     df <- initialize_df(df_none())
-    expect_error(process_move(df, "S@<2,2>"), "Don't know which pieces")
+    expect_error(process_move(df, "S@<2,2>"), "Don't know where")
     df <- process_move(df, "Sd@b1 Ad@c4")
     expect_equal(df$x, c(2,3))
     expect_equal(df$y, c(1,4))
@@ -605,6 +609,21 @@ test_that("relative moves work as expected", {
     df <- process_move(df, "?Ad-2NNE ?Ad-2SSW ?Ad-2NNW ?Ad-2SSE")
     expect_equal(df$x, c(4,6))
     expect_equal(df$y, c(3,3))
+    df <- process_move(df, "?Ad-2R ?Ad-2L ?Ad-2U ?Ad-2D")
+    expect_equal(df$x, c(4,6))
+    expect_equal(df$y, c(3,3))
+    df <- process_move(df, "?Ad-2UR ?Ad-2DL ?Ad-2UL ?Ad-2DR")
+    expect_equal(df$x, c(4,6))
+    expect_equal(df$y, c(3,3))
+    df <- process_move(df, "?Ad-2UUR ?Ad-2DDL ?Ad-2UUL ?Ad-2DDR")
+    expect_equal(df$x, c(4,6))
+    expect_equal(df$y, c(3,3))
+    df <- process_move(df, "?Ad-2UUR ?Ad-2DDL ?Ad-2UUL ?Ad-2DDR")
+    expect_equal(df$x, c(4,6))
+    expect_equal(df$y, c(3,3))
+    df <- process_move(df, "?Ad-2L|2U|(2,2)")
+    expect_equal(df$x, c(4,0))
+    expect_equal(df$y, c(3,4))
 })
 
 test_that("partial piece update (tilde)", {
