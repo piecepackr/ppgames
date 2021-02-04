@@ -331,8 +331,8 @@ df_iceberg <- function(seed = NULL, tiles = NULL) {
 #' @export
 df_ice_floe <- function() {
     df <- tibble(piece_side = "tile_face",
-           x = rep(seq(1,9,2), 5),
-           y = rep(seq(9,1,-2), each=5),
+           x = 0.5 + rep(seq(1,9,2), 5),
+           y = 0.5 + rep(seq(9,1,-2), each=5),
            suit = c(1,1,3,2,2, 1,1,4,2,2, 2,3,NA,1,4, 4,4,2,3,3, 4,4,1,3,3),
            rank = c(2,3,1,2,3, 4,5,1,4,5, 0,0,NA,0,0, 2,3,1,2,3, 4,5,1,4,5) + 1)
     df[-13, ]
