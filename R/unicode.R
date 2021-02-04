@@ -25,32 +25,25 @@
 #' @return Character vector of text diagram (returned invisibly).
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ..., file = "") {
+    cat_piece_helper(df, ..., color = color, reorient = reorient, annotate = annotate, ..., file = file)
+}
+cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
+                             xoffset = NULL, yoffset = NULL, file = "") {
     if (is.null(color)) color <- TRUE
     if (!is.null(file) && file != "") color <- FALSE
     if (nrow(df) == 0) {
         cat(..., file = file)
         return(invisible(NULL))
     }
-    nn <- names(df)
-    if (!("cfg" %in% nn)) df$cfg <- "piecepack"
-    df$cfg <- ifelse(is.na(df$cfg), "piecepack", df$cfg)
-    if (!("rank" %in% nn)) df$rank <- NA_integer_
-    df$rank <- ifelse(is.na(df$rank), 1L, df$rank)
-    # checkers/chess boards rank is number of cells
-    df$rank <- ifelse(df$rank == 1L & str_detect(df$piece_side, "^board") & str_detect(df$cfg, "[12]$"), 8L, df$rank)
-    # go board rank is number of lines
-    df$rank <- ifelse(str_detect(df$piece_side, "^board") & df$cfg == "go",
-                      ifelse(df$rank == 1L, 18, df$rank - 1),
-                      df$rank)
-    if (!("suit" %in% nn)) df$suit <- NA_integer_
-    df$suit <- ifelse(is.na(df$suit), 1L, df$suit)
-    if (!("angle" %in% nn)) df$angle <- NA_real_
-    df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
+    df <- clean_df(df)
     if (isTRUE(reorient) || reorient == "all") df$angle <- 0
 
     lr <- range_heuristic(df)
-    nc <- 2*lr$xmax+1
-    nr <- 2*lr$ymax+1
+    offset <- get_df_offsets(df, lr, xoffset, yoffset, annotate)
+    df$x <- df$x + offset$x
+    df$y <- df$y + offset$y
+    nc <- 2 * (lr$xmax + offset$x) + 1
+    nr <- 2 * (lr$ymax + offset$y) + 1
     cm <- list(char = matrix(" ", nrow = nr, ncol = nc),
                bg = matrix("white", nrow = nr, ncol = nc),
                fg = matrix("black", nrow = nr, ncol = nc))
@@ -65,25 +58,15 @@ cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...
         cfg <- as.character(df[rr, "cfg"])
         cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg, reorient)
     }
+    cm <- annotate_text(cm, nc, nr, offset$x, offset$y, annotate)
+    cm <- color_text(cm, color)
 
-    if (!isFALSE(annotate)) {
-       x <- seq(3, nc, by=2)
-       if (annotate == "cartesian") {
-           x <- utils::head(x, 9)
-           xt <- as.character(seq_along(x))
-           cm$char[1, x] <- xt
-       } else {
-           if (length(x) > 26) x <- x[1:26]
-           cm$char[1, x] <- letters[seq_along(x)]
-       }
-       y <- seq(3, nr, by=2)
-       yt <- as.character(seq_along(y))
-       if (length(yt) > 9) {
-           yt <- stringr::str_pad(yt, 2, "right")
-           cm$char[y, 2] <- substr(yt, 2, 2)
-       }
-       cm$char[y, 1] <- substr(yt, 1, 1)
-    }
+    text <- rev(apply(cm$char, 1, function(x) paste(x, collapse = "")))
+    if (!is.null(file)) cat(text, ..., file = file, sep = "\n")
+    invisible(text)
+}
+
+color_text <- function(cm, color) {
     if (isTRUE(color) || color == "crayon") {
         for (rr in seq(nrow(cm$char))) {
             for (cc in seq(ncol(cm$char))) {
@@ -94,10 +77,48 @@ cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...
             }
         }
     }
+    cm
+}
 
-    text <- rev(apply(cm$char, 1, function(x) paste(x, collapse = "")))
-    if (!is.null(file)) cat(text, ..., file = file, sep = "\n")
-    invisible(text)
+annotate_text <- function(cm, nc, nr, xoffset, yoffset, annotate) {
+    if (!isFALSE(annotate)) {
+       x <- seq(3 + 2 * xoffset, nc, by=2)
+       if (annotate == "cartesian") {
+           x <- utils::head(x, 9)
+           xt <- as.character(seq_along(x))
+           cm$char[1, x] <- xt
+       } else {
+           if (length(x) > 26) x <- x[1:26]
+           cm$char[1, x] <- letters[seq_along(x)]
+       }
+       y <- seq(3 + 2 * yoffset, nr, by=2)
+       yt <- as.character(seq_along(y))
+       if (length(yt) > 9) {
+           yt <- stringr::str_pad(yt, 2, "right")
+           cm$char[y[-seq(9)], 2L] <- substr(yt[-seq(9)], 2, 2)
+       }
+       cm$char[y, 1L] <- substr(yt, 1L, 1L)
+    }
+    cm
+}
+
+clean_df <- function(df) {
+    if (!hasName(df, "cfg")) df$cfg <- "piecepack"
+    df$cfg <- ifelse(is.na(df$cfg), "piecepack", df$cfg)
+    if (!hasName(df, "rank")) df$rank <- NA_integer_
+    df$rank <- ifelse(is.na(df$rank), 1L, df$rank)
+    # checkers/chess boards rank is number of cells
+    df$rank <- ifelse(df$rank == 1L & str_detect(df$piece_side, "^board") & str_detect(df$cfg, "[12]$"), 8L, df$rank)
+    # go board rank is number of lines
+    df$rank <- ifelse(str_detect(df$piece_side, "^board") & df$cfg == "go",
+                      ifelse(df$rank == 1L, 18, df$rank - 1),
+                      df$rank)
+    if (!hasName(df, "suit")) df$suit <- NA_integer_
+    df$suit <- ifelse(is.na(df$suit), 1L, df$suit)
+    if (!hasName(df, "angle")) df$angle <- NA_real_
+    df$angle <- ifelse(is.na(df$angle), 0, df$angle %% 360)
+    attr(df, "was_cleaned") <- TRUE
+    df
 }
 
 #' @rdname cat_piece
@@ -107,15 +128,46 @@ cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...
 #' @export
 cat_move <- function(game, move = NULL, ...) {
     df <- get_df_from_move(game, move)
-    cat_piece(df, ...)
+    cat_piece_helper(df, ...)
+}
+
+get_df_offsets <- function(df, lr, xoffset, yoffset, annotate = FALSE) {
+    if (!isFALSE(annotate)) {
+        xlbound <- ifelse(lr$ymax >= 10, 1.0, 0.5)
+        ylbound <- 0.5
+    } else {
+        xlbound <- 0
+        ylbound <- 0
+    }
+    if (is.null(xoffset)) xoffset <- min2offset(lr$xmin, xlbound)
+    if (is.null(yoffset)) yoffset <- min2offset(lr$ymin, ylbound)
+    list(x = xoffset, y = yoffset)
+}
+
+get_game_offsets <- function(game, annotate = FALSE, ...) {
+    ranges <- lapply(game$dfs, range_heuristic)
+    ymax <- max(sapply(ranges, function(x) x$ymax), na.rm = TRUE)
+    ymin <- min(sapply(ranges, function(x) x$ymin), na.rm = TRUE)
+    xmin <- min(sapply(ranges, function(x) x$xmin), na.rm = TRUE)
+    if (!isFALSE(annotate)) {
+        xoffset <- min2offset(xmin, ifelse(ymax >= 10, 1.0, 0.5))
+        yoffset <- min2offset(ymin, 0.5)
+    } else {
+        xoffset <- min2offset(xmin, 0)
+        yoffset <- min2offset(ymin, 0)
+    }
+    list(x = xoffset, y = yoffset)
 }
 
 #' @rdname cat_piece
 #' @param fps Frames per second.
 #' @export
 cat_game <- function(game, ..., fps = 1) {
+    offset <- get_game_offsets(game, ...)
     for (ii in seq_along(game$dfs)) {
-        prev <- system.time(out <- cat_piece(game$dfs[[ii]], ..., file=NULL))[["elapsed"]]
+        prev <- system.time({
+            out <- cat_piece_helper(game$dfs[[ii]], ..., xoffset=offset$x, yoffset=offset$y, file=NULL)
+        })[["elapsed"]]
         dur <- ifelse(1/fps - prev > 0, 1/fps - prev, 0)
         Sys.sleep(dur)
         clear_screen()

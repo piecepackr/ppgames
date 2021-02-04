@@ -1,5 +1,6 @@
 range_heuristic <- function(df) {
     if (nrow(df) == 0) return(list(xmin = NA_real_, xmax = NA_real_, ymin = NA_real_, ymax = NA_real_))
+    if (!isTRUE(attr(df, "was_cleaned"))) df <- clean_df(df)
 
     # piecepack
     is_tile <- grepl("tile", df$piece_side)

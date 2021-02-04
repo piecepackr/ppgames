@@ -277,9 +277,9 @@ plot_df <- function(df, file = NULL, annotate = TRUE, ...,
 }
 
 
-min2offset <- function(min) {
-    if (min < 0.50) {
-        0.50 - min
+min2offset <- function(min, lbound = 0.5) {
+    if (min < lbound) {
+        lbound - min
     } else {
         0
     }
