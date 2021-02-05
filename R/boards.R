@@ -52,17 +52,6 @@ df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles 
 
 even <- function(x) x %% 2 == 0
 
-cycle_elements <- function(x, n = 1) {
-    l <- length(x)
-    if (l < 2 || n == l || n == 0) {
-        x
-    } else if (n < l) {
-        c(x[(n+1):l], x[1:n])
-    } else {
-        cycle_elements(cycle_elements(x, l), n-l)
-    }
-}
-
 can_use_squares <- function(nrows, ncols, max_tiles) {
     even(nrows) && even(ncols) && (nrows*ncols/4 <= max_tiles)
 }
@@ -102,7 +91,6 @@ line_score <- function(x) {
     score
 }
 
-# #' @importFrom gtools permutations
 adjust_rivers <- function(x) {
     if (length(x) < 3) return(x)
     score <- Inf
@@ -123,12 +111,6 @@ adjust_rivers <- function(x) {
             }
         }
     }
-    # nolint start
-    # n <- length(x)
-    # p <- unique(permutations(n, n, x, FALSE))
-    # s <- apply(p, 1, line_score)
-    # p[which.min(s), ]
-    # nolint end
     x
 }
 
@@ -138,16 +120,6 @@ swap <- function(x, ii, jj) {
     x[jj] <- tmp
     x
 }
-
-# nolint start
-# max_line_tiles <- function(n) {
-#     if (odd(n)) {
-#         (n-1)/2
-#     } else {
-#         (n-2)/2
-#     }
-# }
-# nolint end
 
 can_use_lines <- function(nrows, ncols, max_tiles) {
     minr <- min_line_tiles(nrows)
