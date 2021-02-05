@@ -196,42 +196,8 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
     if (is.null(df)) df <- initialize_df(df_none())
     #### Convert # comments into braces?
     if (length(text)>0) {
-        # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
-        # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
-        move_number_semicolon <- ";(?![^\\{]*\\})"
-        text <- str_replace_all(text, move_number_semicolon, " . ")
-        text <- str_squish(paste(text, collapse = " "))
-        move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_\\.]*\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
-        locations <- str_locate_all(text, move_number_token)[[1]]
-        nr <- nrow(locations)
-        moves_raw <- list()
-        if (nr == 0L) {
-            moves_raw[[1L]] <- text
-        } else {
-            i1 <- locations[1L, 1L]
-            if (i1 > 1L) {
-                moves_raw <- vector("list", nr + 1)
-                moves_names <- vector("character", nr + 1)
-                offset <- 1L
-                moves_raw[[1]] <- str_sub(text, 1L, i1 - 2L)
-            } else {
-                offset <- 0L
-                moves_names <- vector("character", nr)
-                moves_raw <- vector("list", nr)
-            }
-            for (ii in seq(nr)) {
-                is <- locations[ii, 1L]
-                ie <- locations[ii, 2L]
-                moves_names[ii + offset] <- str_sub(text, is, ie)
-                is <- locations[ii, 2L] + 2L
-                if (ii < nr)
-                    ie <- locations[ii+1L, 1L] - 2L
-                else
-                    ie <- str_count(text)
-                moves_raw[[ii + offset]] <- str_sub(text, is, ie)
-            }
-            names(moves_raw) <- moves_names
-        }
+        text <- parse_braces(text)
+        moves_raw <- parse_movenumbers(text)
         moves <- lapply(moves_raw, remove_comments)
         comments <- lapply(moves_raw, extract_comments)
         dfs <- process_moves(df, moves, state = state)
@@ -246,6 +212,58 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
     names(moves) <- names(dfs)
     names(comments) <- names(dfs)
     list(moves = moves, comments = comments, dfs = dfs)
+}
+
+parse_braces <- function(text) {
+    text <- split_blanks(str_squish(paste(text, collapse = " "))) # vector of tokens
+    text <- unlist(lapply(text, exp_braces)) # vector of expanded tokens
+    paste(text, collapse = " ")
+}
+exp_braces <- function(string) {
+    if (str_sub(string, 1L, 1L) == "{" && str_sub(string, -1L, -1L) == "}") # no preamble/postfix
+        string
+    else
+        bracer::expand_braces(string)
+}
+
+parse_movenumbers <- function(text) {
+    # (?![^\\{]*\\}) is a negative lookahead assertion to not capture moves in comment braces
+    # (?![[:digit:]]) is a negative lookahead assertion to not capture dots followed by non-space
+    move_number_semicolon <- ";(?![^\\{]*\\})"
+    text <- str_replace_all(text, move_number_semicolon, " . ")
+    move_number_token <- "(?<![[:alnum:][:punct:]])[[:alnum:]_\\.]*\\.+(?![[:alnum:][:punct:]])(?![^\\{]*\\})"
+    locations <- str_locate_all(text, move_number_token)[[1]]
+    nr <- nrow(locations)
+    moves_raw <- list()
+    if (nr == 0L) {
+        moves_raw[[1L]] <- text
+    } else {
+        i1 <- locations[1L, 1L]
+        if (i1 > 1L) {
+            moves_raw <- vector("list", nr + 1)
+            moves_names <- vector("character", nr + 1)
+            offset <- 1L
+            moves_raw[[1]] <- str_sub(text, 1L, i1 - 2L)
+        } else {
+            offset <- 0L
+            moves_names <- vector("character", nr)
+            moves_raw <- vector("list", nr)
+        }
+        for (ii in seq(nr)) {
+            is <- locations[ii, 1L]
+            ie <- locations[ii, 2L]
+            moves_names[ii + offset] <- str_sub(text, is, ie)
+            is <- locations[ii, 2L] + 2L
+            if (ii < nr)
+                ie <- locations[ii+1L, 1L] - 2L
+            else
+                ie <- str_count(text)
+            moves_raw[[ii + offset]] <- str_sub(text, is, ie)
+        }
+        names(moves_raw) <- moves_names
+        if (names(moves_raw)[1] == "") names(moves_raw)[1] <- "SetupFn.."
+    }
+    moves_raw
 }
 
 comment_token <- "(?<![[:alnum:][:punct:]])\\{[^}]*\\}(?![[:alnum:][:punct:]])"
@@ -584,9 +602,9 @@ get_algebraic_y <- function(text) {
 get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
     # nocov piece_id <- gsub("'", "", piece_id)
     if (piece_id == "") {
-        indices <- which(!is.na(match(df$id, state$active_id)))
-        if (!length(indices)) stop("Couldn't find any active pieces")
-        indices
+        id <- state$active_id
+        if (!length(id)) stop("Couldn't find any active pieces")
+        id
     } else if (str_detect(piece_id, "^\\^")) { # ^b4
         piece_id <- str_sub(piece_id, 2L)
         get_id_from_piece_id(piece_id, state$df_move_start, state)
@@ -836,7 +854,6 @@ process_hyphen_move <- function(df, text, state) {
         index <- nrow(df_rest)
     else
         index <- which(df_rest$id %in% l_i$id)
-
     df_moving$x <- new_xy$x
     df_moving$y <- new_xy$y
     state$active_id <- df_moving$id
@@ -1102,7 +1119,7 @@ replace_macros <- function(df, text, state = create_state(df)) {
 process_move <- function(df, text, state = create_state(df)) {
     state$df_move_start <- df
     text <- replace_macros(df, text, state)
-    text <- bracer::expand_braces(split_blanks(text))
+    text <- split_blanks(text)
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
     text <- gsub("\u035c|\u203f", "_", text) # convert underties to underscore
     text <- gsub("([0-9]+)\\?", "\\1&?", text) # convert n? to n&?

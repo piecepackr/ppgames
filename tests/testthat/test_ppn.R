@@ -47,6 +47,9 @@ test_that("parsing ppn files works as expected", {
     g <- read_ppn(textConnection(null))[[1]]
     expect_length(g, 0)
 
+    comments <- "---\n...\n{comment,with,commas}"
+    g <- read_ppn(textConnection(comments))[[1]]
+    expect_equal(g$comments[[2]], "comment,with,commas")
 })
 
 test_that("parsing simplified piece notation works as expected", {
@@ -375,9 +378,7 @@ test_that("process_submove works as expected", {
     expect_error(process_submove(df, "!"))
     expect_error(get_id_from_coords(df, "e5"))
 
-    df <- initialize_df(df_none())
-    state <- create_state(df)
-    df <- process_move(df, "S@a{1..6} M@a1 5a1-b1", state)
+    df <- read_ppn(textConnection("1. S@a{1..6} M@a1 5a1-b1"))[[1]]$dfs[[2]]
     expect_equal(sum(near(df$x, 1)), 2)
     expect_equal(sum(near(df$x, 2)), 5)
 })
@@ -489,11 +490,12 @@ test_that("rotations work as expected", {
 })
 
 test_that("address works as expected", {
-    dfn <- initialize_df(df_none())
-    df <- process_move(dfn, "t@(1.5,1.5) S@{a,b}{1,2}")
+
+    df <- read_ppn(textConnection("1. t@(1.5,1.5) S@{a,b}{1,2}"))[[1]]$dfs[[2]]
     expect_equal(mean(df$x), 1.5)
     expect_equal(get_xy("&5(1.5,1.5)", df)$x, 1.5)
 
+    dfn <- initialize_df(df_none())
     df <- process_move(dfn, "S@b2 d@b2")
     expect_equal(df$piece_side, c("coin_back", "die_face"))
     df <- process_move(df, "&?d[2]-c3")
@@ -574,8 +576,7 @@ test_that("non-greedy search works as expected", {
     expect_error(process_move(df, "3/tf-2R", state), "Failed to parse coordinates: /tf")
 })
 test_that("greedy search works as expected", {
-    df <- initialize_df(df_none())
-    df <- process_move(df, "S@{a..f}2")
+    df <- read_ppn(textConnection("1. S@{a..f}2"))[[1]]$dfs[[2]]
     expect_equal(nrow(df), 6)
     df <- process_move(df, "*?S")
     expect_equal(nrow(df), 5)
