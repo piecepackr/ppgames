@@ -9,6 +9,7 @@ g2 <- ppn2[[1]]
 g3a <- ppn3[[1]]
 g3b <- ppn3[[2]]
 g4 <- ppn4[[1]]
+cat_move <- function(df, ...) ppgames::cat_move(df, ..., color = FALSE)
 test_that("parsing ppn files works as expected", {
     expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
     expect_equal(g1$moves[["setup."]], "t@b2")

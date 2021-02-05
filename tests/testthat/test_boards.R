@@ -4,7 +4,7 @@ test_that("rectangular boards works as expected", {
         dfc <- tibble(piece_side = "coin_face", x=1:6, y = 1:6, angle = 0, suit = 1, rank = 1:6)
         rbind(df, dfc)
     }
-    cpiece <- function(df) cat_piece(add_coins(df))
+    cpiece <- function(df) cat_piece(add_coins(df), color = FALSE)
 
     expect_equal(min_line_tiles(6), 2)
     expect_equal(min_line_tiles(7), 3)

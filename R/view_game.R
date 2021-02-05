@@ -52,11 +52,11 @@ next_move <- function(game, move) {
     move
 }
 
-print_screen <- function(game, move, reorient = "none", annotate = FALSE, clear = TRUE) {
+print_screen <- function(game, move, reorient = "none", annotate = FALSE, clear = TRUE, color = TRUE) {
     offset <- get_game_offsets(game, annotate)
     ppn <- as_ppn(game)
     diagram <- cat_move(game, move, reorient = reorient, annotate = annotate, file = NULL,
-                        xoffset=offset$x, yoffset=offset$y)
+                        xoffset=offset$x, yoffset=offset$y, color = color)
     pmove_info <- paste("Prev move:", move, game$moves[[move]])
     nmove <- next_move(game, move)
     if (move != nmove)

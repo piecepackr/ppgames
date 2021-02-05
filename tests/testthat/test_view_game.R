@@ -16,7 +16,9 @@ test_that("view_game works as expected", {
     expect_equal(prev, "3...")
     expect_equal(next_move(game, prev), "4.")
 
-    verify_output("../text_diagrams/print_screen.txt", print_screen(game, move, clear = FALSE))
+    print_screen <- function(...) ppgames:::print_screen(..., color = FALSE)
+    verify_output("../text_diagrams/print_screen.txt",
+                  print_screen(game, move, clear = FALSE))
 
     g <- list(metadata = NULL, movetext = character())
     g <- append_to_ppn(g, "1. S@b2")

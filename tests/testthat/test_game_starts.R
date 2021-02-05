@@ -2,6 +2,7 @@ library("dplyr")
 library("piecepackr")
 library("vdiffr")
 cfg <- pp_cfg()
+cat_piece <- function(df, ...) ppgames::cat_piece(df, ..., color = FALSE)
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {

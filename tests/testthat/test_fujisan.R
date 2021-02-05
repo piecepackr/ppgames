@@ -1,6 +1,8 @@
 library("piecepackr")
 library("vdiffr")
 context("test fujisan solver")
+cat_piece <- function(df, ...) ppgames::cat_piece(df, ..., color = FALSE)
+cat_move <- function(df, ...) ppgames::cat_move(df, ..., color = FALSE)
 test_that("fujisan solver works as expected", {
     coins <- "235334140030554141221205"
     dice <- "0000"

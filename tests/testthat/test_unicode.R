@@ -1,5 +1,6 @@
 library("tibble")
 context("test unicode")
+cat_piece <- function(df, ...) ppgames::cat_piece(df, ..., color = FALSE)
 test_that("dimensions", {
     df <- df_four_field_kono()
     df$cfg <- "piecepack"
