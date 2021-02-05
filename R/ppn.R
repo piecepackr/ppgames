@@ -583,7 +583,11 @@ get_algebraic_y <- function(text) {
 
 get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
     # nocov piece_id <- gsub("'", "", piece_id)
-    if (str_detect(piece_id, "^\\^")) { # ^b4
+    if (piece_id == "") {
+        indices <- which(!is.na(match(df$id, state$active_id)))
+        if (!length(indices)) stop("Couldn't find any active pieces")
+        indices
+    } else if (str_detect(piece_id, "^\\^")) { # ^b4
         piece_id <- str_sub(piece_id, 2L)
         get_id_from_piece_id(piece_id, state$df_move_start, state)
     } else {
@@ -692,6 +696,7 @@ process_rotate_move <- function(df, text, state = create_state(df), clockwise = 
 
     indices <- get_indices_from_piece_id(piece_id, df, state)
     df$angle[indices] <- df$angle[indices] + angle
+    state$active_id <- df$id[indices]
     df
 }
 
@@ -710,6 +715,7 @@ process_hash_move <- function(df, text, state = create_state(df)) {
     df2$x <- coords1$x
     df2$y <- coords1$y
     dfo <- df[-c(indices1, indices2), ]
+    state$active_id <- df$id[indices1]
     bind_rows(dfo, df1, df2)
 }
 
@@ -721,7 +727,7 @@ process_at_move <- function(df, text, state = create_state(df)) {
     xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
     df_piece$y <- xy$y
-    df_piece$id <- state$max_id <- state$max_id + 1L
+    df_piece$id <- state$active_id <- state$max_id <- state$max_id + 1L
 
     insert_df(df, df_piece, l_i$index)
 }
@@ -742,7 +748,7 @@ process_backslash_move <- function(df, text, state = create_state(df)) {
     xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
     df_piece$y <- xy$y
-    df_piece$id <- state$max_id <- state$max_id + 1L
+    df_piece$id <- state$active_id <- state$max_id <- state$max_id + 1L
     if (is.null(l_i$id))
         index <- 0L
     else
@@ -781,6 +787,7 @@ get_indices_from_piece_id <- function(piece_id, df, state) {
 process_asterisk_move <- function(df, text, state = create_state(df)) {
     piece_id <- gsub("\\*", "", text)
     indices <- get_indices_from_piece_id(piece_id, df, state)
+    state$active_id <- setdiff(state$active_id, df$id[indices])
     df[-indices,]
 }
 
@@ -801,6 +808,7 @@ process_underscore_move <- function(df, text, state) {
 
     df_moving$x <- new_xy$x
     df_moving$y <- new_xy$y
+    state$active_id <- df_moving$id
     insert_df(df_rest, df_moving, index)
 }
 
@@ -831,6 +839,7 @@ process_hyphen_move <- function(df, text, state) {
 
     df_moving$x <- new_xy$x
     df_moving$y <- new_xy$y
+    state$active_id <- df_moving$id
     insert_df(df_rest, df_moving, index)
 }
 process_hyphen_percent_move <- function(df, text, state) {
@@ -851,6 +860,7 @@ create_state <- function(df, metadata = list()) {
     as.environment(list(df_move_start = df,
                         macros = c(metadata$Macros, attr(df, "macros"), macros),
                         max_id = nrow(df),
+                        active_id = integer(),
                         scale_factor = as.numeric(scale_factor)))
 }
 
@@ -938,6 +948,7 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
         state$max_id <- max(new_id)
         df[indices[to_change_id], "id"] <- new_id
     }
+    state$active_id <- df$id[indices]
     df
 }
 
@@ -959,6 +970,7 @@ process_equal_move <- function(df, text, state = create_state(df)) {
     df[indices, "angle"] <- df_piece$angle
     df[indices, "cfg"] <- df_piece$cfg
     df[indices, "id"] <- new_id
+    state$active_id <- df$id[indices]
     df
 }
 
