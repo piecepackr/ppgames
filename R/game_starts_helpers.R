@@ -31,23 +31,48 @@ process_suits <- function(suits) {
     as.integer(suits)
 }
 
+generate_sra <- function(df, filter_ = "^tile", which_ = "sra") {
+    df <- dplyr::filter(df, str_detect(.data$piece_side, filter_))
+    l <- purrr::pmap(df, generate_helper, which_ = which_)
+    paste(unlist(l), collapse = "")
+}
+generate_helper <- function(suit, rank, angle = 0, which_ = "sra", ...) {
+    s <- switch(suit, "S", "M", "C", "A")
+    r <- rank - 1
+    a <- "^"
+    if (near(angle %% 360, 90)) a <- "<"
+    if (near(angle %% 360, 180)) a <- "v"
+    if (near(angle %% 360, 270)) a <- ">"
+    switch(which_,
+           sra = paste0(s, r, a),
+           sr = paste(s, r),
+           r = r)
+}
+
 process_tiles <- function(tiles, n_tiles = 24) {
     tiles <- gsub("[[:space:]]", "", tiles)
     tiles <- gsub("[/:;\\\\|]", "", tiles)
     tiles <- stringr::str_split(tiles, "")[[1]]
     if (length(tiles) == 2 * n_tiles) {
         suits <- tiles[which(seq(2 * n_tiles) %% 2 == 1)]
-        angles <- tiles[which(seq(2 * n_tiles) %% 2 == 0)]
-        ranks <- integer(n_tiles)
+        needs_ranks <- str_detect(tiles[2], "[\\^<v>]")
+        if (needs_ranks) {
+            angles <- tiles[which(seq(2 * n_tiles) %% 2 == 0)]
+            ranks <- integer(n_tiles)
+        } else {
+            ranks <- tiles[which(seq(2 * n_tiles) %% 2 == 0)]
+            angles <- rep("^", n_tiles)
+        }
     } else if (length(tiles) == 3 * n_tiles) {
         suits <- tiles[which(seq(3 * n_tiles) %% 3 == 1)]
         ranks <- tiles[which(seq(3 * n_tiles) %% 3 == 2)]
         angles <- tiles[which(seq(3 * n_tiles) %% 3 == 0)]
+        needs_ranks <- FALSE
     } else {
         stop(paste("Don't know how to handle tiles string", tiles))
     }
     suits <- process_suits(suits)
-    if (length(tiles) == 2 * n_tiles) {
+    if (needs_ranks) {
         n_ranks <- n_tiles %/% 4
         ranks[which(suits==1)] <- sample.int(n_ranks)
         ranks[which(suits==2)] <- sample.int(n_ranks)

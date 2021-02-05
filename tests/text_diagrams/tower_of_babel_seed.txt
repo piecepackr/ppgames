@@ -1,4 +1,4 @@
-> cat_piece(df_tower_of_babel(seed = 42))
+> cat_piece(df)
   ┌─┰─┐
   │ ┃ │
   ┝━╋━┥

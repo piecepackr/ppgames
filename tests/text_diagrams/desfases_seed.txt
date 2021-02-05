@@ -1,4 +1,4 @@
-> cat_piece(df_desfases(seed = 42), reorient = "symbols")
+> cat_piece(df, reorient = "symbols")
                                     
               4⃞   5⃝   3⃝ 2⃝ a⃝ n⃝       
                                     
