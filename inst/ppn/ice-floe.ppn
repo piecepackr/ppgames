@@ -1,0 +1,19 @@
+---
+GameType: Ice Floe
+...
+PlacePawns. pS@e11 pM@k6 pC@f0 pA@(0,5) 
+RollDice. dS5@f11 dMa@k5 dC3@e0 dA2@(0,6) 
+PlacePyramids. xn{S@h7,M@d5,C@j1,A@b1}; xa{S@d3,M@f3,C@j9,A@f9}; 
+               x2{S@b5,M@b9,C@h1,A@j3}; x3{S@h5,M@d9,C@d7,A@f1};
+               x4{S@h9,M@b3,C@d1,A@b7}; x5{S@h3,M@j7,C@f7,A@j5};
+Round1. ?xS4-3L; ?xM3-f10; *4?Ca; ?xC2-g3; ?xAn-d4;-h4; *4?C2;
+        ?d{S~5,M~n,C~n,A~a} . c5A@g11 c4A@k4 c3A@d0 cnS@(0,7) . *2?An . *?M2
+Round2. ?xMn-3L;-2U; ?xC3-b8; *4?S4; ?xA3-3R; ?xSa-3L;
+        ?d{S~5,M~a,C~n,A~a} . 2@g0; 2@d11; a@h0; */cf; ?c5~C ?c{4,3,n}~S . *2?Sn; *?S3
+Round3. ?xC4-4R; ?xA3-3L; ?xSn-3L; ?xM2-2SE;-f8; *4?Aa;
+        ?d{S~5,M~4,C~5,A~5} . ?c{5,3,n}~M ?c4~C . *2?M5 . *?S5
+Round4. ?xA3-2UL;-b4;*4?A2; ?xS2-4U; 2?Ma-2U; ?xC4-i3;
+        ?d{S~3,M~3,C~2,A~3} . ?c{5,4}~C ?c3~A ?cn~M; 
+        a@(0,4); 2@k3; 2@(0,3); a@{k2,d11} . */cf; *3?C3; *?M4
+{ Final coins: Suns: none; Moons: none; Crowns: none; Arms: none }
+{ Final score: Suns: 3, Moons: 2, Crowns: 2, Arms: 0 }
