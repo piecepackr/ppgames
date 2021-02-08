@@ -25,6 +25,11 @@ New features
   - ``N?PieceSpec`` is now a shortcut for ``N&?PieceSpec``
   - An empty PieceSpec now refers to the "last active" piece(s)
   - Brace expansions are now expanded before semi-colons are
+  - There is now support for rotating pieces around a reference location/pieces (#86):
+
+    * ``PieceId@>Angle|Location`` means rotating ``PieceId`` pieces ``Angle`` angle around ``Location`` location
+    * ``PieceId1@>Angle$PieceId2`` is a shortcut for ``PieceId1@>Angle|&PieceId2``
+    * ``PieceId$>Angle`` is a shortcut for ``PieceId@>Angle$PieceId``
 
 * New function ``view_game()`` provides a simple command-line PPN viewer/editor.
 * New function ``cat_game()`` renders a plaintext animation of a game within the terminal.

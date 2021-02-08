@@ -673,6 +673,8 @@ get_coords_from_piece_id <- function(piece_id, df, state = create_state(df)) {
 process_submove <- function(df, text, state = create_state(df)) {
     if (text == "") {
         df
+    } else if (str_detect(text, "\\$>")) {
+        process_percent_rotate_move(df, text, state)
     } else if (str_detect(text, "@>")) {
         process_rotate_move(df, text, state)
     } else if (str_detect(text, "@%")) {
@@ -709,13 +711,38 @@ process_submove <- function(df, text, state = create_state(df)) {
 process_rotate_move <- function(df, text, state = create_state(df), clockwise = TRUE) {
     id_angle <- str_split(text, "@>")[[1]]
     piece_id <- id_angle[1L]
-    angle <- as.numeric(id_angle[2])
-    angle <- ifelse(clockwise, -angle, angle)
-
     indices <- get_indices_from_piece_id(piece_id, df, state)
-    df$angle[indices] <- df$angle[indices] + angle
+    angle <- id_angle[2L]
+    if (str_detect(angle, "\\|")) {
+        angle_coords <- str_split(angle, "\\|", n=2L)[[1L]]
+        angle <- as.numeric(angle_coords[1L])
+        location <- get_xy(angle_coords[2L], df, state)
+    } else if (str_detect(angle, "\\$")) {
+        angle_coords <- str_split(angle, "\\$", n=2L)[[1L]]
+        angle <- as.numeric(angle_coords[1L])
+        location <- get_xy(paste0("&", angle_coords[2L]), df, state)
+    } else {
+        angle <- as.numeric(angle)
+        location <- NULL
+    }
+    angle <- ifelse(clockwise, -angle, angle)
+    if (!is.null(location)) {
+        p <- piecepackr:::Point2D$new(x = df$x[indices], y = df$x[indices])
+        p <- p$translate(-location$x, -location$y)$rotate(angle)$translate(location$x, location$y)
+        df$x[indices] <- p$x
+        df$y[indices] <- p$y
+    }
+    df$angle[indices] <- (df$angle[indices] + angle)
     state$active_id <- df$id[indices]
     df
+}
+
+process_percent_rotate_move <- function(df, text, state = create_state(df)) {
+    pa <- str_split(text, "\\$>")[[1L]]
+    piece_spec <- pa[1L]
+    angle <- pa[2L]
+    text <- str_glue("{piece_spec}@>{angle}${piece_spec}")
+    process_rotate_move(df, text, state)
 }
 
 process_hash_move <- function(df, text, state = create_state(df)) {
