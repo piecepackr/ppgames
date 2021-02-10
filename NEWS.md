@@ -31,6 +31,13 @@ New features
     * ``PieceId1@>Angle$PieceId2`` is a shortcut for ``PieceId1@>Angle|&PieceId2``
     * ``PieceId$>Angle`` is a shortcut for ``PieceId@>Angle$PieceId``
 
+  - The ``+`` move token "flips" pieces (#87)
+   
+    * If "pyramid_top" flips to "pyramid_face"
+    * Other pyramid sides flip to "pyramid_top"
+    * "die_face" flips to "die_face" but with a new rank plus three mod 6
+    * Other pieces flip back and forth from "back" <-> "face", "top" <-> "base", "left" <-> "right"
+
 * New function ``view_game()`` provides a simple command-line PPN viewer/editor.
 * New function ``cat_game()`` renders a plaintext animation of a game within the terminal.
 * New function ``write_ppn()`` takes a list of parsed PPN files and writes it to a file.
@@ -55,8 +62,8 @@ New features
 
 * ``cat_piece()`` now supports the argument ``reorient`` which allows it to first reorient all pieces or just the rank/suit symbols:
 
-    * The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.
-    * "all" (or \code{TRUE}) means setting the angle to zero for all pieces.
+    * The default "none" (or ``FALSE``) means don't reorient any pieces/symbols.
+    * "all" (or ``TRUE``) means setting the angle to zero for all pieces.
     * "symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
       In particular, in contrast with "all" this preserves the location of the upper-left "corner" of piecepack tile faces.
 * ``cat_piece()`` now supports the argument ``annotate`` which allows one to add coordinate information to plaintext diagrams.

@@ -687,6 +687,8 @@ process_submove <- function(df, text, state = create_state(df)) {
         process_hyphen_move(df, text, state)
     } else if (str_detect(text, "\\*")) {
         process_asterisk_move(df, text, state)
+    } else if (str_detect(text, plus_token)) {
+        process_plus_move(df, text, state)
     } else if (str_detect(text, "~")) {
         process_tilde_move(df, text, state)
     } else if (str_detect(text, "=")) {
@@ -830,10 +832,24 @@ get_indices_from_piece_id <- function(piece_id, df, state) {
 }
 
 process_asterisk_move <- function(df, text, state = create_state(df)) {
-    piece_id <- gsub("\\*", "", text)
+    piece_id <- sub("\\*", "", text)
     indices <- get_indices_from_piece_id(piece_id, df, state)
     state$active_id <- setdiff(state$active_id, df$id[indices])
     df[-indices,]
+}
+plus_token <- "(?<![(<,])\\+"  # +d4 but not (+4,-3) or <-4,+3>
+process_plus_move <- function(df, text, state) {
+    piece_id <- sub("\\+", "", text)
+    indices <- get_indices_from_piece_id(piece_id, df, state)
+    df$piece_side[indices] <- flip_ps(df$piece_side[indices])
+    df$rank[indices] <- ifelse(df$piece_side[indices] == "die_face",
+                               (df$rank[indices] + 2) %% 6 + 1,
+                               df$rank[indices])
+    new_id <- seq.int(state$max_id + 1L, length.out = length(indices))
+    df$id[indices] <- new_id
+    state$max_id <- max(new_id)
+    state$active_id <- df$id[indices]
+    df
 }
 
 process_underscore_move <- function(df, text, state) {
@@ -1148,6 +1164,7 @@ process_move <- function(df, text, state = create_state(df)) {
     text <- replace_macros(df, text, state)
     text <- split_blanks(text)
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
+    text <- str_trim(gsub("\\+", " +", text)) # allow a4-b5+
     text <- gsub("\u035c|\u203f", "_", text) # convert underties to underscore
     text <- gsub("([0-9]+)\\?", "\\1&?", text) # convert n? to n&?
     moves <- split_blanks(text)
@@ -1180,4 +1197,21 @@ clean_comments <- function(nms) {
         nms[[i]] <- paste0(nms[[i-1L]], ".")
     }
     nms
+}
+
+flip_ps <- function(piece_side) {
+    new <- piece_side
+    p_s <- str_split(piece_side, "_")
+    piece <- sapply(p_s, function(x) x[1])
+    side <- sapply(p_s, function(x) x[2])
+    new <- ifelse(side == "face", paste0(piece, "_back"), new)
+    new <- ifelse(side == "back", paste0(piece, "_face"), new)
+    new <- ifelse(side == "left", paste0(piece, "_right"), new)
+    new <- ifelse(side == "right", paste0(piece, "_left"), new)
+    new <- ifelse(side == "top", paste0(piece, "_base"), new)
+    new <- ifelse(side == "base", paste0(piece, "_top"), new)
+    new <- ifelse(piece == "pyramid", "pyramid_top", new)
+    new <- ifelse(piece_side == "pyramid_top", "pyramid_face", new)
+    new <- ifelse(piece_side == "die_face", "die_face", new)
+    new
 }

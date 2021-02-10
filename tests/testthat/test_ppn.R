@@ -699,6 +699,20 @@ test_that("partial piece update (tilde)", {
     expect_equal(df$piece_side, "pyramid_face")
 })
 
+test_that("flipping pieces works", {
+    ps <- c("tile_face", "coin_back", "pawn_top", "pyramid_top", "pyramid_face",
+            "tile_base", "card_left", "bit_right", "die_face")
+    ps_flipped <- flip_ps(ps)
+    expect_equal(ps_flipped, c("tile_back", "coin_face", "pawn_base", "pyramid_face", "pyramid_top",
+                               "tile_top", "card_right", "bit_left", "die_face"))
+    df <- initialize_df(df_none())
+    state <- create_state(df)
+    df <- process_move(df, "S@b2 S5d@b3 M@b4 +/S", state)
+    expect_equal(df$piece_side, c("coin_face", "die_face", "coin_back"))
+    expect_equal(df$id, c(4L, 5L, 3L))
+    expect_equal(df$rank, c(1L, 3L, 1L))
+})
+
 test_that("scale_factor works as expected", {
     scale <- "MovetextParser:\n  Name: Default\n  ScaleFactor: 2\n...\n1. S@a2"
     df <- tail(read_ppn(textConnection(scale))[[1]]$dfs, 1)[[1]]
