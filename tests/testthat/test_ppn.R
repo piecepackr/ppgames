@@ -510,10 +510,12 @@ test_that("address works as expected", {
     expect_equal(get_xy("&5(1.5,1.5)", df)$x, 1.5)
 
     dfn <- initialize_df(df_none())
-    df <- process_move(dfn, "S@b2 d@b2")
+    state <- create_state(df)
+    df <- process_move(dfn, "S@b2 d@b2", state)
     expect_equal(df$piece_side, c("coin_back", "die_face"))
-    df <- process_move(df, "&?d[2]-c3")
+    df <- process_move(df, "&?d[2]-c3", state)
     expect_equal(df$x, c(2,3))
+    expect_equal(get_xy("", df, state)$x, 3)
 })
 
 test_that("Identifying pieces with brackets works", {

@@ -1067,7 +1067,9 @@ insert_df <- function(df1, df2, index = nrow(df1)) {
 }
 
 get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = NULL) {
-    xy <- if (str_detect(coords, "^&")) {
+    xy <- if (coords == "") {
+        get_xy("&", df, state, anchor_indices)
+    } else if (str_detect(coords, "^&")) {
         piece_id <- str_sub(coords, 2L)
         get_coords_from_piece_id(piece_id, df, state)
     } else if (str_detect(coords, "^<")) { # relative moves
