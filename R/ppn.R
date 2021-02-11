@@ -97,7 +97,7 @@ parse_movetext <- function(movetext, metadata) {
     }
 }
 
-parser_default <- function(movetext = character(), metadata = list(), envir = NULL, scale_factor = NULL) {
+parser_default <- function(movetext = character(), metadata = list(), scale_factor = NULL) {
     game_list <- list(metadata = metadata, movetext = movetext)
     df <- get_starting_df(metadata)
     if (!is.null(scale_factor)) attr(df, "scale_factor") <- scale_factor
