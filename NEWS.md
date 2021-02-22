@@ -23,6 +23,7 @@ New features
         UUR, RUR, RDR, DDR, DDL, LDL, LUL, UUL are diagonal moves for a hexagonal board
 
   - ``N?PieceSpec`` is now a shortcut for ``N&?PieceSpec``
+  - ``!PieceId`` is now a shortcut for ``PieceId-<0,0>``
   - An empty PieceSpec now refers to the "last active" piece(s)
   - An empty Location now refers to the location of the "last active" piece(s) (#90)
   - Brace expansions are now expanded before semi-colons are

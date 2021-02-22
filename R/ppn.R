@@ -166,13 +166,16 @@ get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
     fn <- ppn_get(fn_name, package)
     df <- do.call(fn, .l)
     df <- initialize_df(df)
-    if (is.null(df[["cfg"]])) df$cfg <- "piecepack"
     df
 }
 
 initialize_df <- function(df) {
     df <- tibble::rowid_to_column(df, "id")
     if (!hasName(df, "angle")) df$angle <- 0
+    df$angle <- ifelse(is.na(df$angle), 0, df$angle)
+    df$rank <- ifelse(is.na(df$rank), 1L, df$rank)
+    df$suit <- ifelse(is.na(df$suit), 1L, df$suit)
+    if (is.null(df[["cfg"]])) df$cfg <- "piecepack"
     df
 }
 
@@ -674,7 +677,7 @@ process_submove <- function(df, text, state = create_state(df)) {
     if (text == "") {
         df
     } else if (str_detect(text, "\\$>")) {
-        process_percent_rotate_move(df, text, state)
+        process_dollar_rotate_move(df, text, state)
     } else if (str_detect(text, "@>")) {
         process_rotate_move(df, text, state)
     } else if (str_detect(text, "@%")) {
@@ -705,6 +708,8 @@ process_submove <- function(df, text, state = create_state(df)) {
         process_backslash_move(df, text, state)
     } else if (str_detect(text, "#")) {
         process_hash_move(df, text, state)
+    } else if (str_detect(text, "!")) {
+        process_exclamation_move(df, text, state)
     } else {
         stop(paste("Don't know how to handle move", text))
     }
@@ -729,7 +734,7 @@ process_rotate_move <- function(df, text, state = create_state(df), clockwise = 
     }
     angle <- ifelse(clockwise, -angle, angle)
     if (!is.null(location)) {
-        p <- piecepackr:::Point2D$new(x = df$x[indices], y = df$x[indices])
+        p <- piecepackr:::Point2D$new(x = df$x[indices], y = df$y[indices])
         p <- p$translate(-location$x, -location$y)$rotate(angle)$translate(location$x, location$y)
         df$x[indices] <- p$x
         df$y[indices] <- p$y
@@ -739,7 +744,12 @@ process_rotate_move <- function(df, text, state = create_state(df), clockwise = 
     df
 }
 
-process_percent_rotate_move <- function(df, text, state = create_state(df)) {
+process_exclamation_move <- function(df, text, state = create_state(df)) {
+    piece_id <- str_sub(text, 2L, 2L)
+    process_hyphen_move(df, paste0(piece_id, "-<0,0>"), state)
+}
+
+process_dollar_rotate_move <- function(df, text, state = create_state(df)) {
     pa <- str_split(text, "\\$>")[[1L]]
     piece_spec <- pa[1L]
     angle <- pa[2L]
@@ -1167,6 +1177,7 @@ process_move <- function(df, text, state = create_state(df)) {
     text <- split_blanks(text)
     text <- str_trim(gsub("\\*", " *", text)) # allow a4-b5*c3*c4
     text <- str_trim(gsub("\\+", " +", text)) # allow a4-b5+
+    text <- str_trim(gsub("!", " !", text)) # allow 3?Sa$>90!
     text <- gsub("\u035c|\u203f", "_", text) # convert underties to underscore
     text <- gsub("([0-9]+)\\?", "\\1&?", text) # convert n? to n&?
     moves <- split_blanks(text)
