@@ -631,6 +631,7 @@ test_that("relative moves work as expected", {
     df <- initialize_df(df_none())
     state <- create_state(df)
     expect_error(process_move(df, 'S"d4'), "Don't know how to handle move S\"d4")
+    expect_error(process_move(df, "S@<2,2>"), "Don't know where this location is relative to")
     df <- process_move(df, "Sd@b1 Ad@c4", state)
     expect_equal(df$x, c(2,3))
     expect_equal(df$y, c(1,4))

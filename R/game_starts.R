@@ -65,11 +65,15 @@
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
 #'  \item{Pass the Food}{A dexterity game by Trevor L Davis.
 #'                       See \url{https://www.ludism.org/ppwiki/PassTheFood}}
+#'  \item{Piece Packing Pirates}{A solitaire sea adventure by Clark Rodeffer.
+#'                               See \url{https://www.ludism.org/ppwiki/PiecePackingPirates}.}
 #'  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
 #'                      Pac-Man, designed for Namco by Toru Iwatani.
 #'                      See \url{https://www.ludism.org/ppwiki/Piecepackman}}
 #'  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
 #'        See \url{https://www.ludism.org/ppwiki/PlansOfAction}.}
+#'  \item{Quatri}{An abstract adapted to piecepack by Michael Schoessow.
+#'                See \url{https://www.ludism.org/ppwiki/Quatri}.}
 #'  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.
 #'                    See \url{https://www.ludism.org/ppwiki/Relativity}.}
 #'  \item{Salta}{Two-player abstract invented in 1899 by Konrad Heinrich Büttgenbach.
@@ -94,10 +98,10 @@
 #'                             See \url{https://en.wikipedia.org/wiki/Morabaraba}.}
 #'  \item{Ultima}{AKA \dQuote{Baroque chess}, a chess variant by Robert Abbott.
 #'                See \url{https://en.wikipedia.org/wiki/Baroque_chess}.}
-#'  \item{Xiangqi}{AKA \dQuote{Chinese chess}, a major chess variant.
-#'                 See \url{https://www.ludism.org/ppwiki/Xiangqi}.}
 #'  \item{Wormholes}{Piecepack game by Marty and Ron Hale-Evans.
 #'                   See \url{https://www.ludism.org/ppwiki/Wormholes}.}
+#'  \item{Xiangqi}{AKA \dQuote{Chinese chess}, a major chess variant.
+#'                 See \url{https://www.ludism.org/ppwiki/Xiangqi}.}
 #'}
 #'
 #' @param seed Seed that determines setup, either an integer or \code{NULL}
@@ -462,16 +466,72 @@ df_pass_the_food <- function() {
 
 #' @rdname df_game
 #' @export
+df_piece_packing_pirates <- function(seed = NULL) {
+    set.seed(seed)
+    new <- "0_0"
+    tiles_xy <- new
+    impossible <- c()
+    possible <- c()
+    while (length(tiles_xy) < 24L) {
+        impossible <- union(impossible, new_impossible(new))
+        possible <- union(possible, new_possible(new))
+        possible <- setdiff(possible, impossible)
+        new <- sample(possible, 1L)
+        tiles_xy <- c(tiles_xy, new)
+    }
+    xy <- str_split(tiles_xy, "_")
+    x <- as.numeric(sapply(xy, function(x) x[1]))
+    y <- as.numeric(sapply(xy, function(x) x[2]))
+    df_tiles <- tibble(piece_side = "tile_back",
+                       x = x - min(x) + 1.5,
+                       y = y - min(y) + 1.5,
+                       angle = sample(c(0, 90, 180, 270), 24, replace=TRUE))
+    df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+    bind_cols(df_tiles, df_tsr)
+}
+
+p_ <- function(...) paste(..., sep = "_")
+new_impossible <- function(x_y) {
+    xy <- as.integer(str_split(x_y, "_")[[1]])
+    c(p_(xy[1] - 1L, xy[2] + -1:1),
+      p_(xy[1], xy[2] + -1:1),
+      p_(xy[1] + 1L, xy[2] + -1:1))
+}
+new_possible <- function(x_y) {
+    xy <- as.integer(str_split(x_y, "_")[[1]])
+    c(p_(xy[1] - 2L, xy[2] + -1:1),
+      p_(xy[1] - 1L, xy[2] + c(-2L, 2L)),
+      p_(xy[1] + 0L, xy[2] + c(-2L, 2L)),
+      p_(xy[1] + 1L, xy[2] + c(-2L, 2L)),
+      p_(xy[1] + 2L, xy[2] + -1:1))
+}
+
+#' @rdname df_game
+#' @export
 df_plans_of_action <- function(seed = NULL, coins = NULL) {
+    df_tiles <- df_rect_board_tiles(nrows=8, ncols=8)
     if (is.null(coins)) {
         set.seed(seed)
         suits <- sample(rep(1:4, 6), 24)
     } else {
         suits <- process_suits(coins)
     }
-    df_tiles <- df_rect_board_tiles(nrows=8, ncols=8)
     df_coins <- tibble(piece_side = "coin_back", suit = suits,
-                       x = rep(2:7, 4), y = rep(6:3, each=6))
+                       x = rep(2:7, 4), y = rep(6:3, each=6), angle=0)
+    df_coins <- arrange(df_coins, .data$suit)
+    df_coins$rank <- rep(1:6, 4)
+    bind_rows(df_tiles, df_coins)
+}
+
+#' @rdname df_game
+#' @export
+df_quatri <- function() {
+    df_tiles <- df_rect_board_tiles(nrows=4, ncols=4)
+    df_coins <- tibble(piece_side = "coin_back",
+                       x = rep(1:4, 2), y = rep(c(4,1), each=4),
+                       suit = c(1,2,1,2, 2,1,2,1),
+                       rank = c(2,2,3,3, 5,5,4,4),
+                       angle = c(180, 0, 180, 0, 0, 180, 0, 180))
     bind_rows(df_tiles, df_coins)
 }
 

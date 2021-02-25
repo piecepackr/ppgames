@@ -24,7 +24,7 @@ New features
 
   - ``N?PieceSpec`` is now a shortcut for ``N&?PieceSpec``
   - ``!PieceId`` is now a shortcut for ``PieceId-<0,0>``
-  - An empty PieceSpec now refers to the "last active" piece(s)
+  - An empty PieceId now refers to the "last active" piece(s)
   - An empty Location now refers to the location of the "last active" piece(s) (#90)
   - Brace expansions are now expanded before semi-colons are
   - There is now support for rotating pieces around a reference location/pieces (#86):
@@ -50,7 +50,9 @@ New features
   - ``df_iceberg()``
   - ``df_grasshopper()``
   - ``df_jul_gono()``
+  - ``df_quatri()``
   - ``df_pass_the_food()``
+  - ``df_piece_packing_pirates()``
   - ``df_tower_of_babel()``
 
 * ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:

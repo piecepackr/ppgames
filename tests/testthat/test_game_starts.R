@@ -2,7 +2,7 @@ library("dplyr")
 library("piecepackr")
 library("vdiffr")
 cfg <- pp_cfg()
-cat_piece <- function(df, ...) ppgames::cat_piece(df, ..., color = FALSE)
+cat_piece <- function(df, ..., color = FALSE) ppgames::cat_piece(df, ..., color = color)
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {
@@ -46,12 +46,15 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt",
                   cat_piece(df_nine_mens_morris(has_matchsticks = TRUE)))
     verify_output("../text_diagrams/pass_the_food.txt", cat_piece(df_pass_the_food()))
+    verify_output("../text_diagrams/piece_packing_pirates.txt",
+                  cat_piece(df_piece_packing_pirates(seed = 42)))
     verify_output("../text_diagrams/piecepackmen.txt",
                   cat_piece(df_piecepackman(seed = 42)))
     expect_error(df_piecepackman(seed = 42, variant = 2))
     verify_output("../text_diagrams/plans_of_action_seed.txt", cat_piece(df_plans_of_action(seed=42)))
     coins <- "ASSCCM/CAMSMS/AAMCSS/ACAMMC"
     verify_output("../text_diagrams/plans_of_action_coins.txt", cat_piece(df_plans_of_action(coins=coins)))
+    verify_output("../text_diagrams/quatri.txt", cat_piece(df_quatri(), color=NULL))
     verify_output("../text_diagrams/relativity_seed.txt", cat_piece(df_relativity(seed=42)))
     coins <- "3ann4a/524253/345n34/a2na52"
     verify_output("../text_diagrams/relativity_coins.txt", cat_piece(df_relativity(coins=coins)))

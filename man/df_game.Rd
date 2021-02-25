@@ -17,7 +17,9 @@
 \alias{df_ley_lines}
 \alias{df_piecepackman}
 \alias{df_pass_the_food}
+\alias{df_piece_packing_pirates}
 \alias{df_plans_of_action}
+\alias{df_quatri}
 \alias{df_relativity}
 \alias{df_the_in_crowd}
 \alias{df_san_andreas}
@@ -83,7 +85,11 @@ df_piecepackman(seed = NULL, variant = 1)
 
 df_pass_the_food()
 
+df_piece_packing_pirates(seed = NULL)
+
 df_plans_of_action(seed = NULL, coins = NULL)
+
+df_quatri()
 
 df_relativity(seed = NULL, coins = NULL)
 
@@ -245,11 +251,15 @@ Here is some more information about the various games:
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
  \item{Pass the Food}{A dexterity game by Trevor L Davis.
                       See \url{https://www.ludism.org/ppwiki/PassTheFood}}
+ \item{Piece Packing Pirates}{A solitaire sea adventure by Clark Rodeffer.
+                              See \url{https://www.ludism.org/ppwiki/PiecePackingPirates}.}
  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
                      Pac-Man, designed for Namco by Toru Iwatani.
                      See \url{https://www.ludism.org/ppwiki/Piecepackman}}
  \item{Plans Of Action}{Solitaire piecepack game by L. Edward Pulley.
        See \url{https://www.ludism.org/ppwiki/PlansOfAction}.}
+ \item{Quatri}{An abstract adapted to piecepack by Michael Schoessow.
+               See \url{https://www.ludism.org/ppwiki/Quatri}.}
  \item{Relativity}{Piecepack game by Marty and Ron Hale-Evans.
                    See \url{https://www.ludism.org/ppwiki/Relativity}.}
  \item{Salta}{Two-player abstract invented in 1899 by Konrad Heinrich Büttgenbach.
@@ -274,9 +284,9 @@ Here is some more information about the various games:
                             See \url{https://en.wikipedia.org/wiki/Morabaraba}.}
  \item{Ultima}{AKA \dQuote{Baroque chess}, a chess variant by Robert Abbott.
                See \url{https://en.wikipedia.org/wiki/Baroque_chess}.}
- \item{Xiangqi}{AKA \dQuote{Chinese chess}, a major chess variant.
-                See \url{https://www.ludism.org/ppwiki/Xiangqi}.}
  \item{Wormholes}{Piecepack game by Marty and Ron Hale-Evans.
                   See \url{https://www.ludism.org/ppwiki/Wormholes}.}
+ \item{Xiangqi}{AKA \dQuote{Chinese chess}, a major chess variant.
+                See \url{https://www.ludism.org/ppwiki/Xiangqi}.}
 }
 }
