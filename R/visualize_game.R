@@ -39,7 +39,7 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
     dfs <- game$dfs
     ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
     if (n_transitions > 0L)
-        dfs <- get_tweenr_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
+        dfs <- get_tweened_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
 
     #### Add grid and comment annotations
     xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm = TRUE)
@@ -107,22 +107,53 @@ animation_fn <- function(file, new_device = TRUE) {
 }
 
 #' @importFrom dplyr bind_rows left_join matches select
-to_zero <- function(df) {
-    # df$alpha <- 0 nocov
-    df$scale <- 0
-    df
+get_tweened_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
+    n <- length(dfs)
+    if (n < 2) return(rep(dfs, n_pauses))
+    new_dfs <- list()
+    for (i in seq_len(n - 1)) {
+        new_dfs <- append(new_dfs, rep(dfs[i], n_pauses))
+        new_dfs <- append(new_dfs, tween_dfs(dfs[[i]], dfs[[i+1]], n_transitions))
+    }
+    new_dfs <- append(new_dfs, rep(dfs[n], n_pauses))
+    new_dfs
 }
-get_tweenr_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
-    df_id_cfg <- get_id_cfg(dfs)
-    dfs <- rev(lapply(dfs, get_tweenr_df, ...)) # better transitions with 'rev'
-    dfs[[1]] <- keep_state(dfs[[1L]], n_pauses)
-    df <- Reduce(tweenr_reducer(n_transitions, n_pauses), dfs)
+
+#' @importFrom utils hasName head packageVersion
+tween_dfs <- function(df1, df2, n_transitions = 0L) {
+    df_id_cfg <- get_id_cfg(df1, df2)
+    if (nrow(df1) == 0 && nrow(df2) == 0) return(rep(list(df1), n_transitions))
+    if (nrow(df1) == 0) {
+        df1 <- get_tweenr_df(df2)
+        df1$scale <- 0
+    } else {
+        df1 <- get_tweenr_df(df1)
+    }
+    if (nrow(df2) == 0) {
+        df2 <- get_tweenr_df(df1)
+        df2$scale <- 0
+    } else {
+        df2 <- get_tweenr_df(df2)
+    }
+    df1_anti <- filter(df1, match(.data$id, df2$id, 0) == 0)
+    df1_anti$scale <- rep(0, nrow(df1_anti))
+    df2_anti <- filter(df2, match(.data$id, df1$id, 0) == 0)
+    df2_anti$scale <- rep(0, nrow(df2_anti))
+    df1 <- bind_rows(df1, df2_anti)
+    df2 <- bind_rows(df2, df1_anti)
+    # https://github.com/thomasp85/tweenr/issues/44
+    if (hasName(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+        n_transitions <- n_transitions - 1L
+    df <- tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2L, id = .data$id)
     df <- left_join(df, df_id_cfg, by = "id")
     id_frames <- as.list(seq.int(max(df$.frame)))
-    rev(lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame)))
+    l <- lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame))
+    l <- head(l, -1L)
+    l <- tail(l, -1L)
+    l
 }
-get_id_cfg <- function(dfs) {
-    df <- do.call(bind_rows, dfs)
+get_id_cfg <- function(df1, df2) {
+    df <- bind_rows(df1, df2)
     df <- select(df, .data$id, .data$cfg)
     unique(df)
 }
@@ -134,27 +165,6 @@ get_tweenr_df <- function(df, ...) {
                  .data$scale, .data$alpha)
     as.data.frame(df)
 }
-#' @importFrom utils hasName packageVersion
-tweenr_reducer <- function(n_transitions = 0L, n_pauses = 1L) {
-    function(df1, df2) {
-        df <- tween_state(df1, df2, n_transitions)
-        keep_state(df, n_pauses)
-    }
-}
-tween_state <- function(df1, df2, n_transitions = 0L) {
-    # https://github.com/thomasp85/tweenr/issues/44
-    if (hasName(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
-        n_transitions <- n_transitions - 1L
-    tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2L,
-                              id = .data$id, enter = to_zero, exit = to_zero)
-}
-keep_state <- function(df, n_pauses = 1L) {
-    if (hasName(df, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
-        n_pauses <- n_pauses - 1L
-    tweenr::keep_state(df, nframes = n_pauses)
-}
-
-#### Option to generate postcard?
 
 get_df_from_move <- function(game, move = NULL) {
     if (is.null(move)) {
