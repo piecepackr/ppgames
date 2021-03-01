@@ -119,38 +119,70 @@ get_tweened_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
     new_dfs
 }
 
-#' @importFrom utils hasName head packageVersion
+#' @importFrom utils hasName packageVersion
 tween_dfs <- function(df1, df2, n_transitions = 0L) {
     df_id_cfg <- get_id_cfg(df1, df2)
     if (nrow(df1) == 0 && nrow(df2) == 0) return(rep(list(df1), n_transitions))
-    if (nrow(df1) == 0) {
-        df1 <- get_tweenr_df(df2)
-        df1$scale <- 0
-    } else {
-        df1 <- get_tweenr_df(df1)
-    }
-    if (nrow(df2) == 0) {
-        df2 <- get_tweenr_df(df1)
-        df2$scale <- 0
-    } else {
-        df2 <- get_tweenr_df(df2)
-    }
-    df1_anti <- filter(df1, match(.data$id, df2$id, 0) == 0)
-    df1_anti$scale <- rep(0, nrow(df1_anti))
-    df2_anti <- filter(df2, match(.data$id, df1$id, 0) == 0)
-    df2_anti$scale <- rep(0, nrow(df2_anti))
-    df1 <- bind_rows(df1, df2_anti)
-    df2 <- bind_rows(df2, df1_anti)
+    dfs <- init_dfs(df1, df2)
     # https://github.com/thomasp85/tweenr/issues/44
-    if (hasName(df1, ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
+    if (hasName(dfs[[1]], ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
         n_transitions <- n_transitions - 1L
-    df <- tweenr::tween_state(df1, df2, ease = "cubic-in-out", nframes = n_transitions + 2L, id = .data$id)
+    df <- tweenr::tween_state(dfs[[1]], dfs[[2]], ease = "cubic-in-out",
+                              nframes = n_transitions + 2L, id = .data$id)
     df <- left_join(df, df_id_cfg, by = "id")
     id_frames <- as.list(seq.int(max(df$.frame)))
     l <- lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame))
-    l <- head(l, -1L)
-    l <- tail(l, -1L)
+    l <- utils::head(l, -1L)
+    l <- utils::tail(l, -1L)
     l
+}
+init_dfs <- function(df1, df2) {
+    if (nrow(df1) == 0) {
+        df1i <- get_tweenr_df(df2)
+        df1i$scale <- 0
+    } else {
+        df1i <- get_tweenr_df(df1)
+    }
+    if (nrow(df2) == 0) {
+        df2i <- get_tweenr_df(df1)
+        df2i$scale <- 0
+    } else {
+        df2i <- get_tweenr_df(df2)
+    }
+    df2_anti <- filter(df2i, match(.data$id, df1i$id, 0) == 0)
+    df2_anti$scale <- rep(0, nrow(df2_anti))
+    df1 <- bind_rows(df1i, df2_anti) # 'added' pieces
+    df1_anti <- filter(df1i, match(.data$id, df2i$id, 0) == 0)
+    df1_anti$scale <- rep(0, nrow(df1_anti))
+    df2 <- df2i # 'removed' pieces
+    while (nrow(df1_anti)) {
+        row <- df1_anti[1L, ]
+        df1_anti <- df1_anti[-1L, ]
+        prev_index <- find_good_prev_index(row, df1i, df2i)
+        df2 <- insert_df(df2, row, prev_index)
+    }
+    df1 <- df1[match(df2$id, df1$id), ] # re-sort to match df2
+    list(df1, df2)
+}
+find_good_prev_index <- function(row, df1i, df2i) {
+    prev_index <- Inf
+    index <- which(df1i$id == row$id)
+    while (is.infinite(prev_index)) {
+        index <- index - 1
+        if (index == 0) {
+            prev_index <- 0
+        } else {
+            prev <- df1i[index, ]
+            index2 <- which(df2i$id == prev$id)
+            if (length(index2)) {
+                prev2 <- df2i[index2, ]
+                if (near(prev$x, prev2$x) && near(prev$y, prev2$y)) {
+                    prev_index <- index2
+                }
+            }
+        }
+    }
+    prev_index
 }
 get_id_cfg <- function(df1, df2) {
     df <- bind_rows(df1, df2)

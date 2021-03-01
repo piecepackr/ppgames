@@ -76,13 +76,18 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
-* Checkers set-up is now "mirrored" (pieces on bottom-left instead of bottom-right)
-  to match traditional checkers set-up.
+* ``animate_game()`` transitions have been improved:
+
+  - Situations where the board is completely empty of pieces should now be handled correctly
+  - "Deleted" pieces now should no longer (automatically) be "on top" (#92)
+
 * ``cat_piece()`` now returns the text diagram as a character vector invisibly.
 * Now if ``cat_piece()``'s argument ``file`` is ``NULL`` we don't call ``cat()`` 
   (and return the text diagram as a character vector).
 * ``cat_piece()`` now has very basic support for non-icehouse pyramids (#81)
 * The tiles in ``df_ice_floe()`` have been shifted slightly.
+* Checkers set-up is now "mirrored" (pieces on bottom-left instead of bottom-right)
+  to match traditional checkers set-up.
 
 Breaking Changes
 ----------------
