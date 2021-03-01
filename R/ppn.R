@@ -170,7 +170,7 @@ get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
 }
 
 initialize_df <- function(df) {
-    df <- tibble::rowid_to_column(df, "id")
+    df$id <- as.character(seq_len(nrow(df)))
     if (!hasName(df, "angle")) df$angle <- 0
     df$angle <- ifelse(is.na(df$angle), 0, df$angle)
     df$rank <- ifelse(is.na(df$rank), 1L, df$rank)
@@ -784,8 +784,9 @@ process_at_move <- function(df, text, state = create_state(df)) {
     xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
     df_piece$y <- xy$y
-    df_piece$id <- state$active_id <- state$max_id <- state$max_id + 1L
+    df_piece$id <- compute_new_id(state)
 
+    state$active_id <- df_piece$id
     insert_df(df, df_piece, l_i$index)
 }
 process_at_percent_move <- function(df, text, state = create_state(df)) {
@@ -805,12 +806,13 @@ process_backslash_move <- function(df, text, state = create_state(df)) {
     xy <- get_xy(l_i$location, df, state)
     df_piece$x <- xy$x
     df_piece$y <- xy$y
-    df_piece$id <- state$active_id <- state$max_id <- state$max_id + 1L
+    df_piece$id <- compute_new_id(state)
     if (is.null(l_i$id))
         index <- 0L
     else
         index <- l_i$index - 1L
 
+    state$active_id <- df_piece$id
     insert_df(df, df_piece, index)
 }
 process_backslash_percent_move <- function(df, text, state = create_state(df)) {
@@ -855,9 +857,7 @@ process_plus_move <- function(df, text, state) {
     df$rank[indices] <- ifelse(df$piece_side[indices] == "die_face",
                                (df$rank[indices] + 2) %% 6 + 1,
                                df$rank[indices])
-    new_id <- seq.int(state$max_id + 1L, length.out = length(indices))
-    df$id[indices] <- new_id
-    state$max_id <- max(new_id)
+    df$id[indices] <- compute_new_id(state, length(indices))
     state$active_id <- df$id[indices]
     df
 }
@@ -930,7 +930,7 @@ create_state <- function(df, metadata = list()) {
     as.environment(list(df_move_start = df,
                         macros = c(metadata$Macros, attr(df, "macros"), macros),
                         max_id = nrow(df),
-                        active_id = integer(),
+                        active_id = character(),
                         scale_factor = as.numeric(scale_factor)))
 }
 
@@ -1014,9 +1014,7 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
 
     if (sum(to_change_id)) {
-        new_id <- seq.int(state$max_id + 1L, length.out = sum(to_change_id))
-        state$max_id <- max(new_id)
-        df[indices[to_change_id], "id"] <- new_id
+        df$id[indices[to_change_id]] <- compute_new_id(state, sum(to_change_id))
     }
     state$active_id <- df$id[indices]
     df
@@ -1031,17 +1029,22 @@ process_equal_move <- function(df, text, state = create_state(df)) {
     piece_spec <- cp[2L]
     df_piece <- parse_piece(piece_spec)
 
-    new_id <- seq.int(state$max_id + 1L, length.out = length(indices))
-    state$max_id <- max(new_id)
+    df$piece_side[indices] <- df_piece$piece_side
+    df$suit[indices] <- df_piece$suit
+    df$rank[indices] <- df_piece$rank
+    df$angle[indices] <- df_piece$angle
+    df$cfg[indices] <- df_piece$cfg
 
-    df[indices, "piece_side"] <- df_piece$piece_side
-    df[indices, "suit"] <- df_piece$suit
-    df[indices, "rank"] <- df_piece$rank
-    df[indices, "angle"] <- df_piece$angle
-    df[indices, "cfg"] <- df_piece$cfg
-    df[indices, "id"] <- new_id
+    df$id[indices] <- compute_new_id(state, length(indices))
     state$active_id <- df$id[indices]
     df
+}
+
+# as a side effect updates state$max_id
+compute_new_id <- function(state = create_state(initialize_df()), n = 1L) {
+    new_id <- seq.int(state$max_id + 1L, length.out = n)
+    state$max_id <- max(new_id)
+    as.character(new_id)
 }
 
 colon_token <- ":(?![^\\[]*])" # a4-d4 but not a4[1:4]
