@@ -66,10 +66,11 @@ New features
 
 * ``cat_piece()`` now supports the argument ``reorient`` which allows it to first reorient all pieces or just the rank/suit symbols:
 
-    * The default "none" (or ``FALSE``) means don't reorient any pieces/symbols.
-    * "all" (or ``TRUE``) means setting the angle to zero for all pieces.
-    * "symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
+    - The default "none" (or ``FALSE``) means don't reorient any pieces/symbols.
+    - "all" (or ``TRUE``) means setting the angle to zero for all pieces.
+    - "symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
       In particular, in contrast with "all" this preserves the location of the upper-left "corner" of piecepack tile faces.
+
 * ``cat_piece()`` now supports the argument ``annotate`` which allows one to add coordinate information to plaintext diagrams.
   It is a bit more limited than the support in ``plot_move()`` / ``animate_game()``.
 
@@ -92,16 +93,25 @@ Bug fixes and minor improvements
 Breaking Changes
 ----------------
 
-* Interpretation of the ``game`` / ``book`` argument in ``save_ruleset``, ``save_pamphlet``, ``save_rulebook`` now
-  follows similar rules as the ``GameType`` argument in PPN,
-  in particular now use arguments like ``"American Checkers"`` instead of ``"american-checkers"``.
-* By default ``save_pamphlet()`` now orients the second page up instead of down.
-  To restore prior behaviour (second page flipped down) manually set the argument ``duplex_edge`` to "long".
 * The following rectangular board utility functions have been removed and marked Defunct:
 
   1. ``grid.board_rect_cells()``, use the "board" pieces from ``piecepackr::game_systems()$checkers1``  with ``piecepackr::grid.piece()``instead
   2. ``grid.board_rect_points()``, use the "board" picees from ``piecepackr::game_systems()$go`` with ``piecepackr::grid.piece()`` instead
   3. ``grid.board_rect_tiles()``, use ``piecepackr::pmap_piece(df_rect_board_tiles())`` instead
+
+* Interpretation of the ``game`` / ``book`` argument in ``save_ruleset``, ``save_pamphlet``, ``save_rulebook`` now
+  follows similar rules as the ``GameType`` argument in PPN,
+  in particular now use arguments like ``"American Checkers"`` instead of ``"american-checkers"``.
+* By default ``save_pamphlet()`` now orients the second page up instead of down.
+  To restore prior behaviour (second page flipped down) manually set the argument ``duplex_edge`` to "long".
+* The id column in the data frames returned by ``read_ppn()`` is now different (#94):
+
+  + It is now a character vector instead of integer vector
+  + New pieces are a single number (like before) which they keep during simple moves (i.e. no 3D rotations or replacements)
+  + When pieces are 3D rotated we increment a number after a single ``.`` (introducing it if not there)
+  + When pieces are "replaced" with different pieces we increment a number after a double ``..`` (introducing it if not there)
+ 
+  These changes allow for more fine-tuned animation possibilities.
 
 ppgames 0.5.1
 =============

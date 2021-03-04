@@ -612,8 +612,8 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
         piece_id <- str_sub(piece_id, 2L)
         get_id_from_piece_id(piece_id, state$df_move_start, state)
     } else {
-        if (str_detect(piece_id, "^[[:digit:]]+$")) { # 15
-            as.numeric(piece_id)
+        if (str_detect(piece_id, "^[[:digit:].]+$")) { # 15
+            as.character(piece_id)
         } else if (str_detect(piece_id, "^[[:digit:]]+")) { # 2b4
             n_pieces <- as.integer(gsub("(^[[:digit:]]+)(.*)", "\\1", piece_id))
             location <- gsub("(^[[:digit:]]+)(.*)", "\\2", piece_id)
@@ -857,8 +857,7 @@ process_plus_move <- function(df, text, state) {
     df$rank[indices] <- ifelse(df$piece_side[indices] == "die_face",
                                (df$rank[indices] + 2) %% 6 + 1,
                                df$rank[indices])
-    df$id[indices] <- compute_new_id(state, length(indices))
-    state$active_id <- df$id[indices]
+    df$id[indices] <- compute_plus_id(df$id[indices])
     df
 }
 
@@ -982,40 +981,53 @@ process_tilde_move <- function(df, text, state = create_state(df)) {
     cp <- str_split(text, "~")[[1]]
     piece_id <- cp[1]
     indices <- get_indices_from_piece_id(piece_id, df, state)
-    to_change_id <- rep(FALSE, length(indices))
+    to_change_id <- rep(0L, length(indices))
 
     std_piece_spec <- standardize_piece_spec(cp[2])
     dfp <- parse_piece_incomplete(std_piece_spec)
 
+    if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
     if (!is.na(dfp$piece) || !is.na(dfp$side)) {
         psm <- str_split_fixed(df$piece_side, "_", 2L)
+        if (!is.na(dfp$side)) { # change side means 1L
+            to_change <- psm[indices, 2L] != dfp$side
+            to_change_id[to_change] <- 1L
+            psm[indices, 2L] <- dfp$side
+        }
+    }
+    # 2L if cfg change
+    if (!is.na(dfp$cfg)) {
+        to_change <- is.na(df$cfg[indices]) | df$cfg[indices] != dfp$cfg
+        to_change_id[to_change] <- 2L
+        df$cfg[indices] <- dfp$cfg
+    }
+    if (!is.na(dfp$rank)) { # if change rank 1L if die_face and not 2L already else 2L
+        to_change <- is.na(df$rank[indices]) ||
+            df$rank[indices] != ifelse(df$cfg[indices] %in% index_rank_by_one, dfp$rank - 1L, dfp$rank)
+        to_change_id[to_change] <- ifelse(df$piece_side[indices[to_change]] == "die_face" &&
+                                          to_change_id[to_change] < 2L,
+                                          1L, 2L)
+        df$rank[indices] <- ifelse(df$cfg[indices] %in% index_rank_by_one, dfp$rank - 1L, dfp$rank)
+    }
+    # 2L if different piece, suit
+    if (!is.na(dfp$piece) || !is.na(dfp$side)) {
         if (!is.na(dfp$piece)) {
             to_change <- psm[indices, 1] != dfp$piece
-            to_change_id[to_change] <- TRUE
+            to_change_id[to_change] <- 2L
             psm[indices, 1L] <- dfp$piece
-        }
-        if (!is.na(dfp$side)) {
-            to_change <- psm[indices, 2L] != dfp$side
-            to_change_id[to_change] <- TRUE
-            psm[indices, 2L] <- dfp$side
         }
         df$piece_side <- paste0(psm[, 1L], "_", psm[, 2L])
     }
     if (!is.na(dfp$suit)) {
         to_change <- is.na(df$suit[indices]) | df$suit[indices] != dfp$suit
-        to_change_id[to_change] <- TRUE
+        to_change_id[to_change] <- 2L
         df$suit[indices] <- dfp$suit
     }
-    if (!is.na(dfp$rank)) {
-        to_change <- is.na(df$rank[indices]) | df$rank[indices] != dfp$rank
-        to_change_id[to_change] <- TRUE
-        df$rank[indices] <- ifelse(df$cfg[indices] %in% index_rank_by_one, dfp$rank - 1L, dfp$rank)
-    }
-    if (!is.na(dfp$angle)) df[indices, "angle"] <- dfp$angle
 
-    if (sum(to_change_id)) {
-        df$id[indices[to_change_id]] <- compute_new_id(state, sum(to_change_id))
-    }
+    to_plus_id <- which(to_change_id == 1L)
+    df$id[indices[to_plus_id]] <- compute_plus_id(df$id[indices[to_plus_id]])
+    to_equal_id <- which(to_change_id == 2L)
+    df$id[indices[to_equal_id]] <- compute_equal_id(df$id[indices[to_equal_id]])
     state$active_id <- df$id[indices]
     df
 }
@@ -1025,17 +1037,39 @@ process_equal_move <- function(df, text, state = create_state(df)) {
 
     piece_id <- cp[1L]
     indices <- get_indices_from_piece_id(piece_id, df, state)
+    #### Don't downgrade to 1 if already 2
+    to_change_id <- rep(0L, length(indices))
 
     piece_spec <- cp[2L]
     df_piece <- parse_piece(piece_spec)
 
-    df$piece_side[indices] <- df_piece$piece_side
-    df$suit[indices] <- df_piece$suit
-    df$rank[indices] <- df_piece$rank
     df$angle[indices] <- df_piece$angle
+
+    # change side means 1L
+    side <- str_extract(df_piece$piece_side, "^[a-z]+")
+    old_side <- str_extract(df$piece_side[indices], "^[a-z]+")
+    to_change_id[old_side != side] <- 1L
+
+    # change rank 1L if die_face else 2L
+    to_change <- df$rank[indices] != df_piece$rank
+    to_change_id[to_change] <- ifelse(df$piece_side[indices] == "die_face", 1L, 2L)
+    df$rank[indices] <- df_piece$rank
+
+    # 2L if different piece, suit, or cfg
+    piece <- str_extract(df_piece$piece_side, "^[a-z]+")
+    old_piece <- str_extract(df$piece_side[indices], "^[a-z]+")
+    to_change_id[old_piece != piece] <- 2L
+    df$piece_side[indices] <- df_piece$piece_side
+
+    to_change_id[df$suit[indices] != df_piece$suit] <- 2L
+    df$suit[indices] <- df_piece$suit
+    to_change_id[df$cfg[indices] != df_piece$cfg] <- 2L
     df$cfg[indices] <- df_piece$cfg
 
-    df$id[indices] <- compute_new_id(state, length(indices))
+    to_plus_id <- which(to_change_id == 1L)
+    df$id[indices[to_plus_id]] <- compute_plus_id(df$id[indices[to_plus_id]])
+    to_equal_id <- which(to_change_id == 2L)
+    df$id[indices[to_equal_id]] <- compute_equal_id(df$id[indices[to_equal_id]])
     state$active_id <- df$id[indices]
     df
 }
@@ -1045,6 +1079,27 @@ compute_new_id <- function(state = create_state(initialize_df()), n = 1L) {
     new_id <- seq.int(state$max_id + 1L, length.out = n)
     state$max_id <- max(new_id)
     as.character(new_id)
+}
+compute_plus_id <- function(id) {
+    if (length(id) == 0) return(id)
+    id <- str_replace(id, "\\.{2}", "=")
+    id <- str_split(id, "\\.", simplify=TRUE)
+    if (ncol(id) == 1) id <- cbind(id, "")
+    id[, 2] <- ifelse(id[, 2] == "", "0", id[, 2])
+    id[, 2] <- as.character(as.integer(id[, 2]) + 1L)
+    id <- paste0(id[, 1], ".", id[, 2])
+    id <- str_replace(id, "=", "..")
+    id
+}
+compute_equal_id <- function(id) {
+    if (length(id) == 0) return(id)
+    id <- str_replace(id, "\\.{2}", "=")
+    id <- str_remove(id, "\\.[:digit:]*")
+    id <- str_split(id, "=", simplify=TRUE)
+    if (ncol(id) == 1) id <- cbind(id, "")
+    id[, 2] <- ifelse(id[, 2] == "", "0", id[, 2])
+    id[, 2] <- as.character(as.integer(id[, 2]) + 1L)
+    paste0(id[, 1], "..", id[, 2])
 }
 
 colon_token <- ":(?![^\\[]*])" # a4-d4 but not a4[1:4]
