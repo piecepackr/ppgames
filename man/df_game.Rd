@@ -17,6 +17,8 @@
 \alias{df_ley_lines}
 \alias{df_piecepackman}
 \alias{df_pass_the_food}
+\alias{df_piecepack_klondike}
+\alias{df_piece_gaps}
 \alias{df_piece_packing_pirates}
 \alias{df_plans_of_action}
 \alias{df_quatri}
@@ -84,6 +86,10 @@ df_ley_lines()
 df_piecepackman(seed = NULL, variant = 1)
 
 df_pass_the_food()
+
+df_piecepack_klondike(seed = NULL)
+
+df_piece_gaps(seed = NULL)
 
 df_piece_packing_pirates(seed = NULL)
 
@@ -251,8 +257,12 @@ Here is some more information about the various games:
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
  \item{Pass the Food}{A dexterity game by Trevor L Davis.
                       See \url{https://www.ludism.org/ppwiki/PassTheFood}}
+ \item{Piece Gaps}{A solitaire by Chris Brooks inspired by the Gaps card game.
+                   See \url{https://www.ludism.org/ppwiki/PieceGaps}}
  \item{Piece Packing Pirates}{A solitaire sea adventure by Clark Rodeffer.
                               See \url{https://www.ludism.org/ppwiki/PiecePackingPirates}.}
+ \item{Piecepack Klondike}{A solitaire game by Eric Witt inspired by the Klondike card game.
+       See \url{https://ludism.org/ppwiki/PiecepackKlondike}}
  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
                      Pac-Man, designed for Namco by Toru Iwatani.
                      See \url{https://www.ludism.org/ppwiki/Piecepackman}}

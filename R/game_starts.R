@@ -65,8 +65,12 @@
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
 #'  \item{Pass the Food}{A dexterity game by Trevor L Davis.
 #'                       See \url{https://www.ludism.org/ppwiki/PassTheFood}}
+#'  \item{Piece Gaps}{A solitaire by Chris Brooks inspired by the Gaps card game.
+#'                    See \url{https://www.ludism.org/ppwiki/PieceGaps}}
 #'  \item{Piece Packing Pirates}{A solitaire sea adventure by Clark Rodeffer.
 #'                               See \url{https://www.ludism.org/ppwiki/PiecePackingPirates}.}
+#'  \item{Piecepack Klondike}{A solitaire game by Eric Witt inspired by the Klondike card game.
+#'        See \url{https://ludism.org/ppwiki/PiecepackKlondike}}
 #'  \item{Piecepackman}{A cooperative maze game by Dan Burkey inspired by the video game
 #'                      Pac-Man, designed for Namco by Toru Iwatani.
 #'                      See \url{https://www.ludism.org/ppwiki/Piecepackman}}
@@ -462,6 +466,32 @@ df_pass_the_food <- function() {
            rank = rep(c(1, 3:6, 2), 4),
            x = rep(2 * 1:4 - 0.5, each = 6),
            y = rep(2 * 1:6 - 0.5, 4))
+}
+
+#' @rdname df_game
+#' @export
+df_piecepack_klondike <- function(seed = NULL) {
+    set.seed(seed)
+    df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+    df_tiles <- tibble(piece_side = c(rep("tile_back", 15),
+                                      rep("tile_face", 6),
+                                      rep("tile_back", 3)),
+                       x = c(seq(4, 12, 2), seq(6, 12, 2), seq(8, 12, 2),
+                             10, 12, 12, seq(2, 12, 2), rep(2, 3)),
+                       y = c(rep(2, 21), rep(6, 3)), angle = 0)
+    bind_cols(df_tiles, df_tsr)
+}
+
+#' @rdname df_game
+#' @export
+df_piece_gaps <- function(seed = NULL) {
+    set.seed(seed)
+    df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
+    df_tiles <- tibble(piece_side = "tile_face",
+                       x = rep(seq(2, 12, 2), 4),
+                       y = rep(seq(2, 8, 2), each=6), angle = 0)
+    df <- bind_cols(df_tiles, df_tsr)
+    df[-which(df$rank == 1), ]
 }
 
 #' @rdname df_game

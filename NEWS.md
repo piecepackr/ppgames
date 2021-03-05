@@ -52,7 +52,9 @@ New features
   - ``df_jul_gono()``
   - ``df_quatri()``
   - ``df_pass_the_food()``
+  - ``df_piece_gaps()``
   - ``df_piece_packing_pirates()``
+  - ``df_piecepack_klondike()``
   - ``df_tower_of_babel()``
 
 * ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
