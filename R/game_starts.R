@@ -57,6 +57,8 @@
 #'               See \url{https://www.ludism.org/ppwiki/Japan}.}
 #'  \item{Jul-Gonu}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
 #'                         See \url{https://www.ludism.org/ppwiki/JulGonu}.}
+#'  \item{Landlocked}{Piecepack game by Eric Witt.
+#'                    See \url{https://www.ludism.org/ppwiki/Landlocked}.}
 #'  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
 #'                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
 #'  \item{Lines of Action}{An abstract designed by Claude Soucie.
@@ -86,10 +88,14 @@
 #'                    See \url{https://www.ludism.org/ppwiki/SanAndreas}.}
 #'  \item{Shogi}{AKA \dQuote{Japanese chess} is a major chess variant.
 #'               See \url{https://www.ludism.org/ppwiki/Shogi}.}
+#'  \item{Skyscrapers}{A solitaire by Michael Schoessow.
+#'                     See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
 #'  \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
 #'                See \url{https://www.ludism.org/ppwiki/Tablut}.}
 #'  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
 #'        See \url{https://www.ludism.org/ppwiki/TheInCrowd}.}
+#'  \item{The Magic Bag}{Piecepack game by Rob LeGood.
+#'                       See \url{https://www.ludism.org/ppwiki/The_Magic_Bag}.}
 #'  \item{Tower of Babel}{Solitaire piecepack game by Mark A. Biggar.
 #'        See \url{https://www.ludism.org/ppwiki/TowerOfBabel}.}
 #'  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
@@ -389,6 +395,18 @@ df_japan <- function(seed = NULL) {
 
 #' @rdname df_game
 #' @export
+df_landlocked <- function(seed = NULL) {
+    set.seed(seed)
+    df_tiles <- tibble(piece_side = rep(c("tile_back", "tile_face"), each = 12),
+                       suit = rep(1:4, each = 6), rank = rep(1:6, 4))[sample.int(24), ]
+    df_tiles$x <- 0.5 + c(seq(3, 9, 2), rep(seq(1, 9, 2), 4))
+    df_tiles$y <- 0.5 + c(rep(9, 4), rep(seq(7, 1, -2), each = 5))
+    df_pawn <- tibble(piece_side = "pawn_face", suit = 1, rank = 1, x = 1, y = 9)
+    bind_rows(df_tiles, df_pawn)
+}
+
+#' @rdname df_game
+#' @export
 df_ley_lines <- function() {
     df <- tibble(piece_side = "tile_back",
                  x = c(6,8,     7,9,   7,9,   3,5, 8,10, 2,4, 9,11, 2,4,13, 7,9,11, 13, 9,11, 7) - 0.5,
@@ -591,6 +609,25 @@ should_resample_relativity <- function(coins) {
 
 #' @rdname df_game
 #' @export
+df_skyscrapers <- function(seed = NULL, tiles = NULL) {
+    set.seed(seed)
+    df_txy <- tibble(piece_side = "tile_face",
+                     x = 0.5 + c(rep(seq(1, 9, 2), 2), 1, 3, 7, 9, rep(seq(1, 9, 2), 2)),
+                     y = 0.5 + c(rep(9, 5), rep(7, 5), rep(5, 4), rep(3, 5), rep(1, 5)))
+    if (is.null(tiles)) {
+       df_tsr <- tibble(suit = rep(1:4, each = 6), rank = rep(1:6, 4))[sample.int(24), ]
+    } else {
+        df_tsr <- process_tiles(tiles)
+    }
+    df_tiles <- bind_cols(df_txy, df_tsr)
+    df_pawn <- dplyr::filter(df_tiles, .data$rank == 1)
+    df_pawn <- dplyr::mutate(df_pawn, piece_side = "pawn_face",
+                             x = .data$x + 0.5, y = .data$y - 0.5)
+    bind_rows(df_tiles, df_pawn)
+}
+
+#' @rdname df_game
+#' @export
 df_the_in_crowd <- function() {
     df_t1 <- df_rect_board_tiles(6, 6)
     df_t2 <- df_rect_board_tiles(4, 4, 2, 2)
@@ -605,6 +642,17 @@ df_san_andreas <- function() {
     y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)
     tibble(piece_side="tile_back", x=x, y=y,
            suit = rep(1:4, each=6, length.out=23), rank = rep(1:6, 4, length.out=23))
+}
+
+#' @rdname df_game
+#' @export
+df_the_magic_bag <- function(seed = NULL) {
+    set.seed(seed)
+    df_tiles <- tibble(piece_side = "tile_face", suit = rep(1:4, each = 6),
+                       rank = rep(1:6, 4))[sample.int(24), ]
+    df_tiles$x <- 0.5 + c(rep(1, 9), rep(3, 7), rep(5, 5), rep(7, 3))
+    df_tiles$y <- 0.5 + c(seq(17, 1, -2), seq(13, 1, -2), seq(9, 1, -2), seq(5, 1, -2))
+    df_tiles
 }
 
 #' @rdname df_game

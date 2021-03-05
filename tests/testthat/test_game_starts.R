@@ -40,6 +40,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/international_chess.txt", cat_piece(df_international_chess()))
     verify_output("../text_diagrams/japan.txt", cat_piece(df_japan(seed=42)))
     verify_output("../text_diagrams/jul_gono.txt", cat_piece(df_jul_gono()))
+    verify_output("../text_diagrams/landlocked.txt", cat_piece(df_landlocked(seed=42)))
     verify_output("../text_diagrams/ley_lines.txt", cat_piece(df_ley_lines()))
     verify_output("../text_diagrams/lines_of_action.txt",
                   cat_piece(df_lines_of_action(), reorient="all"))
@@ -64,7 +65,9 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/relativity_coins.txt", cat_piece(df_relativity(coins=coins)))
     verify_output("../text_diagrams/salta.txt", cat_piece(df_salta()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
+    verify_output("../text_diagrams/skyscrapers.txt", cat_piece(df_skyscrapers(seed=23)))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
+    verify_output("../text_diagrams/the_magic_bag.txt", cat_piece(df_the_magic_bag(seed=27)))
     verify_output("../text_diagrams/tablut.txt",
                   cat_piece(df_tablut(), reorient="all"))
     df <- df_tower_of_babel(seed=42)

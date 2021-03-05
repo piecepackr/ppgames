@@ -14,6 +14,7 @@
 \alias{df_iceberg}
 \alias{df_ice_floe}
 \alias{df_japan}
+\alias{df_landlocked}
 \alias{df_ley_lines}
 \alias{df_piecepackman}
 \alias{df_pass_the_food}
@@ -23,8 +24,10 @@
 \alias{df_plans_of_action}
 \alias{df_quatri}
 \alias{df_relativity}
+\alias{df_skyscrapers}
 \alias{df_the_in_crowd}
 \alias{df_san_andreas}
+\alias{df_the_magic_bag}
 \alias{df_tower_of_babel}
 \alias{df_triactor}
 \alias{df_tula}
@@ -81,6 +84,8 @@ df_ice_floe()
 
 df_japan(seed = NULL)
 
+df_landlocked(seed = NULL)
+
 df_ley_lines()
 
 df_piecepackman(seed = NULL, variant = 1)
@@ -99,9 +104,13 @@ df_quatri()
 
 df_relativity(seed = NULL, coins = NULL)
 
+df_skyscrapers(seed = NULL, tiles = NULL)
+
 df_the_in_crowd()
 
 df_san_andreas()
+
+df_the_magic_bag(seed = NULL)
 
 df_tower_of_babel(seed = NULL, tiles = NULL)
 
@@ -249,6 +258,8 @@ Here is some more information about the various games:
               See \url{https://www.ludism.org/ppwiki/Japan}.}
  \item{Jul-Gonu}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
                         See \url{https://www.ludism.org/ppwiki/JulGonu}.}
+ \item{Landlocked}{Piecepack game by Eric Witt.
+                   See \url{https://www.ludism.org/ppwiki/Landlocked}.}
  \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
  \item{Lines of Action}{An abstract designed by Claude Soucie.
@@ -278,10 +289,14 @@ Here is some more information about the various games:
                    See \url{https://www.ludism.org/ppwiki/SanAndreas}.}
  \item{Shogi}{AKA \dQuote{Japanese chess} is a major chess variant.
               See \url{https://www.ludism.org/ppwiki/Shogi}.}
+ \item{Skyscrapers}{A solitaire by Michael Schoessow.
+                    See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
  \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
                See \url{https://www.ludism.org/ppwiki/Tablut}.}
  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
        See \url{https://www.ludism.org/ppwiki/TheInCrowd}.}
+ \item{The Magic Bag}{Piecepack game by Rob LeGood.
+                      See \url{https://www.ludism.org/ppwiki/The_Magic_Bag}.}
  \item{Tower of Babel}{Solitaire piecepack game by Mark A. Biggar.
        See \url{https://www.ludism.org/ppwiki/TowerOfBabel}.}
  \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.

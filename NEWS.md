@@ -50,11 +50,14 @@ New features
   - ``df_iceberg()``
   - ``df_grasshopper()``
   - ``df_jul_gono()``
+  - ``df_landlocked()``
   - ``df_quatri()``
   - ``df_pass_the_food()``
   - ``df_piece_gaps()``
   - ``df_piece_packing_pirates()``
   - ``df_piecepack_klondike()``
+  - ``df_skyscrapers()``
+  - ``df_the_magic_bag()``
   - ``df_tower_of_babel()``
 
 * ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
