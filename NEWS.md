@@ -45,18 +45,22 @@ New features
 * New function ``write_ppn()`` takes a list of parsed PPN files and writes it to a file.
 * New starting board generators for specific games:
 
-  - ``df_chinese_checkers()``
+  - ``df_chinese_checkers()`` with ``df_mini_halma()`` as an alias
+  - ``df_coin_collectors()``
+  - ``df_easy_slider()``
   - ``df_evade()``
   - ``df_iceberg()``
   - ``df_grasshopper()``
   - ``df_jul_gono()``
   - ``df_landlocked()``
+  - ``df_mathrix()``
   - ``df_quatri()``
   - ``df_pass_the_food()``
   - ``df_piece_gaps()``
   - ``df_piece_packing_pirates()``
   - ``df_piecepack_klondike()``
   - ``df_skyscrapers()``
+  - ``df_slides_of_action()``
   - ``df_the_magic_bag()``
   - ``df_tower_of_babel()``
 

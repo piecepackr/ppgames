@@ -190,7 +190,7 @@ piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
 #### darkgreen sometimes shows up as black?
 #### black instead of grey sometimes?
-checkers_colors <- c("darkred", "grey", "green", "darkblue", "darkorange3", "black")
+checkers_colors <- c("darkred", "black", "green", "darkblue", "darkorange3", "black")
 piecepack_colors <- dice_colors <- chess_colors <- go_colors <- checkers_colors
 dice_colors[2] <- "grey"
 ss_list <- list(piecepack = piecepack_suits,

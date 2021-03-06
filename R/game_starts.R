@@ -27,6 +27,8 @@
 #'                               See \url{https://www.ludism.org/ppwiki/Chess}.}
 #'  \item{Chinese Checkers}{A port of Chinese Checkers by Mark A. Biggar.
 #'                          See \url{https://www.ludism.org/ppwiki/ChineseCheckers}.}
+#'  \item{Coin Collectors}{A solitaire by Don Kirkby.
+#'                         See \url{https://www.ludism.org/ppwiki/CoinCollectors}.}
 #'  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
 #'                  but one can use a piecepack as a cribbage board instead.
 #'                  See \url{https://www.ludism.org/ppwiki/Cribbage}.}
@@ -35,10 +37,14 @@
 #'  \item{Desfases}{Game by Antonio Recuenco Muñoz.
 #'                  Runner-up for best game in the eighth community piecepack game design contest.
 #'                  See \url{https://www.ludism.org/ppwiki/Desfases}.}
+#'  \item{Easy Slider}{A solitaire by Ron Hale-Evans and Marty Hale-Evans.
+#'                  See \url{https://www.ludism.org/ppwiki/EasySlider}.}
 #'  \item{Evade}{Adaption by Mark A. Biggar of a game by Alex Randolph.
 #'                 See \url{https://www.ludism.org/ppwiki/Evade}.}
 #'  \item{Everest}{Game by Mark A. Biggar that features a Roborally programmed movement system.
 #'                 See \url{https://www.ludism.org/ppwiki/Everest}.}
+#'  \item{Four Blind Mice}{Multi-player puzzle by Tim Farley inspired by Ricochet Robot by Alex Randolph.
+#'                         See \url{https://www.ludism.org/ppwiki/FourBlindMice}.}
 #'  \item{Four Field Kono}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
 #'                         See \url{https://www.ludism.org/ppwiki/FourFieldKono}.}
 #'  \item{Four Seasons Chess}{A traditional four person chess variant recorded in \emph{Libro del Acedrex}.
@@ -63,6 +69,8 @@
 #'                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
 #'  \item{Lines of Action}{An abstract designed by Claude Soucie.
 #'                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
+#'  \item{Mathrix}{A solitaire by Clark Rodeffer.
+#'                 See \url{https://www.ludism.org/ppwiki/Mathrix}}
 #'  \item{Nine Men's Morris}{Traditional board game.
 #'        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
 #'  \item{Pass the Food}{A dexterity game by Trevor L Davis.
@@ -90,6 +98,8 @@
 #'               See \url{https://www.ludism.org/ppwiki/Shogi}.}
 #'  \item{Skyscrapers}{A solitaire by Michael Schoessow.
 #'                     See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
+#'  \item{Slides of Action}{An abstract connection game by Clark Rodeffer.
+#'                          See \url{https://www.ludism.org/ppwiki/SlidesOfAction}.}
 #'  \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
 #'                See \url{https://www.ludism.org/ppwiki/Tablut}.}
 #'  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
@@ -118,9 +128,10 @@
 #' @param cfg2 A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)
 #' @param has_matchsticks Has matchsticks
 #' @param has_subpack Has a piecepack subpack
+#' @param tiles String of tile layout
 #' @param coins String of coin layout
 #' @param dice String of dice layout
-#' @param tiles String of tile layout
+#' @param pawns String of pawns layout
 #' @param die_width Width of dice
 #' @param max_tiles Maximum number of (piecepack) tiles available to build boards
 #' @param suit_colors Character vector of the suit colors
@@ -221,6 +232,29 @@ df_chinese_checkers <- function() {
 
 #' @rdname df_game
 #' @export
+df_mini_halma <- df_chinese_checkers
+
+#' @rdname df_game
+#' @export
+df_coin_collectors <- function(seed = NULL, tiles = NULL, coins = NULL, dice = NULL) {
+    set.seed(seed)
+    df_tiles <- df_donut_tiles(seed = seed, tiles = tiles, x0 = 1.5, y0 = 1.5)
+    if (is.null(coins)) {
+       ranks <- rep(1:6, 4)[sample.int(24)]
+    } else {
+       ranks <- process_ranks(coins)
+    }
+    df_coins <- tibble(piece_side = "coin_face",
+                       x = df_tiles$x + 0.5, y = df_tiles$y - 0.5,
+                       rank = ranks, suit = 1L)
+    ranks <- if (is.null(dice)) sample.int(6L, 4L, TRUE) else process_ranks(dice)
+    df_dice <- tibble(piece_side = "die_face", x = 12, y = c(9, 7, 5, 3), rank = ranks, suit = 1:4)
+    df_pawn <- tibble(piece_side = "pawn_face", x = c(5, 6, 6, 5), y = c(6, 6, 5, 5), rank = 1L, suit = 1:4)
+    bind_rows(df_tiles, df_coins, df_dice, df_pawn)
+}
+
+#' @rdname df_game
+#' @export
 df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
     set.seed(seed)
     df_txy <- tibble(piece_side = "tile_face",
@@ -273,6 +307,20 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
 
 #' @rdname df_game
 #' @export
+df_easy_slider <- function(seed = NULL, tiles = NULL, coins = NULL, pawns = NULL) {
+    set.seed(seed)
+    df_tiles <- df_donut_tiles(seed = seed, tiles = tiles, x0 = 2, y0 = 2)
+    ranks <- if (is.null(coins)) sample.int(5L) + 1L else process_ranks(coins)
+    df_coins <- tibble(piece_side = "coin_face", x = seq(2, 10, 2), y = 11.5, rank = ranks, suit = 1L)
+    suits <- if (is.null(pawns)) sample.int(4L) else process_suits(pawns)
+    df_pawns <- tibble(piece_side = "pawn_face", x = 0.5, y = seq(10, 4, -2), rank = 1L, suit = suits)
+    df <- bind_rows(df_tiles, df_coins, df_pawns)
+    attr(df, "scale_factor") <- 2
+    df
+}
+
+#' @rdname df_game
+#' @export
 df_evade <- function() df_rect_board_tiles(ncols = 6, nrows = 6)
 
 #' @rdname df_game
@@ -289,6 +337,10 @@ df_everest <- function() {
                    x = c(1,8,8,1), y = c(5,5,2,2), suit = 1:4)
     bind_rows(df_t1, df_t2, df_t3, df_t4, df_t5, df_p)
 }
+
+#' @rdname df_game
+#' @export
+df_four_blind_mice <- function() df_rect_board_tiles(ncols = 8, nrows = 8)
 
 #' @rdname df_game
 #' @export
@@ -328,28 +380,14 @@ df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
 #' @rdname df_game
 #' @export
 df_iceberg <- function(seed = NULL, tiles = NULL) {
-    set.seed(seed)
-    df_txy <- tibble(piece_side = "tile_back",
-                     x = rep(seq(1,9,2), 5),
-                     y = rep(seq(9,1,-2), each=5))
-    df_txy <- df_txy[-13, ]
-    if (is.null(tiles)) {
-        df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
-    } else {
-        df_tsr <- process_tiles(tiles)
-    }
-    bind_cols(df_txy, df_tsr)
+    df_donut_tiles(seed = seed, tiles = tiles, x0 = 1, y0 = 1, face = FALSE)
 }
 
 #' @rdname df_game
 #' @export
 df_ice_floe <- function() {
-    df <- tibble(piece_side = "tile_face",
-           x = 0.5 + rep(seq(1,9,2), 5),
-           y = 0.5 + rep(seq(9,1,-2), each=5),
-           suit = c(1,1,3,2,2, 1,1,4,2,2, 2,3,NA,1,4, 4,4,2,3,3, 4,4,1,3,3),
-           rank = c(2,3,1,2,3, 4,5,1,4,5, 0,0,NA,0,0, 2,3,1,2,3, 4,5,1,4,5) + 1)
-    df[-13, ]
+    tiles <- "S2S3CaM2M3/S4S5AaM4M5/MnCnSnAn/A2A3MaC2C3/A4A5SaC4C5"
+    df_donut_tiles(tiles = tiles, x0 = 1.5, y0 = 1.5)
 }
 
 #' @rdname df_game
@@ -412,6 +450,24 @@ df_ley_lines <- function() {
                  x = c(6,8,     7,9,   7,9,   3,5, 8,10, 2,4, 9,11, 2,4,13, 7,9,11, 13, 9,11, 7) - 0.5,
                  y = c(15,15, 13,13, 11,11, 10,10,  9,9, 8,8, 7,7,  6,6,6,  5,5,5,  4,  3,3,  2) - 0.5,
                  suit = rep(1:4, each=6), rank = rep(1:6, 4))
+}
+
+#' @rdname df_game
+#' @export
+df_mathrix <- function(seed = NULL, coins = NULL) {
+    set.seed(seed)
+    df_tiles <- df_rect_board_tiles(nrows=4, ncols=6)
+    if (is.null(coins)) {
+        ranks <- rep(1:6, 4)[sample.int(24)]
+    } else {
+        ranks <- process_ranks(coins)
+    }
+    suits <- integer(24)
+    for (i in seq.int(6L)) suits[which(ranks == 1)] <- sample.int(4)
+    df_coins <- tibble(piece_side = "coin_face",
+                       rank = ranks, suit = suits,
+                       x = rep(1:6, 4), y = rep(4:1, each=6))
+    bind_rows(df_tiles, df_coins)
 }
 
 #' @rdname df_game
@@ -602,7 +658,6 @@ df_relativity <- function(seed = NULL, coins = NULL) {
                        suit = rep(c(1,2,1,2,4,3,4,3), each=3))
     bind_rows(df_tiles, df_coins)
 }
-
 should_resample_relativity <- function(coins) {
     stats::sd(c(coins[6], coins[4], coins[3], coins[1])) == 0
 }
@@ -610,20 +665,22 @@ should_resample_relativity <- function(coins) {
 #' @rdname df_game
 #' @export
 df_skyscrapers <- function(seed = NULL, tiles = NULL) {
-    set.seed(seed)
-    df_txy <- tibble(piece_side = "tile_face",
-                     x = 0.5 + c(rep(seq(1, 9, 2), 2), 1, 3, 7, 9, rep(seq(1, 9, 2), 2)),
-                     y = 0.5 + c(rep(9, 5), rep(7, 5), rep(5, 4), rep(3, 5), rep(1, 5)))
-    if (is.null(tiles)) {
-       df_tsr <- tibble(suit = rep(1:4, each = 6), rank = rep(1:6, 4))[sample.int(24), ]
-    } else {
-        df_tsr <- process_tiles(tiles)
-    }
-    df_tiles <- bind_cols(df_txy, df_tsr)
-    df_pawn <- dplyr::filter(df_tiles, .data$rank == 1)
-    df_pawn <- dplyr::mutate(df_pawn, piece_side = "pawn_face",
-                             x = .data$x + 0.5, y = .data$y - 0.5)
+    df_tiles <- df_donut_tiles(seed = seed, tiles = tiles, x0 = 1.5, y0 = 1.5)
+    df_pawn <- filter(df_tiles, .data$rank == 1)
+    df_pawn <- mutate(df_pawn, piece_side = "pawn_face",
+                      x = .data$x + 0.5, y = .data$y - 0.5)
     bind_rows(df_tiles, df_pawn)
+}
+
+#' @rdname df_game
+#' @export
+df_slides_of_action <- function() {
+    df_tiles <- df_rect_board_tiles(4, 4)
+    df_coins <- tibble(piece_side = "coin_back",
+                       suit = rep(c(1,3,4), each = 5), rank = rep(1:5, 3),
+                       x = c(3,1,4,2,3, 2,3,1,4,2, 1,4,2,3,1),
+                       y = c(4,3,3,2,1, 4,3,2,2,1, 4,4,3,2,1))
+    bind_rows(df_tiles, df_coins)
 }
 
 #' @rdname df_game

@@ -6,9 +6,13 @@
 \alias{df_alien_city}
 \alias{df_cell_management}
 \alias{df_chinese_checkers}
+\alias{df_mini_halma}
+\alias{df_coin_collectors}
 \alias{df_desfases}
+\alias{df_easy_slider}
 \alias{df_evade}
 \alias{df_everest}
+\alias{df_four_blind_mice}
 \alias{df_froggy_bottom}
 \alias{df_fujisan}
 \alias{df_iceberg}
@@ -16,6 +20,7 @@
 \alias{df_japan}
 \alias{df_landlocked}
 \alias{df_ley_lines}
+\alias{df_mathrix}
 \alias{df_piecepackman}
 \alias{df_pass_the_food}
 \alias{df_piecepack_klondike}
@@ -25,6 +30,7 @@
 \alias{df_quatri}
 \alias{df_relativity}
 \alias{df_skyscrapers}
+\alias{df_slides_of_action}
 \alias{df_the_in_crowd}
 \alias{df_san_andreas}
 \alias{df_the_magic_bag}
@@ -68,11 +74,19 @@ df_cell_management(seed = NULL)
 
 df_chinese_checkers()
 
+df_mini_halma()
+
+df_coin_collectors(seed = NULL, tiles = NULL, coins = NULL, dice = NULL)
+
 df_desfases(seed = NULL, tiles = NULL, dice = NULL)
+
+df_easy_slider(seed = NULL, tiles = NULL, coins = NULL, pawns = NULL)
 
 df_evade()
 
 df_everest()
+
+df_four_blind_mice()
 
 df_froggy_bottom()
 
@@ -87,6 +101,8 @@ df_japan(seed = NULL)
 df_landlocked(seed = NULL)
 
 df_ley_lines()
+
+df_mathrix(seed = NULL, coins = NULL)
 
 df_piecepackman(seed = NULL, variant = 1)
 
@@ -105,6 +121,8 @@ df_quatri()
 df_relativity(seed = NULL, coins = NULL)
 
 df_skyscrapers(seed = NULL, tiles = NULL)
+
+df_slides_of_action()
 
 df_the_in_crowd()
 
@@ -181,9 +199,11 @@ df_tablut(die_width = 0.63)
 
 \item{tiles}{String of tile layout}
 
+\item{coins}{String of coin layout}
+
 \item{dice}{String of dice layout}
 
-\item{coins}{String of coin layout}
+\item{pawns}{String of pawns layout}
 
 \item{variant}{Number of variant.}
 
@@ -228,6 +248,8 @@ Here is some more information about the various games:
                               See \url{https://www.ludism.org/ppwiki/Chess}.}
  \item{Chinese Checkers}{A port of Chinese Checkers by Mark A. Biggar.
                          See \url{https://www.ludism.org/ppwiki/ChineseCheckers}.}
+ \item{Coin Collectors}{A solitaire by Don Kirkby.
+                        See \url{https://www.ludism.org/ppwiki/CoinCollectors}.}
  \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
                  but one can use a piecepack as a cribbage board instead.
                  See \url{https://www.ludism.org/ppwiki/Cribbage}.}
@@ -236,10 +258,14 @@ Here is some more information about the various games:
  \item{Desfases}{Game by Antonio Recuenco Muñoz.
                  Runner-up for best game in the eighth community piecepack game design contest.
                  See \url{https://www.ludism.org/ppwiki/Desfases}.}
+ \item{Easy Slider}{A solitaire by Ron Hale-Evans and Marty Hale-Evans.
+                 See \url{https://www.ludism.org/ppwiki/EasySlider}.}
  \item{Evade}{Adaption by Mark A. Biggar of a game by Alex Randolph.
                 See \url{https://www.ludism.org/ppwiki/Evade}.}
  \item{Everest}{Game by Mark A. Biggar that features a Roborally programmed movement system.
                 See \url{https://www.ludism.org/ppwiki/Everest}.}
+ \item{Four Blind Mice}{Multi-player puzzle by Tim Farley inspired by Ricochet Robot by Alex Randolph.
+                        See \url{https://www.ludism.org/ppwiki/FourBlindMice}.}
  \item{Four Field Kono}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
                         See \url{https://www.ludism.org/ppwiki/FourFieldKono}.}
  \item{Four Seasons Chess}{A traditional four person chess variant recorded in \emph{Libro del Acedrex}.
@@ -264,6 +290,8 @@ Here is some more information about the various games:
                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
  \item{Lines of Action}{An abstract designed by Claude Soucie.
                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
+ \item{Mathrix}{A solitaire by Clark Rodeffer.
+                See \url{https://www.ludism.org/ppwiki/Mathrix}}
  \item{Nine Men's Morris}{Traditional board game.
        See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
  \item{Pass the Food}{A dexterity game by Trevor L Davis.
@@ -291,6 +319,8 @@ Here is some more information about the various games:
               See \url{https://www.ludism.org/ppwiki/Shogi}.}
  \item{Skyscrapers}{A solitaire by Michael Schoessow.
                     See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
+ \item{Slides of Action}{An abstract connection game by Clark Rodeffer.
+                         See \url{https://www.ludism.org/ppwiki/SlidesOfAction}.}
  \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
                See \url{https://www.ludism.org/ppwiki/Tablut}.}
  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.

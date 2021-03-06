@@ -21,6 +21,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/chinese_checkers.txt", cat_piece(df_chinese_checkers(), reorient="all"))
+    verify_output("../text_diagrams/coin_collectors.txt", cat_piece(df_coin_collectors(seed = 15)))
     verify_output("../text_diagrams/cribbage.txt", cat_piece(df_cribbage_board()))
     df <- df_desfases(seed=42)
     tiles <- generate_sra(df)
@@ -28,9 +29,11 @@ test_that("game diagrams work as expected", {
     df <- df_desfases(tiles=tiles, dice=dice)
     verify_output("../text_diagrams/desfases_seed.txt",
                   cat_piece(df, reorient="symbols"))
+    verify_output("../text_diagrams/easy_slider.txt", cat_piece(df_easy_slider(seed=71)))
     verify_output("../text_diagrams/evade.txt", cat_piece(df_evade()))
     verify_output("../text_diagrams/everest.txt", cat_piece(df_everest()))
     verify_output("../text_diagrams/froggy_bottom.txt", cat_piece(df_froggy_bottom()))
+    verify_output("../text_diagrams/four_blind_mice.txt", cat_piece(df_four_blind_mice()))
     verify_output("../text_diagrams/grasshopper.txt", cat_piece(df_grasshopper()))
     df <- df_iceberg(seed=42)
     tiles <- generate_sra(df)
@@ -44,6 +47,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/ley_lines.txt", cat_piece(df_ley_lines()))
     verify_output("../text_diagrams/lines_of_action.txt",
                   cat_piece(df_lines_of_action(), reorient="all"))
+    verify_output("../text_diagrams/mathrix.txt", cat_piece(df_mathrix(seed=72)))
     verify_output("../text_diagrams/nine_mens_morris_matchsticks.txt",
                   cat_piece(df_nine_mens_morris(has_matchsticks = TRUE)))
     verify_output("../text_diagrams/pass_the_food.txt", cat_piece(df_pass_the_food()))
@@ -66,6 +70,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/salta.txt", cat_piece(df_salta()))
     verify_output("../text_diagrams/san_andreas.txt", cat_piece(df_san_andreas()))
     verify_output("../text_diagrams/skyscrapers.txt", cat_piece(df_skyscrapers(seed=23)))
+    verify_output("../text_diagrams/slides_of_action.txt", cat_piece(df_slides_of_action()))
     verify_output("../text_diagrams/the_in_crowd.txt", cat_piece(df_the_in_crowd()))
     verify_output("../text_diagrams/the_magic_bag.txt", cat_piece(df_the_magic_bag(seed=27)))
     verify_output("../text_diagrams/tablut.txt",
