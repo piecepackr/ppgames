@@ -28,9 +28,7 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
                          width = NULL, height = NULL, ppi = NULL,
                          new_device = TRUE) {
 
-    if (n_transitions > 0L) {
-        piecepackr:::assert_suggested("tweenr")
-    }
+    if (n_transitions > 0L) piecepackr:::assert_suggested("tweenr")
 
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
@@ -38,8 +36,9 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
 
     dfs <- game$dfs
     ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
-    if (n_transitions > 0L)
+    if (n_transitions > 0L) {
         dfs <- get_tweened_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
+    }
 
     #### Add grid and comment annotations
     xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm = TRUE)
@@ -124,9 +123,6 @@ tween_dfs <- function(df1, df2, n_transitions = 0L) {
     df_id_cfg <- get_id_cfg(df1, df2)
     if (nrow(df1) == 0 && nrow(df2) == 0) return(rep(list(df1), n_transitions))
     dfs <- init_dfs(df1, df2)
-    # https://github.com/thomasp85/tweenr/issues/44
-    if (hasName(dfs[[1]], ".frame") && packageVersion("tweenr") <= package_version("1.0.1"))
-        n_transitions <- n_transitions - 1L
     df <- tweenr::tween_state(dfs[[1]], dfs[[2]], ease = "cubic-in-out",
                               nframes = n_transitions + 2L, id = .data$id)
     df <- left_join(df, df_id_cfg, by = "id")
