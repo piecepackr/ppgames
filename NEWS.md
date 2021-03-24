@@ -1,4 +1,4 @@
-ppgames 0.6.0
+ppgames 0.6.1
 =============
 
 New features
