@@ -249,16 +249,16 @@ fg_list <- list(piecepack = piecepack_colors,
                 go = go_colors)
 
 add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg, reorient = "none") {
-    if (piecepackr:::has_suit(piece_side)) {
+    if (piece_side %in% c("tile_back", "coin_face", "card_back")) {
+        fg <- "black"
+    } else {
         if (grepl("pyramid", piece_side)) cfg <- "icehouse_pieces"
         ss <- ss_list[[cfg]][suit]
         if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
         if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle, reorient)
         fg <- fg_list[[cfg]][suit]
-    } else {
-        fg <- "black"
     }
-    if (piecepackr:::has_rank(piece_side)) {
+    if (!(piece_side %in% c("tile_back", "coin_back", "card_back", "pawn_face", "pawn_back"))) {
         rs <- rs_list[[cfg]][rank]
         if (grepl("chess", cfg) && suit == 6L) rs <- unicode_chess_white[rank]
         if (!grepl("matchstick", piece_side)) rs <- rotate(rs, angle, reorient)
