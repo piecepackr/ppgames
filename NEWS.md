@@ -1,3 +1,14 @@
+ppgames 0.6.2
+=============
+
+Bug fixes and minor improvements
+--------------------------------
+
+* Filled in missing suits/ranks in following board generators to guarantee each piecepack piece is completely unique:
+
+  + ``df_international_chess()`` aka ``df_chess()``
+  + ``df_xiangqi()``
+
 ppgames 0.6.1
 =============
 
@@ -257,7 +268,7 @@ ppgames 0.3.1
 New features
 ------------
 
-* ``df_alice_chess()``, ``df_chaturaji()``, ``df_fide_chess()``, ``df_four_seasons_chess()``, 
+* ``df_alice_chess()``, ``df_chaturaji()``, ``df_international_chess()``, ``df_four_seasons_chess()``, 
   ``df_shogi()``, ``df_ultima()``, ``df_xiangqi()``  now have a new argument 
   ``has_subpack`` which if ``TRUE`` will provide alternative piecepack "stackpack" diagrams.
 * New starting board generators for specific games:

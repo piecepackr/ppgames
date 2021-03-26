@@ -75,30 +75,34 @@ df_four_seasons_chess <- function(has_subpack = FALSE) {
 df_chess_pieces <- function(has_subpack = FALSE) {
     if (has_subpack) {
         df_pb <- tibble(piece_side = "coin_back", cfg = "piecepack",
-                        suit = rep(1:2, each = 4), x = 1:8, y = 7, angle = 180)
+                        suit = rep(1:2, each = 4), rank = rep(3:6, 2),
+                        x = 1:8, y = 7, angle = 180)
         df_ob <- tibble(piece_side = "tile_face", cfg = "subpack",
                         suit = rep(1:2, each = 4), x = 1:8, y = 8, angle = 180,
                         rank = c(4,2,3,5,6,3,2,4))
         df_pw <- tibble(piece_side = "coin_back", cfg = "piecepack",
-                        suit = rep(4:3, each = 4), x = 1:8, y = 2)
+                        suit = rep(4:3, each = 4), rank = rep(3:6, 2),
+                        x = 1:8, y = 2)
         df_ow <- tibble(piece_side = "tile_face", cfg = "subpack",
                         suit = rep(4:3, each = 4), x = 1:8, y = 1,
                         rank = c(4,2,3,5,6,3,2,4))
         bind_rows(df_pb, df_pw, df_ow, df_ob)
     } else {
         df_p1 <- tibble(piece_side = "coin_back",
-                        suit = (1:8+1) %% 2 + 1, x = 1:8, y = 7, angle = 180)
+                        suit = (1:8+1) %% 2 + 1, rank = c(1,1, 3,3, 4,4, 5,6),
+                        x = 1:8, y = 7, angle = 180)
         df_p2 <- tibble(piece_side = "coin_back",
-                        suit = 1:8 %% 2 + 3, x = 1:8, y = 2)
+                        suit = 1:8 %% 2 + 3, rank = c(1,1, 3,3, 4,4, 5,6),
+                        x = 1:8, y = 2, angle = 0)
         df_r <- tibble(piece_side = "die_face", suit = 1:4, rank = 4,
                        x = c(1,8,8,1), y = c(8,8,1,1), angle = c(180,180,0,0))
-        df_n <- tibble(piece_side = "coin_face", rank = 2,
+        df_n <- tibble(piece_side = "coin_face", rank = 2, suit = 1:4,
                        x = c(2,7,7,2), y = c(8,8,1,1), angle = c(180,180,0,0))
         df_b <- tibble(piece_side = "pawn_face", suit = 1:4,
                        x = c(3,6,6,3), y = c(8,8,1,1), angle = c(180,180,0,0))
-        df_q <- tibble(piece_side = "coin_face", rank = 5,
+        df_q <- tibble(piece_side = "coin_face", rank = 5, suit = c(3, 2),
                        x = 4, y = c(8,1), angle = c(180,0))
-        df_k <- tibble(piece_side = "coin_face", rank = 6,
+        df_k <- tibble(piece_side = "coin_face", rank = 6, suit = c(4, 1),
                        x = 5, y = c(8,1), angle = c(180,0))
         bind_rows(df_p1, df_p2, df_r, df_n, df_b, df_q, df_k)
     }
@@ -226,13 +230,15 @@ df_xiangqi <- function(has_subpack = FALSE) {
     suits <- c(1,2,4,3)
     x2 <- function(x) rep(c(x, 10-x), 2)
     y2 <- function(y) rep(c(11-y, y), each = 2)
-    df_t1 <- df_rect_board_tiles(10, 9)
+    df_t1 <- df_rect_board_tiles(10, 9, rank = rep(3:6, each = 4))
     df_t2 <- tibble(piece_side = "tile_face", suit = c(1,3), rank = 2,
                     x = 5, y = c(9, 2), angle = c(180, 0))
     df_zu1 <- tibble(piece_side = "coin_back",
-                   suit = (1:5+1) %% 2 + 3, x = seq(1, 9, 2), y = 4)
+                   suit = (1:5+1) %% 2 + 3, rank = c(1, 4, 6, 1, 4),
+                   x = seq(1, 9, 2), y = 4)
     df_zu2 <- tibble(piece_side = "coin_back",
-                   suit = (1:5+1) %% 2 + 1, x = seq(1, 9, 2), y = 7, angle = 180)
+                   suit = (1:5+1) %% 2 + 1, rank = c(1, 4, 6, 1, 4),
+                   x = seq(1, 9, 2), y = 7, angle = 180)
     df_pao <- tibble(piece_side = "pawn_face", suit = suits,
                      x = x2(2), y = y2(3), angle = ang2)
     df_che <- tibble(piece_side = "die_face", suit = suits, rank = 4,
@@ -243,7 +249,7 @@ df_xiangqi <- function(has_subpack = FALSE) {
                     x = x2(3), y = y2(1), angle = ang2)
     df_shi <- tibble(piece_side = "coin_face", suit = suits, rank = 5,
                     x = x2(4), y = y2(1), angle = ang2)
-    df_jiang <- tibble(piece_side = "coin_face", suit = c(3,1), rank = 6,
+    df_jiang <- tibble(piece_side = "coin_face", suit = c(4,2), rank = 6,
                        x = 5, y = c(1,10), angle = c(0, 180))
     df_sb <- bind_rows(df_ma, df_xiang, df_shi, df_jiang, df_che)
     if (has_subpack) {
