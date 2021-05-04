@@ -54,7 +54,7 @@ By default set so image max 600 pixels wide or tall.}
 \item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
 }
 \value{
-Nothing, as a side effect saves a graphic
+An invisible list of the dimensions of the image, as a side effect saves a graphic
 }
 \description{
 Plot game move

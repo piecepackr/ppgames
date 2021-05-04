@@ -263,7 +263,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
 #' @param move Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 #'             unless \code{NULL} in which case will plot the game state after the last move.
 #' @param bg Background color (\code{"transparent")} for transparent
-#' @return Nothing, as a side effect saves a graphic
+#' @return An invisible list of the dimensions of the image, as a side effect saves a graphic
 #' @import grDevices
 #' @export
 plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ...,
@@ -275,7 +275,6 @@ plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ...,
     plot_df(df, file = file, annotate = annotate, ...,
             .f = .f, cfg = cfg, envir = envir,
             width = width, height = height, ppi = ppi, bg = bg, new_device = new_device)
-    invisible(NULL)
 }
 
 plot_df <- function(df, file = NULL, annotate = TRUE, ...,

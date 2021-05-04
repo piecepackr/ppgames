@@ -141,7 +141,7 @@ gridUI <- function(id) {
     renderUI(tagList(fluidRow(column(2, numericInput(ns("op_angle"), "op_angle", 45, step = 15)),
                               column(2, numericInput(ns("op_scale"), "op_scale", 0, min = 0, step = 0.1)),
                               column(2, annotateInput(ns("annotate")))),
-                     imageOutput(ns("grid"), width="50%", height="auto")))
+                     imageOutput(ns("grid"))))
 }
 gridServer <- function(id, game, move) {
     moduleServer(id, function(input, output, session) {
@@ -153,11 +153,21 @@ gridServer <- function(id, game, move) {
             } else {
                 trans <- function(x, ...) x
             }
-            plot_move(game(), f, move(), annotate = input$annotate,
+            dim_image <- plot_move(game(), f, move(), annotate = input$annotate,
                       envir = envir, trans = trans,
                       op_scale = input$op_scale,
                       op_angle = input$op_angle)
-            list(src = f)
+            h <- dim_image$height
+            w <- dim_image$width
+            max_pixels <- min(720, max(h, w))
+            if (h < w) {
+                height <- round((h / w) * max_pixels, 0)
+                width <- max_pixels
+            } else {
+                height <- max_pixels
+                width <- round((w / h) * max_pixels, 0)
+            }
+            list(src = f, width = width, height = height)
         }, deleteFile = TRUE)
     })
 }

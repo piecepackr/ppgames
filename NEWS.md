@@ -17,6 +17,7 @@ Bug fixes and minor improvements
 
   + ``df_international_chess()`` aka ``df_chess()``
   + ``df_xiangqi()``
+* ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
 
 ppgames 0.6.1
 =============
