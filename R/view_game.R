@@ -22,36 +22,26 @@ view_game <- function(game, shiny = FALSE, ...,
 
 view_game_shiny <- function(game) {
     # write a temporary shiny app with pre-filled PPN
+
+    app_dir <- tempfile()
+    on.exit(unlink(app_dir))
+    old_dir <- system.file("shiny/ppn_viewer", package = "ppgames")
+    file.copy(old_dir, tempdir(), recursive = TRUE)
+    file.rename(file.path(tempdir(), "ppn_viewer"), app_dir)
+
     ppn_file <- tempfile(fileext = ".ppn")
     on.exit(unlink(ppn_file))
     write_ppn(list(game), ppn_file)
-    app <- sprintf('
-    library("ppgames")
-    library("shiny")
 
-    f <- "%s"
+    app_file <- file.path(app_dir, "app.R")
+    app <- readLines(app_file)
+    i <- grep("txt <-", app)
+    app[i] <- sprintf('f <- "%s"
     g <- read_ppn(f)[[1]]
-    txt <- paste(ppgames:::as_ppn(g), collapse = "\n")
-
-    ui <- fluidPage(
-        gameUI("game", txt),
-        hr(),
-        moveUI("move"),
-        hr(),
-        plotUI("plot")
-    )
-
-    server <- function(input, output, session) {
-        game <- gameServer("game")
-        move <- moveServer("move", game)
-        plotServer("plot", game, move)
-    }
-
-    shinyApp(ui, server)', ppn_file)
-    app_dir <- tempfile()
-    on.exit(unlink(app_dir))
-    dir.create(app_dir)
+    txt <- paste(ppgames:::as_ppn(g), collapse = "\n")',
+    ppn_file)
     writeLines(app, file.path(app_dir, "app.R"))
+
     shiny::runApp(app_dir)
 }
 
