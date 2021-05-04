@@ -33,13 +33,14 @@ will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
 In particular, in contrast with "all" this preserves the location
 of the upper-left "corner" of piecepack tile faces.}}}
 
-\item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
-if \code{FALSE} don't annotate,
+\item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
+with \dQuote{algrebraic} coordinates,
+if \code{FALSE} or \code{"none"} don't annotate,
 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
-\item{...}{Passed to \code{cat}}
+\item{...}{Passed to \code{cat()}}
 
-\item{file}{\code{file} argument of \code{cat}.
+\item{file}{\code{file} argument of \code{cat()}.
 Default (\code{""}) is to print to standard output.
 \code{NULL} means we don't \code{cat()}}
 

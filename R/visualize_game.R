@@ -4,9 +4,10 @@
 #' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
 #' @param file Filename to save animation unless \code{NULL}
 #'             in which case it uses the current graphics device.
-#' @param annotate If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
-#'                 if \code{FALSE} don't annotate,
-#'                 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.
+#' @param annotate If `TRUE` or `"algebraic"` annotate the plot
+#'                  with \dQuote{algrebraic} coordinates,
+#'                 if `FALSE` or `"none"` don't annotate,
+#'                 if `"cartesian"` annotate the plot with \dQuote{cartesian} coordinates.
 #' @param ... Arguments to \code{pmap_piece}
 #' @param .f Low level graphics function to use e.g. \code{grid.piece}, \code{piece3d}, or \code{piece}.
 #' @param cfg A piecepackr configuration list
@@ -328,7 +329,8 @@ min2offset <- function(min, lbound = 0.5) {
 }
 
 annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0) {
-        if (isFALSE(annotate) || is.na(xmax) || is.na(ymax)) return(invisible(NULL))
+        if (isFALSE(annotate) || annotate == "none" || is.na(xmax) || is.na(ymax))
+            return(invisible(NULL))
         gp <- gpar(fontsize = 18, fontface = "bold")
         x_indices <- seq(floor(xmax))
         if (annotate == "cartesian")

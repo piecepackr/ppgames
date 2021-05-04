@@ -1,27 +1,28 @@
 #' Generate plaintext piecepack diagrams
 #'
-#' \code{cat_piece()} generates plaintext piecepack diagrams and
-#'  outputs them using \code{base::cat()}.  \code{cat_move()} generates
-#' a plaintext diagram for a move within a game.  \code{cat_game()}
+#' `cat_piece()` generates plaintext piecepack diagrams and
+#'  outputs them using `base::cat()`.  `cat_move()` generates
+#' a plaintext diagram for a move within a game.  `cat_game()`
 #' renders an animation of a game in the terminal.
 #'
 #' @param df Data frame containing piece info.
-#' @param color How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
-#'       will colorize output for the terminal.  If \code{FALSE} won't colorize output.
+#' @param color How should the text be colorized.  If `TRUE` or `"crayon"`
+#'       will colorize output for the terminal.  If `FALSE` won't colorize output.
 #' @param reorient Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
-#'        \item{The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.}
-#'        \item{"all" (or \code{TRUE}) means setting the angle to zero for all pieces
+#'        \item{The default "none" (or `FALSE`) means don't reorient any pieces/symbols.}
+#'        \item{"all" (or `TRUE`) means setting the angle to zero for all pieces
 #'              (reorienting them all \dQuote{up}).}
 #'        \item{"symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
 #'              In particular, in contrast with "all" this preserves the location
 #'              of the upper-left "corner" of piecepack tile faces.}}
-#' @param annotate If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
-#'                 if \code{FALSE} don't annotate,
-#'                 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.
-#' @param ... Passed to \code{cat}
-#' @param file \code{file} argument of \code{cat}.
-#'             Default (\code{""}) is to print to standard output.
-#'             \code{NULL} means we don't \code{cat()}
+#' @param annotate If `TRUE` or `"algebraic"` annotate the plot
+#'                  with \dQuote{algrebraic} coordinates,
+#'                 if `FALSE` or `"none"` don't annotate,
+#'                 if `"cartesian"` annotate the plot with \dQuote{cartesian} coordinates.
+#' @param ... Passed to `cat()`
+#' @param file `file` argument of `cat()`.
+#'             Default (`""`) is to print to standard output.
+#'             `NULL` means we don't `cat()`
 #' @return Character vector of text diagram (returned invisibly).
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ..., file = "") {
@@ -81,7 +82,7 @@ color_text <- function(cm, color) {
 }
 
 annotate_text <- function(cm, nc, nr, xoffset, yoffset, annotate) {
-    if (!isFALSE(annotate)) {
+    if (!(isFALSE(annotate) || annotate == "none")) {
        x <- seq(3 + 2 * xoffset, nc, by=2)
        if (annotate == "cartesian") {
            x <- utils::head(x, 9)
@@ -132,7 +133,7 @@ cat_move <- function(game, move = NULL, ...) {
 }
 
 get_df_offsets <- function(df, lr, xoffset, yoffset, annotate = FALSE) {
-    if (!isFALSE(annotate)) {
+    if (!(isFALSE(annotate) || annotate == "none")) {
         xlbound <- ifelse(lr$ymax >= 10, 1.0, 0.5)
         ylbound <- 0.5
     } else {
@@ -149,7 +150,7 @@ get_game_offsets <- function(game, annotate = FALSE, ...) {
     ymax <- max(sapply(ranges, function(x) x$ymax), na.rm = TRUE)
     ymin <- min(sapply(ranges, function(x) x$ymin), na.rm = TRUE)
     xmin <- min(sapply(ranges, function(x) x$xmin), na.rm = TRUE)
-    if (!isFALSE(annotate)) {
+    if (!(isFALSE(annotate) || annotate == "none")) {
         xoffset <- min2offset(xmin, ifelse(ymax >= 10, 1.0, 0.5))
         yoffset <- min2offset(ymin, 0.5)
     } else {

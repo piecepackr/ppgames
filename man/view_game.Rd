@@ -28,8 +28,9 @@ view_game(
 In particular, in contrast with "all" this preserves the location
 of the upper-left "corner" of piecepack tile faces.}}}
 
-\item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
-if \code{FALSE} don't annotate,
+\item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
+with \dQuote{algrebraic} coordinates,
+if \code{FALSE} or \code{"none"} don't annotate,
 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{fps}{Frames per second.  Passed to \code{cat_game()}.}

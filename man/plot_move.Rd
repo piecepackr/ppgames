@@ -29,8 +29,9 @@ in which case it uses the current graphics device.}
 \item{move}{Which move to plot game state (after the move, will use \code{game$dfs[[move]]})
 unless \code{NULL} in which case will plot the game state after the last move.}
 
-\item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
-if \code{FALSE} don't annotate,
+\item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
+with \dQuote{algrebraic} coordinates,
+if \code{FALSE} or \code{"none"} don't annotate,
 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{...}{Arguments to \code{pmap_piece}}

@@ -27,8 +27,9 @@ animate_game(
 \item{file}{Filename to save animation unless \code{NULL}
 in which case it uses the current graphics device.}
 
-\item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
-if \code{FALSE} don't annotate,
+\item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
+with \dQuote{algrebraic} coordinates,
+if \code{FALSE} or \code{"none"} don't annotate,
 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{...}{Arguments to \code{pmap_piece}}
