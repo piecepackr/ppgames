@@ -37,6 +37,7 @@ Suggests:
     purrr,
     rayrender,
     rgl,
+    shiny,
     testthat,
     tweenr,
     vdiffr

@@ -1,16 +1,61 @@
 #' View/edit game
 #'
-#' Basic command-line program to view/edit (PPN) games
+#' Launch PPN game viewer/editor
 #'
+#' @param shiny If `TRUE` launch a shiny PPN viewer in a browser instead of command-line viewer.
 #' @inheritParams cat_move
 #' @param editor usually a character string naming (or giving the path to) the text editor you want to use.
-#' @param ... Passed to \code{plot_move()}
-#' @param fps Frames per second.  Passed to \code{cat_game()}.
+#' @param ... Passed to `plot_move()`.
+#' @param fps Frames per second.  Passed to `cat_game()`.
 #' @export
-view_game <- function(game, ...,
+view_game <- function(game, shiny = FALSE, ...,
                       editor = getOption("editor"),
                       reorient = "none", annotate = FALSE, fps = 1) {
-    piecepackr:::assert_suggested("argparse")
+    if (shiny) {
+        piecepackr:::assert_suggested("shiny")
+        view_game_shiny(game)
+    } else {
+        piecepackr:::assert_suggested("argparse")
+        view_game_cmdline(game, ..., editor, reorient, annotate, fps)
+    }
+}
+
+view_game_shiny <- function(game) {
+    # write a temporary shiny app with pre-filled PPN
+    ppn_file <- tempfile(fileext = ".ppn")
+    on.exit(unlink(ppn_file))
+    write_ppn(list(game), ppn_file)
+    app <- sprintf('
+    library("ppgames")
+    library("shiny")
+
+    f <- "%s"
+    g <- read_ppn(f)[[1]]
+    txt <- paste(ppgames:::as_ppn(g), collapse = "\n")
+
+    ui <- fluidPage(
+        gameUI("game", txt),
+        hr(),
+        moveUI("move"),
+        hr(),
+        plotUI("plot")
+    )
+
+    server <- function(input, output, session) {
+        game <- gameServer("game")
+        move <- moveServer("move", game)
+        plotServer("plot", game, move)
+    }
+
+    shinyApp(ui, server)', ppn_file)
+    app_dir <- tempfile()
+    on.exit(unlink(app_dir))
+    dir.create(app_dir)
+    writeLines(app, file.path(app_dir, "app.R"))
+    shiny::runApp(app_dir)
+}
+
+view_game_cmdline <- function(game, ..., editor, reorient, annotate, fps) {
     move <- tail(names(game$moves), 1)
     parser <- get_parser()
     print_screen(game, move, reorient, annotate)

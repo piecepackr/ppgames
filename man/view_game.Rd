@@ -6,6 +6,7 @@
 \usage{
 view_game(
   game,
+  shiny = FALSE,
   ...,
   editor = getOption("editor"),
   reorient = "none",
@@ -16,7 +17,9 @@ view_game(
 \arguments{
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
-\item{...}{Passed to \code{plot_move()}}
+\item{shiny}{If \code{TRUE} launch a shiny PPN viewer in a browser instead of command-line viewer.}
+
+\item{...}{Passed to \code{plot_move()}.}
 
 \item{editor}{usually a character string naming (or giving the path to) the text editor you want to use.}
 
@@ -36,5 +39,5 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 \item{fps}{Frames per second.  Passed to \code{cat_game()}.}
 }
 \description{
-Basic command-line program to view/edit (PPN) games
+Launch PPN game viewer/editor
 }

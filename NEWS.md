@@ -1,6 +1,13 @@
 ppgames 0.6.2
 =============
 
+New features
+------------
+
+* There is now a Shiny PPN viewer which can be
+  launched via `view_game(game, shiny=TRUE)` or
+  `shiny::runApp(system.file("shiny/ppn_viewer", package = "ppgames"))` (#27)
+
 Bug fixes and minor improvements
 --------------------------------
 
