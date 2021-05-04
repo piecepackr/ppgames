@@ -175,12 +175,15 @@ gridServer <- function(id, game, move) {
 # piece3d
 rglUI <- function(id) {
     ns <- NS(id)
-    renderUI(tagList(rgl::rglwidgetOutput(ns("rgl"))))
+    renderUI(tagList(rgl::rglwidgetOutput(ns("rgl"), width = "600px", height = "600px")))
 }
 rglServer <- function(id, game, move) {
     moduleServer(id, function(input, output, session) {
         output$rgl <- rgl::renderRglwidget({
             req(game(), move())
+            id <- showNotification("Building rotatable, zoomable 3D model.  Please be patient.",
+                                   type = "message", duration = NULL, closeButton = FALSE)
+            on.exit(removeNotification(id), add = TRUE)
             try(rgl::close3d())
             rgl::open3d(useNULL = TRUE)
             rgl::view3d(0, 0)
