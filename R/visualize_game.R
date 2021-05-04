@@ -292,6 +292,8 @@ plot_df <- function(df, file = NULL, annotate = TRUE, ...,
     yoffset <- min2offset(dfr$ymin_op)
     if (is.null(width)) width <- dfr$xmax_op + xoffset + 0.50
     if (is.null(height)) height <- dfr$ymax_op + yoffset + 0.50
+    if (is.na(width)) width <- 1
+    if (is.na(height)) height <- 1
     m <- max(width, height)
     if (is.null(file)) {
         if (new_device) dev.new(width = width, height = height, unit = "in", noRstudioGD = TRUE)
@@ -316,7 +318,9 @@ plot_df <- function(df, file = NULL, annotate = TRUE, ...,
 
 
 min2offset <- function(min, lbound = 0.5) {
-    if (min < lbound) {
+    if (is.na(min)) {
+        NA_real_
+    } else if (min < lbound) {
         lbound - min
     } else {
         0
@@ -324,7 +328,7 @@ min2offset <- function(min, lbound = 0.5) {
 }
 
 annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0) {
-        if (isFALSE(annotate)) return(invisible(NULL))
+        if (isFALSE(annotate) || is.na(xmax) || is.na(ymax)) return(invisible(NULL))
         gp <- gpar(fontsize = 18, fontface = "bold")
         x_indices <- seq(floor(xmax))
         if (annotate == "cartesian")

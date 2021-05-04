@@ -4,6 +4,7 @@ ppgames 0.6.2
 Bug fixes and minor improvements
 --------------------------------
 
+* ``cat_move()`` no longer throws an error for moves that result with zero pieces on the board (#96)
 * Filled in missing suits/ranks in following board generators to guarantee each piecepack piece is completely unique:
 
   + ``df_international_chess()`` aka ``df_chess()``
