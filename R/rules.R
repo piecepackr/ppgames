@@ -56,8 +56,8 @@ clean_game <- function(game) {
 #' @param gk A \code{game_kit} R6 object.
 #' @param output Path to the output file.
 #'        If \code{NULL} the function will guess a default.
-#' @param size Paper size (either "letter", or "A4")
 #' @param quietly Whether to hide document compilation output.
+#' @param size Paper size (either "letter", or "A4")
 #' @param duplex_edge String specifying the desired duplex printing edge.
 #'       If "short" match the second page along its short edge (second page flipped up, easier to preview on computer)
 #'       and if "long" match along its long edge (second page flipped upside down, usual printer default).

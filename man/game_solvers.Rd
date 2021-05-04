@@ -13,7 +13,7 @@ solve_fujisan(coins = random_fujisan_coins(), dice = random_dice() - 1)
 }
 \value{
 A list with solution of Fujisan solution, its length, coin layout, dice (if needed),
-        and portable piecepack notation.
+and portable piecepack notation.
 }
 \description{
 Solves a game of Fujisan (if possible).

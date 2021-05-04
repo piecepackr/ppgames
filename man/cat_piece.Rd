@@ -28,10 +28,10 @@ will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
 \item{reorient}{Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
 \item{The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.}
 \item{"all" (or \code{TRUE}) means setting the angle to zero for all pieces
-      (reorienting them all \dQuote{up}).}
+(reorienting them all \dQuote{up}).}
 \item{"symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
-      In particular, in contrast with "all" this preserves the location
-      of the upper-left "corner" of piecepack tile faces.}}}
+In particular, in contrast with "all" this preserves the location
+of the upper-left "corner" of piecepack tile faces.}}}
 
 \item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
 if \code{FALSE} don't annotate,
@@ -55,7 +55,7 @@ Character vector of text diagram (returned invisibly).
 }
 \description{
 \code{cat_piece()} generates plaintext piecepack diagrams and
- outputs them using \code{base::cat()}.  \code{cat_move()} generates
+outputs them using \code{base::cat()}.  \code{cat_move()} generates
 a plaintext diagram for a move within a game.  \code{cat_game()}
 renders an animation of a game in the terminal.
 }

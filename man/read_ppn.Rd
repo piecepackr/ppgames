@@ -31,5 +31,5 @@ Read/write Portable Piecepack Notation (PPN) files
  unlink(tmp)
 }
 \seealso{
-[plot_move()], [animate_game()], and [cat_move()] for visualizing parsed ppn games.
+\code{\link[=plot_move]{plot_move()}}, \code{\link[=animate_game]{animate_game()}}, and \code{\link[=cat_move]{cat_move()}} for visualizing parsed ppn games.
 }

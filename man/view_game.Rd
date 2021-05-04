@@ -23,10 +23,10 @@ view_game(
 \item{reorient}{Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
 \item{The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.}
 \item{"all" (or \code{TRUE}) means setting the angle to zero for all pieces
-      (reorienting them all \dQuote{up}).}
+(reorienting them all \dQuote{up}).}
 \item{"symbols" means just re-orient suit/rank symbols but not the orientation of the piece itself.
-      In particular, in contrast with "all" this preserves the location
-      of the upper-left "corner" of piecepack tile faces.}}}
+In particular, in contrast with "all" this preserves the location
+of the upper-left "corner" of piecepack tile faces.}}}
 
 \item{annotate}{If \code{TRUE} annotate the plot with \dQuote{algrebraic} coordinates,
 if \code{FALSE} don't annotate,
