@@ -25,8 +25,8 @@ gameServer <- function(id) {
 # select move within game
 moveUI <- function(id) {
     ns <- NS(id)
-    tagList(selectInput(ns("move"), "Select move", character(0)),
-            fluidRow(column(1, actionButton(ns("prev_move"), "Prev.")),
+    tagList(fluidRow(column(2, selectInput(ns("move"), "Select move", character(0))),
+                     column(1, actionButton(ns("prev_move"), "Prev.")),
                      column(1, actionButton(ns("next_move"), "Next")),
                      uiOutput(ns("move_label"))))
 }
@@ -141,34 +141,82 @@ gridUI <- function(id) {
     renderUI(tagList(fluidRow(column(2, numericInput(ns("op_angle"), "op_angle", 45, step = 15)),
                               column(2, numericInput(ns("op_scale"), "op_scale", 0, min = 0, step = 0.1)),
                               column(2, annotateInput(ns("annotate")))),
-                     imageOutput(ns("grid"))))
+                     imageOutput(ns("grid")),
+                     fluidRow(column(2, actionButton(ns("animate"), "Create GIF animation!")),
+                              column(2, numericInput(ns("n_transitions"), "n_transitions", 0, min = 0, step = 1)),
+                              column(2, numericInput(ns("n_pauses"), "n_pauses", 1, min = 1, step = 1)),
+                              column(2, numericInput(ns("fps"), "fps", 1.5, min = 0, step = 0.1)))))
 }
 gridServer <- function(id, game, move) {
     moduleServer(id, function(input, output, session) {
+
+        v <- reactiveValues(should_animate = FALSE)
+        observeEvent(move(), v$should_animate <- FALSE)
+        observeEvent(game(), v$should_animate <- FALSE)
+
+        observeEvent(input$op_scale, v$should_animate <- FALSE)
+        observeEvent(input$op_angle, v$should_animate <- FALSE)
+        observeEvent(input$annotate, v$should_animate <- FALSE)
+
+        observeEvent(input$n_transitions, {
+                         v$should_animate <- FALSE
+                         fps <- 1.5 * (input$n_transitions + input$n_pauses)
+                         updateNumericInput(session, "fps", value = fps)
+                     })
+        observeEvent(input$n_pauses, {
+                         v$should_animate <- FALSE
+                         fps <- 1.5 * (input$n_transitions + input$n_pauses)
+                         updateNumericInput(session, "fps", value = fps)
+                     })
+        observeEvent(input$fps, v$should_animate <- FALSE)
+
+        observeEvent(input$animate, v$should_animate <- TRUE)
+
         output$grid <- renderImage({
-            req(game(), move(), input$op_scale, input$op_angle, input$annotate)
-            f <- tempfile(fileext = ".png")
-            if (input$op_scale > 0) {
-                trans <- piecepackr::op_transform
+            if (v$should_animate) {
+                req(game(), input$op_scale, input$op_angle, input$annotate,
+                    input$n_transitions, input$n_pauses, input$fps)
+                id <- showNotification("I'm drawing animation frames as fast as I can.  Please be patient.",
+                                       type = "message", duration = NULL, closeButton = FALSE)
+                on.exit(removeNotification(id), add = TRUE)
+                f <- tempfile(fileext = ".gif")
+                if (input$op_scale > 0) {
+                    trans <- piecepackr::op_transform
+                } else {
+                    trans <- function(x, ...) x
+                }
+                animate_game(game(), file = f, envir = envir,
+                             op_scale = input$op_scale,
+                             op_angle = input$op_angle,
+                             annotate = input$annotate,
+                             n_transitions = input$n_transitions,
+                             n_pauses = input$n_pauses,
+                             fps = input$fps)
+                list(src = f)
             } else {
-                trans <- function(x, ...) x
-            }
-            dim_image <- plot_move(game(), f, move(), annotate = input$annotate,
-                      envir = envir, trans = trans,
-                      op_scale = input$op_scale,
-                      op_angle = input$op_angle)
-            h <- dim_image$height
-            w <- dim_image$width
-            max_pixels <- min(720, max(h, w))
-            if (h < w) {
-                height <- round((h / w) * max_pixels, 0)
-                width <- max_pixels
-            } else {
-                height <- max_pixels
-                width <- round((w / h) * max_pixels, 0)
-            }
-            list(src = f, width = width, height = height)
-        }, deleteFile = TRUE)
+                req(game(), move(), input$op_scale, input$op_angle, input$annotate)
+                f <- tempfile(fileext = ".png")
+                if (input$op_scale > 0) {
+                    trans <- piecepackr::op_transform
+                } else {
+                    trans <- function(x, ...) x
+                }
+                dim_image <- plot_move(game(), f, move(), annotate = input$annotate,
+                          envir = envir, trans = trans,
+                          op_scale = input$op_scale,
+                          op_angle = input$op_angle)
+                h <- dim_image$height
+                w <- dim_image$width
+                max_pixels <- min(720, max(h, w))
+                if (h < w) {
+                    height <- round((h / w) * max_pixels, 0)
+                    width <- max_pixels
+                } else {
+                    height <- max_pixels
+                    width <- round((w / h) * max_pixels, 0)
+                }
+                list(src = f, width = width, height = height)
+            }}, deleteFile = TRUE)
     })
 }
 
@@ -181,7 +229,7 @@ rglServer <- function(id, game, move) {
     moduleServer(id, function(input, output, session) {
         output$rgl <- rgl::renderRglwidget({
             req(game(), move())
-            id <- showNotification("Building rotatable, zoomable 3D model.  Please be patient.",
+            id <- showNotification("Crafting rotatable, zoomable 3D model.  Please be patient.",
                                    type = "message", duration = NULL, closeButton = FALSE)
             on.exit(removeNotification(id), add = TRUE)
             try(rgl::close3d())
