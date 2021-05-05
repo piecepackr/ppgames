@@ -4,7 +4,7 @@ gameUI <- function(id, ppn_text = "") {
     ns <- NS(id)
     tagList("Enter the ", ppn_link, "for a game:",
         textAreaInput(ns("ppn_text"), "", ppn_text,
-                      width = "60%", rows=12),
+                      width = "100%", rows=24),
         actionButton(ns("parse_ppn"), "Parse PPN"),
         verbatimTextOutput(ns("parse_error"))
     )
@@ -25,10 +25,11 @@ gameServer <- function(id) {
 # select move within game
 moveUI <- function(id) {
     ns <- NS(id)
-    tagList(fluidRow(column(2, selectInput(ns("move"), "Select move", character(0))),
-                     column(1, actionButton(ns("prev_move"), "Prev.")),
-                     column(1, actionButton(ns("next_move"), "Next")),
-                     uiOutput(ns("move_label"))))
+    tagList(selectInput(ns("move"), "Select move", character(0)),
+            fluidRow(column(2, actionButton(ns("prev_move"), "Prev.")),
+                     column(2, actionButton(ns("next_move"), "Next"))),
+            br(),
+            uiOutput(ns("move_label")))
 }
 moveServer <- function(id, game) {
     moduleServer(id, function(input, output, session) {
@@ -117,8 +118,8 @@ reorientInput <- function(id) {
 # cat_piece
 plaintextUI <- function(id) {
     ns <- NS(id)
-    renderUI(tagList(fluidRow(column(2, annotateInput(ns("annotate"))),
-                              column(2, reorientInput(ns("reorient")))),
+    renderUI(tagList(fluidRow(column(3, annotateInput(ns("annotate"))),
+                              column(3, reorientInput(ns("reorient")))),
                      verbatimTextOutput(ns("plaintext"))))
 }
 plaintextServer <- function(id, game, move) {
@@ -138,14 +139,16 @@ plaintextServer <- function(id, game, move) {
 # grid.piece
 gridUI <- function(id) {
     ns <- NS(id)
-    renderUI(tagList(fluidRow(column(2, numericInput(ns("op_angle"), "op_angle", 45, step = 15)),
-                              column(2, numericInput(ns("op_scale"), "op_scale", 0, min = 0, step = 0.1)),
-                              column(2, annotateInput(ns("annotate")))),
-                     imageOutput(ns("grid")),
-                     fluidRow(column(2, actionButton(ns("animate"), "Create GIF animation!")),
-                              column(2, numericInput(ns("n_transitions"), "n_transitions", 0, min = 0, step = 1)),
+    renderUI(tagList(fluidRow(column(3, numericInput(ns("op_angle"), "op_angle", 90, step = 15)),
+                              column(3, numericInput(ns("op_scale"), "op_scale", 0, min = 0, step = 0.1)),
+                              column(3, annotateInput(ns("annotate")))),
+                     hr(),
+                     fluidRow(column(3, actionButton(ns("animate"), "Create GIF!")),
+                              column(3, numericInput(ns("n_transitions"), "n_transitions", 0, min = 0, step = 1)),
                               column(2, numericInput(ns("n_pauses"), "n_pauses", 1, min = 1, step = 1)),
-                              column(2, numericInput(ns("fps"), "fps", 1.5, min = 0, step = 0.1)))))
+                              column(3, numericInput(ns("fps"), "fps", 1.5, min = 0.5, step = 0.5))),
+
+                     imageOutput(ns("grid"))))
 }
 gridServer <- function(id, game, move) {
     moduleServer(id, function(input, output, session) {
@@ -181,13 +184,14 @@ gridServer <- function(id, game, move) {
                 on.exit(removeNotification(id), add = TRUE)
                 f <- tempfile(fileext = ".gif")
                 if (input$op_scale > 0) {
-                    trans <- piecepackr::op_transform
+                    trans <- shiny_trans
                 } else {
                     trans <- function(x, ...) x
                 }
                 animate_game(game(), file = f, envir = envir,
                              op_scale = input$op_scale,
                              op_angle = input$op_angle,
+                             trans = shiny_trans,
                              annotate = input$annotate,
                              n_transitions = input$n_transitions,
                              n_pauses = input$n_pauses,
@@ -195,9 +199,12 @@ gridServer <- function(id, game, move) {
                 list(src = f)
             } else {
                 req(game(), move(), input$op_scale, input$op_angle, input$annotate)
+                id <- showNotification("I'm now painting the game diagram.  Please be patient.",
+                                       type = "message", duration = NULL, closeButton = FALSE)
+                on.exit(removeNotification(id), add = TRUE)
                 f <- tempfile(fileext = ".png")
                 if (input$op_scale > 0) {
-                    trans <- piecepackr::op_transform
+                    trans <- shiny_trans
                 } else {
                     trans <- function(x, ...) x
                 }
@@ -207,7 +214,7 @@ gridServer <- function(id, game, move) {
                           op_angle = input$op_angle)
                 h <- dim_image$height
                 w <- dim_image$width
-                max_pixels <- min(720, max(h, w))
+                max_pixels <- min(600, max(h, w))
                 if (h < w) {
                     height <- round((h / w) * max_pixels, 0)
                     width <- max_pixels
@@ -219,6 +226,8 @@ gridServer <- function(id, game, move) {
             }}, deleteFile = TRUE)
     })
 }
+
+shiny_trans <- function(df, ...) piecepackr::op_transform(df, ..., pt_thickness = 0.30)
 
 # piece3d
 rglUI <- function(id) {
@@ -235,10 +244,10 @@ rglServer <- function(id, game, move) {
             try(rgl::close3d())
             rgl::open3d(useNULL = TRUE)
             rgl::view3d(0, 0)
-            trans <- piecepackr::op_transform
+            trans <- shiny_trans
             df <- game()$dfs[[move()]]
             piecepackr::pmap_piece(df, piecepackr::piece3d,
-                                   envir=envir3d, trans=trans)
+                                   envir=envir3d, trans=trans, scale = 0.98)
             rgl::rglwidget()
         })
     })
