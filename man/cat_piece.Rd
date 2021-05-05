@@ -22,8 +22,10 @@ cat_game(game, ..., fps = 1)
 \arguments{
 \item{df}{Data frame containing piece info.}
 
-\item{color}{How should the text be colorized.  If \code{TRUE} or \code{"crayon"}
-will colorize output for the terminal.  If \code{FALSE} won't colorize output.}
+\item{color}{How should the text be colorized.
+If \code{FALSE} won't colorize output at all.
+If \code{"html"} will colorize output for html.
+Otherwise will colorize output for the terminal using ANSI CSI SGR control sequences.}
 
 \item{reorient}{Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
 \item{The default "none" (or \code{FALSE}) means don't reorient any pieces/symbols.}
@@ -52,7 +54,7 @@ unless \code{NULL} in which case will cat the game state after the last move.}
 \item{fps}{Frames per second.}
 }
 \value{
-Character vector of text diagram (returned invisibly).
+String of text diagram (returned invisibly).
 }
 \description{
 \code{cat_piece()} generates plaintext piecepack diagrams and

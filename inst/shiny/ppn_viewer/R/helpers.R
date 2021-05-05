@@ -1,3 +1,10 @@
+# suggested packages
+has_animation <- requireNamespace("animation", quietly = TRUE) || requireNamespace("gifski", quietly = TRUE)
+has_fansi <- requireNamespace("fansi", quietly = TRUE)
+has_piecenikr <- requireNamespace("piecenikr", quietly = TRUE)
+has_rgl <- requireNamespace("rgl", quietly = TRUE)
+has_tradgames <- requireNamespace("tradgames", quietly = TRUE)
+
 # parse PPN game
 ppn_link <- a(href="https://trevorldavis.com/piecepackr/portable-piecepack-notation.html", "PPN")
 gameUI <- function(id, ppn_text = "") {
@@ -69,14 +76,13 @@ moveServer <- function(id, game) {
 
 # plot move with a specified renderer
 envir <- piecepackr::game_systems("dejavu")
-envir3d <- piecepackr::game_systems("dejavu3d")
 renderers <- c("grid.piece", "cat_piece")
-if (requireNamespace("rgl")) {
+if (has_rgl) {
     renderers <- append(renderers, "piece3d")
+    envir3d <- piecepackr::game_systems("dejavu3d")
 }
 # Support Looney Pyramids if available
-#### Have trans use a larger pt_thickness argument?
-if (requireNamespace("piecenikr")) {
+if (has_piecenikr) {
     pyramids <- piecenikr::looney_pyramids()$icehouse_pieces
     envir$icehouse_pieces <- pyramids
     envir3d$icehouse_pieces <- pyramids
@@ -114,24 +120,32 @@ reorientInput <- function(id) {
     options <- c("none", "symbols", "all")
     selectInput(id, "reorient", options)
 }
+colorInput <- function(id) {
+    if (has_fansi) {
+        checkboxInput(id, "color", value = FALSE)
+    } else {
+        NULL
+    }
+}
 
 # cat_piece
 plaintextUI <- function(id) {
     ns <- NS(id)
     renderUI(tagList(fluidRow(column(3, annotateInput(ns("annotate"))),
-                              column(3, reorientInput(ns("reorient")))),
-                     verbatimTextOutput(ns("plaintext"))))
+                              column(3, reorientInput(ns("reorient"))),
+                              column(3, colorInput(ns("color")))),
+                     uiOutput(ns("plaintext"))))
 }
 plaintextServer <- function(id, game, move) {
     moduleServer(id, function(input, output, session) {
-        output$plaintext <- renderText({
+        output$plaintext <- renderUI({
             req(game(), move(), input$annotate, input$reorient)
-            f <- textConnection("diagram", "w")
-            on.exit(close(f))
-            cat_move(game(), move(), file = f,
-                     annotate = input$annotate,
-                     reorient = input$reorient)
-            paste(diagram, collapse="\n")
+            txt <- cat_move(game(), move(),
+                            file = NULL,
+                            color = ifelse(isTRUE(input$color), "html", FALSE),
+                            annotate = input$annotate,
+                            reorient = input$reorient)
+            pre(HTML(txt), class = "diagram")
         })
     })
 }
@@ -139,15 +153,19 @@ plaintextServer <- function(id, game, move) {
 # grid.piece
 gridUI <- function(id) {
     ns <- NS(id)
-    renderUI(tagList(fluidRow(column(3, numericInput(ns("op_angle"), "op_angle", 90, step = 15)),
-                              column(3, numericInput(ns("op_scale"), "op_scale", 0, min = 0, step = 0.1)),
-                              column(3, annotateInput(ns("annotate")))),
-                     hr(),
+    if (has_animation) {
+        animation_ui <- tagList(hr(),
                      fluidRow(column(3, actionButton(ns("animate"), "Create GIF!")),
                               column(3, numericInput(ns("n_transitions"), "n_transitions", 0, min = 0, step = 1)),
                               column(2, numericInput(ns("n_pauses"), "n_pauses", 1, min = 1, step = 1)),
-                              column(3, numericInput(ns("fps"), "fps", 1.5, min = 0.5, step = 0.5))),
-
+                              column(3, numericInput(ns("fps"), "fps", 1.5, min = 0.5, step = 0.5))))
+    } else {
+        animation_ui <- NULL
+    }
+    renderUI(tagList(fluidRow(column(3, numericInput(ns("op_angle"), "op_angle", 90, step = 15)),
+                              column(3, numericInput(ns("op_scale"), "op_scale", 0, min = 0, step = 0.1)),
+                              column(3, annotateInput(ns("annotate")))),
+                     animation_ui,
                      imageOutput(ns("grid"))))
 }
 gridServer <- function(id, game, move) {

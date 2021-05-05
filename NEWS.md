@@ -7,10 +7,16 @@ New features
 * There is now a Shiny PPN viewer which can be
   launched via `view_game(game, shiny=TRUE)` or
   `shiny::runApp(system.file("shiny/ppn_viewer", package = "ppgames"))` (#27)
+* ``cat_piece()``'s ``color`` argument now supports the value ``"html"`` which will colorize
+  the output for HTML using ``fansi::sgr_to_html()``.
 
 Bug fixes and minor improvements
 --------------------------------
 
+* The "white" background color produced by ``cat_piece()`` if ``color != FALSE`` is now less grey.
+* ``cat_piece()`` will no longer override an explicitly set ``color=TRUE`` to ``FALSE`` when writing to files.
+* ``cat_piece()`` now returns an invisible ``""`` instead of ``NULL`` when passed zero-row input.
+* The (invisible) character vector returned by ``cat_piece()`` is now length one.
 * ``cat_move()`` no longer throws an error for moves that result with zero pieces on the board (#96)
 * The ``annotate`` argument in ``cat_piece()``, ``plot_move()``, ``animate_game()`` now supports using "none" as an alias to `FALSE` and "algebraic" as an alias to `TRUE` (#97)
 * Filled in missing suits/ranks in following board generators to guarantee each piecepack piece is completely unique:

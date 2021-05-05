@@ -6,8 +6,10 @@
 #' renders an animation of a game in the terminal.
 #'
 #' @param df Data frame containing piece info.
-#' @param color How should the text be colorized.  If `TRUE` or `"crayon"`
-#'       will colorize output for the terminal.  If `FALSE` won't colorize output.
+#' @param color How should the text be colorized.
+#'              If `FALSE` won't colorize output at all.
+#'              If `"html"` will colorize output for html.
+#'              Otherwise will colorize output for the terminal using ANSI CSI SGR control sequences.
 #' @param reorient Determines whether and how we should reorient (the angle) of pieces or symbols:\enumerate{
 #'        \item{The default "none" (or `FALSE`) means don't reorient any pieces/symbols.}
 #'        \item{"all" (or `TRUE`) means setting the angle to zero for all pieces
@@ -23,18 +25,18 @@
 #' @param file `file` argument of `cat()`.
 #'             Default (`""`) is to print to standard output.
 #'             `NULL` means we don't `cat()`
-#' @return Character vector of text diagram (returned invisibly).
+#' @return String of text diagram (returned invisibly).
+#' @importFrom rlang %||%
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ..., file = "") {
     cat_piece_helper(df, ..., color = color, reorient = reorient, annotate = annotate, ..., file = file)
 }
 cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
                              xoffset = NULL, yoffset = NULL, file = "") {
-    if (is.null(color)) color <- TRUE
-    if (!is.null(file) && file != "") color <- FALSE
+    color <- color %||% (is.null(file) || file == "")
     if (nrow(df) == 0) {
-        cat(..., file = file)
-        return(invisible(NULL))
+        if (!is.null(file)) cat("", file = file)
+        return(invisible(""))
     }
     df <- clean_df(df)
     if (isTRUE(reorient) || reorient == "all") df$angle <- 0
@@ -46,7 +48,7 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
     nc <- 2 * (lr$xmax + offset$x) + 1
     nr <- 2 * (lr$ymax + offset$y) + 1
     cm <- list(char = matrix(" ", nrow = nr, ncol = nc),
-               bg = matrix("white", nrow = nr, ncol = nc),
+               bg = matrix("#FFFFFF", nrow = nr, ncol = nc),
                fg = matrix("black", nrow = nr, ncol = nc))
 
     for (rr in seq(nrow(df))) {
@@ -63,12 +65,18 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
     cm <- color_text(cm, color)
 
     text <- rev(apply(cm$char, 1, function(x) paste(x, collapse = "")))
-    if (!is.null(file)) cat(text, ..., file = file, sep = "\n")
+    text <- paste(text, collapse = "\n")
+    if (color == "html") {
+        piecepackr:::assert_suggested("fansi")
+        text <- fansi::sgr_to_html(text)
+    }
+    text <- paste0(text, "\n")
+    if (!is.null(file)) cat(text, ..., file = file)
     invisible(text)
 }
 
 color_text <- function(cm, color) {
-    if (isTRUE(color) || color == "crayon") {
+    if (!isFALSE(color)) {
         for (rr in seq(nrow(cm$char))) {
             for (cc in seq(ncol(cm$char))) {
                 fg <- crayon::make_style(cm$fg[rr, cc])
@@ -172,7 +180,7 @@ cat_game <- function(game, ..., fps = 1) {
         dur <- ifelse(1/fps - prev > 0, 1/fps - prev, 0)
         Sys.sleep(dur)
         clear_screen()
-        cat(out, sep="\n")
+        cat(out)
     }
 }
 

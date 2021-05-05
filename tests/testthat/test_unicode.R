@@ -30,7 +30,7 @@ test_that("text diagrams", {
     expect_warning(rotate("&", 45))
     expect_warning(rotate("&", 35))
     f <- tempfile()
-    expect_null(cat_piece(tibble(), file = f))
+    expect_equal(cat_piece(tibble(), file = f), "")
     unlink(f)
     expect_warning(capture.output(cat_piece(tibble(piece_side = "saucer_face", x=2, y=2))))
     expect_error(cat_piece(tibble(piece_side = "pyramid_top", x=2, y=2, rank=7, cfg="icehouse_pieces")))
