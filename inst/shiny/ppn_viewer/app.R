@@ -1,6 +1,7 @@
 library("ppgames")
 library("shiny")
 if (has_piecenikr) library("piecenikr")
+options(crayon.enabled = TRUE, crayon.colors = 256L)
 
 txt <- ""
 
