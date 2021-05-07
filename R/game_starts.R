@@ -659,7 +659,7 @@ df_relativity <- function(seed = NULL, coins = NULL) {
     bind_rows(df_tiles, df_coins)
 }
 should_resample_relativity <- function(coins) {
-    stats::sd(c(coins[6], coins[4], coins[3], coins[1])) == 0
+    all(diff(c(coins[6], coins[4], coins[3], coins[1])) == 0)
 }
 
 #' @rdname df_game
