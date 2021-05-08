@@ -21,13 +21,14 @@
 #' @param ppi Resolution of animation in pixels per inch.
 #'            By default set so image max 600 pixels wide or tall.
 #' @param new_device If \code{file} is \code{NULL} should we open up a new graphics device?
+#' @inheritParams cat_piece
 #' @return Nothing, as a side effect saves an animation of ppn game
 #' @export
 animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
                          .f = piecepackr::grid.piece, cfg = NULL, envir = NULL,
                          n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses,
                          width = NULL, height = NULL, ppi = NULL,
-                         new_device = TRUE) {
+                         new_device = TRUE, annotation_scale = NULL) {
 
     if (n_transitions > 0L) piecepackr:::assert_suggested("tweenr")
 
@@ -59,7 +60,8 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
     width <- ceiling(ppi * width)
     height <- height + (height %% 2)
     width <- width + (width %% 2)
-    plot_fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir, annotate)
+    plot_fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir,
+                              annotate, annotation_scale)
     animation_fn(file, new_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, ppi)
     invisible(NULL)
 }
@@ -116,6 +118,8 @@ get_tweened_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
         new_dfs <- append(new_dfs, tween_dfs(dfs[[i]], dfs[[i+1]], n_transitions))
     }
     new_dfs <- append(new_dfs, rep(dfs[n], n_pauses))
+    for (i in seq_along(new_dfs))
+        attr(new_dfs[[i]], "scale_factor") <- attr(dfs[[1]], "scale_factor")
     new_dfs
 }
 
@@ -204,15 +208,16 @@ get_df_from_move <- function(game, move = NULL) {
 }
 
 plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
-                           width, height, m, ppi, envir, annotate) {
+                           width, height, m, ppi, envir, annotate, annotation_scale) {
     if (identical(.f, grid.piece)) {
         function(df, ..., scale = 1) {
+            annotation_scale <- annotation_scale %||% attr(df, "scale_factor") %||% 1
             df$x <- df$x + xoffset
             df$y <- df$y + yoffset
             df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
             grid::grid.newpage()
             pmap_piece(df, default.units = "in", ..., envir = envir)
-            annotate_plot(annotate, xmax, ymax, xoffset, yoffset)
+            annotate_plot(annotate, xmax, ymax, xoffset, yoffset, annotation_scale)
         }
     } else if (identical(.f, piece3d)) {
         piecepackr:::assert_suggested("rgl")
@@ -269,18 +274,19 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
 plot_move <- function(game, file = NULL,  move = NULL, annotate = TRUE, ...,
                       .f = piecepackr::grid.piece, cfg = NULL, envir = NULL,
                       width = NULL, height = NULL, ppi = 72,
-                      bg = "white",  new_device = TRUE) {
+                      bg = "white",  new_device = TRUE, annotation_scale = NULL) {
 
     df <- get_df_from_move(game, move)
     plot_df(df, file = file, annotate = annotate, ...,
             .f = .f, cfg = cfg, envir = envir,
-            width = width, height = height, ppi = ppi, bg = bg, new_device = new_device)
+            width = width, height = height, ppi = ppi, bg = bg, new_device = new_device,
+            annotation_scale = NULL)
 }
 
 plot_df <- function(df, file = NULL, annotate = TRUE, ...,
                     .f = piecepackr::grid.piece, cfg = NULL, envir = NULL,
                     width = NULL, height = NULL, ppi = 72,
-                    bg = "white",  new_device = TRUE) {
+                    bg = "white",  new_device = TRUE, annotation_scale = NULL) {
     ce <- piecepackr:::default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
     envir <- ce$envir
@@ -311,7 +317,9 @@ plot_df <- function(df, file = NULL, annotate = TRUE, ...,
     # plot_fn_helper expected width and height in pixels
     width <- ppi * width
     height <- ppi * height
-    plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir, annotate)(df, ...)
+    fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir,
+                         annotate, annotation_scale)
+    fn(df, ...)
     if (!is.null(file)) dev.off()
     invisible(list(width=width, height=height))
 }
@@ -327,20 +335,20 @@ min2offset <- function(min, lbound = 0.5) {
     }
 }
 
-annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0) {
+annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0, annotation_scale = 1) {
         if (isFALSE(annotate) || annotate == "none" || is.na(xmax) || is.na(ymax))
             return(invisible(NULL))
         gp <- gpar(fontsize = 18, fontface = "bold")
-        x_indices <- seq(floor(xmax))
+        x_coords <- seq(annotation_scale, floor(xmax), by = annotation_scale)
         if (annotate == "cartesian")
-            l <- as.character(x_indices)
+            l <- as.character(seq_along(x_coords))
         else
-            l <- letters[x_indices]
+            l <- letters[seq_along(x_coords)]
         l <- stringr::str_pad(l, max(stringr::str_count(l)))
-        grid.text(l, x = x_indices + xoffset, y = 0.25, default.units = "in", gp = gp)
-        y_indices <- seq(floor(ymax))
-        n <- as.character(y_indices)
+        grid.text(l, x = x_coords + xoffset, y = 0.25, default.units = "in", gp = gp)
+        y_coords <- seq(annotation_scale, floor(ymax), by = annotation_scale)
+        n <- as.character(seq_along(y_coords))
         n <- stringr::str_pad(n, max(stringr::str_count(n)))
-        grid.text(n, x = 0.25, y = y_indices + yoffset, default.units = "in", gp = gp)
+        grid.text(n, x = 0.25, y = y_coords + yoffset, default.units = "in", gp = gp)
         invisible(NULL)
 }

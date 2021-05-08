@@ -12,7 +12,8 @@ cat_piece(
   reorient = "none",
   annotate = FALSE,
   ...,
-  file = ""
+  file = "",
+  annotation_scale = NULL
 )
 
 cat_move(game, move = NULL, ...)
@@ -45,6 +46,9 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 \item{file}{\code{file} argument of \code{cat()}.
 Default (\code{""}) is to print to standard output.
 \code{NULL} means we don't \code{cat()}}
+
+\item{annotation_scale}{Multiplicative factor that scales (stretches) any annotation coordinates.
+By default uses \code{attr(df, "scale_factor") \%||\% 1}.}
 
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 

@@ -18,7 +18,8 @@ animate_game(
   width = NULL,
   height = NULL,
   ppi = NULL,
-  new_device = TRUE
+  new_device = TRUE,
+  annotation_scale = NULL
 )
 }
 \arguments{
@@ -55,6 +56,9 @@ how many transition frames to add between moves.}
 By default set so image max 600 pixels wide or tall.}
 
 \item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
+
+\item{annotation_scale}{Multiplicative factor that scales (stretches) any annotation coordinates.
+By default uses \code{attr(df, "scale_factor") \%||\% 1}.}
 }
 \value{
 Nothing, as a side effect saves an animation of ppn game

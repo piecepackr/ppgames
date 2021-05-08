@@ -9,6 +9,9 @@ New features
   `shiny::runApp(system.file("shiny/ppn_viewer", package = "ppgames"))` (#27)
 * ``cat_piece()``'s ``color`` argument now supports the value ``"html"`` which will colorize
   the output for HTML using ``fansi::sgr_to_html()``.
+* ``cat_piece()``, ``plot_move()``, and ``animate_game()`` now support the new argument ``annotation_scale``
+  which stretches (or contracts) the placement of the annotated coordinates.
+  By default it uses the ``scale_factor`` attribute of the ``df`` argument if present else 1 (#105).
 
 Bug fixes and minor improvements
 --------------------------------
@@ -23,6 +26,7 @@ Bug fixes and minor improvements
 
   + ``df_international_chess()`` aka ``df_chess()``
   + ``df_xiangqi()``
+
 * ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
 
 ppgames 0.6.1

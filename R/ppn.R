@@ -198,7 +198,7 @@ ppn_get <- function(name, package = NULL) {
 parse_moves <- function(text, df = NULL, state = create_state(df)) {
     if (is.null(df)) df <- initialize_df(df_none())
     #### Convert # comments into braces?
-    if (length(text)>0) {
+    if (length(text) > 0) {
         text <- parse_braces(text)
         moves_raw <- parse_movenumbers(text)
         moves <- lapply(moves_raw, remove_comments)
@@ -214,6 +214,7 @@ parse_moves <- function(text, df = NULL, state = create_state(df)) {
     if (any(duplicated(names(dfs)))) warning("Non-unique MoveNumbers")
     names(moves) <- names(dfs)
     names(comments) <- names(dfs)
+    for (i in seq_along(dfs)) attr(dfs[[i]], "scale_factor") <- state$scale_factor
     list(moves = moves, comments = comments, dfs = dfs)
 }
 

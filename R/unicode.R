@@ -25,15 +25,21 @@
 #' @param file `file` argument of `cat()`.
 #'             Default (`""`) is to print to standard output.
 #'             `NULL` means we don't `cat()`
+#' @param annotation_scale Multiplicative factor that scales (stretches) any annotation coordinates.
+#'                         By default uses `attr(df, "scale_factor") %||% 1`.
 #' @return String of text diagram (returned invisibly).
 #' @importFrom rlang %||%
 #' @export
-cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ..., file = "") {
-    cat_piece_helper(df, ..., color = color, reorient = reorient, annotate = annotate, ..., file = file)
+cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
+                      file = "", annotation_scale = NULL) {
+    cat_piece_helper(df, ..., color = color, reorient = reorient, annotate = annotate, ...,
+                     file = file, annotation_scale = annotation_scale)
 }
 cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
-                             xoffset = NULL, yoffset = NULL, file = "") {
+                             xoffset = NULL, yoffset = NULL,
+                             file = "", annotation_scale = NULL) {
     color <- color %||% (is.null(file) || file == "")
+    annotation_scale <- annotation_scale %||% attr(df, "scale_factor") %||% 1
     if (nrow(df) == 0) {
         if (!is.null(file)) cat("", file = file)
         return(invisible(""))
@@ -61,7 +67,7 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
         cfg <- as.character(df[rr, "cfg"])
         cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg, reorient)
     }
-    cm <- annotate_text(cm, nc, nr, offset$x, offset$y, annotate)
+    cm <- annotate_text(cm, nc, nr, offset$x, offset$y, annotate, annotation_scale)
     cm <- color_text(cm, color)
 
     text <- rev(apply(cm$char, 1, function(x) paste(x, collapse = "")))
@@ -89,25 +95,25 @@ color_text <- function(cm, color) {
     cm
 }
 
-annotate_text <- function(cm, nc, nr, xoffset, yoffset, annotate) {
-    if (!(isFALSE(annotate) || annotate == "none")) {
-       x <- seq(3 + 2 * xoffset, nc, by=2)
-       if (annotate == "cartesian") {
-           x <- utils::head(x, 9)
-           xt <- as.character(seq_along(x))
-           cm$char[1, x] <- xt
-       } else {
-           if (length(x) > 26) x <- x[1:26]
-           cm$char[1, x] <- letters[seq_along(x)]
-       }
-       y <- seq(3 + 2 * yoffset, nr, by=2)
-       yt <- as.character(seq_along(y))
-       if (length(yt) > 9) {
-           yt <- stringr::str_pad(yt, 2, "right")
-           cm$char[y[-seq(9)], 2L] <- substr(yt[-seq(9)], 2, 2)
-       }
-       cm$char[y, 1L] <- substr(yt, 1L, 1L)
+annotate_text <- function(cm, nc, nr, xoffset, yoffset, annotate, annotation_scale) {
+    if (isFALSE(annotate) || annotate == "none") return(cm)
+    step <- 2 * annotation_scale
+    x <- seq(1 + step + 2 * xoffset, nc, by = step)
+    if (annotate == "cartesian") {
+        x <- utils::head(x, 9)
+        xt <- as.character(seq_along(x))
+        cm$char[1, x] <- xt
+    } else {
+        if (length(x) > 26) x <- x[1:26]
+        cm$char[1, x] <- letters[seq_along(x)]
     }
+    y <- seq(1 + step + 2 * yoffset, nr, by= step)
+    yt <- as.character(seq_along(y))
+    if (length(yt) > 9) {
+        yt <- stringr::str_pad(yt, 2, "right")
+        cm$char[y[-seq(9)], 2L] <- substr(yt[-seq(9)], 2, 2)
+    }
+    cm$char[y, 1L] <- substr(yt, 1L, 1L)
     cm
 }
 
