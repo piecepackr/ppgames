@@ -687,8 +687,9 @@ df_slides_of_action <- function() {
 #' @export
 df_the_in_crowd <- function() {
     df_t1 <- df_rect_board_tiles(6, 6)
-    df_t2 <- df_rect_board_tiles(4, 4, 2, 2)
-    df_t3 <- tibble(piece_side="tile_back", x=3.5, y=3.5)
+    df_t2 <- df_rect_board_tiles(4, 4, 2, 2, rank = 4)
+    df_t3 <- tibble(piece_side="tile_back", x=3.5, y=3.5,
+                    angle = 0, suit = 2, rank = 3)
     bind_rows(df_t1, df_t2, df_t3)
 }
 
@@ -698,7 +699,8 @@ df_san_andreas <- function() {
     x <- 0.5+c(rep(c(1,3,5), 3), 2,4,6, 3,5,7, 4,6,8, 5,7,9, 7,9)
     y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)
     tibble(piece_side="tile_back", x=x, y=y,
-           suit = rep(1:4, each=6, length.out=23), rank = rep(1:6, 4, length.out=23))
+           suit = rep(1:4, each=6, length.out=23),
+           rank = rep(1:6, 4, length.out=23))
 }
 
 #' @rdname df_game

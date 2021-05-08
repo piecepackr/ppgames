@@ -22,9 +22,10 @@ Bug fixes and minor improvements
 * The (invisible) character vector returned by ``cat_piece()`` is now length one.
 * ``cat_move()`` no longer throws an error for moves that result with zero pieces on the board (#96)
 * The ``annotate`` argument in ``cat_piece()``, ``plot_move()``, ``animate_game()`` now supports using "none" as an alias to `FALSE` and "algebraic" as an alias to `TRUE` (#97)
-* Filled in missing suits/ranks in following board generators to guarantee each piecepack piece is completely unique:
+* Set/tweaked suits/ranks in following board generators to guarantee each piecepack piece is completely unique:
 
   + ``df_international_chess()`` aka ``df_chess()``
+  + ``df_the_in_crowd()``
   + ``df_xiangqi()``
 
 * ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
