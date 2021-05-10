@@ -1,5 +1,4 @@
 library("piecepackr")
-library("vdiffr")
 context("test fujisan solver")
 cat_piece <- function(df, ...) ppgames::cat_piece(df, ..., color = FALSE)
 cat_move <- function(df, ...) ppgames::cat_move(df, ..., color = FALSE)
@@ -27,6 +26,9 @@ test_that("fujisan solver works as expected", {
     puzzle2 <- matrix(c(4,4,4,5,2,0,2,4,0,3,1,1,
                         1,2,5,3,3,5,3,2,5,1,0,0), nrow = 2, byrow = TRUE)
     s2 <- solve_fujisan(coins = puzzle2)
+    saved_ppn <- paste(readLines(system.file("ppn/fujisan.ppn", package = "ppgames")),
+                       collapse = "\n")
+    expect_equal(str_wrap(s2$ppn), str_wrap(saved_ppn))
     g2 <- read_ppn(textConnection(s2$ppn))[[1]]
     verify_output("../text_diagrams/fujisan_solved.txt", cat_move(g2, move = "SetupFn."))
 })

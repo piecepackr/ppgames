@@ -1,30 +1,70 @@
 library("dplyr")
 context("test ppn")
-ppn1 <- read_ppn(system.file("ppn/tic-tac-toe.ppn", package = "ppgames"))
-ppn2 <- read_ppn(system.file("ppn/four-field-kono.ppn", package = "ppgames"))
-ppn3 <- read_ppn(system.file("extdata/ex3.ppn", package = "ppgames"))
-ppn4 <- read_ppn(system.file("extdata/ex4.ppn", package = "ppgames"))
-g1 <- ppn1[[1]]
-g2 <- ppn2[[1]]
-g3a <- ppn3[[1]]
-g3b <- ppn3[[2]]
-g4 <- ppn4[[1]]
 cat_move <- function(df, ...) ppgames::cat_move(df, ..., color = FALSE)
+sf_read_ppn <- function(f) {
+    read_ppn(system.file(paste0("ppn/", f, ".ppn"), package = "ppgames"))[[1]]
+}
+sf_verify <- function(game_var, ...) {
+    game_name <- gsub("_", "-", as.character(substitute(game_var)))
+    verify_output(paste0("../text_diagrams/ppn-", game_name, ".txt"),
+                  cat_move(game_var, ...))
+}
 test_that("parsing ppn files works as expected", {
-    expect_true(any(grepl("2. S\\@c1 2... M\\@a3", g1$movetext)))
-    expect_equal(g1$moves[["setup."]], "t@b2")
-    expect_equal(g1$moves[["1..."]], "M@a2")
-    expect_equal(g1$comments[["1..."]], "? (1... M@a1)")
-    verify_output("../text_diagrams/ppn-tic-tac-toe.txt", cat_move(g1))
+    # stored in inst/ppn
+    alien_city <- sf_read_ppn("alien-city")
+    sf_verify(alien_city, reorient = "symbols")
 
-    verify_output("../text_diagrams/ppn-four-field-kono.txt", cat_move(g2, annotate=TRUE))
+    checkers <- sf_read_ppn("american-checkers")
+    sf_verify(checkers)
 
+    desfases <- sf_read_ppn("desfases")
+    sf_verify(desfases, reorient = "symbols")
+
+    four_field_kono <- sf_read_ppn("four-field-kono")
+    sf_verify(four_field_kono, annotate=TRUE)
+
+    # fujisan's PPN effectively tested in test_fujisan.R
+
+    ice_floe <- sf_read_ppn("ice-floe")
+    sf_verify(ice_floe)
+
+    chess <- sf_read_ppn("international-chess")
+    sf_verify(chess)
+
+    japan <- sf_read_ppn("japan")
+    sf_verify(japan)
+
+    plans_of_action <- sf_read_ppn("plans-of-action")
+    sf_verify(plans_of_action, reorient = "symbols")
+
+    relativity <- sf_read_ppn("relativity")
+    sf_verify(relativity)
+
+    tic_tac_toe <- sf_read_ppn("tic-tac-toe")
+    expect_true(any(grepl("2. S\\@c1 2... M\\@a3", tic_tac_toe$movetext)))
+    expect_equal(tic_tac_toe$moves[["setup."]], "t@b2")
+    expect_equal(tic_tac_toe$moves[["1..."]], "M@a2")
+    expect_equal(tic_tac_toe$comments[["1..."]], "? (1... M@a1)")
+    sf_verify(tic_tac_toe)
+
+    xiangqi <- sf_read_ppn("xiangqi")
+    sf_verify(xiangqi)
+
+    # on the fly
+    ppn_multiple <- paste(c("---", "GameType: Ultima", "...", "1. c2-c4 1... c7-c5",
+                            "---", "Event: Example 3 Game B", "...", "0. t@b4 cA@c3"),
+                          collapse = "\n")
+    ppn3 <- read_ppn(textConnection(ppn_multiple))
+    g3a <- ppn3[[1]]
     df3a <- tail(g3a$dfs, 1)[[1]]
     expect_equal(g3a$metadata$GameType, "Ultima")
 
+    g3b <- ppn3[[2]]
     expect_equal(g3b$metadata$Event, "Example 3 Game B")
     expect_equal(g3b$movetext, "0. t@b4 cA@c3")
 
+    ppn_no_metadata <- "0. c5@b3 t@(2.5,2.5)"
+    g4 <- read_ppn(textConnection(ppn_no_metadata))[[1]]
     expect_equal(g4$metadata, list())
     expect_equal(g4$movetext, "0. c5@b3 t@(2.5,2.5)")
 
@@ -566,10 +606,6 @@ test_that("move numbers work as expected", {
     expect_equal(game$comments[[4]], "what happens ; here?")
 })
 
-test_that("move multiple pieces works as expected", {
-    checkers <- read_ppn(system.file("ppn/american-checkers.ppn", package = "ppgames"))[[1]]
-    verify_output("../text_diagrams/ppn_checkers.txt", cat_move(checkers))
-})
 
 test_that("non-greedy search works as expected", {
     df <- initialize_df(df_none())

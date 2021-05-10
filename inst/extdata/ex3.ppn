@@ -1,8 +1,0 @@
----
-GameType: Ultima
-...
-1. c2-c4 1... c7-c5
----
-Event: Example 3 Game B
-...
-0. t@b4 cA@c3

@@ -1,4 +1,4 @@
-> cat_move(g1)
+> cat_move(game_var, ...)
         
   ☾⃝─┰─☾⃝ 
   │ ┃ │ 
