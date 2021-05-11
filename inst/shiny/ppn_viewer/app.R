@@ -1,9 +1,9 @@
 # URL parameters supported:
 #
-# ppn - PPN text
+# ppn - Raw PPN text to use
 # system.file - Name of file accessible by sytem.file() to read PPN from,
 #               will try prepending "ppn/" and postpending ".ppn"
-# package - Name of package to feed to system.file()
+# package - Name of package to feed to system.file() to be used with `system.file` parameter
 # op_scale - Numeric value greater than or equal to zero
 # op_angle - Numeric from 0 to 360
 # annotate - Either "none", "algebraic", or "cartesian"
