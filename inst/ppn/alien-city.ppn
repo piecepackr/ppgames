@@ -19,8 +19,8 @@ GameType:
 14. S@c9 14... R3x@d2
 15. A@a2 15... S@g1 
 16. R3x@f3 K1x@e5 {? A@b1 this turn} 16... G3x@b1
-17. M@c5 17... K1x@a4
-18. K1x@d3  18... R3x@h1
+17. M@c5 17... M@a4
+18. M@d3  18... R3x@h1
 { Scoring:
     e5 = 4 x 8 = 32
     e6 = 5 x 9 + 2 * (10 - 2*1) = 61
