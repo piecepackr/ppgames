@@ -23,6 +23,29 @@ gameServer <- function(id) {
             try(ppgames::read_ppn(ppn)[[1]])
         })
 
+        observe({
+            query <- parseQueryString(session$clientData$url_search)
+            if (!is.null(query$system.file)) {
+                package <- query$package %||% "ppgames"
+                f <- system.file(query$system.file, package = package)
+                if (!file.exists(f)) {
+                    f <- file.path("ppn", paste0(query$system.file, ".ppn"))
+                    f <- system.file(f, package = package)
+                }
+                if (file.exists(f)) {
+                    ppn_text <- paste(readLines(f), collapse = "\n")
+                    updateTextAreaInput(session, "ppn_text", value = ppn_text)
+                } else {
+                    showNotification(sprintf("system.file '%s' does not exist in package '%s'",
+                                             query$system.file, package),
+                                     type = "error")
+                }
+            }
+            if (!is.null(query$ppn)) {
+                updateTextAreaInput(session, "ppn_text", value = query$ppn)
+            }
+        })
+
         output$parse_error <- renderText(if (inherits(game(), "try-error")) game() else NULL)
 
         game
@@ -242,6 +265,30 @@ gridServer <- function(id, game, move) {
                 }
                 list(src = f, width = width, height = height)
             }}, deleteFile = TRUE)
+
+        observe({
+            query <- parseQueryString(session$clientData$url_search)
+            if (!is.null(query$op_angle)) {
+                opa <- as.numeric(query$op_angle)
+                if (is.na(opa))
+                    showNotification("Bad 'op_angle' URL parameter value. Ignoring.", type = "warning")
+                else
+                    updateNumericInput(session, "op_angle", value = query$op_angle)
+            }
+            if (!is.null(query$op_scale)) {
+                ops <- as.numeric(query$op_scale)
+                if (is.na(ops) || ops < 0)
+                    showNotification("Bad 'op_scale' URL parameter value. Ignoring.", type = "warning")
+                else
+                    updateNumericInput(session, "op_scale", value = query$op_scale)
+            }
+            if (!is.null(query$annotate)) {
+                if (query$annotate %in% c("none", "cartesian", "algebraic"))
+                    updateSelectInput(session, "annotate", selected = query$annotate)
+                else
+                    showNotification("Bad 'annotate' URL parameter value. Ignoring.", type = "warning")
+            }
+        })
     })
 }
 

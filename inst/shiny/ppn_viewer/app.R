@@ -1,4 +1,15 @@
+# URL parameters supported:
+#
+# ppn - PPN text
+# system.file - Name of file accessible by sytem.file() to read PPN from,
+#               will try prepending "ppn/" and postpending ".ppn"
+# package - Name of package to feed to system.file()
+# op_scale - Numeric value greater than or equal to zero
+# op_angle - Numeric from 0 to 360
+# annotate - Either "none", "algebraic", or "cartesian"
+#
 library("ppgames")
+library("rlang")
 library("shiny")
 if (has_piecenikr) library("piecenikr")
 options(crayon.enabled = TRUE, crayon.colors = 256L)
