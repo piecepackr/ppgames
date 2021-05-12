@@ -127,15 +127,26 @@ get_starting_df <- function(metadata) {
 }
 
 get_starting_df_from_field <- function(field) {
-    if (is.character(field)) {
-        df <- get_starting_df_from_name(field)
-    } else if (is.list(field)) {
-        names(field) <- to_varname(names(field))
-        i_name <- match("name", names(field))
-        i_system <- match("system", names(field), nomatch = 0)
-        .l <- field[-c(i_name, i_system)]
-        df <- get_starting_df_from_name(field[["name"]], .l, field[["system"]])
-    }
+    field0 <- field
+    df <- tryCatch({
+        if (is.character(field)) {
+            df <- get_starting_df_from_name(field)
+        } else if (is.list(field)) {
+            names(field) <- to_varname(names(field))
+            i_name <- match("name", names(field))
+            i_system <- match("system", names(field), nomatch = 0)
+            .l <- field[-c(i_name, i_system)]
+            df <- get_starting_df_from_name(field[["name"]], .l, field[["system"]])
+        }
+        df
+    }, error = function(e) {
+        if (is.list(field))
+            msg <- paste0("Couldn't process SetUp/GameType:\n", yaml::as.yaml(field0))
+        else
+            msg <- paste("Couldn't process SetUp/GameType:", field0)
+        msg <- c(msg, i = e$message)
+        abort(msg, class = "initialize_setup", parent = e)
+    })
     return(df)
 }
 
@@ -155,7 +166,7 @@ get_ppn_package <- function(system) {
            piecepack = "ppgames",
            stackpack = "ppgames",
            traditional = "tradgames",
-           stop("Don't recognize system ", system))
+           abort(paste("Don't recognize System:", system), class = "board_setup"))
 }
 
 get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
@@ -423,14 +434,17 @@ complete_piece <- function(df, std_piece_spec) {
             df$cfg <- switch(df$piece,
                              bit = switch(str_extract(simple, "[smc]"),
                                           s = "go", c = "checkers2", m = "meeples",
-                                          stop("Unknown cfg")),
+                                          abort(str_glue("Don't know proper cfg for piece '{simple}'"),
+                                                class = "infer_piece")),
                              die = "dice",
                              pyramid = "icehouse_pieces",
                              tile = paste0("dominoes_",
                                            switch(str_extract(simple, "[RKGBYW]"),
                                                   R = "red", K = "black", G = "green",
                                                   B = "blue", Y = "yellow", W = "white")),
-                             stop("Don't know how to handle this case"))
+                             abort(str_glue("Don't know proper cfg for piece '{simple}'"),
+                                   class = "infer_piece")
+            )
         } else if (df$piece == "card") {
             df$cfg <- "playing_cards_tarot"
         } else if (df$piece == "bit") {
@@ -446,7 +460,9 @@ complete_piece <- function(df, std_piece_spec) {
                          chess2 = "chess1",
                          checkers2 = "checkers1",
                          piecepack = "subpack",
-                         stop("Don't know how to handle this case"))
+                         abort(paste("Don't know miniature version of cfg", df$cfg),
+                               class = "infer_piece")
+        )
     }
     if (is.na(df$side)) {
         df$side <- switch(df$piece,
@@ -607,7 +623,7 @@ get_id_from_piece_id <- function(piece_id, df, state = create_state(df)) {
     # nocov piece_id <- gsub("'", "", piece_id)
     if (piece_id == "") {
         id <- state$active_id
-        if (!length(id)) stop("Couldn't find any active pieces")
+        if (!length(id)) abort("Couldn't find any active pieces", class = "identify_piece")
         id
     } else if (str_detect(piece_id, "^\\^")) { # ^b4
         piece_id <- str_sub(piece_id, 2L)
@@ -654,7 +670,8 @@ get_id_from_coords <- function(df, coords, n_pieces = NULL, state = create_state
     df <- mutate(df, dist_squared = round((.data$x - xy$x)^2 + (.data$y - xy$y)^2, 5))
     indices <- arrange(df, desc(.data$dist_squared))$id
     if (is.null(n_pieces)) {
-        if (sum(near(df$dist_squared, 0)) < 1) stop(paste("Can't identify the piece at", coords))
+        if (sum(near(df$dist_squared, 0)) < 1)
+            abort(paste("Can't identify the piece at", coords), class = "identify_piece")
         n_pieces <- 1L
     } else if (is.infinite(n_pieces)) {
         n_pieces <- sum(near(df$dist_squared, 0))
@@ -712,7 +729,7 @@ process_submove <- function(df, text, state = create_state(df)) {
     } else if (str_detect(text, "!")) {
         process_exclamation_move(df, text, state)
     } else {
-        stop(paste("Don't know how to handle move", text))
+        abort(paste("Don't know how to handle move", text), class = "identify_move")
     }
 }
 
@@ -975,7 +992,7 @@ non_greedy_match <- function(df, piece_spec) {
                            ngm_helper(dff$rank, df$rank == dff$rank) &
                            df$cfg == dff$cfg)
     if (length(without_angle)) return(df$id[tail(without_angle, 1L)])
-    stop("Couldn't find a match")
+    abort("Couldn't find a match", class = "identify_piece")
 }
 
 process_tilde_move <- function(df, text, state = create_state(df)) {
@@ -1155,7 +1172,8 @@ get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = 
         }
         xy <- as.numeric(str_extract_all(coords, "[0-9.-]+")[[1]]) * state$scale_factor
         if (is.null(location)) {
-            if (is.null(anchor_indices)) stop("Don't know where this location is relative to")
+            if (is.null(anchor_indices))
+                abort("Don't know where this location is relative to", class = "infer_location")
             list(x = xy[1] + df$x[anchor_indices], y = xy[2] + df$y[anchor_indices])
         } else {
             list(x = xy[1] + location$x, y = xy[2] + location$y)
@@ -1167,7 +1185,8 @@ get_xy <- function(coords, df, state = create_state(tibble()), anchor_indices = 
         p <- piecepackr:::Point2D$new(x = get_x(coords), y = get_y(coords))
         p$dilate(state$scale_factor)
     }
-    if (any(is.na(xy$x) | is.na(xy$y))) stop("Failed to parse coordinates: ", coords)
+    if (any(is.na(xy$x) | is.na(xy$y)))
+        abort(paste("Failed to parse coordinates:", coords), class = "infer_location")
     xy
 }
 
@@ -1200,7 +1219,8 @@ convert_relative_helper <- function(coords) {
                          RDR = hex_xy(330, number), DDR = hex_xy(300, number),
                          DDL = hex_xy(240, number), LDL = hex_xy(210, number),
                          LUL = hex_xy(150, number), UUL = hex_xy(120, number),
-                         stop("Don't know direction"))
+                         abort(str_glue("Don't know direction {direction}"),
+                               class = "infer_location"))
     paste0("<", number * multiplier[1], ",", number * multiplier[2], ">")
 }
 hex_xy <- function(angle, number) c(to_x(angle, number), to_y(angle, number))
@@ -1224,7 +1244,8 @@ replace_macros <- function(df, text, state = create_state(df)) {
     ml <- str_locate_all(text, "`[^']+'")[[1]]
     for (r in rev(seq_len(nrow(ml)))) {
         mtext <- str_sub(text, ml[r, 1] + 1, ml[r, 2] - 1)
-        if (is.null(state$macros[[mtext]])) stop("Macro ", mtext, " is unknown")
+        if (is.null(state$macros[[mtext]]))
+            abort(paste("Macro", mtext, "is unknown"), class = "identify_macro")
         str_sub(text, ml[r, 1], ml[r, 2]) <- state$macros[[mtext]]
     }
     text
@@ -1250,17 +1271,25 @@ process_move <- function(df, text, state = create_state(df)) {
 split_blanks <- function(text) c(str_split(text, "[[:blank:]]+"), recursive = TRUE)
 
 process_moves <- function(df, movelist, state = create_state(df)) {
-    df_list <- vector("list", 1L + length(movelist))
-    df_list[[1L]] <- df
-    for (i in seq_along(movelist)) {
-        df <- process_move(df, movelist[[i]], state = state)
-        df_list[[i + 1L]] <- df
-    }
-
     nms <- vector("character", 1L + length(movelist))
     nms[1] <- "SetupFn."
     if (!is.null(names(movelist))) nms[seq_along(movelist) + 1L] <- names(movelist)
-    names(df_list) <- clean_comments(nms)
+    nms <- clean_comments(nms)
+
+    df_list <- vector("list", 1L + length(movelist))
+    df_list[[1L]] <- df
+    for (i in seq_along(movelist)) {
+        df <- tryCatch(process_move(df, movelist[[i]], state = state),
+                       error = function(e) {
+                           msg <- c(str_glue("Couldn't process move `{movenumber} {move}`",
+                                             movenumber = nms[i + 1L], move = movelist[[i]]),
+                                    i = e$message)
+                           abort(msg, class = "process_move", parent = e)
+                       })
+        df_list[[i + 1L]] <- df
+    }
+    names(df_list) <- nms
+
     df_list
 }
 

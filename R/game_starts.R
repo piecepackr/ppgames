@@ -480,7 +480,7 @@ df_piecepackman <- function(seed = NULL, variant = 1) {
                        suit = rep(1:4, 6), rank = rep(1:6, each = 4))
     df_p <- switch(variant,
                    df_roundabout(),
-                   stop("Can't handle variant ", variant))
+                   abort(paste("Can't handle Piecepackman variant ", variant), class = "board_setup"))
     p_xy <- filter(df_p, !grepl("matchstick", .data$piece_side)) %>%
             mutate(x_y = paste(.data$x, .data$y, sep = "_")) %>%
             select(.data$x_y)

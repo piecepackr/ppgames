@@ -94,8 +94,9 @@ animation_fn <- function(file, new_device = TRUE) {
                                    ani.dev = "png", ani.type = "png")
             }
         } else {
-            stop("You need to install either the suggested package 'gifski' or 'animation' to use 'animate_game()'.",
-                 "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")'")
+            abort(c("At least one the suggested packages 'gifski' or 'animation' is required to use 'animate_game()'.",
+                    i = "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")' to install them."),
+                  class = "suggested_package")
         }
     } else {
         piecepackr:::assert_suggested("animation")

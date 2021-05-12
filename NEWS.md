@@ -29,6 +29,7 @@ Bug fixes and minor improvements
   + ``df_xiangqi()``
 
 * ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
+* There are now more informative error messages being raised by ``rlang::abort()`` (#109).
 
 ppgames 0.6.1
 =============

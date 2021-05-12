@@ -24,7 +24,7 @@ test_that("rectangular boards works as expected", {
     expect_equal(line_score(c(2, 3, 2, 3, 2)), 0)
     expect_equal(line_score(c(2, 2, 2, 3)), 6)
 
-    expect_error(df_rect_board_tiles(2, 3), "don't know how to draw this board")
+    expect_error(df_rect_board_tiles(2, 3), "Don't know how to form a 3x2 board with 24 tiles")
 
     df <- df_rect_board_tiles(nr = 8, nc = 8)
     verify_output("../text_diagrams/8x8.txt", cpiece(df))

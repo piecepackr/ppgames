@@ -40,7 +40,8 @@ df_rect_board_tiles <- function(nrows = 8, ncols = 8, x0 = 1, y0 = 1, max_tiles 
             }
         }
     } else {
-       stop("don't know how to draw this board")
+       abort(str_glue("Don't know how to form a {ncols}x{nrows} board with {max_tiles} tiles"),
+             class = "board_setup")
     }
     xr <- x0 + rep(x, length(y))
     yr <- y0 + rep(y, each = length(x))

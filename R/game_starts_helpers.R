@@ -83,7 +83,7 @@ process_tiles <- function(tiles, n_tiles = 24) {
         angles <- tiles[which(seq(3 * n_tiles) %% 3 == 0)]
         needs_ranks <- FALSE
     } else {
-        stop(paste("Don't know how to handle tiles string", tiles))
+        abort(paste("Don't know how to handle tiles string", tiles), class = "board_setup")
     }
     suits <- process_suits(suits)
     if (needs_ranks) {

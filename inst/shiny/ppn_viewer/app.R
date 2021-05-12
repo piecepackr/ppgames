@@ -12,7 +12,11 @@ library("ppgames")
 library("rlang")
 library("shiny")
 if (has_piecenikr) library("piecenikr")
-options(crayon.enabled = TRUE, crayon.colors = 256L)
+if (has_fansi) {
+    options(crayon.enabled = TRUE, crayon.colors = 256L)
+} else {
+    options(crayon.enabled = FALSE)
+}
 
 txt <- ""
 

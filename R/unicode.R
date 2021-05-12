@@ -28,7 +28,7 @@
 #' @param annotation_scale Multiplicative factor that scales (stretches) any annotation coordinates.
 #'                         By default uses `attr(df, "scale_factor") %||% 1`.
 #' @return String of text diagram (returned invisibly).
-#' @importFrom rlang %||%
+#' @importFrom rlang %||% abort
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
                       file = "", annotation_scale = NULL) {
@@ -315,7 +315,14 @@ add_matchstick_face <- function(cm, x, y, angle, fg, rank) {
            add_matchstick_face4(cm, x, y, angle, fg),
            add_matchstick_face5(cm, x, y, angle, fg),
            add_matchstick_face6(cm, x, y, angle, fg),
-           stop("Don't know how to draw matchstick of rank", rank))
+           abort(paste("Don't know how to draw matchstick of rank", rank),
+                 class = "unicode_diagram"))
+}
+abort_angle <- function(angle) {
+    abort(paste("Can't handle angle", angle),
+          class = "unicode_diagram",
+          angle = angle)
+
 }
 add_matchstick_face1 <- function(cm, x, y, angle, fg) {
     if (angle %in% c(0, 90, 180, 270)) {
@@ -323,7 +330,7 @@ add_matchstick_face1 <- function(cm, x, y, angle, fg) {
     } else if (angle %in% c(45, 135, 225, 315)) {
         cm$char[y, x] <- "\u25c6"
     } else {
-        stop("Can't handle angle ", angle)
+        abort_angle(angle)
     }
     cm$fg[y, x] <- fg
     cm
@@ -338,7 +345,7 @@ add_matchstick_face2 <- function(cm, x, y, angle, fg) {
     } else if (angle %in% c(135, 315)) {
         cm$char[y, x] <- "\u2571"
     } else {
-        stop("Can't handle angle ", angle)
+        abort_angle(angle)
     }
     cm$fg[y, x] <- fg
     cm
@@ -373,7 +380,7 @@ add_matchstick_face4 <- function(cm, x, y, angle, fg) {
         cm$char[y, x] <- "\u2571"
         cm$fg[y, x] <- fg
     } else {
-        stop("Can't handle angle ", angle)
+        abort_angle(angle)
     }
     cm
 }
@@ -400,7 +407,7 @@ add_matchstick_face6 <- function(cm, x, y, angle, fg) {
         cm$char[y+1, x+1] <- "\u2571"
         cm$fg[y+1, x+1] <- fg
     } else {
-        stop("Can't handle angle ", angle)
+        abort_angle(angle)
     }
     cm
 }
@@ -472,7 +479,7 @@ add_pyramid_face <- function(cm, ss, x, y, angle, fg, rank = 1) {
 # bottom dots U+0323 U+0324 U+20ef
 get_dots <- function(rank) {
     switch(rank, "\u0323", "\u0324", "\u20e8", "\u0324\u0308", "\u20e8\u0308", "\u20e8\u20db",
-           stop("Doesn't support ", rank, " dots"))
+           abort(paste("Doesn't support", rank, "dots")), class = "unicode_diagram")
 }
 add_pyramid_top <- function(cm, ss, x, y, angle, fg, rank = 1) {
     # nolint start
@@ -487,8 +494,7 @@ add_pyramid_top <- function(cm, ss, x, y, angle, fg, rank = 1) {
     cm
 }
 add_tile_back <- function(cm, x, y, angle, cfg) {
-    if (angle %% 90 != 0)
-        stop("Don't know how to handle angle ", angle)
+    if (angle %% 90 != 0) abort_angle(angle)
 
     if (cfg == "subpack") {
         add_tile_back_subpack(cm, x, y)
@@ -525,8 +531,7 @@ add_tile_back_subpack <- function(cm, x, y) {
     cm
 }
 add_tile_face <- function(cm, ss, rs, x, y, angle, fg, cfg) {
-    if (angle %% 90 != 0)
-        stop("Don't know how to handle angle ", angle)
+    if (angle %% 90 != 0) abort_angle(angle)
 
     if (cfg == "subpack") {
         add_tile_face_subpack(cm, rs, x, y, fg)

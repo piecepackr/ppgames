@@ -847,7 +847,7 @@ test_that("Setup and GameType work as expected", {
     expect_equal(get_ppn_package("Looney Pyramids"), "piecenikr")
     expect_equal(get_ppn_package("Icehouse Pieces"), "piecenikr")
     expect_equal(get_ppn_package("Icehouse"), "piecenikr")
-    expect_error(get_ppn_package("Realm"), "Don't recognize system Realm")
+    expect_error(get_ppn_package("Realm"), "Don't recognize System: Realm")
 })
 
 test_that("ID computation works as expected", {

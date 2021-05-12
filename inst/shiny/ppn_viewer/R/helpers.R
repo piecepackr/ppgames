@@ -19,6 +19,9 @@ gameUI <- function(id, ppn_text = "") {
 gameServer <- function(id) {
     moduleServer(id, function(input, output, session) {
         game <- eventReactive(input$parse_ppn, {
+            op <- options()
+            on.exit(options(op))
+            options(crayon.enabled = FALSE) # prevent adding ANSI Control codes to error message
             ppn <- textConnection(input$ppn_text)
             try(ppgames::read_ppn(ppn)[[1]])
         })
