@@ -162,7 +162,7 @@ save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), 
         knit_chapter(game, gk, quietly, size)
     }
 
-    of <- system.file(sprintf("books/%s.Rtex", book), package = "ppgames")
+    of <- system.file(str_glue("books/{book}.Rtex"), package = "ppgames")
     tex <- knit(of, quiet = quietly)
     pdf <- xelatex(tex, quietly)
 
@@ -198,9 +198,9 @@ game_data <- function(game) {
     items$Length <- game_length(info$length)
     equipment <- if (is.null(info$equipment)) "one standard piecepack" else info$equipment
     items$Equipment <- equipment
-    items$Version <- sprintf("%s (%s)", info$version, info$version_date)
+    items$Version <- str_glue("{info$version} ({info$version_date})")
     cat(paste(c("\\begin{description}",
-                sprintf("\\item[%s] %s", names(items), as.character(items)),
+                str_glue("\\item[{names(items)}] {as.character(items)}"),
                 "\\end{description}\n"),
           collapse="\n"))
 }
@@ -211,13 +211,13 @@ game_credits <- function(game) {
     if ("author" %in% names(info)) items$`Written by:` <- info$author
     items$`Game design:` <- info$designer
     license <- if (is.null(info$license)) "CC-BY-SA-4" else info$license
-    license_text <- sprintf("\\href{%s}{%s}", license_urls[[license]], license_names[[license]])
+    license_text <- str_glue("\\href{{{license_urls[[license]]}}}{{{license_names[[license]]}}}")
     copyright <- paste0("\\copyright~", info$copyright, "\\newline")
     license <- paste(copyright, "Some Rights Reserved.\\newline",
                      paste("License: ", license_text, "\\newline"),
                      collapse="\n")
     cat(paste(c("\\begin{description}",
-                sprintf("\\item[%s] %s", names(items), as.character(items)),
+                str_glue("\\item[{names(items)}] {as.character(items)}"),
                 "\\end{description}\n"),
           collapse="\n"))
     cat(license, "\n")
@@ -225,7 +225,7 @@ game_credits <- function(game) {
 
 game_length <- function(gl) {
     if (length(gl) == 2)
-        sprintf("%s--%s minutes", gl[1], gl[2])
+        str_glue("{gl[1]}--{gl[2]} minutes")
     else
         paste(gl, "minutes")
 }
@@ -334,8 +334,8 @@ latex_url_name <- function(url) {
     name
 }
 
-# url <- function(url) sprintf("\\url{%s}", name) # nolint
+# url <- function(url) str_glue("\\url{{{name}}}") # nolint
 href <- function(url, name=NULL) {
     if (is.null(name)) name <- latex_url_name(url)
-    sprintf("\\href{%s}{%s}", url, name)
+    str_glue("\\href{{{url}}}{{{name}}}")
 }

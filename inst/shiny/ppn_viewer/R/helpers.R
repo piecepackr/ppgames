@@ -39,9 +39,8 @@ gameServer <- function(id) {
                     ppn_text <- paste(readLines(f), collapse = "\n")
                     updateTextAreaInput(session, "ppn_text", value = ppn_text)
                 } else {
-                    showNotification(sprintf("system.file '%s' does not exist in package '%s'",
-                                             query$system.file, package),
-                                     type = "error")
+                    msg <- str_glue("system.file '{query$system.file}' does not exist in package '{package}'")
+                    showNotification(msg, type = "error")
                 }
             }
             if (!is.null(query$ppn)) {

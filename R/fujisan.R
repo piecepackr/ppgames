@@ -130,7 +130,10 @@ path2movetext <- function(p) {
         b <- p[[ii]]
         a <- p[[ii+1]]
         i <- intersect(b, a)
-        movetext[ii] <- sprintf("%d. %s-%s", ii, b[!(b %in% i)], a[!(a %in% i)])
+        movetext[ii] <- str_glue("{movenumber}. {from}-{to}",
+                                 movenumber = ii,
+                                 from = b[!(b %in% i)],
+                                 to = a[!(a %in% i)])
     }
     movetext
 }
@@ -171,7 +174,7 @@ dice2string <- function(dice, sep = "/") {
 }
 dice2ppn <- function(coins, dice) {
     if (first_move_needs_dice(coins)) {
-        sprintf('\n  Dice: "%s"\n', dice2string(dice, "/"))
+        str_glue('\n  Dice: "{dice}"\n', dice = dice2string(dice, "/"))
     } else {
         ""
     }
@@ -179,10 +182,10 @@ dice2ppn <- function(coins, dice) {
 
 sol2ppn <- function(sol) {
     movetext <- paste(path2movetext(sol$shortest_path), collapse = "\n")
-    metadata <- sprintf('---\nGameType:\n  Name: Fujisan\n  Coins: "%s"%s\n...\n',
-                        coins2string(sol$coins, "/"),
-                        dice2ppn(sol$coins, sol$dice))
-    paste0(metadata, movetext, "\n")
+    metadata <- str_glue('---\nGameType:\n  Name: Fujisan\n  Coins: "{coins}"{dice}\n...',
+                         coins = coins2string(sol$coins, "/"),
+                         dice = dice2ppn(sol$coins, sol$dice))
+    paste0(metadata, "\n", movetext, "\n")
 }
 
 n2alg <- function(n) {

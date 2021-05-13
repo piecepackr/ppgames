@@ -36,10 +36,9 @@ view_game_shiny <- function(game) {
     app_file <- file.path(app_dir, "app.R")
     app <- readLines(app_file)
     i <- grep("txt <-", app)
-    app[i] <- sprintf('f <- "%s"
+    app[i] <- str_glue('f <- "{ppn_file}"
     g <- read_ppn(f)[[1]]
-    txt <- paste(ppgames:::as_ppn(g), collapse = "\n")',
-    ppn_file)
+    txt <- paste(ppgames:::as_ppn(g), collapse = "\n")')
     writeLines(app, file.path(app_dir, "app.R"))
 
     shiny::runApp(app_dir)

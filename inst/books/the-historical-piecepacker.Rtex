@@ -1,5 +1,5 @@
 %% begin.rcode documentclass, echo=FALSE, results='asis'
-cat(sprintf("\\documentclass[%spaper, onecolumn]{report}\n", size)) # book
+cat(str_glue("\\documentclass[{size}paper, onecolumn]{{report}}\n")) # book
 %% end.rcode
 
 \usepackage[colorlinks]{hyperref}
@@ -11,7 +11,7 @@ pdf_metadata(pdftitle = "The Historical Piecepacker",
 %% end.rcode
 
 %% begin.rcode graphicspath, echo=FALSE, results='asis'
-cat(sprintf("\\graphicspath{{%s/}}", system.file("images", package = "ppgames")))
+cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "ppgames")))
 %% end.rcode
 
 % Add Copyright Page

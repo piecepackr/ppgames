@@ -1,5 +1,5 @@
 %% begin.rcode documentclass, echo=FALSE, results='asis'
-cat(sprintf("\\documentclass[%spaper,onecolumn]{article}\n", size))
+cat(str_glue("\\documentclass[{size}paper,onecolumn]{{article}}"))
 %% end.rcode
 
 \usepackage[colorlinks]{hyperref}
@@ -7,7 +7,7 @@ cat(sprintf("\\documentclass[%spaper,onecolumn]{article}\n", size))
 \usepackage{enumitem}
 
 %% begin.rcode graphicspath, echo=FALSE, results='asis'
-cat(sprintf("\\graphicspath{{%s/}}", system.file("images", package = "ppgames")))
+cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "ppgames")))
 %% end.rcode
 
 %% begin.rcode metadata, echo=FALSE, results='asis'
@@ -19,7 +19,7 @@ pdf_metadata(game)
 % \pagenumbering{gobble}
 
 %% begin.rcode title, echo=FALSE, results='asis'
-cat(sprintf("\\title{%s}", title(game)))
+cat(str_glue("\\title{{{title(game)}}}"))
 %% end.rcode
 \date{}
 
@@ -27,7 +27,7 @@ cat(sprintf("\\title{%s}", title(game)))
 \maketitle\vspace{-4\baselineskip}
 %% begin.rcode include, echo=FALSE, results='asis'
 game_data(game)
-cat(sprintf("\\input{%s}", game))
+cat(str_glue("\\input{{{game}}}"))
 %% end.rcode
 
 \subsection{External Links}

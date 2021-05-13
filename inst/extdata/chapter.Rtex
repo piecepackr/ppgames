@@ -1,7 +1,7 @@
 %% begin.rcode include, echo=FALSE, results='asis'
-cat(sprintf("\\section{%s}", title(game)))
+cat(str_glue("\\section{{{title(game)}}}"))
 game_data(game)
-cat(sprintf("\\input{%s}", game))
+cat(str_glue("\\input{{{game}}}"))
 %% end.rcode
 
 \subsection{External Links}
