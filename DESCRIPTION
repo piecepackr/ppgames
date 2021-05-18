@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: ppgames
 Type: Package
 Title: Piecepack Games
-Version: 0.6.2-10
+Version: 0.6.2-11
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: This is an R package designed to make piecepack game diagrams.
@@ -12,7 +12,7 @@ BugReports: https://github.com/piecepackr/ppgames/issues
 LazyLoad: yes
 Depends: R (>= 3.4.0)
 Imports:
-    bracer (>= 1.1),
+    bracer (>= 1.2),
     crayon,
     dplyr,
     grid,

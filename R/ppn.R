@@ -238,7 +238,7 @@ exp_braces <- function(string) {
     if (str_sub(string, 1L, 1L) == "{" && str_sub(string, -1L, -1L) == "}") # no preamble/postfix
         string
     else
-        bracer::expand_braces(string)
+        bracer::expand_braces(string, engine = "r")
 }
 
 parse_movenumbers <- function(text) {
@@ -658,7 +658,7 @@ get_indices_from_brackets <- function(bracket_contents) {
     indices <- str_split(bracket_contents, ",")[[1]]
     indices <- gsub(":", "..", indices)
     indices <- paste0("{", indices, "}")
-    indices <- bracer::expand_braces(indices)
+    indices <- bracer::expand_braces(indices, engine = "r")
     indices <- gsub("[\\{\\}]", "", indices)
     rev(as.integer(indices))
 }
