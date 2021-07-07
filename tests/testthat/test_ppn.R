@@ -10,6 +10,8 @@ sf_verify <- function(game_var, ...) {
                   cat_move(game_var, ...))
 }
 test_that("parsing ppn files works as expected", {
+    skip_on_os("windows")
+
     # stored in inst/ppn
     alien_city <- sf_read_ppn("alien-city")
     sf_verify(alien_city, reorient = "symbols")

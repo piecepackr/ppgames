@@ -6,6 +6,8 @@ cat_piece <- function(df, ..., color = FALSE) ppgames::cat_piece(df, ..., color 
 
 context("test game diagrams")
 test_that("game diagrams work as expected", {
+    skip_on_os("windows")
+
     verify_output("../text_diagrams/alice_chess.txt", cat_piece(df_alice_chess()))
     verify_output("../text_diagrams/alien_city.txt",
                   cat_piece(df_alien_city(seed=42), reorient="symbols"))

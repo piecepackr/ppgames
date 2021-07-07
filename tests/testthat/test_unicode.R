@@ -39,6 +39,8 @@ test_that("text diagrams", {
 
     expect_error(suppressWarnings(cat_piece(tibble(piece_side = "tile_face", x=2, y=2, angle = 45))))
 
+    skip_on_os("windows")
+
     # checkers
     dft <- tibble(piece_side = "board_back", x=seq(1.5, 5.5, 2), y=1.5, rank=2, cfg="checkers1")
     dfb <- tibble(piece_side = "bit_back", x=1:6, y=1, suit=1:6, cfg="checkers1")
