@@ -33,7 +33,11 @@ upViewport()
 Every player takes a turn throwing one of their coins until there are no coins left.  Decide on fair throwing locations and styles\footnote{
 Recognizing that it is easier if you lean forward before tossing, you could require people stand far enough that they can barely touch the table if they lean forward with one foot on the ground.
 % \includegraphics[height=1cm]{forward_bend.png}
-\includegraphics[height=\baselineskip]{forward_bend.png}
+% \includegraphics[height=\baselineskip]{forward_bend.png}
+%% begin.rcode forward_bend, echo=FALSE, results='asis'
+cat(str_glue("\\includegraphics[height=\\baselineskip]{{{image}}}", 
+             image = system.file("images/forward_bend.png", package = "ppgames")))
+%% end.rcode
 }.
 
 \subsection{Scoring}
