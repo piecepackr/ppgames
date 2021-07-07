@@ -1,12 +1,9 @@
 ppgames: Piecepack game diagrams and rules
 ==========================================
-.. image:: https://travis-ci.org/piecepackr/ppgames.png?branch=master
-    :target: https://travis-ci.org/piecepackr/ppgames
-    :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/piecepackr/ppgames?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/piecepackr/ppgames
-    :alt: AppVeyor Build Status
+.. image:: https://github.com/piecepackr/ppgames/workflows/R-CMD-check/badge.svg
+    :alt: R-CMD-check
+    :target: https://github.com/piecepackr/ppgames/actions
 
 .. image:: https://img.shields.io/codecov/c/github/piecepackr/ppgames/master.svg
     :target: https://codecov.io/github/piecepackr/ppgames?branch=master
