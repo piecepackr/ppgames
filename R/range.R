@@ -43,10 +43,10 @@ range_heuristic <- function(df) {
 #' @importFrom rlang .data
 range_true <- function(df, cfg = pp_cfg(), envir = NULL, op_scale = 0, op_angle = 45, ...) {
     if (nrow(df) == 0) {
-        return(tibble::tibble(xmin = NA_real_, xmax = NA_real_,
-                              ymin = NA_real_, ymax = NA_real_,
-                              xmin_op = NA_real_, xmax_op = NA_real_,
-                              ymin_op = NA_real_, ymax_op = NA_real_))
+        return(list(xmin = NA_real_, xmax = NA_real_,
+                    ymin = NA_real_, ymax = NA_real_,
+                    xmin_op = NA_real_, xmax_op = NA_real_,
+                    ymin_op = NA_real_, ymax_op = NA_real_))
     }
     df <- piecepackr:::add_3d_info(df, cfg = cfg, envir = envir)
     llb <- piecepackr:::Point3D$new(df$xll, df$yll, df$zb)$project_op(op_angle, op_scale)
@@ -73,18 +73,18 @@ range_true <- function(df, cfg = pp_cfg(), envir = NULL, op_scale = 0, op_angle 
     df$ylrt <- lrt$y
     df$xurt <- urt$x
     df$yurt <- urt$y
-    dfr <- dplyr::summarize(df,
-                            xmin = min(.data$xl, .data$xr),
-                            xmax = max(.data$xl, .data$xr),
-                            ymin = min(.data$yb, .data$yt),
-                            ymax = max(.data$yb, .data$yt),
-                            xmin_op = min(.data$xllb, .data$xllt, .data$xulb, .data$xult,
-                                        .data$xlrb, .data$xlrt, .data$xurb, .data$xurt),
-                            xmax_op = max(.data$xllb, .data$xllt, .data$xulb, .data$xult,
-                                        .data$xlrb, .data$xlrt, .data$xurb, .data$xurt),
-                            ymin_op = min(.data$yllb, .data$yllt, .data$yulb, .data$yult,
-                                        .data$ylrb, .data$ylrt, .data$yurb, .data$yurt),
-                            ymax_op = max(.data$yllb, .data$yllt, .data$yulb, .data$yult,
-                                        .data$ylrb, .data$ylrt, .data$yurb, .data$yurt))
-    dfr
+    xmin = min(df$xl, df$xr)
+    xmax = max(df$xl, df$xr)
+    ymin = min(df$yb, df$yt)
+    ymax = max(df$yb, df$yt)
+    xmin_op = min(df$xllb, df$xllt, df$xulb, df$xult,
+                  df$xlrb, df$xlrt, df$xurb, df$xurt)
+    xmax_op = max(df$xllb, df$xllt, df$xulb, df$xult,
+                  df$xlrb, df$xlrt, df$xurb, df$xurt)
+    ymin_op = min(df$yllb, df$yllt, df$yulb, df$yult,
+                  df$ylrb, df$ylrt, df$yurb, df$yurt)
+    ymax_op = max(df$yllb, df$yllt, df$yulb, df$yult,
+                  df$ylrb, df$ylrt, df$yurb, df$yurt)
+    list(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+         xmin_op = xmin_op, xmax_op = xmax_op, ymin_op = ymin_op, ymax_op = ymax_op)
 }
