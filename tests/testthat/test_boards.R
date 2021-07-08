@@ -26,6 +26,12 @@ test_that("rectangular boards works as expected", {
 
     expect_error(df_rect_board_tiles(2, 3), "Don't know how to form a 3x2 board with 24 tiles")
 
+    expect_error(grid.board_rect_cells(), "use the board pieces")
+    expect_error(grid.board_rect_points(), "use the board pieces")
+    expect_error(grid.board_rect_tiles(), "use piecepackr::pmap_piece")
+
+    skip_on_os("windows")
+
     df <- df_rect_board_tiles(nr = 8, nc = 8)
     verify_output("../text_diagrams/8x8.txt", cpiece(df))
 
@@ -50,8 +56,4 @@ test_that("rectangular boards works as expected", {
     df <- df_rect_board_tiles(nr = 8, nc = 8, max_tiles = 12)
     verify_output("../text_diagrams/8x8_12t.txt", cpiece(df))
 
-
-    expect_error(grid.board_rect_cells(), "use the board pieces")
-    expect_error(grid.board_rect_points(), "use the board pieces")
-    expect_error(grid.board_rect_tiles(), "use piecepackr::pmap_piece")
 })
