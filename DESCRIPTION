@@ -28,6 +28,7 @@ Imports:
     tools,
     utils,
     yaml
+Remotes: github::piecepackr/piecepackr
 Suggests:
     animation,
     argparse,
