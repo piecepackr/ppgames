@@ -40,7 +40,6 @@ range_heuristic <- function(df) {
     list(xmin = min(xleft), xmax = max(xright), ymin = min(ybot), ymax = max(ytop))
 }
 
-#' @importFrom rlang .data
 range_true <- function(df, cfg = pp_cfg(), envir = NULL, op_scale = 0, op_angle = 45, ...) {
     if (nrow(df) == 0) {
         return(list(xmin = NA_real_, xmax = NA_real_,
@@ -48,43 +47,7 @@ range_true <- function(df, cfg = pp_cfg(), envir = NULL, op_scale = 0, op_angle 
                     xmin_op = NA_real_, xmax_op = NA_real_,
                     ymin_op = NA_real_, ymax_op = NA_real_))
     }
-    df <- piecepackr:::add_3d_info(df, cfg = cfg, envir = envir)
-    llb <- piecepackr:::Point3D$new(df$xll, df$yll, df$zb)$project_op(op_angle, op_scale)
-    llt <- piecepackr:::Point3D$new(df$xll, df$yll, df$zt)$project_op(op_angle, op_scale)
-    ulb <- piecepackr:::Point3D$new(df$xul, df$yul, df$zb)$project_op(op_angle, op_scale)
-    ult <- piecepackr:::Point3D$new(df$xul, df$yul, df$zt)$project_op(op_angle, op_scale)
-    lrb <- piecepackr:::Point3D$new(df$xlr, df$ylr, df$zb)$project_op(op_angle, op_scale)
-    lrt <- piecepackr:::Point3D$new(df$xlr, df$ylr, df$zt)$project_op(op_angle, op_scale)
-    urb <- piecepackr:::Point3D$new(df$xur, df$yur, df$zb)$project_op(op_angle, op_scale)
-    urt <- piecepackr:::Point3D$new(df$xur, df$yur, df$zt)$project_op(op_angle, op_scale)
-    df$xllb <- llb$x
-    df$yllb <- llb$y
-    df$xulb <- ulb$x
-    df$yulb <- ulb$y
-    df$xlrb <- lrb$x
-    df$ylrb <- lrb$y
-    df$xurb <- urb$x
-    df$yurb <- urb$y
-    df$xllt <- llt$x
-    df$yllt <- llt$y
-    df$xult <- ult$x
-    df$yult <- ult$y
-    df$xlrt <- lrt$x
-    df$ylrt <- lrt$y
-    df$xurt <- urt$x
-    df$yurt <- urt$y
-    xmin = min(df$xl, df$xr)
-    xmax = max(df$xl, df$xr)
-    ymin = min(df$yb, df$yt)
-    ymax = max(df$yb, df$yt)
-    xmin_op = min(df$xllb, df$xllt, df$xulb, df$xult,
-                  df$xlrb, df$xlrt, df$xurb, df$xurt)
-    xmax_op = max(df$xllb, df$xllt, df$xulb, df$xult,
-                  df$xlrb, df$xlrt, df$xurb, df$xurt)
-    ymin_op = min(df$yllb, df$yllt, df$yulb, df$yult,
-                  df$ylrb, df$ylrt, df$yurb, df$yurt)
-    ymax_op = max(df$yllb, df$yllt, df$yulb, df$yult,
-                  df$ylrb, df$ylrt, df$yurb, df$yurt)
-    list(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
-         xmin_op = xmin_op, xmax_op = xmax_op, ymin_op = ymin_op, ymax_op = ymax_op)
+    aabb <- aabb_piece(df, cfg = cfg, envir = envir, op_scale = op_scale, op_angle = op_angle, ...)
+    list(xmin = aabb$x[1], xmax = aabb$x[2], ymin = aabb$y[1], ymax = aabb$y[2],
+         xmin_op = aabb$x_op[1], xmax_op = aabb$x_op[2], ymin_op = aabb$y_op[1], ymax_op = aabb$y_op[2])
 }

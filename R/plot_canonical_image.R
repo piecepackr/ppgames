@@ -13,20 +13,20 @@ plot_canonical_image <- function(game, gk = game_kit(), file = NULL) {
                                   y = stats::runif(24, -1.20, 13.50),
                                   angle = stats::runif(24, 0, 360))
                df <- bind_rows(df_tiles, df_coins)
-               wh <- plot_df(df, file = file, annotate = FALSE, cfg = cfg,
-                             op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, annotate = FALSE, cfg = cfg,
+                                  op_scale = 0.5, trans = op_transform)
            },
            tablut = {
                cfg <- gk$get_piecepacks(1)[[1]]
                df <- df_tablut(cfg$get_width("die_face"))
-               wh <- plot_df(df, file = file, annotate = FALSE, cfg = cfg,
+               wh <- render_piece(df, file = file, annotate = FALSE, cfg = cfg,
                              op_scale = 0.5, trans = op_transform)
 
            }, {
                cfg <- gk$get_piecepacks(1)[[1]]
                df <- get_starting_df_from_name(game)
-               wh <- plot_df(df, file = file, annotate = FALSE, cfg = cfg,
-                             op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, annotate = FALSE, cfg = cfg,
+                                  op_scale = 0.5, trans = op_transform)
            })
     invisible(c(wh, list(file = file)))
 }
