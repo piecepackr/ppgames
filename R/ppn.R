@@ -95,8 +95,9 @@ extract_metadata_movetext <- function(text) {
     if (is.null(metadata))
         metadata <- list()
     if (!is.list(metadata)) {
-        msg <- paste0("The PPN metadata does not appear to be a YAML dictionary:\n",
-                     yaml::as.yaml(metadata))
+        text <- paste(paste("  ", yaml::as.yaml(metadata), collapse = "\n"))
+        msg <- c("The PPN metadata does not appear to be a YAML dictionary",
+                 i = paste("The PPN metadata is:\n", text))
         abort(msg, class = "extract_metadata")
     }
     list(metadata = metadata, movetext = movetext)
