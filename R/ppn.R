@@ -34,7 +34,10 @@ write_ppn <- function(games = list(), file = "") {
 # @param file Filename
 # @return A list, each element is a character vector containing the text of the PPN games within that file
 parse_ppn_file <- function(file) {
-    text <- readLines(file)
+    text <- readlines_ppn(file)
+    parse_contents(text)
+}
+parse_contents <- function(text) {
     game_starts <- grep("^-{3}", text)
     if (length(game_starts) == 0L || game_starts[1L] != 1L) {
         game_starts <- c(1L, game_starts)
@@ -46,6 +49,17 @@ parse_ppn_file <- function(file) {
     }
     contents
 }
+readlines_ppn <- function(file) {
+    tryCatch({
+        readLines(file)
+    }, warning = function(w) {
+        abort(w$message, class = "readlines_ppn", parent = w)
+    }, error = function(e) {
+        msg <- paste("Couldn't read the file", file)
+        msg <- c(msg, i = e$message)
+        abort(msg, class = "readlines_ppn", parent = e)
+    })
+}
 
 # Parse ppn game
 #
@@ -54,12 +68,21 @@ parse_ppn_file <- function(file) {
 # @return A list with a named list element named \code{Metadata}
 #         and character vector element named \code{Movetext}
 parse_ppn_game <- function(text, parse = TRUE) {
+    l <- extract_metadata_movetext(text)
+    if (parse) {
+        parse_movetext(l$movetext, l$metadata)
+    } else {
+        list(metadata = l$metadata, movetext = l$movetext)
+    }
+}
+
+extract_metadata_movetext <- function(text) {
     yaml_end <- grep("^\\.{3}", text)
     if (length(yaml_end) == 0L) {
         yaml_end <- grep("^[[:blank:]]+|^$", text)
     }
     if (length(yaml_end) > 0L) {
-        metadata <- yaml::yaml.load(text[1L:yaml_end[1L]])
+        metadata <- yaml_load(text[1L:yaml_end[1L]])
         if (yaml_end[1]<length(text)) {
             movetext <- text[(yaml_end[1L]+1L):length(text)]
         } else {
@@ -69,11 +92,27 @@ parse_ppn_game <- function(text, parse = TRUE) {
         metadata <- list()
         movetext <- text
     }
-    if (parse) {
-        parse_movetext(movetext, metadata)
-    } else {
-        list(metadata = metadata, movetext = movetext)
+    if (is.null(metadata))
+        metadata <- list()
+    if (!is.list(metadata)) {
+        msg <- paste0("The PPN metadata does not appear to be a YAML dictionary:\n",
+                     yaml::as.yaml(metadata))
+        abort(msg, class = "extract_metadata")
     }
+    list(metadata = metadata, movetext = movetext)
+}
+
+yaml_load <- function(text) {
+    tryCatch(yaml::yaml.load(text),
+             warning = function(w) {
+                abort(w$message, class = "yaml_load")
+             },
+             error = function(e) {
+                text <- paste(paste(" ", text), collapse = "\n")
+                msg <- c("YAML parsing error:", i = e$message,
+                         i = paste("Failed to parse the following YAML text:\n", text))
+                abort(msg, class = "yaml_load")
+             })
 }
 
 parse_movetext <- function(movetext, metadata) {

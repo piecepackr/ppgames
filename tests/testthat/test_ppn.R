@@ -93,6 +93,10 @@ test_that("parsing ppn files works as expected", {
     comments <- "---\n...\n{comment,with,commas}"
     g <- read_ppn(textConnection(comments))[[1]]
     expect_equal(g$comments[[2]], "comment,with,commas")
+
+    ppn_bad_metadata <- "---\nttt\n...\n"
+    expect_error(read_ppn(textConnection(ppn_bad_metadata)),
+                 "The PPN metadata does not appear to be a YAML dictionary")
 })
 
 test_that("parsing simplified piece notation works as expected", {
