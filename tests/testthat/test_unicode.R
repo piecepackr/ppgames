@@ -13,15 +13,6 @@ test_that("dimensions", {
     expect_equal(range_heuristic(tibble())$xmax, NA_real_)
     expect_equal(range_heuristic(tibble())$ymin, NA_real_)
     expect_equal(range_heuristic(tibble())$ymax, NA_real_)
-
-    expect_equal(range_true(df, envir = game_systems())$xmin, 0.5)
-    expect_equal(range_true(df, envir = game_systems())$xmax, 4.5)
-    expect_equal(range_true(df, envir = game_systems())$ymin, 0.5)
-    expect_equal(range_true(df, envir = game_systems())$ymax, 4.5)
-    expect_equal(range_true(tibble())$xmin, NA_real_)
-    expect_equal(range_true(tibble())$xmax, NA_real_)
-    expect_equal(range_true(tibble())$ymin, NA_real_)
-    expect_equal(range_true(tibble())$ymax, NA_real_)
 })
 test_that("text diagrams", {
     expect_warning(rotate("$", 90))

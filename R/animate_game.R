@@ -37,18 +37,18 @@ animate_game <- function(game, file = "animation.gif", annotate = TRUE, ...,
     envir <- ce$envir
 
     dfs <- game$dfs
-    ranges <- lapply(dfs, range_true, cfg = cfg, envir = envir, ...)
+    ranges <- lapply(dfs, aabb_piece, cfg = cfg, envir = envir, ...)
     if (n_transitions > 0L) {
         dfs <- get_tweened_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
     }
 
     #### Add grid and comment annotations
-    xmax_op <- max(sapply(ranges, function(x) x$xmax_op), na.rm = TRUE)
-    ymax_op <- max(sapply(ranges, function(x) x$ymax_op), na.rm = TRUE)
-    xmin_op <- min(sapply(ranges, function(x) x$xmin_op), na.rm = TRUE)
-    ymin_op <- min(sapply(ranges, function(x) x$ymin_op), na.rm = TRUE)
-    xmax <- max(sapply(ranges, function(x) x$xmax), na.rm = TRUE)
-    ymax <- max(sapply(ranges, function(x) x$ymax), na.rm = TRUE)
+    xmax_op <- max(sapply(ranges, function(r) r$x_op[2]), na.rm = TRUE)
+    ymax_op <- max(sapply(ranges, function(r) r$y_op[2]), na.rm = TRUE)
+    xmin_op <- min(sapply(ranges, function(r) r$x_op[1]), na.rm = TRUE)
+    ymin_op <- min(sapply(ranges, function(r) r$y_op[1]), na.rm = TRUE)
+    xmax <- max(sapply(ranges, function(r) r$x[2]), na.rm = TRUE)
+    ymax <- max(sapply(ranges, function(r) r$y[2]), na.rm = TRUE)
     xoffset <- min2offset(xmin_op)
     yoffset <- min2offset(ymin_op)
     if (is.null(width)) width <- xmax_op + xoffset + 0.50
