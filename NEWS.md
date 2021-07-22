@@ -29,7 +29,9 @@ Bug fixes and minor improvements
   + ``df_xiangqi()``
 
 * ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
-* There are now more informative error messages being raised by ``rlang::abort()`` (#109).
+* In game starting functions with argument `seed` we now use `withr::local_seed()` instead of `set.seed()`
+  and if `seed = NULL` we don't try to set any seed at all (#112).
+* There are now more informative error messages being raised by ``rlang::abort()`` (#109, #111).
 
 ppgames 0.6.1
 =============

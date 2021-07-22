@@ -7,7 +7,7 @@ plot_canonical_image <- function(game, gk = game_kit(), file = NULL) {
                df_tiles <- get_starting_df_from_name(game)
                df_tiles$id <- NULL
                df_tiles$cfg <- NULL
-               set.seed(36)
+               withr::local_seed(36)
                df_coins <- tibble(piece_side = "coin_back", rank = rep(1:6, 4), suit = rep(1:4, each=6),
                                   x = stats::runif(24, -1.10, 8.70),
                                   y = stats::runif(24, -1.20, 13.50),

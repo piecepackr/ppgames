@@ -1,6 +1,6 @@
 # 24 tiles arranged 5x5 with hole in middle, center of bottom-left tile at (x0, y0)
 df_donut_tiles <- function(seed = NULL, tiles = NULL, x0 = 1.5, y0 = 1.5, face = TRUE) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_txy <- tibble(piece_side = ifelse(face, "tile_face", "tile_back"),
                      x = x0 + c(rep(seq(0, 8, 2), 2), 0, 2, 6, 8, rep(seq(0, 8, 2), 2)),
                      y = y0 + c(rep(8, 5), rep(6, 5), rep(4, 4), rep(2, 5), rep(0, 5)))

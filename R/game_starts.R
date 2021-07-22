@@ -151,7 +151,7 @@ NULL
 #' @rdname df_game
 #' @export
 df_alien_city <- function(seed = NULL, tiles = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_t1 <- tibble(piece_side = "tile_face",
                    x = 0.5+rep(seq(1,7,2),5),
                    y = 0.5+rep(seq(9,1,-2), each = 4))
@@ -169,7 +169,7 @@ df_alien_city <- function(seed = NULL, tiles = NULL) {
 #' @rdname df_game
 #' @export
 df_cell_management <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
 
     # hexagon distances
     #    between closest vertices: 2
@@ -237,8 +237,8 @@ df_mini_halma <- df_chinese_checkers
 #' @rdname df_game
 #' @export
 df_coin_collectors <- function(seed = NULL, tiles = NULL, coins = NULL, dice = NULL) {
-    set.seed(seed)
-    df_tiles <- df_donut_tiles(seed = seed, tiles = tiles, x0 = 1.5, y0 = 1.5)
+    if (!is.null(seed)) withr::local_seed(seed)
+    df_tiles <- df_donut_tiles(seed = NULL, tiles = tiles, x0 = 1.5, y0 = 1.5)
     if (is.null(coins)) {
        ranks <- rep(1:6, 4)[sample.int(24)]
     } else {
@@ -256,7 +256,7 @@ df_coin_collectors <- function(seed = NULL, tiles = NULL, coins = NULL, dice = N
 #' @rdname df_game
 #' @export
 df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_txy <- tibble(piece_side = "tile_face",
                      x = 2+rep(seq(1, by=3, length.out=5), 5),
                      y = 2+rep(seq(1, by=3, length.out=5), each=5))
@@ -308,8 +308,8 @@ df_desfases <- function(seed = NULL, tiles = NULL, dice = NULL) {
 #' @rdname df_game
 #' @export
 df_easy_slider <- function(seed = NULL, tiles = NULL, coins = NULL, pawns = NULL) {
-    set.seed(seed)
-    df_tiles <- df_donut_tiles(seed = seed, tiles = tiles, x0 = 2, y0 = 2)
+    if (!is.null(seed)) withr::local_seed(seed)
+    df_tiles <- df_donut_tiles(seed = NULL, tiles = tiles, x0 = 2, y0 = 2)
     ranks <- if (is.null(coins)) sample.int(5L) + 1L else process_ranks(coins)
     df_coins <- tibble(piece_side = "coin_face", x = seq(2, 10, 2), y = 11.5, rank = ranks, suit = 1L)
     suits <- if (is.null(pawns)) sample.int(4L) else process_suits(pawns)
@@ -349,7 +349,7 @@ df_froggy_bottom <- function() df_rect_board_tiles(ncols = 6, nrows = 8)
 #' @rdname df_game
 #' @export
 df_fujisan <- function(seed = NULL, coins = NULL, dice = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     if (is.null(coins)) {
         coins <- random_fujisan_coins()
     } else if (is.character(coins)) {
@@ -393,7 +393,7 @@ df_ice_floe <- function() {
 #' @rdname df_game
 #' @export
 df_japan <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tiles <- tibble(piece_side = "tile_back",
                        x = 0.5 + c(rep(seq(1, by=4, length.out=4), each = 3),
                                    rep(seq(3, by=4, length.out=3), each = 4)),
@@ -434,7 +434,7 @@ df_japan <- function(seed = NULL) {
 #' @rdname df_game
 #' @export
 df_landlocked <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tiles <- tibble(piece_side = rep(c("tile_back", "tile_face"), each = 12),
                        suit = rep(1:4, each = 6), rank = rep(1:6, 4))[sample.int(24), ]
     df_tiles$x <- 0.5 + c(seq(3, 9, 2), rep(seq(1, 9, 2), 4))
@@ -455,7 +455,7 @@ df_ley_lines <- function() {
 #' @rdname df_game
 #' @export
 df_mathrix <- function(seed = NULL, coins = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tiles <- df_rect_board_tiles(nrows=4, ncols=6)
     if (is.null(coins)) {
         ranks <- rep(1:6, 4)[sample.int(24)]
@@ -473,7 +473,7 @@ df_mathrix <- function(seed = NULL, coins = NULL) {
 #' @rdname df_game
 #' @export
 df_piecepackman <- function(seed = NULL, variant = 1) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tiles <- tibble(piece_side = "tile_back",
                        x = 0.5 + c(rep(seq(1, 9, 2), 4), seq(2, 8, 2)),
                        y = 0.5 + c(rep(c(1, 3, 7, 9), each = 5), rep(5, 4)),
@@ -545,7 +545,7 @@ df_pass_the_food <- function() {
 #' @rdname df_game
 #' @export
 df_piecepack_klondike <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
     df_tiles <- tibble(piece_side = c(rep("tile_back", 15),
                                       rep("tile_face", 6),
@@ -559,7 +559,7 @@ df_piecepack_klondike <- function(seed = NULL) {
 #' @rdname df_game
 #' @export
 df_piece_gaps <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
     df_tiles <- tibble(piece_side = "tile_face",
                        x = rep(seq(2, 12, 2), 4),
@@ -571,7 +571,7 @@ df_piece_gaps <- function(seed = NULL) {
 #' @rdname df_game
 #' @export
 df_piece_packing_pirates <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     new <- "0_0"
     tiles_xy <- new
     impossible <- c()
@@ -615,7 +615,7 @@ new_possible <- function(x_y) {
 df_plans_of_action <- function(seed = NULL, coins = NULL) {
     df_tiles <- df_rect_board_tiles(nrows=8, ncols=8)
     if (is.null(coins)) {
-        set.seed(seed)
+        if (!is.null(seed)) withr::local_seed(seed)
         suits <- sample(rep(1:4, 6), 24)
     } else {
         suits <- process_suits(coins)
@@ -644,7 +644,7 @@ df_quatri <- function() {
 df_relativity <- function(seed = NULL, coins = NULL) {
     df_tiles <- df_rect_board_tiles(nrows=4, ncols=6)
     if (is.null(coins)) {
-        set.seed(seed)
+        if (!is.null(seed)) withr::local_seed(seed)
         ranks <- c(sample.int(6), sample.int(6), sample.int(6), sample.int(6))
         while (should_resample_relativity(ranks)) {
             ranks <- c(sample.int(6), sample.int(6), sample.int(6), sample.int(6))
@@ -706,7 +706,7 @@ df_san_andreas <- function() {
 #' @rdname df_game
 #' @export
 df_the_magic_bag <- function(seed = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tiles <- tibble(piece_side = "tile_face", suit = rep(1:4, each = 6),
                        rank = rep(1:6, 4))[sample.int(24), ]
     df_tiles$x <- 0.5 + c(rep(1, 9), rep(3, 7), rep(5, 5), rep(7, 3))
@@ -717,7 +717,7 @@ df_the_magic_bag <- function(seed = NULL) {
 #' @rdname df_game
 #' @export
 df_tower_of_babel <- function(seed = NULL, tiles = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_txy <- tibble(piece_side = "tile_back", x = 2, y = 4)
     if (is.null(tiles)) {
         df_tsr <- expand.grid(suit = 1:4, rank = 1:6)[sample.int(24), ]
@@ -734,7 +734,7 @@ df_tower_of_babel <- function(seed = NULL, tiles = NULL) {
 #' @rdname df_game
 #' @export
 df_triactor <- function(seed = NULL, cfg2 = "playing_cards_expansion") {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_tb <- tibble(piece_side = "tile_back", cfg = "piecepack",
                     x = 0.5+rep(c(seq(5,15,2),1,2,18,19),2),
                     y = 0.5+c(rep(1,6),5,3,3,5,rep(11,6),7,9,9,7),
@@ -756,7 +756,7 @@ df_triactor <- function(seed = NULL, cfg2 = "playing_cards_expansion") {
 #' @rdname df_game
 #' @export
 df_tula <- function(seed = NULL, tiles = NULL) {
-    set.seed(seed)
+    if (!is.null(seed)) withr::local_seed(seed)
     df_txy <- tibble(piece_side = "tile_back",
                      x = c(rep(seq(1,7,2), 3), 4,
                            rep(seq(2,6,2), 2), 4,
