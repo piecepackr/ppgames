@@ -27,23 +27,28 @@
 #'             `NULL` means we don't `cat()`
 #' @param annotation_scale Multiplicative factor that scales (stretches) any annotation coordinates.
 #'                         By default uses `attr(df, "scale_factor") %||% 1`.
+#' @param style If "Unicode" (default) only use glyphs in Unicode proper.
+#'              If "Game Bit Duo" use glyphs in Private Use Area of "Game Bit Duo" font.
+#'              If "Game Bit Mono" use glyphs in Private Use Area of "Game Bit Mono" font.
 #' @return String of text diagram (returned invisibly).
 #' @importFrom rlang %||% abort
+#' @seealso See <https://trevorld/game-bit-font> for more information about the \dQuote{Game Bit} family of fonts.
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
-                      file = "", annotation_scale = NULL) {
+                      file = "", annotation_scale = NULL, style = c("Unicode", "Game Bit Mono")) {
     cat_piece_helper(df, ..., color = color, reorient = reorient, annotate = annotate, ...,
-                     file = file, annotation_scale = annotation_scale)
+                     file = file, annotation_scale = annotation_scale, style = style)
 }
 cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
                              xoffset = NULL, yoffset = NULL,
-                             file = "", annotation_scale = NULL) {
+                             file = "", annotation_scale = NULL, style = "Unicode") {
     color <- color %||% (is.null(file) || file == "")
     annotation_scale <- annotation_scale %||% attr(df, "scale_factor") %||% 1
     if (nrow(df) == 0) {
         if (!is.null(file)) cat("", file = file)
         return(invisible(""))
     }
+    style <- get_style(style = style)
     df <- clean_df(df)
     if (isTRUE(reorient) || reorient == "all") df$angle <- 0
 
@@ -53,7 +58,7 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
     df$y <- df$y + offset$y
     nc <- 2 * (lr$xmax + offset$x) + 1
     nr <- 2 * (lr$ymax + offset$y) + 1
-    cm <- list(char = matrix(" ", nrow = nr, ncol = nc),
+    cm <- list(char = matrix(style$space, nrow = nr, ncol = nc),
                bg = matrix("#FFFFFF", nrow = nr, ncol = nc),
                fg = matrix("black", nrow = nr, ncol = nc))
 
@@ -65,7 +70,7 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
         y <- 2*as.numeric(df[rr, "y"])+1
         angle <- as.numeric(df[rr, "angle"])
         cfg <- as.character(df[rr, "cfg"])
-        cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg, reorient)
+        cm <- add_piece(cm, ps, suit, rank, x, y, angle, cfg, reorient, style)
     }
     cm <- annotate_text(cm, nc, nr, offset$x, offset$y, annotate, annotation_scale)
     cm <- color_text(cm, color)
@@ -79,6 +84,103 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
     text <- paste0(text, "\n")
     if (!is.null(file)) cat(text, ..., file = file)
     invisible(text)
+}
+
+get_style <- function(style = "Unicode") {
+    style <- tolower(style)
+    style <- gsub("-", "", style)
+    style <- gsub(" ", "", style)
+    style <- match.arg(style, c("unicode", "gamebitduo", "gamebitmono"))
+
+    if (style == "gamebitduo") {
+        space <- "  " ####
+    } else {
+        space <- " "
+    }
+
+    list(rotate = get_style_rotate(style),
+         rs = get_style_rs(style),
+         ss = get_style_ss(style),
+         fg = get_style_fg(style),
+         space = space)
+}
+
+get_style_rs <- function(style) {
+
+    dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+    piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
+
+    rs <- list(piecepack = piecepack_ranks,
+                    playing_cards_expansion = piecepack_ranks,
+                    dual_piecepacks_expansion = piecepack_ranks,
+                    subpack = piecepack_ranks,
+                    checkers1 = rep("\u26c2", 6),
+                    checkers2 = rep("\u26c2", 6),
+                    chess1 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
+                    chess2 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
+                    dice = dominoes_ranks[-1],
+                    dominoes = dominoes_ranks,
+                    dominoes_black = dominoes_ranks,
+                    dominoes_blue = dominoes_ranks,
+                    dominoes_green = dominoes_ranks,
+                    dominoes_red = dominoes_ranks,
+                    dominoes_white = dominoes_ranks,
+                    dominoes_yellow = dominoes_ranks,
+                    icehouse_pieces = rep(" ", 6),
+                    go = rep("\u25cf", 6))
+    rs
+}
+
+get_style_ss <- function(style) {
+    # nolint start
+    # Use Half-circle for Moons? \u25d0
+    # Use Arrows for Arms?
+    # nolint end
+    dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+    piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
+
+    ss <- list(piecepack = piecepack_suits,
+                    playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
+                    dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),
+                    subpack = piecepack_suits,
+                    checkers1 = c(rep("\u26c2", 5), "\u26c0"),
+                    checkers2 = c(rep("\u26c2", 5), "\u26c0"),
+                    chess1 = "",
+                    chess2 = "",
+                    dice = rep(" ", 6),
+                    dominoes = dominoes_ranks,
+                    dominoes_black = dominoes_ranks,
+                    dominoes_blue = dominoes_ranks,
+                    dominoes_green = dominoes_ranks,
+                    dominoes_red = dominoes_ranks,
+                    dominoes_white = dominoes_ranks,
+                    dominoes_yellow = dominoes_ranks,
+                    go = c(rep("\u25cf", 5), "\u25cb"),
+                    icehouse_pieces = c(rep("\u25b2", 5), "\u25b3"))
+    ss
+}
+
+get_style_fg <- function(style) {
+    fg <- list(piecepack = piecepack_colors,
+                    dual_piecepacks_expansion = piecepack_colors,
+                    playing_cards_expansion = piecepack_colors[c(1, 2, 2, 1)],
+                    subpack = piecepack_colors,
+                    chess1 = chess_colors,
+                    chess2 = chess_colors,
+                    checkers1 = checkers_colors,
+                    checkers2 = checkers_colors,
+                    dice = dice_colors,
+                    dominoes = rep("black", 7),
+                    dominoes_black = rep(dice_colors[2], 7),
+                    dominoes_blue = rep(dice_colors[4], 7),
+                    dominoes_green = rep(dice_colors[3], 7),
+                    dominoes_red = rep(dice_colors[1], 7),
+                    dominoes_white = rep(dice_colors[6], 7),
+                    dominoes_yellow = rep(dice_colors[5], 7),
+                    icehouse_pieces = dice_colors,
+                    go = go_colors)
+
+    fg
 }
 
 color_text <- function(cm, color) {
@@ -196,87 +298,26 @@ clear_screen <- function() {
            windows = system("cls"))
 }
 
-# nolint start
-# Use Half-circle for Moons? \u25d0
-# Use Arrows for Arms?
-# nolint end
-dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
-piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
-piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
 #### darkgreen sometimes shows up as black?
 #### black instead of grey sometimes?
 checkers_colors <- c("darkred", "black", "green", "darkblue", "darkorange3", "black")
 piecepack_colors <- dice_colors <- chess_colors <- go_colors <- checkers_colors
 dice_colors[2] <- "grey"
-ss_list <- list(piecepack = piecepack_suits,
-                playing_cards_expansion = c("\u2665", "\u2660", "\u2663", "\u2666"),
-                dual_piecepacks_expansion = c("\u2661", "\u2664", "\u2667", "\u2662"),
-                subpack = piecepack_suits,
-                checkers1 = c(rep("\u26c2", 5), "\u26c0"),
-                checkers2 = c(rep("\u26c2", 5), "\u26c0"),
-                chess1 = "",
-                chess2 = "",
-                dice = rep(" ", 6),
-                dominoes = dominoes_ranks,
-                dominoes_black = dominoes_ranks,
-                dominoes_blue = dominoes_ranks,
-                dominoes_green = dominoes_ranks,
-                dominoes_red = dominoes_ranks,
-                dominoes_white = dominoes_ranks,
-                dominoes_yellow = dominoes_ranks,
-                go = c(rep("\u25cf", 5), "\u25cb"),
-                icehouse_pieces = c(rep("\u25b2", 5), "\u25b3"))
-rs_list <- list(piecepack = piecepack_ranks,
-                playing_cards_expansion = piecepack_ranks,
-                dual_piecepacks_expansion = piecepack_ranks,
-                subpack = piecepack_ranks,
-                checkers1 = rep("\u26c2", 6),
-                checkers2 = rep("\u26c2", 6),
-                chess1 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
-                chess2 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
-                dice = dominoes_ranks[-1],
-                dominoes = dominoes_ranks,
-                dominoes_black = dominoes_ranks,
-                dominoes_blue = dominoes_ranks,
-                dominoes_green = dominoes_ranks,
-                dominoes_red = dominoes_ranks,
-                dominoes_white = dominoes_ranks,
-                dominoes_yellow = dominoes_ranks,
-                icehouse_pieces = rep(" ", 6),
-                go = rep("\u25cf", 6))
-fg_list <- list(piecepack = piecepack_colors,
-                dual_piecepacks_expansion = piecepack_colors,
-                playing_cards_expansion = piecepack_colors[c(1, 2, 2, 1)],
-                subpack = piecepack_colors,
-                chess1 = chess_colors,
-                chess2 = chess_colors,
-                checkers1 = checkers_colors,
-                checkers2 = checkers_colors,
-                dice = dice_colors,
-                dominoes = rep("black", 7),
-                dominoes_black = rep(dice_colors[2], 7),
-                dominoes_blue = rep(dice_colors[4], 7),
-                dominoes_green = rep(dice_colors[3], 7),
-                dominoes_red = rep(dice_colors[1], 7),
-                dominoes_white = rep(dice_colors[6], 7),
-                dominoes_yellow = rep(dice_colors[5], 7),
-                icehouse_pieces = dice_colors,
-                go = go_colors)
 
-add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg, reorient = "none") {
+add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg, reorient = "none", style = get_style()) {
     if (piece_side %in% c("tile_back", "coin_face", "card_back")) {
         fg <- "black"
     } else {
         if (grepl("pyramid", piece_side)) cfg <- "icehouse_pieces"
-        ss <- ss_list[[cfg]][suit]
+        ss <- style$ss[[cfg]][suit]
         if (piece_side == "pyramid_top") ss <- top_subs[[ss]]
-        if (!grepl("matchstick", piece_side)) ss <- rotate(ss, angle, reorient)
-        fg <- fg_list[[cfg]][suit]
+        if (!grepl("matchstick", piece_side)) ss <- style$rotate(ss, angle, reorient)
+        fg <- style$fg[[cfg]][suit]
     }
     if (!(piece_side %in% c("tile_back", "coin_back", "card_back", "pawn_face", "pawn_back"))) {
-        rs <- rs_list[[cfg]][rank]
+        rs <- style$rs[[cfg]][rank]
         if (grepl("chess", cfg) && suit == 6L) rs <- unicode_chess_white[rank]
-        if (!grepl("matchstick", piece_side)) rs <- rotate(rs, angle, reorient)
+        if (!grepl("matchstick", piece_side)) rs <- style$rotate(rs, angle, reorient)
     }
     if (grepl("2", cfg)) {
         cell <- 2
@@ -289,12 +330,12 @@ add_piece <- function(cm, piece_side, suit, rank, x, y, angle, cfg, reorient = "
            die_face = add_die_face(cm, rs, x, y, angle, fg),
            pawn_face = add_pawn_face(cm, ss, x, y, angle, fg),
            pawn_back = add_pawn_back(cm, ss, x, y, angle, fg),
-           tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg, cfg),
-           tile_back = add_tile_back(cm, x, y, angle, cfg),
+           tile_face = add_tile_face(cm, ss, rs, x, y, angle, fg, cfg, style),
+           tile_back = add_tile_back(cm, x, y, angle, cfg, style),
            bit_back = add_bit_back(cm, ss, x, y, fg),
            bit_face = add_bit_face(cm, rs, x, y, fg),
-           board_back = add_board(cm, x, y, cell * rank, cell * rank, cell),
-           board_face = add_board(cm, x, y, cell * rank, cell * rank, cell),
+           board_back = add_board(cm, x, y, cell * rank, cell * rank, cell, style),
+           board_face = add_board(cm, x, y, cell * rank, cell * rank, cell, style),
            matchstick_back = add_matchstick_face(cm, x, y, angle, fg, rank),
            matchstick_face = add_matchstick_face(cm, x, y, angle, fg, rank),
            pyramid_top = add_pyramid_top(cm, ss, x, y, angle, fg, rank),
@@ -493,91 +534,86 @@ add_pyramid_top <- function(cm, ss, x, y, angle, fg, rank = 1) {
     cm$fg[y, x] <- fg
     cm
 }
-add_tile_back <- function(cm, x, y, angle, cfg) {
+add_tile_back <- function(cm, x, y, angle, cfg, style) {
     if (angle %% 90 != 0) abort_angle(angle)
 
     if (cfg == "subpack") {
-        add_tile_back_subpack(cm, x, y)
+        add_tile_back_subpack(cm, x, y, style)
     } else if (grepl("dominoes", cfg)) {
-        add_tile_back_dominoes(cm, x, y, angle)
+        add_tile_back_dominoes(cm, x, y, angle, style)
     } else {
-        add_tile_back_piecepack(cm, x, y)
+        add_tile_back_piecepack(cm, x, y, style)
     }
 }
-add_tile_back_dominoes <- function(cm, x, y, angle) {
+add_tile_back_dominoes <- function(cm, x, y, angle, style) {
     if (angle %% 180 == 0) { # vertical
         cm$fg[y+-2:2, x+-1:1] <- "black"
-        cm$char[y+-1:1, x] <- " "
-        cm <- add_border(cm, x, y, width = 1, height = 2)
+        cm <- add_border(cm, x, y, width = 1, height = 2, space = style$space)
         cm
     } else if (angle %% 90 == 0) { # horizontal
         cm$fg[y+-1:1, x+-2:2] <- "black"
-        cm$char[y, x+-1:1] <- " "
-        cm <- add_border(cm, x, y, width = 2, height = 1)
+        cm <- add_border(cm, x, y, width = 2, height = 1, space = style$space)
         cm
     }
 }
-add_tile_back_piecepack <- function(cm, x, y) {
+add_tile_back_piecepack <- function(cm, x, y, style) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
-    cm$char[y+-1:1, x+-1:1] <- " "
-    cm <- add_border(cm, x, y)
+    cm <- add_border(cm, x, y, space = style$space)
     cm <- add_gridlines(cm, x, y)
     cm
 }
-add_tile_back_subpack <- function(cm, x, y) {
+add_tile_back_subpack <- function(cm, x, y, style) {
     cm$fg[y+-1:1, x+-1:1] <- "black"
-    cm <- add_border(cm, x, y, 1, 1)
+    cm <- add_border(cm, x, y, 1, 1, space = style$space)
     cm <- add_gridlines(cm, x, y, 1, 1, 0.5)
     cm
 }
-add_tile_face <- function(cm, ss, rs, x, y, angle, fg, cfg) {
+add_tile_face <- function(cm, ss, rs, x, y, angle, fg, cfg, style) {
     if (angle %% 90 != 0) abort_angle(angle)
 
     if (cfg == "subpack") {
-        add_tile_face_subpack(cm, rs, x, y, fg)
+        add_tile_face_subpack(cm, rs, x, y, fg, style)
     } else if (grepl("dominoes", cfg)) {
-        add_tile_face_dominoes(cm, ss, rs, x, y, angle, fg)
+        add_tile_face_dominoes(cm, ss, rs, x, y, angle, fg, style)
     } else {
-        add_tile_face_piecepack(cm, ss, rs, x, y, angle, fg)
+        add_tile_face_piecepack(cm, ss, rs, x, y, angle, fg, style)
     }
 }
-add_tile_face_subpack <- function(cm, rs, x, y, fg) {
+add_tile_face_subpack <- function(cm, rs, x, y, fg, style) {
     cm$fg[y+-1:1, x+-1:1] <- "black"
+    cm <- add_border(cm, x, y, 1, 1, space = style$space)
     cm$char[y, x] <- rs
     cm$fg[y, x] <- fg
-    cm <- add_border(cm, x, y, 1, 1)
     cm
 }
-add_tile_face_dominoes <- function(cm, ss, rs, x, y, angle, fg) {
+add_tile_face_dominoes <- function(cm, ss, rs, x, y, angle, fg, style) {
     if (angle == 0) {
         cm$fg[y+-2:2, x+-1:1] <- "black"
-        cm <- add_border(cm, x, y, width = 1, height = 2)
+        cm <- add_border(cm, x, y, width = 1, height = 2, space = style$space)
         cm$char[y+-1:1, x] <-  c(ss, "\u2501", rs)
         cm$fg[y+-1:1, x] <- fg
     } else if (angle == 90) {
         cm$fg[y+-1:1, x+-2:2] <- "black"
-        cm$char[y, x+-1:1] <- " "
-        cm <- add_border(cm, x, y, width = 2, height = 1)
+        cm <- add_border(cm, x, y, width = 2, height = 1, space = style$space)
         cm$char[y, x+-1:1] <-  c(rs, "\u2503", ss)
         cm$fg[y, x+-1:1] <- fg
     }
     if (angle == 180) {
         cm$fg[y+-2:2, x+-1:1] <- "black"
-        cm <- add_border(cm, x, y, width = 1, height = 2)
+        cm <- add_border(cm, x, y, width = 1, height = 2, space = style$space)
         cm$char[y+-1:1, x] <-  c(rs, "\u2501", ss)
         cm$fg[y+-1:1, x] <- fg
     } else if (angle == 270) {
         cm$fg[y+-1:1, x+-2:2] <- "black"
-        cm <- add_border(cm, x, y, width = 2, height = 1)
+        cm <- add_border(cm, x, y, width = 2, height = 1, space = style$space)
         cm$char[y, x+-1:1] <-  c(ss, "\u2503", rs)
         cm$fg[y, x+-1:1] <- fg
     }
     cm
 }
-add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg) {
+add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg, style) {
     cm$fg[y+-2:2, x+-2:2] <- "black"
-    cm$char[y+-1:1, x+-1:1] <- " "
-    cm <- add_border(cm, x, y)
+    cm <- add_border(cm, x, y, space = style$space)
     # rank symbol
     cm$char[y, x] <- rs
     cm$fg[y, x] <- fg
@@ -597,9 +633,9 @@ add_tile_face_piecepack <- function(cm, ss, rs, x, y, angle, fg) {
     }
     cm
 }
-add_board <- function(cm, x, y, width = 8, height = 8, cell = 1) {
+add_board <- function(cm, x, y, width = 8, height = 8, cell = 1, style = get_style("Unicode")) {
     cm$fg[y+-height:height, x+-width:width] <- "black"
-    cm <- add_border(cm, x, y, width, height)
+    cm <- add_border(cm, x, y, width, height, space = style$space)
     cm <- add_gridlines(cm, x, y, width, height, cell)
     cm
 }
@@ -627,7 +663,12 @@ add_gridlines <- function(cm, x, y, width = 2, height = 2, cell = 1) {
     cm
 }
 
-add_border <- function(cm, x, y, width = 2, height = 2) {
+add_border <- function(cm, x, y, width = 2, height = 2, space = " ") {
+    for (i in seq(1 - height, height - 1)) {
+        for (j in seq(1 - width, width - 1)) {
+            cm$char[y + i, x + j] <- space
+        }
+    }
     for (i in seq(1 - width, width - 1)) {
         cm <- add_box_edge(cm, x+i, y+height, c(NA, 1, 0, 1)) # top side
         cm <- add_box_edge(cm, x+i, y-height, c(0, 1, NA, 1)) # bottom side
@@ -655,30 +696,40 @@ add_box_edge <- function(cm, x, y, box_info) {
     cm
 }
 
-rotate <- function(char, angle, reorient = "none") {
-    if (angle == 0 || reorient == "symbols") {
-        rchar <- char
-    } else if (angle == 45) {
-        rchar <- r45[[char]]
-    } else if (angle == 90) {
-        rchar <- r90[[char]]
-    } else if (angle == 135) {
-        rchar <- r135[[char]]
-    } else if (angle == 180) {
-        rchar <- r180[[char]]
-    } else if (angle == 225) {
-        rchar <- r225[[char]]
-    } else if (angle == 270) {
-        rchar <- r270[[char]]
-    } else if (angle == 315) {
-        rchar <- r315[[char]]
-    } else {
-        rchar <- NULL
+get_style_rotate <- function(style = "unicode") {
+    rl <- list(r45 = r45, r90 = r90, r135 = r135,
+               r180 = r180, r225 = r225, r270 = r270, r315 = r315)
+
+    if (style == "gamebitmono") {
+        r90[["\u283f"]] <- "\u3000\u20db\u20e8"
+        r270[["\u283f"]] <- "\u3000\u20db\u20e8"
     }
-    if (is.null(rchar)) {
-        warning(paste("Can't rotate", char, angle, "degrees"))
-        char
-    } else {
-        rchar
+
+    function(char, angle, reorient = "none") {
+        if (angle == 0 || reorient == "symbols") {
+            rchar <- char
+        } else if (angle == 45) {
+            rchar <- rl$r45[[char]]
+        } else if (angle == 90) {
+            rchar <- rl$r90[[char]]
+        } else if (angle == 135) {
+            rchar <- rl$r135[[char]]
+        } else if (angle == 180) {
+            rchar <- rl$r180[[char]]
+        } else if (angle == 225) {
+            rchar <- rl$r225[[char]]
+        } else if (angle == 270) {
+            rchar <- rl$r270[[char]]
+        } else if (angle == 315) {
+            rchar <- rl$r315[[char]]
+        } else {
+            rchar <- NULL
+        }
+        if (is.null(rchar)) {
+            warning(paste("Can't rotate", char, angle, "degrees"))
+            char
+        } else {
+            rchar
+        }
     }
 }

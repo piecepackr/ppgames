@@ -13,7 +13,8 @@ cat_piece(
   annotate = FALSE,
   ...,
   file = "",
-  annotation_scale = NULL
+  annotation_scale = NULL,
+  style = c("Unicode", "Game Bit Mono")
 )
 
 cat_move(game, move = NULL, ...)
@@ -50,6 +51,10 @@ Default (\code{""}) is to print to standard output.
 \item{annotation_scale}{Multiplicative factor that scales (stretches) any annotation coordinates.
 By default uses \code{attr(df, "scale_factor") \%||\% 1}.}
 
+\item{style}{If "Unicode" (default) only use glyphs in Unicode proper.
+If "Game Bit Duo" use glyphs in Private Use Area of "Game Bit Duo" font.
+If "Game Bit Mono" use glyphs in Private Use Area of "Game Bit Mono" font.}
+
 \item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
 
 \item{move}{Which move to cat game state (after the move, will use \code{game$dfs[[move]]})
@@ -65,4 +70,7 @@ String of text diagram (returned invisibly).
 outputs them using \code{base::cat()}.  \code{cat_move()} generates
 a plaintext diagram for a move within a game.  \code{cat_game()}
 renders an animation of a game in the terminal.
+}
+\seealso{
+See \url{https://trevorld/game-bit-font} for more information about the \dQuote{Game Bit} family of fonts.
 }
