@@ -35,7 +35,7 @@
 #' @seealso See <https://trevorld/game-bit-font> for more information about the \dQuote{Game Bit} family of fonts.
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
-                      file = "", annotation_scale = NULL, style = c("Unicode", "Game Bit Mono")) {
+                      file = "", annotation_scale = NULL, style = c("Unicode", "Game Bit Mono", "Game Bit Duo")) {
     cat_piece_helper(df, ..., color = color, reorient = reorient, annotate = annotate, ...,
                      file = file, annotation_scale = annotation_scale, style = style)
 }
@@ -48,7 +48,7 @@ cat_piece_helper <- function(df, color = NULL, reorient = "none", annotate = FAL
         if (!is.null(file)) cat("", file = file)
         return(invisible(""))
     }
-    style <- get_style(style = style)
+    style <- get_style(style = style[1])
     df <- clean_df(df)
     if (isTRUE(reorient) || reorient == "all") df$angle <- 0
 

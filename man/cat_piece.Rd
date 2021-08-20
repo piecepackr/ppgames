@@ -14,7 +14,7 @@ cat_piece(
   ...,
   file = "",
   annotation_scale = NULL,
-  style = c("Unicode", "Game Bit Mono")
+  style = c("Unicode", "Game Bit Mono", "Game Bit Duo")
 )
 
 cat_move(game, move = NULL, ...)
