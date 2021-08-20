@@ -107,7 +107,11 @@ get_style <- function(style = "Unicode") {
 
 get_style_rs <- function(style) {
 
-    dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+    if (style == "unicode")
+        dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+    else
+        dominoes_ranks <- c("\U000FCA00", "\U000FCA01", "\U000FCA02", "\U000FCA03", "\U000FCA04",
+                            "\U000FCA05", "\U000FCA06", "\U000FCA07", "\U000FCA08", "\U000FCA09")
     piecepack_ranks <- c("n", "a", "2", "3", "4", "5")
 
     rs <- list(piecepack = piecepack_ranks,
@@ -136,7 +140,11 @@ get_style_ss <- function(style) {
     # Use Half-circle for Moons? \u25d0
     # Use Arrows for Arms?
     # nolint end
-    dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+    if (style == "unicode")
+        dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
+    else
+        dominoes_ranks <- c("\U000FCA00", "\U000FCA01", "\U000FCA02", "\U000FCA03", "\U000FCA04",
+                            "\U000FCA05", "\U000FCA06", "\U000FCA07", "\U000FCA08", "\U000FCA09")
     piecepack_suits <- c("\u2600", "\u263e", "\u265b", "\u2e38")
 
     ss <- list(piecepack = piecepack_suits,

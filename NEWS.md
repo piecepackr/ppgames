@@ -12,6 +12,8 @@ New features
 * ``cat_piece()``, ``plot_move()``, and ``animate_game()`` now support the new argument ``annotation_scale``
   which stretches (or contracts) the placement of the annotated coordinates.
   By default it uses the ``scale_factor`` attribute of the ``df`` argument if present else 1 (#105).
+* ``cat_piece()`` supports new "style" argument which alters which
+  Unicode characters are used in the diagram.
 
 Bug fixes and minor improvements
 --------------------------------
