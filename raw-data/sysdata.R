@@ -29,12 +29,17 @@ r315[["\u3000"]] <- "\u3000"
 # r180[["\u2202"]] <- "\u03ed"
 # nolint end
 r180[["\u2202"]] <- "\u03f1"
-r180[["\u0ed1"]] <- "\u0ed2" ## Spirals (Lao Digit One)
-r180[["\u0ed2"]] <- "\u0ed1" ## Spirals (Lao Digit One)
 r180[["n"]] <- "u"
 r270[["n"]] <- "\u1d59"
 r180[["N"]] <- "N"
 r180[["0"]] <- "0"
+ r90[["\U000FCB50"]] <- "\U000FCB74" # Game Bit PUA
+r180[["\U000FCB50"]] <- "\U000FCB68"
+r270[["\U000FCB50"]] <- "\U000FCB5C"
+ r90[["\U000FCC50"]] <- "\U000FCC74" # Game Bit PUA
+r180[["\U000FCC50"]] <- "\U000FCC68"
+r270[["\U000FCC50"]] <- "\U000FCC5C"
+
 ## Ace
 r90[["A"]] <- "\u2222"
 r180[["A"]] <- "\u2200"
@@ -51,12 +56,32 @@ r270[["\u21bf"]] <- "\u21c0"
 r90[["\u2960"]] <- "\u295e"
 r180[["\u2960"]] <- "\u295d"
 r270[["\u2960"]] <- "\u295b"
+r180[["\u0ed1"]] <- "\u0ed2" ## Spirals (Lao Digit One)
+r180[["\u0ed2"]] <- "\u0ed1" ## Spirals (Lao Digit One)
+ r90[["\U000FCB51"]] <- "\U000FCB75" # Game Bit PUA
+r180[["\U000FCB51"]] <- "\U000FCB69"
+r270[["\U000FCB51"]] <- "\U000FCB5D"
+ r90[["\U000FCC51"]] <- "\U000FCC75" # Game Bit PUA
+r180[["\U000FCC51"]] <- "\U000FCC69"
+r270[["\U000FCC51"]] <- "\U000FCC5D"
 
 r180[["2"]] <- "\u218a"
+ r90[["\U000FCB52"]] <- "\U000FCB76" # Game Bit PUA
+r180[["\U000FCB52"]] <- "\U000FCB6A"
+r270[["\U000FCB52"]] <- "\U000FCB5E"
+ r90[["\U000FCC52"]] <- "\U000FCC76" # Game Bit PUA
+r180[["\U000FCC52"]] <- "\U000FCC6A"
+r270[["\U000FCC52"]] <- "\U000FCC5E"
 
 r90[["3"]] <- "m"
 r180[["3"]] <- "\u218b"
 r270[["3"]] <- "\u03c9"
+ r90[["\U000FCB53"]] <- "\U000FCB77" # Game Bit PUA
+r180[["\U000FCB53"]] <- "\U000FCB6B"
+r270[["\U000FCB53"]] <- "\U000FCB5F"
+ r90[["\U000FCC53"]] <- "\U000FCC77" # Game Bit PUA
+r180[["\U000FCC53"]] <- "\U000FCC6B"
+r270[["\U000FCC53"]] <- "\U000FCC5F"
 
 r180[["4"]] <- "\u152d"
 # nolint start
@@ -64,10 +89,64 @@ r180[["4"]] <- "\u152d"
 # r180[["4"]] <- "\u07c8"
 # r180[["5"]] <- "\u03da"
 # nolint end
+ r90[["\U000FCB54"]] <- "\U000FCB78" # Game Bit PUA
+r180[["\U000FCB54"]] <- "\U000FCB6C"
+r270[["\U000FCB54"]] <- "\U000FCB60"
+ r90[["\U000FCC54"]] <- "\U000FCC78" # Game Bit PUA
+r180[["\U000FCC54"]] <- "\U000FCC6C"
+r270[["\U000FCC54"]] <- "\U000FCC60"
+
 r180[["5"]] <- "\u2185\u0332"
+ r90[["\U000FCB55"]] <- "\U000FCB79" # Game Bit PUA
+r180[["\U000FCB55"]] <- "\U000FCB6D"
+r270[["\U000FCB55"]] <- "\U000FCB61"
+ r90[["\U000FCC55"]] <- "\U000FCC79" # Game Bit PUA
+r180[["\U000FCC55"]] <- "\U000FCC6D"
+r270[["\U000FCC55"]] <- "\U000FCC61"
 
 r180[["6"]] <- "9"
+ r90[["\U000FCB56"]] <- "\U000FCB7A" # Game Bit PUA
+r180[["\U000FCB56"]] <- "\U000FCB6E"
+r270[["\U000FCB56"]] <- "\U000FCB62"
+ r90[["\U000FCC56"]] <- "\U000FCC7A" # Game Bit PUA
+r180[["\U000FCC56"]] <- "\U000FCC6E"
+r270[["\U000FCC56"]] <- "\U000FCC62"
+
+ r90[["\U000FCB57"]] <- "\U000FCB7B" # Game Bit PUA
+r180[["\U000FCB57"]] <- "\U000FCB6F"
+r270[["\U000FCB57"]] <- "\U000FCB63"
+ r90[["\U000FCC57"]] <- "\U000FCC7B" # Game Bit PUA
+r180[["\U000FCC57"]] <- "\U000FCC6F"
+r270[["\U000FCC57"]] <- "\U000FCC63"
+
+ r90[["\U000FCB58"]] <- "\U000FCB7C" # Game Bit PUA
+r180[["\U000FCB58"]] <- "\U000FCB70"
+r270[["\U000FCB58"]] <- "\U000FCB64"
+ r90[["\U000FCC58"]] <- "\U000FCC7C" # Game Bit PUA
+r180[["\U000FCC58"]] <- "\U000FCC70"
+r270[["\U000FCC58"]] <- "\U000FCC64"
+
 r180[["9"]] <- "6"
+ r90[["\U000FCB59"]] <- "\U000FCB7D" # Game Bit PUA
+r180[["\U000FCB59"]] <- "\U000FCB71"
+r270[["\U000FCB59"]] <- "\U000FCB65"
+ r90[["\U000FCC59"]] <- "\U000FCC7D" # Game Bit PUA
+r180[["\U000FCC59"]] <- "\U000FCC71"
+r270[["\U000FCC59"]] <- "\U000FCC65"
+
+ r90[["\U000FCB5A"]] <- "\U000FCB7E" # Game Bit PUA
+r180[["\U000FCB5A"]] <- "\U000FCB72"
+r270[["\U000FCB5A"]] <- "\U000FCB66"
+ r90[["\U000FCC5A"]] <- "\U000FCC7E" # Game Bit PUA
+r180[["\U000FCC5A"]] <- "\U000FCC72"
+r270[["\U000FCC5A"]] <- "\U000FCC66"
+
+ r90[["\U000FCB5B"]] <- "\U000FCB7F" # Game Bit PUA
+r180[["\U000FCB5B"]] <- "\U000FCB73"
+r270[["\U000FCB5B"]] <- "\U000FCB67"
+ r90[["\U000FCC5B"]] <- "\U000FCC7F" # Game Bit PUA
+r180[["\U000FCC5B"]] <- "\U000FCC73"
+r270[["\U000FCC5B"]] <- "\U000FCC67"
 
 ### Piecepack
 ## Suns
@@ -92,6 +171,25 @@ r270[["\u263c"]] <- "\u263c"
 r315[["\u2600"]] <- "\u2600"
 r315[["\u2609"]] <- "\u2609"
 r315[["\u263c"]] <- "\u263c"
+ r90[["\U000FCB00"]] <- "\U000FCB0C" # Game Bit PUA (Black)
+r180[["\U000FCB00"]] <- "\U000FCB08"
+r270[["\U000FCB00"]] <- "\U000FCB04"
+ r90[["\U000FCC00"]] <- "\U000FCC0C" # Game Bit PUA (Black)
+r180[["\U000FCC00"]] <- "\U000FCC08"
+r270[["\U000FCC00"]] <- "\U000FCC04"
+ r90[["\U000FCE00"]] <- "\U000FCE0C" # Game Bit PUA (Black)
+r180[["\U000FCE00"]] <- "\U000FCE08"
+r270[["\U000FCE00"]] <- "\U000FCE04"
+
+ r90[["\U000FCB10"]] <- "\U000FCB1C" # Game Bit PUA (White)
+r180[["\U000FCB10"]] <- "\U000FCB18"
+r270[["\U000FCB10"]] <- "\U000FCB14"
+ r90[["\U000FCC10"]] <- "\U000FCC1C" # Game Bit PUA (White)
+r180[["\U000FCC10"]] <- "\U000FCC18"
+r270[["\U000FCC10"]] <- "\U000FCC14"
+ r90[["\U000FCE10"]] <- "\U000FCE1C" # Game Bit PUA (White)
+r180[["\U000FCE10"]] <- "\U000FCE18"
+r270[["\U000FCE10"]] <- "\U000FCE14"
 
 ## Moons
 r90[["\u25d0"]] <- "\u25d3"
@@ -102,16 +200,73 @@ r180[["\u25d8"]] <- "\u25d8"
 r270[["\u25d8"]] <- "\u25d8"
 r180[["\u263e"]] <- "\u263d"
 r180[["\u263d"]] <- "\u263e"
+ r90[["\U000FCB01"]] <- "\U000FCB0D" # Game Bit PUA (Black)
+r180[["\U000FCB01"]] <- "\U000FCB09"
+r270[["\U000FCB01"]] <- "\U000FCB05"
+ r90[["\U000FCC01"]] <- "\U000FCC0D" # Game Bit PUA (Black)
+r180[["\U000FCC01"]] <- "\U000FCC09"
+r270[["\U000FCC01"]] <- "\U000FCC05"
+ r90[["\U000FCE01"]] <- "\U000FCE0D" # Game Bit PUA (Black)
+r180[["\U000FCE01"]] <- "\U000FCE09"
+r270[["\U000FCE01"]] <- "\U000FCE05"
+
+ r90[["\U000FCB11"]] <- "\U000FCB1D" # Game Bit PUA (White)
+r180[["\U000FCB11"]] <- "\U000FCB19"
+r270[["\U000FCB11"]] <- "\U000FCB15"
+ r90[["\U000FCC11"]] <- "\U000FCC1D" # Game Bit PUA (White)
+r180[["\U000FCC11"]] <- "\U000FCC19"
+r270[["\U000FCC11"]] <- "\U000FCC15"
+ r90[["\U000FCE11"]] <- "\U000FCE1D" # Game Bit PUA (White)
+r180[["\U000FCE11"]] <- "\U000FCE19"
+r270[["\U000FCE11"]] <- "\U000FCE15"
 
 ## Crowns
 r180[["\u2641"]] <- "\u2640" # Earth
 r180[["\u2640"]] <- "\u2641" # Venus
 r180[["\u0238"]] <- "\u0239" # Small Letter db Digraph
+ r90[["\U000FCB02"]] <- "\U000FCB0E" # Game Bit PUA (Black)
+r180[["\U000FCB02"]] <- "\U000FCB0A"
+r270[["\U000FCB02"]] <- "\U000FCB06"
+ r90[["\U000FCC02"]] <- "\U000FCC0E" # Game Bit PUA (Black)
+r180[["\U000FCC02"]] <- "\U000FCC0A"
+r270[["\U000FCC02"]] <- "\U000FCC06"
+ r90[["\U000FCE02"]] <- "\U000FCE0E" # Game Bit PUA (Black)
+r180[["\U000FCE02"]] <- "\U000FCE0A"
+r270[["\U000FCE02"]] <- "\U000FCE06"
+
+ r90[["\U000FCB12"]] <- "\U000FCB1E" # Game Bit PUA (White)
+r180[["\U000FCB12"]] <- "\U000FCB1A"
+r270[["\U000FCB12"]] <- "\U000FCB16"
+ r90[["\U000FCC12"]] <- "\U000FCC1E" # Game Bit PUA (White)
+r180[["\U000FCC12"]] <- "\U000FCC1A"
+r270[["\U000FCC12"]] <- "\U000FCC16"
+ r90[["\U000FCE12"]] <- "\U000FCE1E" # Game Bit PUA (White)
+r180[["\U000FCE12"]] <- "\U000FCE1A"
+r270[["\U000FCE12"]] <- "\U000FCE16"
 
 ## Arms
 r180[["\u2020"]] <- "\u2e38" ## Dagger
 r180[["\u2e38"]] <- "\u2020" ## Turned Dagger
 r180[["\u2021"]] <- "\u2021" ## Double Dagger
+ r90[["\U000FCB03"]] <- "\U000FCB0F" # Game Bit PUA (Black)
+r180[["\U000FCB03"]] <- "\U000FCB0B"
+r270[["\U000FCB03"]] <- "\U000FCB07"
+ r90[["\U000FCC03"]] <- "\U000FCC0F" # Game Bit PUA (Black)
+r180[["\U000FCC03"]] <- "\U000FCC0B"
+r270[["\U000FCC03"]] <- "\U000FCC07"
+ r90[["\U000FCE03"]] <- "\U000FCE0F" # Game Bit PUA (Black)
+r180[["\U000FCE03"]] <- "\U000FCE0B"
+r270[["\U000FCE03"]] <- "\U000FCE07"
+
+ r90[["\U000FCB13"]] <- "\U000FCB1F" # Game Bit PUA (White)
+r180[["\U000FCB13"]] <- "\U000FCB1B"
+r270[["\U000FCB13"]] <- "\U000FCB17"
+ r90[["\U000FCC13"]] <- "\U000FCC1F" # Game Bit PUA (White)
+r180[["\U000FCC13"]] <- "\U000FCC1B"
+r270[["\U000FCC13"]] <- "\U000FCC17"
+ r90[["\U000FCE13"]] <- "\U000FCE1F" # Game Bit PUA (White)
+r180[["\U000FCE13"]] <- "\U000FCE1B"
+r270[["\U000FCE13"]] <- "\U000FCE17"
 
 ## Misc
 r180[["\u260a"]] <- "\u260b" # Ascending/Descending nodes
@@ -123,28 +278,100 @@ r180[["\u260b"]] <- "\u260a" # Ascending/Descending nodes
 r90[["\u2665"]] <- "\u2765" # Rotated Black Heart
 r90[["\u2764"]] <- "\u2765"
 r180[["\u2665"]] <- "\u03c9\u0302"
+ r90[["\U000FCB20"]] <- "\U000FCB2C" # Game Bit PUA (Black)
+r180[["\U000FCB20"]] <- "\U000FCB28"
+r270[["\U000FCB20"]] <- "\U000FCB24"
+ r90[["\U000FCC20"]] <- "\U000FCC2C" # Game Bit PUA (Black)
+r180[["\U000FCC20"]] <- "\U000FCC28"
+r270[["\U000FCC20"]] <- "\U000FCC24"
+ r90[["\U000FCE20"]] <- "\U000FCE2C" # Game Bit PUA (Black)
+r180[["\U000FCE20"]] <- "\U000FCE28"
+r270[["\U000FCE20"]] <- "\U000FCE24"
 # White Heart
 r90[["\u2661"]] <- "\u2765"
 r180[["\u2661"]] <- "\u03c9\u0302"
+ r90[["\U000FCB30"]] <- "\U000FCB3C" # Game Bit PUA (White)
+r180[["\U000FCB30"]] <- "\U000FCB38"
+r270[["\U000FCB30"]] <- "\U000FCB34"
+ r90[["\U000FCC30"]] <- "\U000FCC3C" # Game Bit PUA (White)
+r180[["\U000FCC30"]] <- "\U000FCC38"
+r270[["\U000FCC30"]] <- "\U000FCC34"
+ r90[["\U000FCE30"]] <- "\U000FCE3C" # Game Bit PUA (White)
+r180[["\U000FCE30"]] <- "\U000FCE38"
+r270[["\U000FCE30"]] <- "\U000FCE34"
 ## Spades
 # Black
 r180[["\u2660"]] <- "\u2764\u030d"
+ r90[["\U000FCB21"]] <- "\U000FCB2D" # Game Bit PUA (Black)
+r180[["\U000FCB21"]] <- "\U000FCB29"
+r270[["\U000FCB21"]] <- "\U000FCB25"
+ r90[["\U000FCC21"]] <- "\U000FCC2D" # Game Bit PUA (Black)
+r180[["\U000FCC21"]] <- "\U000FCC29"
+r270[["\U000FCC21"]] <- "\U000FCC25"
+ r90[["\U000FCE21"]] <- "\U000FCE2D" # Game Bit PUA (Black)
+r180[["\U000FCE21"]] <- "\U000FCE29"
+r270[["\U000FCE21"]] <- "\U000FCE25"
 # White
 r180[["\u2664"]] <- "\u2661\u030d"
+ r90[["\U000FCB31"]] <- "\U000FCB3D" # Game Bit PUA (White)
+r180[["\U000FCB31"]] <- "\U000FCB39"
+r270[["\U000FCB31"]] <- "\U000FCB35"
+ r90[["\U000FCC31"]] <- "\U000FCC3D" # Game Bit PUA (White)
+r180[["\U000FCC31"]] <- "\U000FCC39"
+r270[["\U000FCC31"]] <- "\U000FCC35"
+ r90[["\U000FCE31"]] <- "\U000FCE3D" # Game Bit PUA (White)
+r180[["\U000FCE31"]] <- "\U000FCE39"
+r270[["\U000FCE31"]] <- "\U000FCE35"
+## Clubs
+# Black
+r180[["\u2663"]] <- "\u2235\u0304"
+ r90[["\U000FCB22"]] <- "\U000FCB2E" # Game Bit PUA (White)
+r180[["\U000FCB22"]] <- "\U000FCB2A"
+r270[["\U000FCB22"]] <- "\U000FCB26"
+ r90[["\U000FCC22"]] <- "\U000FCC2E" # Game Bit PUA (White)
+r180[["\U000FCC22"]] <- "\U000FCC2A"
+r270[["\U000FCC22"]] <- "\U000FCC26"
+ r90[["\U000FCE22"]] <- "\U000FCE2E" # Game Bit PUA (White)
+r180[["\U000FCE22"]] <- "\U000FCE2A"
+r270[["\U000FCE22"]] <- "\U000FCE26"
+# White
+r180[["\u2667"]] <- "\u2235\u0304"
+ r90[["\U000FCB32"]] <- "\U000FCB3E" # Game Bit PUA (White)
+r180[["\U000FCB32"]] <- "\U000FCB3A"
+r270[["\U000FCB32"]] <- "\U000FCB36"
+ r90[["\U000FCC32"]] <- "\U000FCC3E" # Game Bit PUA (White)
+r180[["\U000FCC32"]] <- "\U000FCC3A"
+r270[["\U000FCC32"]] <- "\U000FCC36"
+ r90[["\U000FCE32"]] <- "\U000FCE3E" # Game Bit PUA (White)
+r180[["\U000FCE32"]] <- "\U000FCE3A"
+r270[["\U000FCE32"]] <- "\U000FCE36"
 ## Diamonds
 # Black
 r90[["\u2666"]] <- "\u25c6"
 r180[["\u2666"]] <- "\u2666"
 r270[["\u2666"]] <- "\u25c6"
+ r90[["\U000FCB23"]] <- "\U000FCB2F" # Game Bit PUA (White)
+r180[["\U000FCB23"]] <- "\U000FCB2B"
+r270[["\U000FCB23"]] <- "\U000FCB27"
+ r90[["\U000FCC23"]] <- "\U000FCC2F" # Game Bit PUA (White)
+r180[["\U000FCC23"]] <- "\U000FCC2B"
+r270[["\U000FCC23"]] <- "\U000FCC27"
+ r90[["\U000FCE23"]] <- "\U000FCE2F" # Game Bit PUA (White)
+r180[["\U000FCE23"]] <- "\U000FCE2B"
+r270[["\U000FCE23"]] <- "\U000FCE27"
 # White
 r90[["\u2662"]] <- "\u25c7"
 r180[["\u2662"]] <- "\u2662"
 r270[["\u2662"]] <- "\u25c7"
-## Clubs
-# Black
-r180[["\u2663"]] <- "\u2235\u0304"
-# White
-r180[["\u2667"]] <- "\u2235\u0304"
+ r90[["\U000FCB33"]] <- "\U000FCB3F" # Game Bit PUA (White)
+r180[["\U000FCB33"]] <- "\U000FCB3B"
+r270[["\U000FCB33"]] <- "\U000FCB37"
+ r90[["\U000FCC33"]] <- "\U000FCC3F" # Game Bit PUA (White)
+r180[["\U000FCC33"]] <- "\U000FCC3B"
+r270[["\U000FCC33"]] <- "\U000FCC37"
+ r90[["\U000FCE33"]] <- "\U000FCE3F" # Game Bit PUA (White)
+r180[["\U000FCE33"]] <- "\U000FCE3B"
+r270[["\U000FCE33"]] <- "\U000FCE37"
 
 ### Chess symbols
 # https://www.unicode.org/charts/PDF/U1FA00.pdf
@@ -480,7 +707,7 @@ r225[["\u25b3"]] <- "\u25ff"
 r270[["\u25b3"]] <- "\u25b7"
 r315[["\u25b3"]] <- "\u25f9"
 # Various Symmetric Circles
-for (circle in c("\u25cb", "\u25cc", "\u25ce", "\u25cf")) {
+for (circle in c("\u25cb", "\u25cc", "\u25ce", "\u25cf", "\u20dd")) {
     r45[[circle]] <- circle
     r90[[circle]] <- circle
     r135[[circle]] <- circle
@@ -489,6 +716,33 @@ for (circle in c("\u25cb", "\u25cc", "\u25ce", "\u25cf")) {
     r270[[circle]] <- circle
     r315[[circle]] <- circle
 }
+
+# Enclosing Coin
+ r90[["\U000FCE50"]] <- "\U000FCE5C" # Game Bit PUA
+r180[["\U000FCE50"]] <- "\U000FCE58"
+r270[["\U000FCE50"]] <- "\U000FCE54"
+
+# Enclosing Pawn
+ r45[["\u20df"]] <- "\u20de"
+ r90[["\u20df"]] <- "\u20df"
+r135[["\u20df"]] <- "\u20de"
+r180[["\u20df"]] <- "\u20df"
+r225[["\u20df"]] <- "\u20de"
+r270[["\u20df"]] <- "\u20df"
+r315[["\u20df"]] <- "\u20de"
+
+ r90[["\U000FCDE0"]] <- "\U000FCDEC" # Game Bit PUA
+r180[["\U000FCDE0"]] <- "\U000FCDE8"
+r270[["\U000FCDE0"]] <- "\U000FCDE4"
+
+# Enclosing Die
+ r45[["\u20de"]] <- "\u20df"
+ r90[["\u20de"]] <- "\u20de"
+r135[["\u20de"]] <- "\u20df"
+r180[["\u20de"]] <- "\u20de"
+r225[["\u20de"]] <- "\u20df"
+r270[["\u20de"]] <- "\u20de"
+r315[["\u20de"]] <- "\u20df"
 
 die_subs <- list()
 die_subs[["\u00b7\u20de"]] <- "\u2680" # Die Face-1
@@ -508,7 +762,7 @@ top_subs[["\u25b2"]] <- "\u25a0"
 top_subs[["\u25b3"]] <- "\u25a1"
 
 ## Box info
-# [top, right, bottom, left] 0-none 1-light 2-dark
+# [top, right, bottom, left] 0-none 1-light 2-heavy 3-matted-heavy
 char2bi <- list()
 char2bi[["\u2500"]] <- c(0, 1, 0, 1)
 char2bi[["\u2501"]] <- c(0, 2, 0, 2)
@@ -578,8 +832,22 @@ char2bi[["\u2548"]] <- c(1, 2, 2, 2)
 char2bi[["\u2549"]] <- c(2, 1, 2, 2)
 char2bi[["\u254a"]] <- c(2, 2, 2, 1)
 char2bi[["\u254b"]] <- c(2, 2, 2, 2)
+char2bi[["\U000fdd8c"]] <- c(1, 0, 1, 3)
+char2bi[["\U000fdd8d"]] <- c(3, 1, 0, 1)
+char2bi[["\U000fdd8e"]] <- c(1, 3, 1, 0)
+char2bi[["\U000fdd8f"]] <- c(0, 1, 3, 1)
+char2bi[["\U000fdd90"]] <- c(1, 1, 1, 3)
+char2bi[["\U000fdd91"]] <- c(3, 1, 1, 1)
+char2bi[["\U000fdd92"]] <- c(1, 3, 1, 1)
+char2bi[["\U000fdd93"]] <- c(1, 1, 3, 1)
+char2bi[["\U000fdd94"]] <- c(1, 2, 1, 3)
+char2bi[["\U000fdd95"]] <- c(3, 1, 2, 1)
+char2bi[["\U000fdd96"]] <- c(1, 3, 1, 2)
+char2bi[["\U000fdd97"]] <- c(2, 1, 3, 1)
+char2bi[["\U000fdd98"]] <- c(1, 3, 1, 3)
+char2bi[["\U000fdd99"]] <- c(3, 1, 3, 1)
 
-# [top, right, bottom, left] 0-none 1-light 2-dark
+# [top, right, bottom, left] 0-none 1-light 2-heavy 3-matted-heavy
 ## Box chars
 box2char <- list()
 box2char[["0101"]] <- "\u2500"
@@ -650,6 +918,20 @@ box2char[["1222"]] <- "\u2548"
 box2char[["2122"]] <- "\u2549"
 box2char[["2221"]] <- "\u254a"
 box2char[["2222"]] <- "\u254b"
+box2char[["1013"]] <- "\U000fdd8c"
+box2char[["3101"]] <- "\U000fdd8d"
+box2char[["1310"]] <- "\U000fdd8e"
+box2char[["0131"]] <- "\U000fdd8f"
+box2char[["1113"]] <- "\U000fdd90"
+box2char[["3111"]] <- "\U000fdd91"
+box2char[["1311"]] <- "\U000fdd92"
+box2char[["1131"]] <- "\U000fdd93"
+box2char[["1213"]] <- "\U000fdd94"
+box2char[["3121"]] <- "\U000fdd95"
+box2char[["1312"]] <- "\U000fdd96"
+box2char[["2131"]] <- "\U000fdd97"
+box2char[["1313"]] <- "\U000fdd98"
+box2char[["3131"]] <- "\U000fdd99"
 
 # nolint start
 # ppgames_spreadsheet <- "https://docs.google.com/spreadsheets/d/1dd9HuSLgiYOJyP-7wyV3ZjAbnoDJgQR2BWWkD1JbXTc"
