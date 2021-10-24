@@ -123,9 +123,9 @@ get_style_combining <- function(style) {
 
     die_suits <- rep("\u20de", 6)
     if (style == "unicode") {
-        piecepack_suits = die_suits
-        french_suits_black = die_suits
-        french_suits_white = die_suits
+        piecepack_suits <- die_suits
+        french_suits_black <- die_suits
+        french_suits_white <- die_suits
     } else {
         piecepack_suits    <- intToUtf8(utf8ToInt("\U000FCE00") + 0:3, multiple = TRUE)
         french_suits_black <- intToUtf8(utf8ToInt("\U000FCE20") + 0:3, multiple = TRUE)
@@ -146,7 +146,9 @@ get_style_rs <- function(style, big = FALSE) {
         dominoes_ranks <- c(" ", "\u00b7", "\u280c", "\u22f0", "\u2237", "\u2059", "\u283f")
     } else {
         dominoes_ranks <- c("\U000FCA00", "\U000FCA01", "\U000FCA02", "\U000FCA03", "\U000FCA04",
-                            "\U000FCA05", "\U000FCA06", "\U000FCA07", "\U000FCA08", "\U000FCA09")
+                            "\U000FCA05", "\U000FCA06", "\U000FCA07", "\U000FCA08", "\U000FCA09",
+                            "\U000FCA0A", "\U000FCA0B", "\U000FCA0C", "\U000FCA0D", "\U000FCA0E",
+                            "\U000FCA0F", "\U000FCA10", "\U000FCA11", "\U000FCA12")
     }
 
     if (style == "unicode") {

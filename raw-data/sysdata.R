@@ -463,37 +463,63 @@ r270[["\u26c3"]] <- "\u26c3"
 r315[["\u26c3"]] <- "\u26c3"
 
 # Game Bit PUA Domino Pips
-# Zero
- r90[["\U000FCA00"]] <- "\U000FCA10"
-r180[["\U000FCA00"]] <- "\U000FCA20"
-r270[["\U000FCA00"]] <- "\U000FCA30"
- r90[["\U000FCA01"]] <- "\U000FCA11"
-r180[["\U000FCA01"]] <- "\U000FCA21"
-r270[["\U000FCA01"]] <- "\U000FCA31"
- r90[["\U000FCA02"]] <- "\U000FCA12"
-r180[["\U000FCA02"]] <- "\U000FCA22"
-r270[["\U000FCA02"]] <- "\U000FCA32"
- r90[["\U000FCA03"]] <- "\U000FCA13"
-r180[["\U000FCA03"]] <- "\U000FCA23"
-r270[["\U000FCA03"]] <- "\U000FCA33"
- r90[["\U000FCA04"]] <- "\U000FCA14"
-r180[["\U000FCA04"]] <- "\U000FCA24"
-r270[["\U000FCA04"]] <- "\U000FCA34"
- r90[["\U000FCA05"]] <- "\U000FCA15"
-r180[["\U000FCA05"]] <- "\U000FCA25"
-r270[["\U000FCA05"]] <- "\U000FCA35"
- r90[["\U000FCA06"]] <- "\U000FCA16"
-r180[["\U000FCA06"]] <- "\U000FCA26"
-r270[["\U000FCA06"]] <- "\U000FCA36"
- r90[["\U000FCA07"]] <- "\U000FCA17"
-r180[["\U000FCA07"]] <- "\U000FCA27"
-r270[["\U000FCA07"]] <- "\U000FCA37"
- r90[["\U000FCA08"]] <- "\U000FCA18"
-r180[["\U000FCA08"]] <- "\U000FCA28"
-r270[["\U000FCA08"]] <- "\U000FCA38"
- r90[["\U000FCA09"]] <- "\U000FCA19"
-r180[["\U000FCA09"]] <- "\U000FCA29"
-r270[["\U000FCA09"]] <- "\U000FCA39"
+ r90[["\U000FCA00"]] <- "\U000FCA13" # Zero
+ r90[["\U000FCA01"]] <- "\U000FCA14" # One
+ r90[["\U000FCA02"]] <- "\U000FCA15" # Two
+ r90[["\U000FCA03"]] <- "\U000FCA16" # Three
+ r90[["\U000FCA04"]] <- "\U000FCA17" # Four
+ r90[["\U000FCA05"]] <- "\U000FCA18" # Five
+ r90[["\U000FCA06"]] <- "\U000FCA19" # Six
+ r90[["\U000FCA07"]] <- "\U000FCA1A" # Seven
+ r90[["\U000FCA08"]] <- "\U000FCA1B" # Eight
+ r90[["\U000FCA09"]] <- "\U000FCA1C" # Nine
+ r90[["\U000FCA0A"]] <- "\U000FCA1D" # Ten
+ r90[["\U000FCA0B"]] <- "\U000FCA1E" # Eleven
+ r90[["\U000FCA0C"]] <- "\U000FCA1F" # Twelve
+ r90[["\U000FCA0D"]] <- "\U000FCA20" # Thirteen
+ r90[["\U000FCA0E"]] <- "\U000FCA21" # Fourteen
+ r90[["\U000FCA0F"]] <- "\U000FCA22" # Fifteen
+ r90[["\U000FCA10"]] <- "\U000FCA23" # Sixteen
+ r90[["\U000FCA11"]] <- "\U000FCA24" # Seventeen
+ r90[["\U000FCA12"]] <- "\U000FCA25" # Eighteen
+r180[["\U000FCA00"]] <- "\U000FCA26" # Zero
+r180[["\U000FCA01"]] <- "\U000FCA27" # One
+r180[["\U000FCA02"]] <- "\U000FCA28" # Two
+r180[["\U000FCA03"]] <- "\U000FCA29" # Three
+r180[["\U000FCA04"]] <- "\U000FCA2A" # Four
+r180[["\U000FCA05"]] <- "\U000FCA2B" # Five
+r180[["\U000FCA06"]] <- "\U000FCA2C" # Six
+r180[["\U000FCA07"]] <- "\U000FCA2D" # Seven
+r180[["\U000FCA08"]] <- "\U000FCA2E" # Eight
+r180[["\U000FCA09"]] <- "\U000FCA2F" # Nine
+r180[["\U000FCA0A"]] <- "\U000FCA30" # Ten
+r180[["\U000FCA0B"]] <- "\U000FCA31" # Eleven
+r180[["\U000FCA0C"]] <- "\U000FCA32" # Twelve
+r180[["\U000FCA0D"]] <- "\U000FCA33" # Thirteen
+r180[["\U000FCA0E"]] <- "\U000FCA34" # Fourteen
+r180[["\U000FCA0F"]] <- "\U000FCA35" # Fifteen
+r180[["\U000FCA10"]] <- "\U000FCA36" # Sixteen
+r180[["\U000FCA11"]] <- "\U000FCA37" # Seventeen
+r180[["\U000FCA12"]] <- "\U000FCA38" # Eighteen
+r270[["\U000FCA00"]] <- "\U000FCA39" # Zero
+r270[["\U000FCA01"]] <- "\U000FCA3A" # One
+r270[["\U000FCA02"]] <- "\U000FCA3B" # Two
+r270[["\U000FCA03"]] <- "\U000FCA3C" # Three
+r270[["\U000FCA04"]] <- "\U000FCA3D" # Four
+r270[["\U000FCA05"]] <- "\U000FCA3E" # Five
+r270[["\U000FCA06"]] <- "\U000FCA3F" # Six
+r270[["\U000FCA07"]] <- "\U000FCA40" # Seven
+r270[["\U000FCA08"]] <- "\U000FCA41" # Eight
+r270[["\U000FCA09"]] <- "\U000FCA42" # Nine
+r270[["\U000FCA0A"]] <- "\U000FCA43" # Ten
+r270[["\U000FCA0B"]] <- "\U000FCA44" # Eleven
+r270[["\U000FCA0C"]] <- "\U000FCA45" # Twelve
+r270[["\U000FCA0D"]] <- "\U000FCA46" # Thirteen
+r270[["\U000FCA0E"]] <- "\U000FCA47" # Fourteen
+r270[["\U000FCA0F"]] <- "\U000FCA48" # Fifteen
+r270[["\U000FCA10"]] <- "\U000FCA49" # Sixteen
+r270[["\U000FCA11"]] <- "\U000FCA4A" # Seventeen
+r270[["\U000FCA12"]] <- "\U000FCA4B" # Eighteen
 
 # Middle Dot
 r45[["\u00b7"]] <- "\u00b7"
