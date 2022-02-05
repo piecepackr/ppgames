@@ -35,6 +35,11 @@ server <- function(input, output, session) {
     if (!has_animation)
         showNotification("Neither 'animation' or 'gifski' packages installed.  GIF animation disabled.",
                          type = "warning")
+
+    if (!has_dejavu)
+        showNotification('"Dejavu Sans" font not detected.  Falling back to "sans" style.',
+                         type = "warning")
+
     if (!has_fansi)
         showNotification("'fansi' package not installed. 'cat_piece' 'color' option disabled.",
                          type = "warning")

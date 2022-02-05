@@ -4,6 +4,7 @@ has_fansi <- requireNamespace("fansi", quietly = TRUE)
 has_piecenikr <- requireNamespace("piecenikr", quietly = TRUE)
 has_rgl <- requireNamespace("rgl", quietly = TRUE)
 has_tradgames <- requireNamespace("tradgames", quietly = TRUE)
+has_dejavu <- piecepackr::has_font("Dejavu Sans")
 
 # parse PPN game
 ppn_link <- a(href="https://trevorldavis.com/piecepackr/portable-piecepack-notation.html", "PPN")
@@ -100,11 +101,19 @@ moveServer <- function(id, game) {
 }
 
 # plot move with a specified renderer
-envir <- piecepackr::game_systems("dejavu")
+if (has_dejavu) {
+    envir <- piecepackr::game_systems("dejavu")
+} else {
+    envir <- piecepackr::game_systems("sans")
+}
 renderers <- c("grid.piece", "cat_piece")
 if (has_rgl) {
     renderers <- append(renderers, "piece3d")
-    envir3d <- piecepackr::game_systems("dejavu3d")
+    if (has_dejavu) {
+        envir3d <- piecepackr::game_systems("dejavu3d")
+    } else {
+        envir3d <- piecepackr::game_systems("sans3d")
+    }
 }
 # Support Looney Pyramids if available
 if (has_piecenikr) {
