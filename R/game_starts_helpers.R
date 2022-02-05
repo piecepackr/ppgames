@@ -5,7 +5,7 @@ df_donut_tiles <- function(seed = NULL, tiles = NULL, x0 = 1.5, y0 = 1.5, face =
                      x = x0 + c(rep(seq(0, 8, 2), 2), 0, 2, 6, 8, rep(seq(0, 8, 2), 2)),
                      y = y0 + c(rep(8, 5), rep(6, 5), rep(4, 4), rep(2, 5), rep(0, 5)))
     if (is.null(tiles)) {
-        df_tsr <- tibble(suit = rep(1:4, each = 6), rank = rep(1:6, 4))[sample.int(24), ]
+        df_tsr <- tibble(suit = rep(1:4, each = 6), rank = rep(1:6, 4))[sample.int(24L), ]
     } else {
         df_tsr <- process_tiles(tiles)
     }

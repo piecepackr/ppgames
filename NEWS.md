@@ -34,6 +34,7 @@ Bug fixes and minor improvements
 * In game starting functions with argument `seed` we now use `withr::local_seed()` instead of `set.seed()`
   and if `seed = NULL` we don't try to set any seed at all (#112).
 * There are now more informative error messages being raised by ``rlang::abort()`` (#109, #111).
+* Fixes a bug in setting coin ranks in `df_triactor()`.
 
 ppgames 0.6.1
 =============
