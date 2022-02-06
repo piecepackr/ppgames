@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: ppgames
 Type: Package
 Title: Piecepack Games
-Version: 0.6.2-23
+Version: 0.6.2-24
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: Functions to generate piecepack game graphics, rulesets, and books as well as functions to parse "Portable Piecepack Notation" files and a "Fuji-san" solver.
@@ -18,7 +18,7 @@ Imports:
     grid,
     grDevices,
     knitr,
-    piecepackr (>= 1.8.1),
+    piecepackr (>= 1.10.0-10),
     R6,
     rlang,
     snakecase,
@@ -31,18 +31,15 @@ Imports:
     yaml
 Remotes: github::piecepackr/piecepackr
 Suggests:
-    animation (>= 2.7),
     argparse,
     fansi,
     gifski,
     igraph,
     png,
     purrr,
-    rayrender,
     rgl,
     shiny,
     testthat,
-    tweenr,
     vdiffr
 SystemRequirements: pandoc, xelatex
 Roxygen: list(markdown = TRUE)

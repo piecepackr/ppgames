@@ -37,7 +37,7 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{...}{Passed to \code{\link[piecepackr:render_piece]{piecepackr::render_piece()}}}
 
-\item{.f}{Low level graphics function to use e.g. \code{grid.piece}, \code{piece3d}, or \code{piece}.}
+\item{.f}{Low level graphics function to use e.g. \code{\link[piecepackr:grid.piece]{grid.piece()}}, \code{\link[piecepackr:piece3d]{piece3d()}}, \code{\link[piecepackr:piece]{piece()}}, or \code{\link[piecepackr:piece_mesh]{piece_mesh()}}.}
 
 \item{cfg}{A piecepackr configuration list}
 

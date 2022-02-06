@@ -342,6 +342,24 @@ get_game_offsets <- function(game, annotate = FALSE, ...) {
     list(x = xoffset, y = yoffset)
 }
 
+get_df_from_move <- function(game, move = NULL) {
+    if (is.null(move)) {
+        utils::tail(game$dfs, 1)[[1]]
+    } else {
+        game$dfs[[move]]
+    }
+}
+
+min2offset <- function(min, lbound = 0.5) {
+    if (is.na(min)) {
+        NA_real_
+    } else if (min < lbound) {
+        lbound - min
+    } else {
+        0
+    }
+}
+
 #' @rdname cat_piece
 #' @param fps Frames per second.
 #' @export

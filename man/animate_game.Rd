@@ -35,7 +35,7 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{...}{Arguments to \code{pmap_piece}}
 
-\item{.f}{Low level graphics function to use e.g. \code{grid.piece}, \code{piece3d}, or \code{piece}.}
+\item{.f}{Low level graphics function to use e.g. \code{\link[piecepackr:grid.piece]{grid.piece()}}, \code{\link[piecepackr:piece3d]{piece3d()}}, \code{\link[piecepackr:piece]{piece()}}, or \code{\link[piecepackr:piece_mesh]{piece_mesh()}}.}
 
 \item{cfg}{A piecepackr configuration list}
 
@@ -65,4 +65,15 @@ Nothing, as a side effect saves an animation of ppn game
 }
 \description{
 Animate a ppn game
+}
+\examples{
+  game_file <- system.file("ppn/tic-tac-toe.ppn", package = "ppgames")
+  game <- read_ppn(game_file)[[1]]
+  if (require("gifski")) {
+    animate_game(game, file = "tic-tac-toe.gif")
+    unlink("tic-tac-toe.gif")
+  }
+}
+\seealso{
+\code{\link[piecepackr:animate_piece]{piecepackr::animate_piece()}}
 }
