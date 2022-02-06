@@ -14,6 +14,9 @@ New features
   By default it uses the ``scale_factor`` attribute of the ``df`` argument if present else 1 (#105).
 * ``cat_piece()`` supports new "style" argument which alters which
   Unicode characters are used in the diagram.
+* New starting board generators for specific games:
+
+  - ``df_brandubh()``
 
 Bug fixes and minor improvements
 --------------------------------

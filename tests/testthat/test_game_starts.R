@@ -20,6 +20,7 @@ test_that("game diagrams work as expected", {
     verify_output("../text_diagrams/alquerque.txt", cat_piece(df_alquerque()))
     verify_output("../text_diagrams/alquerque_matchsticks.txt", cat_piece(df_alquerque(TRUE)))
     verify_output("../text_diagrams/backgammon.txt", cat_piece(df_backgammon()))
+    verify_output("../text_diagrams/brandubh.txt", cat_piece(df_brandubh()))
     verify_output("../text_diagrams/breakthrough.txt", cat_piece(df_breakthrough()))
     verify_output("../text_diagrams/checkers.txt", cat_piece(df_checkers()))
     verify_output("../text_diagrams/chinese_checkers.txt", cat_piece(df_chinese_checkers(), reorient="all"))

@@ -50,6 +50,7 @@
 \alias{df_alquerque}
 \alias{df_american_checkers}
 \alias{df_awithlaknannai_mosona}
+\alias{df_brandubh}
 \alias{df_english_draughts}
 \alias{df_checkers}
 \alias{df_backgammon}
@@ -162,6 +163,8 @@ df_american_checkers()
 
 df_awithlaknannai_mosona(has_matchsticks = FALSE)
 
+df_brandubh()
+
 df_english_draughts()
 
 df_checkers()
@@ -234,6 +237,8 @@ and icehouse pieces.  See \url{https://www.ludism.org/ppwiki/AlienCity}.}
 \item{Awithlaknannai Mosona}{Traditional Zuni Alquerque variant.
 See \url{https://en.wikipedia.org/wiki/Awithlaknannai_Mosona}.}
 \item{Backgammon}{One of the oldest board games.  See \url{https://www.ludism.org/ppwiki/Backgammon}.}
+\item{Brandubh}{AKA Brandub, a two-player abstract of the hnefatafl family played by the Irish.
+See \url{http://www.cyningstan.com/game/125/brandub} for more information.}
 \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
 that won the 2001 8x8 Game Design Competition.
 See \url{https://en.wikipedia.org/wiki/Breakthrough_(board_game)}.}

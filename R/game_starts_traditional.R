@@ -73,6 +73,29 @@ df_awithlaknannai_mosona <- function(has_matchsticks = FALSE) {
 
 #' @rdname df_game
 #' @export
+df_brandubh <- function() {
+    df_t <- df_rect_board_tiles(7, 7)
+    df_c <- tibble(piece_side = c(rep("coin_back", 4L), "die_face"),
+                    suit = 3L,
+                    rank = c(1, 3, 4, 6, 2),
+                    x = c(1, 1, 7, 7, 4),
+                    y = c(1, 7, 1, 7, 4),
+                    angle = c(0, 180, 0, 180, 0))
+    df_a <- tibble(piece_side = c(rep("coin_back", 4L), "pawn_face"),
+                    suit = 4, x = c(4, 5, 4, 3, 4),
+                    y = c(5, 4, 3, 4, 4),
+                    angle = c(180, 90, 0, 270, 0))
+    df_f <- tibble(piece_side = "coin_face",
+                   x = c(4, 4, 7, 6, 4, 4, 1, 2),
+                   y = c(7, 6, 4, 4, 1, 2, 4, 4),
+                   suit = rep(1:4, each = 2L),
+                   rank = rep(c(2, 5), 4L),
+                   angle = rep(c(180, 90, 0, 270), each = 2L))
+    bind_rows(df_t, df_c, df_a, df_f)
+}
+
+#' @rdname df_game
+#' @export
 df_english_draughts <- df_american_checkers
 
 #' @rdname df_game

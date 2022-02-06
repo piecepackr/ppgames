@@ -1,0 +1,30 @@
+> cat_piece(df_brandubh())
+Warning in style$rotate(ss, angle, reorient): Can't rotate ⸸ 90 degrees
+
+Warning in style$rotate(ss, angle, reorient): Can't rotate ⸸ 270 degrees
+
+Warning in style$rotate(rs, angle, reorient): Can't rotate a 90 degrees
+
+Warning in style$rotate(rs, angle, reorient): Can't rotate 4 90 degrees
+
+Warning in style$rotate(rs, angle, reorient): Can't rotate a 270 degrees
+
+Warning in style$rotate(rs, angle, reorient): Can't rotate 4 270 degrees
+
+                
+  🨥⃝─┰─┬─ɐ⃝─┬─┰─🨥⃝ 
+  │ ┃ │ ┃ │ ┃ │ 
+  ┝━╋━┿━ᔭ⃝━┿━╋━┥ 
+  │ ┃ │ ┃ │ ┃ │ 
+  ├─╂─┼─†⃝─┼─╂─┤ 
+  │ ┃ │ ┃ │ ┃ │ 
+  a⃝━4⃝━⸸⃝━⸸⃟━⸸⃝━4⃝━a⃝ 
+  │ ┃ │ ┃ │ ┃ │ 
+  ├─╂─┼─⸸⃝─┼─╂─┤ 
+  │ ┃ │ ┃ │ ┃ │ 
+  ┝━╋━┿━4⃝━┿━╋━┥ 
+  │ ┃ │ ┃ │ ┃ │ 
+  ♛⃝─┸─┴─a⃝─┴─┸─♛⃝ 
+                
+                
+
