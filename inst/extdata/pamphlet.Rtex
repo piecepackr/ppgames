@@ -42,15 +42,16 @@ cat(str_glue("\\includegraphics[width=1.0\\linewidth, height={round(height, 2)}\
 cat(str_glue("\\section{{{title(game)}}}"))
 cat(str_glue("\\input{{{game}}}"))
 %% end.rcode
-\subsection{External Links}
-%% begin.rcode external-links, echo=FALSE, results='asis'
-external_links(game)
-%% end.rcode
 
 \ifnumcomp{\value{page}}{<}{2}{\newpage\mbox{}}{}
 \ifnumcomp{\value{page}}{<}{3}{\newpage\mbox{}}{}
 \ifnumcomp{\value{page}}{<}{4}{\newpage\mbox{}}{}
 \ifnumcomp{\value{page}}{<}{5}{\newpage\mbox{}}{}
+
+\subsection{Additional Resources}
+%% begin.rcode external-links, echo=FALSE, results='asis'
+external_links(game)
+%% end.rcode
 
 \vspace{\fill} % empty line needed before \vspace 
 \subsection{Credits}
