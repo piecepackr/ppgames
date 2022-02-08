@@ -66,6 +66,9 @@ clean_game <- function(game) {
 save_ruleset <- function(game, gk = game_kit(), output = NULL,
                          quietly = TRUE, size = "letter") {
 
+    cache_dir <- file.path(tempdir(), "ppgames_cache")
+    if (dir.exists(cache_dir)) unlink(cache_dir)
+
     game <- clean_game(game)
     size <- tolower(size)
     if (is.null(output)) output <- paste0(game, ".pdf")
@@ -86,10 +89,29 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
     invisible(NULL)
 }
 
+include_piece <- function(piece_side, suit, rank, cfg, angle = 0, height = "1\\baselineskip") {
+    dir <- file.path(tempdir(), "ppgames_cache")
+    if(!dir.exists(dir)) dir.create(dir)
+
+    file <- file.path(dir, sprintf("%s_%s_%s.pdf", piece_side, suit, rank))
+    if(!file.exists(file)) {
+        grDevices::cairo_pdf(file,
+                             width = cfg$get_width(piece_side, suit, rank),
+                             height = cfg$get_height(piece_side, suit, rank),
+                             bg = "transparent")
+        grid.piece(piece_side, suit, rank, cfg, angle = angle)
+        grDevices::dev.off()
+    }
+    sprintf("\\includegraphics[height=%s]{%s}", height, file)
+}
+
 #' @rdname save_ruleset
 #' @export
 save_pamphlet <- function(game, gk = game_kit(), output = NULL,
                           quietly = TRUE, size = "letter", duplex_edge = "short") {
+
+    cache_dir <- file.path(tempdir(), "ppgames_cache")
+    if (dir.exists(cache_dir)) unlink(cache_dir)
 
     game <- clean_game(game)
     size <- tolower(size)
@@ -145,6 +167,9 @@ knit_game <- function(game, gk, quietly = TRUE, size = "letter", is_pamphlet = F
 #' @export
 save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), output = NULL,
                           quietly = TRUE, size = "letter") {
+
+    cache_dir <- file.path(tempdir(), "ppgames_cache")
+    if (dir.exists(cache_dir)) unlink(cache_dir)
 
     size <- tolower(size)
     book <- clean_game(book)
