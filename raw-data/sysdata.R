@@ -979,11 +979,6 @@ box2char[["3131"]] <- "\U000fdd99"
 # wikipedia : character(1)
 
 # nolint end
-
-license_names <- list(`CC-BY-SA-4` = "Creative Commons Attribution-ShareAlike 4.0 International License")
-# license_names <- list(`CC-BY-SA-4` = "CC BY-SA 4.0")
-license_urls <- list(`CC-BY-SA-4` = "https://creativecommons.org/licenses/by-sa/4.0")
-
 unicode_dice <- c("\u2680", "\u2681", "\u2682", "\u2683", "\u2684", "\u2685")
 # excludes card back
 unicode_cards <- c(intToUtf8(utf8ToInt("\U0001f0a1") + 0:13, multiple = TRUE), # spades
@@ -1092,7 +1087,6 @@ color_suits <- c("R", "K", "G", "B", "Y", "W")
 save(r45, r90, r135, r180, r225, r270, r315,
      die_subs, top_subs,
      box2char, char2bi,
-     license_names, license_urls,
      unicode_dice,
      unicode_cards, card2rank, card2suit,
      unicode_dominoes, tile2rank, tile2suit, tile2angle,

@@ -219,10 +219,15 @@ game_credits <- function(game) {
     items <- list()
     if ("author" %in% names(info)) items$`Written by:` <- info$author
     items$`Game design:` <- info$designer
-    license <- if (is.null(info$license)) "CC-BY-SA-4" else info$license
-    license_text <- str_glue("\\href{{{license_urls[[license]]}}}{{{license_names[[license]]}}}")
-    copyright <- paste0("\\copyright~", info$copyright, "\\newline")
-    license <- paste(copyright, "Some Rights Reserved.\\newline",
+    license <- info$license %||% "CC-BY-SA-4.0"
+    stopifnot(license %in% piecepackr::spdx_license_list$id)
+    license_name <- piecepackr::spdx_license_list[license, "name"]
+    license_url <- piecepackr::spdx_license_list[license, "url_alt"]
+    if (is.na(license_url))
+        license_url <- piecepackr::spdx_license_list[license, "url"]
+    license_text <- str_glue("\\href{{{license_url}}}{{{license_name}}}")
+    copyright <- paste0(info$copyright, "\\newline")
+    license <- paste(copyright,
                      paste("License: ", license_text, "\\newline"),
                      collapse="\n")
     cat(paste(c("\\begin{description}",

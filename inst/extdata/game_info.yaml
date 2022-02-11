@@ -1,5 +1,5 @@
 # Defaults
-# license "CC-BY-SA-4"
+# license "CC-BY-SA-4.0"
 # equipment "one standard piecepack"
 # title inferred from list key
 alice_chess:
@@ -12,13 +12,13 @@ alice_chess:
     boardgamegeek: "134603"
     chessvariants: "other.dir/alice.html"
     wikipedia: "Alice_Chess"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 alquerque:
     players: 2
     length: [10, 20]
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Jessica Eccles and Trevor L. Davis"
-    copyright: "2020 Trevor L. Davis"
+    copyright: "\\copyright~2020 Trevor L. Davis. Some Rights Reserved."
     version: "1.0"
     version_date: "2020-11-24"
     ppwiki: "Alquerque"
@@ -31,7 +31,7 @@ american_checkers:
     length: 30
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Mark A. Biggar and Trevor L. Davis"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
     version: "1.2.2"
     version_date: "2021-01-04"
     ppwiki: "Checkers"
@@ -45,7 +45,7 @@ awithlaknannai_mosona:
     players: 2
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Trevor L. Davis"
-    copyright: "2020 Trevor L. Davis"
+    copyright: "\\copyright~2020 Trevor L. Davis. Some Rights Reserved."
     version: "1.0"
     version_data: "2020-11-21"
     boardgamegeek: 13766
@@ -62,7 +62,7 @@ backgammon:
     boardgamegeek: "2397"
     cyningstan: "400"
     wikipedia: "Backgammon"
-    copyright: "2016-2019 Trevor L. Davis"
+    copyright: "\\copyright~2016-2019 Trevor L. Davis. Some Rights Reserved."
 chaturaji:
     players: 4
     length: [10, 180]
@@ -75,7 +75,7 @@ chaturaji:
     chessvariants: "historic.dir/chaturang4.html"
     cyningstan: "124"
     wikipedia: "Chaturaji"
-    copyright: "2016-2019 Trevor L. Davis"
+    copyright: "\\copyright~2016-2019 Trevor L. Davis. Some Rights Reserved."
 cribbage:
     players: 2
     length: [10, 180]
@@ -86,7 +86,7 @@ cribbage:
     ppwiki: "Cribbage"
     boardgamegeek: "2398"
     wikipedia: "Cribbage"
-    copyright: "2016-2019 Trevor L. Davis"
+    copyright: "\\copyright~2016-2019 Trevor L. Davis. Some Rights Reserved."
 international_chess:
     title: "(International) Chess"
     players: 2
@@ -100,7 +100,7 @@ international_chess:
     chessvariants: "d.chess/chess.html"
     cyningstan: "398"
     wikipedia: "chess"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 four_field_kono:
     players: 2
     length: 15
@@ -112,7 +112,7 @@ four_field_kono:
     boardgamegeek: "20560"
     cyningstan: "205"
     wikipedia: "Four_Field_Kono"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 four_seasons_chess:
     players: 4
     length: [10, 180]
@@ -123,7 +123,7 @@ four_seasons_chess:
     boardgamegeek: "104556"
     chessvariants: "historic.dir/4seiz.html"
     cyningstan: "348"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 nine_mens_morris:
     title: "Nine Men's Morris"
     players: 2
@@ -135,7 +135,7 @@ nine_mens_morris:
     boardgamegeek: "3886"
     cyningstan: "12"
     wikipedia: "Nine_men%27s_morris"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 pass_the_food:
     title: "Pass the Food"
     players: [1, 2, 3, 4]
@@ -144,7 +144,7 @@ pass_the_food:
     designer: "Trevor L. Davis"
     version: "0.3"
     version_date: "2021-01-15"
-    copyright: "2021 Trevor L. Davis"
+    copyright: "\\copyright~2021 Trevor L. Davis. Some Rights Reserved."
     ppwiki: "PassTheFood"
 quirky_qirkat:
     title: "Qirky Qirkat"
@@ -152,7 +152,7 @@ quirky_qirkat:
     equipment: "one standard piecepack, one set of piecepack matchsticks"
     designer: "Trevor L. Davis"
     ppwiki: "QirkyQirkat"
-    copyright: "2020 Trevor L. Davis"
+    copyright: "\\copyright~2020 Trevor L. Davis. Some Rights Reserved."
     version: "0.1"
     version_date: "2020-11-21"
 tablut:
@@ -166,7 +166,7 @@ tablut:
     boardgamegeek: "6121"
     cyningstan: "2"
     wikipedia: "Tafl_games#Tablut"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 twelve_mens_morris:
     title: "Twelve Men's Morris"
     players: 2
@@ -178,7 +178,7 @@ twelve_mens_morris:
     boardgamegeek: "29080"
     cyningstan: "111"
     wikipedia: "Morabaraba"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 ultima:
     title: "Ultima (Baroque Chess)"
     players: 2
@@ -190,7 +190,7 @@ ultima:
     boardgamegeek: "25343"
     chessvariants: "other.dir/ultima.html"
     wikipedia: "Baroque_chess"
-    copyright: "2019 Trevor L. Davis"
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 xiangqi:
     title: "Xiangqi (Chinese Chess)"
     players: 2
@@ -204,4 +204,4 @@ xiangqi:
     chessvariants: "xiangqi.html"
     cyningstan: "75"
     wikipedia: "Xiangqi"
-    copyright: "2022 Trevor L. Davis"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
