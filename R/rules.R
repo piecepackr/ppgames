@@ -89,22 +89,6 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
     invisible(NULL)
 }
 
-include_piece <- function(piece_side, suit, rank, cfg, angle = 0, height = "1\\baselineskip") {
-    dir <- file.path(tempdir(), "ppgames_cache")
-    if(!dir.exists(dir)) dir.create(dir)
-
-    file <- file.path(dir, sprintf("%s_%s_%s.pdf", piece_side, suit, rank))
-    if(!file.exists(file)) {
-        grDevices::cairo_pdf(file,
-                             width = cfg$get_width(piece_side, suit, rank),
-                             height = cfg$get_height(piece_side, suit, rank),
-                             bg = "transparent")
-        grid.piece(piece_side, suit, rank, cfg, angle = angle)
-        grDevices::dev.off()
-    }
-    sprintf("\\includegraphics[height=%s]{%s}", height, file)
-}
-
 #' @rdname save_ruleset
 #' @export
 save_pamphlet <- function(game, gk = game_kit(), output = NULL,

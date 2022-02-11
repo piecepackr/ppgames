@@ -1,5 +1,7 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
 %% end.rcode
 
 \subsection{Description}
@@ -17,7 +19,6 @@ Xiangqi is traditionally played on the lines of a board 9 lines by 10 lines with
 Each player has 5 \emph{soldiers}, 2 \emph{cannons}, 2 \emph{chariots}, 2 \emph{horses}, 2 \emph{elephants}, 2 \emph{advisors}, and one \emph{general}. Figure \ref{fig:xiangqi-starting-diagram} shows the recommended setup which has each player use 3-valued dice as chariots, piecepack pawns as cannons, ace-valued coins as horses, 2-valued coins as elephants, 4-valued coins as advisors, and one 5-valued coin as a general. Flip five remaining coins face down and use them as soldiers. Always orient all coins towards your opponent's side, in particular one must distinguish opposing horses by orientation.\footnote{If you have pawn saucers use them instead of ace-valued coins for the horses --- then every piece that can cross the river (chariots, pawns, cannons, and horses) is colored and orientation is redundant.} Elephants, advisors, and general generally cannot cross the river --- the one exception is the ``flying general'' move if there is no piece in between opposing generals. 
 
 %% begin.rcode starting-diagram, fig.width=10, fig.height=11, out.width="0.91\\linewidth", out.height="1\\linewidth", fig.cap="Xiangqi starting diagram"
-cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_xiangqi(), cfg=cfg, default.units="in")
 # gp_text <- gpar(fontsize=32)
 # grid.text(letters[1:9], x=1:9, y=0.20, default.units="in", gp = gp_text)
@@ -33,11 +34,11 @@ The player with the (red) suns' pawn goes first.\footnote{Generally, \emph{Red} 
 Except for the \emph{cannon} which has a special capture move, all pieces capture using their ``normal'' move.
 
 \begin{description}
-\item[soldier] \rinline{include_piece("coin_back", 1, 1, cfg)}\rinline{include_piece("coin_back", 2, 1, cfg)}\rinline{include_piece("coin_back", 3, 1, cfg)}\rinline{include_piece("coin_back", 4, 1, cfg)} Before crossing the river moves one point forward.  After crossing the river moves one point forward or one point sideways.
-\item[cannon] \rinline{include_piece("pawn_face", 1, 1, cfg)}\rinline{include_piece("pawn_face", 2, 1, cfg)}\rinline{include_piece("pawn_face", 3, 1, cfg)}\rinline{include_piece("pawn_face", 4, 1, cfg)} Cannons' ``normal'' move is any distance orthogonally (sideways or vertically) without ``jumping'' over another piece.  Cannons' ``capture'' move is any distance orthogonally ``jumping'' over exactly one piece (of either player's) on the way.
-\item[chariot] \rinline{include_piece("die_face", 1, 4, cfg)}\rinline{include_piece("die_face", 2, 4, cfg)}\rinline{include_piece("die_face", 3, 4, cfg)}\rinline{include_piece("die_face", 4, 4, cfg)} Moves any distance orthogonally without jumping i.e. moves like an international chess \emph{rook}.
-\item[horse] \rinline{include_piece("coin_face", 1, 2, cfg)} The horse moves one point orthogonally and then one point diagonally further away from its original position.  Unlike an international chess \emph{knight} which may ``jump'' over pieces, the horse's move can be blocked by a orthogonally adjacent piece.
-\item[elephant]\rinline{include_piece("coin_face", 1, 3, cfg)} The elephant moves exactly two points diagonally.  They cannot ``jump`` and hence their move may be blocked by a diagonally adjacent piece.  Elephants may not cross the \emph{river}.
-\item[advisor]\rinline{include_piece("coin_face", 1, 5, cfg)} The advisor moves one point diagonally and may not leave their \emph{palace}.
-\item[general]\rinline{include_piece("coin_face", 1, 6, cfg)} The general generally moves one point orthogonally and may not leave their \emph{palace}.  However if there is no piece in between opposing generals located on the same file/column of the board then a general may perform a ``flying general'' move to capture the opposing general.
+\item[soldier] \rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} Before crossing the river moves one point forward.  After crossing the river moves one point forward or one point sideways.
+\item[cannon] \rinline{paste(pieces$pS, pieces$pM, pieces$pC, pieces$pA)} Cannons' ``normal'' move is any distance orthogonally (sideways or vertically) without ``jumping'' over another piece.  Cannons' ``capture'' move is any distance orthogonally ``jumping'' over exactly one piece (of either player's) on the way.
+\item[chariot] \rinline{paste(pieces$dS3, pieces$dM3, pieces$dC3, pieces$dA3)} Moves any distance orthogonally without jumping i.e. moves like an international chess \emph{rook}.
+\item[horse] \rinline{pieces$ca} The horse moves one point orthogonally and then one point diagonally further away from its original position.  Unlike an international chess \emph{knight} which may ``jump'' over pieces, the horse's move can be blocked by a orthogonally adjacent piece.
+\item[elephant]\rinline{pieces$c2} The elephant moves exactly two points diagonally.  They cannot ``jump`` and hence their move may be blocked by a diagonally adjacent piece.  Elephants may not cross the \emph{river}.
+\item[advisor]\rinline{pieces$c4} The advisor moves one point diagonally and may not leave their \emph{palace}.
+\item[general]\rinline{pieces$c5} The general generally moves one point orthogonally and may not leave their \emph{palace}.  However if there is no piece in between opposing generals located on the same file/column of the board then a general may perform a ``flying general'' move to capture the opposing general.
 \end{description}
