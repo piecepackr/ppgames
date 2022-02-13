@@ -310,34 +310,34 @@ cat(paste0("\\hypersetup{", pdf_key("pdftitle", pdftitle)),
 external_links <- function(game, list_type = "itemize") {
     links <- list()
     info <- get_game_info(game)
-    if ("ppwiki" %in% names(info)) {
+    if (hasName(info, "ppwiki"))
         links[["Piecepack Wiki"]] <- paste0("http://www.ludism.org/ppwiki/", info$ppwiki)
-    }
-    if ("boardgamegeek" %in% names(info)) {
+    if (hasName(info, "boardgamegeek"))
         links[["BoardGameGeek"]] <- paste0("https://boardgamegeek.com/boardgame/", info$boardgamegeek)
-    }
-    if ("chessvariants" %in% names(info)) {
+    if (hasName(info, "chessvariants"))
         links[["The Chess Variants Pages"]] <- paste0("https://www.chessvariants.com/", info$chessvariants)
-    }
-    if ("cyningstan" %in% names(info)) {
+    if (hasName(info, "cyningstan"))
         links[["Cyningstan"]] <- paste0("http://www.cyningstan.com/game/", info$cyningstan)
-    }
-    if ("wikipedia" %in% names(info)) {
+    if (hasName(info, "wikipedia"))
         links[["Wikipedia"]] <- paste0("https://en.wikipedia.org/wiki/", info$wikipedia)
-    }
-    if ("external_links" %in% names(info)) {
+    if (hasName(info, "external_links"))
         for (n in names(info$external_links))
             links[[n]] <- info$external_links[[n]]
-    }
-    if (list_type == "description") {
-        items <- paste("\\item[%s] \\url{%s}", names(links), as.character(links))
-        cat(paste(c("\\begin{description}", items, "\\end{description}\n"),
-              collapse="\n"))
-    } else {
-        items <- paste("\\item", href(as.character(links)))
-        cat(paste(c("\\begin{itemize}", items, "\\end{itemize}\n"),
-              collapse="\n"))
-    }
+    if (list_type == "description")
+        links <- paste("\\item[%s] \\url{%s}", names(links), as.character(links))
+    else
+        links <- paste("\\item", href(as.character(links)))
+    if (hasName(info, "books"))
+        books <- paste("\\item", info$books)
+    else
+        books <- ""
+
+    if (list_type == "description")
+        cat(paste(c("\\begin{description}", links, "\\end{description}\n"),
+                  collapse="\n"))
+    else
+        cat(paste(c("\\begin{itemize}", links, books, "\\end{itemize}\n"),
+                  collapse="\n"))
 }
 
 latex_url_name <- function(url) {

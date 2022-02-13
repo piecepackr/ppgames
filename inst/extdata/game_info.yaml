@@ -130,12 +130,16 @@ nine_mens_morris:
     length: [10, 180]
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Dan Burkey and Trevor L. Davis"
-    version: "1.1"
-    version_date: "2019-06-29"
+    version: "1.2"
+    version_date: "2022-02-12"
     boardgamegeek: "3886"
     cyningstan: "12"
     wikipedia: "Nine_men%27s_morris"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    external_links:
+        NNM: "http://nine-mens-morris.net/index.html"
+    books:
+        - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 pass_the_food:
     title: "Pass the Food"
     players: [1, 2, 3, 4]

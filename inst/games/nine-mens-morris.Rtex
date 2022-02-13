@@ -1,14 +1,20 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
 %% end.rcode
 
 \subsection{Description}
 
 Nine Men's Morris is an ancient game that used to be very popular.
 
+\subsection{Objective}
+
+Remove opponent's pieces by forming \emph{mills}: three pieces in a line.  A player loses when they have been reduced to two pieces or no longer has a legal move to play.
+
 \subsection{Setup}
 
-Figure \ref{fig:nine-mens-morris-starting-diagram} shows the recommended setup of the board.  Give each player nine of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits).  Before a player is reduced to three pieces there moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-possible-moves} shows the moves of the pieces.  If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} use them to connect tiles where orthogonal moves are possible.
+Use all the tiles to set up the board as in Figure \ref{fig:nine-mens-morris-starting-diagram}.  
 
 %% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Nine Men's Morris starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
@@ -17,12 +23,41 @@ pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in"
 popViewport()
 %% end.rcode
 
+Each player takes a total of nine coin backs from two suits (i.e. ``astronomical'' \rinline{paste0(pieces$cS, pieces$cM)} versus ``power'' suits \rinline{paste0(pieces$cC, pieces$cA)}.  Roll a die to determine who goes first and then each player takes turns placing a coin on a tile.  A \emph{mill} is three of one player's coins all in a vertical or horizontal line (but a mill cannot form across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-network} shows the possible lines on the Nine Men's Morris board.\footnote{If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} you may use them to connect tiles that are on the same line.}  The moment when a player makes a \emph{mill} by placing the third piece in a line they must remove an opponent's piece---it cannot be from one of their \emph{mills} unless there are no other pieces that can be removed.\footnote{If you create two mills at once only remove one piece.}
+
+%% begin.rcode network, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Possible lines on the Nine Men's Morris board"
+pushViewport(viewport(width=inch(14), height=inch(14)))
+pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
+gp <- gpar(lex=18, col = cfg$annotation_color)
+grid.segments(x0 = c(1, 3, 5, 1, 9, 5, 3, 1), 
+              y0 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              x1 = c(13, 11, 9, 5, 13, 9, 11, 13), 
+              y1 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              y0 = c(1, 3, 5, 1, 9, 5, 3, 1),
+              x1 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              y1 = c(13, 11, 9, 5, 13, 9, 11, 13),
+              arrow = arrow(), default.units="in", gp=gp)
+gp <- gpar(col = NA, fill = cfg$annotation_color)
+grid.circle(x = rep.int(c(1, 3, 5, 7, 9, 11, 13),
+                        c(3, 3, 3, 6, 3,  3,  3)),
+            y = c(1, 7, 13, 3, 7, 11, 5, 7, 9, 1, 3, 5, 9, 11, 13, 5, 7, 9,
+                3, 7, 11, 1, 7, 13),
+            r = 0.32, default.units = "in", gp = gp)
+popViewport()
+%% end.rcode
+
+\subsection{Moves}
+
+After each player has placed all of their pieces they then alternate moving a single piece on the board.  Before a player is reduced to three pieces their moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-possible-moves} shows examples of how the pieces can move.  Once a player is reduced to exactly three pieces their pieces may ``fly'' to any open tile.  Whenever a player makes a \emph{mill} by moving the third piece into a line they must remove an opponent's piece---it cannot be from one of their \emph{mills} unless there are no other pieces that can be removed.
+
 %% begin.rcode possible-moves, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Moves of the pieces in Nine Men's Morris.  Once a player has been reduced to three pieces their movements are no longer restricted."
 pushViewport(viewport(width=inch(14), height=inch(14)))
 pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 grid.piece("coin_back", suit=1, cfg=cfg, default.units="in",
           x=c(3, 7, 7, 9, 13), y=c(7, 5, 1, 9, 13))
-gp <- gpar(lex=10)
+gp <- gpar(lex=18, col = cfg$annotation_color)
 grid.segments(x0 = c(3, 3.5, 3, 2.5), y0 = c(7.5, 7, 6.5, 7),
               x1 = c(3, 4.5, 3, 1.5), y1 = c(10.5, 7, 3.5, 7),
               arrow = arrow(), default.units="in", gp=gp)
@@ -40,3 +75,13 @@ grid.segments(x0 = c(12.5, 13), y0 = c(13, 12.5),
               arrow = arrow(), default.units="in", gp=gp)
 popViewport()
 %% end.rcode
+
+\subsection{Variants}
+\begin{description}
+\item[Lasker Morris] Proposed by world chess champion Emanuel Lasker.  Same as normal Nine Men's Morris except:\begin{itemize}
+\item Each player gets ten coins
+\item During ``setup''---until they have placed all their coins---a player may choose to either place a new coin on the board or move an existing coin during their turn.
+\end{itemize}
+\item[Multiple mills] It is possible during setup to create two mills at the same time.  In such case take two opponent pieces.
+\item[No flying] When a player is reduced to three pieces they may not ``fly'' but must continue to move ``normally''.
+\end{description}
