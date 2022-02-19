@@ -134,11 +134,13 @@ nine_mens_morris:
     version_date: "2022-02-12"
     boardgamegeek: "3886"
     cyningstan: "12"
+    ppwiki: "NineMensMorris"
     wikipedia: "Nine_men%27s_morris"
     external_links:
         NNM: "http://nine-mens-morris.net/index.html"
     books:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
+        - "David Pritchard, \\emph{Brain Games} (1982), 128--131"
     copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 pass_the_food:
     title: "Pass the Food"
@@ -177,12 +179,15 @@ twelve_mens_morris:
     length: [10, 180]
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Dan Burkey and Trevor L. Davis"
-    version: "1.1"
-    version_date: "2019-06-29"
+    version: "1.2"
+    version_date: "2022-02-18"
     boardgamegeek: "29080"
     cyningstan: "111"
+    ppwiki: "TwelveMensMorris"
     wikipedia: "Morabaraba"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    external_links:
+        ESC: "http://esportscommentator.blogspot.com/2015/04/generally-accepted-rules-for-game-of_4.html"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 ultima:
     title: "Ultima (Baroque Chess)"
     players: 2

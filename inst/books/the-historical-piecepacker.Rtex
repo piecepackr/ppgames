@@ -60,6 +60,14 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \include{alquerque-chapter}
 % \include{awithlaknannai-chapter}
 
+\chapter{Chess Variants}
+
+\include{xiangqi-chapter}
+
+\chapter{Morris aka Merels Games}
+\include{nine-mens-morris-chapter}
+\include{twelve-mens-morris-chapter}
+
 \chapter{Other Traditional Board Games}
 
 \include{american-checkers-chapter}
@@ -100,11 +108,6 @@ Five & King & King & General \\
 \include{chaturaji-chapter}
 \include{four-seasons-chess-chapter}
 \include{ultima-chess-chapter}
-\include{xiangqi-chapter}
-
-\chapter{Morris aka Merels Games}
-\include{nine-mens-morris-chapter}
-\include{twelve-mens-morris-chapter}
 
 \chapter{Other Traditional Games}
 \include{backgammon-chapter}

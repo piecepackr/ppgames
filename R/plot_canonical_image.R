@@ -48,7 +48,7 @@ plot_canonical_image <- function(game, gk = game_kit(), file = NULL) {
 }
 
 canonical_morris_df <- function(game) {
-   df_tiles <- get_starting_df_from_name(game)
+   df_tiles <- df_nine_mens_morris()
    df_coins <- tibble(piece_side = "coin_back",
                       x = c(3, 3, 5, 7, 7, 9, 9, 9, 11, 11, 11),
                       y = c(3, 7, 7, 1, 3, 5, 7, 9, 3, 7, 11),

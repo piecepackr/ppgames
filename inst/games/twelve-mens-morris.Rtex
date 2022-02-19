@@ -1,28 +1,67 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
 %% end.rcode
 
 \subsection{Description}
 
-Twelve Men's Morris is an ancient game that used to be very popular.
+Twelve Men's Morris is an ancient game. The \emph{Morabaraba} variant is popular in South Africa.
+
+\subsection{Objective}
+
+Remove opponent's pieces by forming \emph{mills}: three pieces in a line.  A player loses when they have been reduced to two pieces or no longer has a legal move to play.
 
 \subsection{Setup}
 
-Figure \ref{fig:twelve-mens-morris-starting-diagram} shows the recommended setup of the board.  Give each player twelve of the coin backs of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits).  Before a player is reduced to three pieces there moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile (but not across the empty gap in the center of the board).  One can also move diagonally from ``3'' valued tile faces to either the ``ace'' or ``five'' valued tile faces (and vice versa).  Figure \ref{fig:twelve-mens-morris-possible-moves} shows the moves of the pieces. If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} use them to connect tiles where orthogonal moves are possible.
+Use all the tiles to set up the board as in Figure \ref{fig:twelve-mens-morris-starting-diagram}.
 
 %% begin.rcode starting-diagram, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Twelve Men's Morris starting diagram"
-cfg <- gk$get_piecepacks(1)[[1]]
 pushViewport(viewport(width=inch(14), height=inch(14)))
 pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 popViewport()
 %% end.rcode
+
+Each player takes all twelve of the coin backs from two suits e.g. ``astronomical'' \rinline{paste0(pieces$cS, pieces$cM)} versus ``power'' suits \rinline{paste0(pieces$cC, pieces$cA)}.  Roll a die to determine who goes first and then each player takes turns placing a coin on a tile.  A \emph{mill} is three of one player's coins all in a vertical, horizontal, or diagonal line (but a mill cannot form across the empty gap in the center of the board).  Figure \ref{fig:twelve-mens-morris-network} shows the possible lines on the Twelve Men's Morris board.\footnote{If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} you may use them to connect tiles that are on the same line.}  The moment when a player makes a \emph{mill} by placing the third piece in a line they must remove an opponent's piece---it cannot be from one of their \emph{mills} unless there are no other pieces that can be removed.\footnote{If you create two or three mills at once only remove one piece.}
+
+%% begin.rcode network, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Possible lines on the Twelve Men's Morris board"
+pushViewport(viewport(width=inch(14), height=inch(14)))
+pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
+gp <- gpar(lex=18, col = cfg$annotation_color)
+grid.segments(x0 = c(1, 3, 5, 1, 9, 5, 3, 1), 
+              y0 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              x1 = c(13, 11, 9, 5, 13, 9, 11, 13), 
+              y1 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              y0 = c(1, 3, 5, 1, 9, 5, 3, 1),
+              x1 = c(13, 11, 9, 7, 7, 5, 3, 1),
+              y1 = c(13, 11, 9, 5, 13, 9, 11, 13),
+              arrow = arrow(), default.units="in", gp=gp)
+grid.segments(x0 = c(1, 1, 13, 13),
+              y0 = c(1, 13, 13, 1),
+              x1 = c(5, 5, 9, 9),
+              y1 = c(5, 9, 9, 5),
+              arrow = arrow(), default.units="in", gp=gp)
+gp <- gpar(col = NA, fill = cfg$annotation_color)
+grid.circle(x = rep.int(c(1, 3, 5, 7, 9, 11, 13),
+                        c(3, 3, 3, 6, 3,  3,  3)),
+            y = c(1, 7, 13, 3, 7, 11, 5, 7, 9, 1, 3, 5, 9, 11, 13, 5, 7, 9,
+                3, 7, 11, 1, 7, 13),
+            r = 0.32, default.units = "in", gp = gp)
+popViewport()
+%% end.rcode
+
+\subsection{Moves}
+
+After each player has placed all of their pieces they then alternate moving a single piece on the board.  Before a player is reduced to three pieces their moves are restricted to orthogonal moves to the next tile face either directly horizontal or vertical from that tile or diagonal moves along the X that touches the four corners (but no orthogonal/diagonal moves allowed across the empty gap in the center of the board).  Figure \ref{fig:twelve-mens-morris-possible-moves} shows examples of how the pieces can move.  Once a player is reduced to exactly three pieces their pieces may ``fly'' to any open tile.  Whenever a player makes a \emph{mill} by moving the third piece into a line they must remove an opponent's piece---it cannot be from one of their \emph{mills} unless there are no other pieces that can be removed.  If a player breaks a \emph{mill} by moving one of its pieces and by doing so (immediately) creates a new \emph{mill} then they may not move that piece back to its original \emph{mill} on their next turn.\footnote{The piece may be moved back to its original position if it won't immediately create a \emph{mill} i.e. one of the other two pieces of the original \emph{mill} had just been captured by their opponent.}
 
 %% begin.rcode possible-moves, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Moves of the pieces in Twelve Men's Morris.  Once a player has been reduced to three pieces their movements are no longer restricted."
 pushViewport(viewport(width=inch(14), height=inch(14)))
 pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in")
 grid.piece("coin_back", suit=1, cfg=cfg, default.units="in",
           x=c(3, 7, 7, 9, 13), y=c(7, 5, 1, 9, 13))
-gp <- gpar(lex=10)
+gp <- gpar(lex=18, col = cfg$annotation_color)
 grid.segments(x0 = c(3, 3.5, 3, 2.5), y0 = c(7.5, 7, 6.5, 7),
               x1 = c(3, 4.5, 3, 1.5), y1 = c(10.5, 7, 3.5, 7),
               arrow = arrow(), default.units="in", gp=gp)
@@ -40,3 +79,14 @@ grid.segments(x0 = c(12.5, 13, 12.5), y0 = c(13, 12.5, 12.5),
               arrow = arrow(), default.units="in", gp=gp)
 popViewport()
 %% end.rcode
+
+\subsection{Variants}
+\begin{description}
+\item[Eleven men's morris] Give each player eleven coin backs (instead of twelve coin backs).  This help ensures a player has room to move after the Setup phase.
+\item[Flying begins with four pieces] A player's pieces may begin to ``fly'' when they are down to four pieces (instead of three pieces).
+\item[May immediately rebuild mills] When a player breaks a \emph{mill} by moving one of its pieces and by doing so immediately creates a new \emph{mill} then it is legal for them to move that piece back to its original \emph{mill} on their next turn.
+\item[Multiple mills] It is possible during setup or during a move to create two (or even three) mills at the same time.  In such case take two (or three) opponent pieces.
+\item[No diagonal mills] Players may move along diagonal lines but may not form \emph{mills} on diagonal lines.
+\item[No flying] When a player is reduced to three pieces they may not ``fly'' but most continue to move ``normally''.
+
+\end{description}
