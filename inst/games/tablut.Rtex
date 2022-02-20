@@ -1,16 +1,44 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
 %% end.rcode
 
 \subsection{Description}
 
 Tablut is a historical (hnefa)tafl game played by the Sámi people until at least the 1700s whose rules were written down by the Swedish naturalist Linnaeus in 1732.
 
+\subsection{Objective}
+
+The ``attacking'' player wins if they capture the ``defending'' player's \emph{king} while the ``defending`` player wins if their \emph{king} escapes by reaching any point on the edge of the board.\footnote{Originally, the defenders are called ``Swedes'' while the attackers are called ``Muscovites''.}
+
 \subsection{Setup}
 
-The game is played by two players one of which controls 16 ``attackers'' and other who controls 8 ``defenders'' plus a ``king''.  There is also a ``castle'' in the center of the board (some modern derivatives also have special corners).  There are multiple schemes that can be used to play this game.  Visualized in Figure \ref{fig:tablut-starting-diagram} is one scheme (``ranks'' versus ``suits'') which gives the attacking player all the coin faces of rank 2,3,4,5 as the attackers and gives the defending player the remaining coin backs as defenders plus a pawn as the king and use 1-4 piecepack dice as the ``castle'' (place the pawn on top of the dice to start the game).\footnote{Another scheme could be for the defenders to be four coin ``aces'' and four coin ``moons'' plus a ``moons'' pawn king versus the remaining coin backs as attackers (with a traditional piecepack this give you black-colored coin defenders plus a black-colored pawn versus non-black-colored coin attackers).}
+The game is played by two players one of which controls 16 \emph{attackers} and another who controls 8 \emph{defenders} plus a \emph{king}.  There is also a \emph{castle} in the center of the board.\footnote{Some modern derivatives also have specially marked corners but they have no game effect in Tablut.}  In the recommended setup the attacking player takes all the coin faces of rank 2, 3, 4, and 5 \rinline{paste0(pieces$c2, pieces$c3, pieces$c4, pieces$c5)} to serve as the \emph{attackers} and the defending player takes the remaining coin backs \rinline{paste0(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} as \emph{defenders} plus a pawn \rinline{pieces$pC} as the \emph{king} and use 1-4 piecepack dice \rinline{paste0(pieces$dSa, pieces$dMa, pieces$dCa, pieces$dAa)} as the \emph{castle}.\footnote{If the piecepack dice are sufficiently small one can use all four of them but if the piecepack dice are sufficiently large use only one of them.  An alternative setup scheme could be for the defenders to use the four coin ``aces'' and four coin ``moons'' \emph{defenders} plus a ``moons'' pawn \emph{king} versus the remaining coin backs as \emph{attackers}.  With a traditional piecepack this give you black-colored \emph{defenders} and \emph{king} versus non-black-colored \emph{attackers}.}  Place 16 tile backs in a 4x4 grid; the ``points'' of these tiles makes a 9x9 board.  Place the pieces onto the points of this 9x9 boards as in Figure \ref{fig:tablut-starting-diagram}---place the pawn on top of the di(c)e to start the game.  
 
 %% begin.rcode starting-diagram, fig.width=10, fig.height=10, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Tablut starting diagram"
-cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_tablut(cfg$get_width("die_face")), cfg=cfg, default.units="in", trans=op_transform, op_scale=0.7)
 %% end.rcode
+
+\subsection{The Order of Play}
+
+The ``attacking'' player goes first.\footnote{Most modern Tablut players have the ``attacking'' player go first but Linnaeus's rules didn't specify who goes first.  As a variant you could have the ``defending'' player go first.} Players take turns moving one of their pieces to another point possibly capturing 1--3 opponent's pieces in the process.
+
+\subsection{The Moves}
+
+Without any ``jumps'' over other pieces allowed---\emph{attackers}, \emph{defenders}, and \emph{king} can move orthogonally (sideways or vertically) any positive distance to an unoccupied point.\footnote{Just like the non-capturing move of the international chess \emph{rook}.}  The \emph{castle} cannot move.  The \emph{king} begins the game in the \emph{castle} and after it leaves the \emph{castle} no pieces may land in the empty \emph{castle} or pass through it.\footnote{Linnaeus's rules were a bit unclear here.  A major rule variation among modern Tablut players is that the \emph{king} (only the \emph{king}) can return to the \emph{castle} and all the pieces may pass through an empty \emph{castle}.}
+
+When a piece moves and helps surround opponent's piece(s) then those 1--3 piece(s) that piece just helped to surround\footnote{Note a piece may safely move to a point surrounded by opponent pieces.} are removed under the following conditions:\begin{enumerate}
+\item{An \emph{attacker} or \emph{defender} surrounded (orthogonally) on opposite sides by two opponents' pieces or an opponent's piece and an empty castle.  Note a \emph{king} may team up with a \emph{defender} (or \emph{castle}) to capture an \emph{attacker}.}
+\item{A \emph{king} in the \emph{castle} surrounded by four enemy pieces, a \emph{king} next to the \emph{castle} surrounded by three enemy pieces, or a \emph{king} not by/in the castle surrounded on opposite sides by two enemy pieces.  Note in this case the ``attacking'' player wins the game.}
+\item{If a \emph{king} in its \emph{castle} is surrounded by three \emph{attackers} and one \emph{defender} then that defender may be captured by an \emph{attacker} that moves to the opposite side of that \emph{defender} from the \emph{castle}.}
+\end{enumerate}
+
+\subsection{Imperial Contest}
+
+\emph{Imperial Contest}---produced in 1855 by Jaques\footnote{First manufacturer of the famous Staunton chess pieces.}---was based on \emph{Tablut} and was the first commercial (hnefa)tafl game.  It differs from \emph{Tablut} in the following ways:\begin{enumerate}
+\item{Who goes first is determined randomly.}
+\item{The \emph{castle} is not used.}
+\item{The \emph{king} may only move up to a maximum distance of four squares and the \emph{king} does not capture an enemy piece when surrounding it with a \emph{defender}.  However, the \emph{attackers} can only capture the \emph{king} by surrounding it on all four sides.}
+\item{Multiple pieces may not be captured in a turn; if multiple pieces are surrounded by a move the moving player must choose only one piece to remove.}
+\end{enumerate}

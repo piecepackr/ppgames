@@ -72,6 +72,7 @@ This collective work is released under a \href{https://creativecommons.org/licen
 
 \include{american-checkers-chapter}
 \include{four-field-kono-chapter}
+\include{tablut-chapter}
 
 \part{Game Hints}
 
@@ -111,6 +112,5 @@ Five & King & King & General \\
 
 \chapter{Other Traditional Games}
 \include{backgammon-chapter}
-\include{tablut-chapter}
 
 \end{document}

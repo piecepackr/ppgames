@@ -166,13 +166,17 @@ tablut:
     length: 45
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Trevor L. Davis"
-    version: "1.0"
-    version_date: "2019-04-09"
+    version: "1.1"
+    version_date: "2022-02-19"
     ppwiki: "Tablut"
     boardgamegeek: "6121"
     cyningstan: "2"
     wikipedia: "Tafl_games#Tablut"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    external_links:
+        IC: "http://tafl.cyningstan.com/page/1331/imperial-contest"
+    books:
+        - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 165--188"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 twelve_mens_morris:
     title: "Twelve Men's Morris"
     players: 2
@@ -186,7 +190,7 @@ twelve_mens_morris:
     ppwiki: "TwelveMensMorris"
     wikipedia: "Morabaraba"
     external_links:
-        ESC: "http://esportscommentator.blogspot.com/2015/04/generally-accepted-rules-for-game-of_4.html"
+        MSSA: "http://esportscommentator.blogspot.com/2015/04/generally-accepted-rules-for-game-of_4.html"
     copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 ultima:
     title: "Ultima (Baroque Chess)"
