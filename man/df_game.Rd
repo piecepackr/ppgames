@@ -50,10 +50,10 @@
 \alias{df_alquerque}
 \alias{df_american_checkers}
 \alias{df_awithlaknannai_mosona}
-\alias{df_brandubh}
 \alias{df_english_draughts}
 \alias{df_checkers}
 \alias{df_backgammon}
+\alias{df_brandubh}
 \alias{df_breakthrough}
 \alias{df_cribbage_board}
 \alias{textGrob_cribbage_board}
@@ -163,13 +163,13 @@ df_american_checkers()
 
 df_awithlaknannai_mosona(has_matchsticks = FALSE)
 
-df_brandubh()
-
 df_english_draughts()
 
 df_checkers()
 
 df_backgammon()
+
+df_brandubh()
 
 df_breakthrough()
 

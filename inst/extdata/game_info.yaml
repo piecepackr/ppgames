@@ -39,7 +39,7 @@ american_checkers:
     cyningstan: "399"
     wikipedia: "English_draughts"
     external_links:
-        WCDF: "http://www.wcdf.net/rules.htm"
+        - "http://www.wcdf.net/rules.htm"
 awithlaknannai_mosona:
     title: "Awithlaknannai Mosona"
     players: 2
@@ -56,13 +56,17 @@ backgammon:
     length: [5, 60]
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Trevor L. Davis"
-    version: "1.1"
-    version_date: "2019-05-01"
+    version: "1.2"
+    version_date: "2022-02-21"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
     ppwiki: "Backgammon"
     boardgamegeek: "2397"
     cyningstan: "400"
     wikipedia: "Backgammon"
-    copyright: "\\copyright~2016-2019 Trevor L. Davis. Some Rights Reserved."
+    external_links:
+        - "https://usbgf.org/learn-backgammon/"
+    books:
+        - "David Pritchard, \\emph{Brain Games} (1982), 15--25"
 chaturaji:
     players: 4
     length: [10, 180]
@@ -137,7 +141,7 @@ nine_mens_morris:
     ppwiki: "NineMensMorris"
     wikipedia: "Nine_men%27s_morris"
     external_links:
-        NNM: "http://nine-mens-morris.net/index.html"
+        - "http://nine-mens-morris.net/index.html"
     books:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
         - "David Pritchard, \\emph{Brain Games} (1982), 128--131"
@@ -173,7 +177,7 @@ tablut:
     cyningstan: "2"
     wikipedia: "Tafl_games#Tablut"
     external_links:
-        IC: "http://tafl.cyningstan.com/page/1331/imperial-contest"
+        - "http://tafl.cyningstan.com/page/1331/imperial-contest"
     books:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 165--188"
     copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
@@ -190,7 +194,7 @@ twelve_mens_morris:
     ppwiki: "TwelveMensMorris"
     wikipedia: "Morabaraba"
     external_links:
-        MSSA: "http://esportscommentator.blogspot.com/2015/04/generally-accepted-rules-for-game-of_4.html"
+        - "http://esportscommentator.blogspot.com/2015/04/generally-accepted-rules-for-game-of_4.html"
     copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 ultima:
     title: "Ultima (Baroque Chess)"

@@ -23,7 +23,7 @@ pmap_piece(df_nine_mens_morris(cfg$has_matchsticks), cfg=cfg, default.units="in"
 popViewport()
 %% end.rcode
 
-Each player takes a total of nine coin backs from two suits e.g. ``astronomical'' \rinline{paste0(pieces$cS, pieces$cM)} versus ``power'' suits \rinline{paste0(pieces$cC, pieces$cA)}).  Roll a die to determine who goes first and then each player takes turns placing a coin on a tile.  A \emph{mill} is three of one player's coins all in a vertical or horizontal line (but a mill cannot form across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-network} shows the possible lines on the Nine Men's Morris board.\footnote{If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} you may use them to connect tiles that are on the same line.}  The moment when a player makes a \emph{mill} by placing the third piece in a line they must remove an opponent's piece---it cannot be from one of their \emph{mills} unless there are no other pieces that can be removed.\footnote{If you create two mills at once only remove one piece.}
+Each player takes a total of nine coin backs from two suits e.g. ``astronomical'' \rinline{paste0(pieces$cS, pieces$cM)} versus ``power'' suits \rinline{paste0(pieces$cC, pieces$cA)}.  Roll a die to determine who goes first and then each player takes turns placing a coin on a tile.  A \emph{mill} is three of one player's coins all in a vertical or horizontal line (but a mill cannot form across the empty gap in the center of the board).  Figure \ref{fig:nine-mens-morris-network} shows the possible lines on the Nine Men's Morris board.\footnote{If you have \href{http://www.ludism.org/ppwiki/PiecepackMatchsticks}{(piecepack) matchsticks} you may use them to connect tiles that are on the same line.}  The moment when a player makes a \emph{mill} by placing the third piece in a line they must remove an opponent's piece---it cannot be from one of their \emph{mills} unless there are no other pieces that can be removed.\footnote{If you create two mills at once only remove one piece.}
 
 %% begin.rcode network, fig.width=14.1, fig.height=14.1, out.width="0.6\\linewidth", out.height="0.6\\linewidth", fig.cap="Possible lines on the Nine Men's Morris board"
 pushViewport(viewport(width=inch(14), height=inch(14)))
@@ -33,12 +33,12 @@ grid.segments(x0 = c(1, 3, 5, 1, 9, 5, 3, 1),
               y0 = c(13, 11, 9, 7, 7, 5, 3, 1),
               x1 = c(13, 11, 9, 5, 13, 9, 11, 13), 
               y1 = c(13, 11, 9, 7, 7, 5, 3, 1),
-              arrow = arrow(), default.units="in", gp=gp)
+              default.units="in", gp=gp)
 grid.segments(x0 = c(13, 11, 9, 7, 7, 5, 3, 1),
               y0 = c(1, 3, 5, 1, 9, 5, 3, 1),
               x1 = c(13, 11, 9, 7, 7, 5, 3, 1),
               y1 = c(13, 11, 9, 5, 13, 9, 11, 13),
-              arrow = arrow(), default.units="in", gp=gp)
+              default.units="in", gp=gp)
 gp <- gpar(col = NA, fill = cfg$annotation_color)
 grid.circle(x = rep.int(c(1, 3, 5, 7, 9, 11, 13),
                         c(3, 3, 3, 6, 3,  3,  3)),

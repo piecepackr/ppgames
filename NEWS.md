@@ -27,16 +27,20 @@ Bug fixes and minor improvements
 * The (invisible) character vector returned by ``cat_piece()`` is now length one.
 * ``cat_move()`` no longer throws an error for moves that result with zero pieces on the board (#96)
 * The ``annotate`` argument in ``cat_piece()``, ``plot_move()``, ``animate_game()`` now supports using "none" as an alias to `FALSE` and "algebraic" as an alias to `TRUE` (#97)
+* ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
+* In game starting functions with argument `seed` we now use `withr::local_seed()` instead of `set.seed()`
+  and if `seed = NULL` we don't try to set any seed at all (#112).
+* There are now more informative error messages being raised by ``rlang::abort()`` (#109, #111).
 * Set/tweaked suits/ranks in following board generators to guarantee each piecepack piece is completely unique:
 
   + ``df_international_chess()`` aka ``df_chess()``
   + ``df_the_in_crowd()``
   + ``df_xiangqi()``
 
-* ``plot_move()`` now invisibly returns a list with the dimensions of the resulting image.
-* In game starting functions with argument `seed` we now use `withr::local_seed()` instead of `set.seed()`
-  and if `seed = NULL` we don't try to set any seed at all (#112).
-* There are now more informative error messages being raised by ``rlang::abort()`` (#109, #111).
+* Spread out tile groups further in:
+
+  + ``df_backgammon()``
+
 * Fixes a bug in setting coin ranks in `df_triactor()`.
 
 ppgames 0.6.1

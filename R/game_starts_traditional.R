@@ -73,29 +73,6 @@ df_awithlaknannai_mosona <- function(has_matchsticks = FALSE) {
 
 #' @rdname df_game
 #' @export
-df_brandubh <- function() {
-    df_t <- df_rect_board_tiles(7, 7)
-    df_c <- tibble(piece_side = c(rep("coin_back", 4L), "die_face"),
-                    suit = 3L,
-                    rank = c(1, 3, 4, 6, 2),
-                    x = c(1, 1, 7, 7, 4),
-                    y = c(1, 7, 1, 7, 4),
-                    angle = c(0, 180, 0, 180, 0))
-    df_a <- tibble(piece_side = c(rep("coin_back", 4L), "pawn_face"),
-                    suit = 4, x = c(4, 5, 4, 3, 4),
-                    y = c(5, 4, 3, 4, 4),
-                    angle = c(180, 90, 0, 270, 0))
-    df_f <- tibble(piece_side = "coin_face",
-                   x = c(4, 4, 7, 6, 4, 4, 1, 2),
-                   y = c(7, 6, 4, 4, 1, 2, 4, 4),
-                   suit = rep(1:4, each = 2L),
-                   rank = rep(c(2, 5), 4L),
-                   angle = rep(c(180, 90, 0, 270), each = 2L))
-    bind_rows(df_t, df_c, df_a, df_f)
-}
-
-#' @rdname df_game
-#' @export
 df_english_draughts <- df_american_checkers
 
 #' @rdname df_game
@@ -105,19 +82,19 @@ df_checkers <- df_american_checkers
 #' @rdname df_game
 #' @export
 df_backgammon <- function() {
-    y_top <- 4
+    y_top <- 5
     y_bot <- 1
-    x_1 <- 25-2+1
-    x_6 <- 25-12+1
+    x_1 <- 26-2+1
+    x_6 <- 26-12+1
     x_12 <- 1
     x_08 <- 5*2-1
 
     # tiles
     df_t <- tibble(piece_side = "tile_face",
                  suit = c(3+1:6%%2, 3 + (1:6+1)%%2, 1 + (1:6+1)%%2, 1 + (1:6+0)%%2),
-                 rank = rep(1:6, 4),
-                 x = c(26-2*1:6, 13-2*1:6, 26-2*1:6, 13-2*1:6),
-                 y = rep(c(1, y_top, y_top, 1), each = 6),
+                 rank = rep(c(2:6, 1), 4),
+                 x = c(27-2*1:6, 13-2*1:6, 27-2*1:6, 13-2*1:6),
+                 y = rep(c(y_bot, y_bot, y_top, y_top), each = 6),
                  angle = rep(c(0, 0, 180, 180), each = 6))
 
     # coins
@@ -158,9 +135,32 @@ df_backgammon <- function() {
     # dice
     df_d <- tibble(piece_side = "die_face", suit = c(4,1,3,2), rank = c(1,1,2,2),
                    x = c(x_6, x_6, 6.5-0.5, 6.5+0.5),
-                   y = c(y_bot, y_top, y_bot+1.5, y_bot+1.5),
+                   y = c(y_bot, y_top, y_bot+2.0, y_bot+2.0),
                    angle = c(0, 180, 0, 180))
     bind_rows(df_t, df_c1, df_c2, df_p, df_d)
+}
+
+#' @rdname df_game
+#' @export
+df_brandubh <- function() {
+    df_t <- df_rect_board_tiles(7, 7)
+    df_c <- tibble(piece_side = c(rep("coin_back", 4L), "die_face"),
+                    suit = 3L,
+                    rank = c(1, 3, 4, 6, 2),
+                    x = c(1, 1, 7, 7, 4),
+                    y = c(1, 7, 1, 7, 4),
+                    angle = c(0, 180, 0, 180, 0))
+    df_a <- tibble(piece_side = c(rep("coin_back", 4L), "pawn_face"),
+                    suit = 4, x = c(4, 5, 4, 3, 4),
+                    y = c(5, 4, 3, 4, 4),
+                    angle = c(180, 90, 0, 270, 0))
+    df_f <- tibble(piece_side = "coin_face",
+                   x = c(4, 4, 7, 6, 4, 4, 1, 2),
+                   y = c(7, 6, 4, 4, 1, 2, 4, 4),
+                   suit = rep(1:4, each = 2L),
+                   rank = rep(c(2, 5), 4L),
+                   angle = rep(c(180, 90, 0, 270), each = 2L))
+    bind_rows(df_t, df_c, df_a, df_f)
 }
 
 #' @rdname df_game

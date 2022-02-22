@@ -1,22 +1,123 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
 %% end.rcode
 
 \subsection{Description}
 
-Backgammon is one of the oldest known board games. Like other classic board games like checkers and chess it is also possible to play with a single piecepack. Although not required some players will appreciate extra tokens (each player needs 15 tokens), a doubling cube, 2--4 standard dice, and/or 1--2 dice cups. 
+Backgammon is one of the oldest known board games. It is possible to play with a single piecepack.\footnote{Although not required some players will appreciate extra tokens (each player needs 15 tokens), a doubling cube, 2--4 standard dice, and/or 1--2 dice cups.}
+
+\subsection{Objective}
+
+Backgammon is a race game where a player wins after they \emph{bear off} all their pieces off the board.
 
 \subsection{Setup}
 
-Have each other sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits). For a traditional U-shaped setup have each player place the tiles face up in a row in front of them, alternating suits to mimick the alternating color scheme of a traditional backgammon board. Place a gap in the middle of the tiles (so there are six tiles to the left and six to the right) to represent the backgammon ``bar'' of a traditional backgammon board. Each tile will henceforth be called a ``point'' because on a traditional backgammon board it is shaped like a point. Each points holds between 0--15 tokens of a single player.
+Each player sits across from each other and each player takes all the pieces from two suits e.g. ``astronomical'' \rinline{paste0(pieces$cS, pieces$cM)} versus ``power'' suits \rinline{paste0(pieces$cC, pieces$cA)}. For a traditional U-shaped setup have each player place their tiles face up in a row in front of them, alternating suits to mimic the alternating color scheme of a traditional backgammon board. Place a gap in the middle of the tiles (so there are six tiles to the left and six to the right) to represent the backgammon ``bar'' of a traditional backgammon board. Each tile will henceforth be called a \emph{point} because on a traditional backgammon board it is shaped like a point. Each \emph{point} holds between 0--15 tokens of a single player.
 
-Each player needs 15 tokens. If just using one standard piecepack give each player twelve coins (face down), two pawns, and one die. Place their tokens in the appropriate point according to the rules of backgammon.
+Each player needs 15 tokens. If just using one standard piecepack then each player takes twelve coins (face down), two pawns, and one die to use as their fifteen tokens.\footnote{If you have extra tokens use some of them instead of the die and/or pawns.}  Each player places their tokens in the appropriate \emph{point} according to the rules of backgammon as in Figure \ref{fig:backgammon-starting-diagram}.  The two remaining dice are to be shared by both players and to be rolled as ``normal'' dice (i.e. ace = 1, two = 2, three = 3, four = 4, five = 5, nulls = 6).\footnote{If you have a couple normal six-sided dice handy you may want to use those instead. Serious backgammon players usually use dice cups to reduce the possibility of cheating.}
 
-If playing backgammon for stakes with the doubling cube rule and you don't have a doubling cube or an extra die then the two die tokens will also have to represent the doubling cube. In such case the token dice should be initially placed with nulls facing. Whenever someone changes the stakes change the die face of the player who has the power to double next to the number of times the stakes has been doubled so far (i.e. an ace face means stakes have been doubled once, 2 means stakes have been doubled twice, etc.). If necessary the other players die face should be changed back to nulls. In such a fashion it is possible to tell from the two token dice how much the stakes have been doubled and who has the power to next double the stakes. Of course if you have an actual doubling cube use that instead or if you have an extra die use it exclusively as a doubling cube using the ``each number represents number of times stakes have been doubled'' system.
-
-The other two dice are rolled as ``normal'' dice (i.e. ace = 1, nulls = 6). A player's turn ends when they pick up the dice and hand them to the other player. Serious backgammon players usually use dice cups to reduce the possibility of cheating. 
-
-%% begin.rcode starting-diagram, fig.width=25.2, fig.height=5.04, out.width="1\\linewidth", out.height=".2\\linewidth", fig.cap="Backgammon starting diagram"
-cfg <- gk$get_piecepacks(1)[[1]]
+%% begin.rcode starting-diagram, fig.width=26.2, fig.height=6.2, out.width="1\\linewidth", out.height=paste0(6.2/26.2, "\\linewidth"), fig.cap="Backgammon starting diagram"
 pmap_piece(df_backgammon(), cfg=cfg, default.units="in")
 %% end.rcode
+
+\subsection{The Order of Play}
+
+Each player rolls a die to see who goes first.  Players then alternate turns rolling two dice and then moving 0--4 pieces possibly \emph{hitting} 1--4 of the opponent's pieces.
+
+\subsection{Moving, Hitting, and Entering}
+
+Each number on the two die indicate how many \emph{points} to move their pieces:\begin{enumerate}
+\item{The ``Astronomical'' player moves one direction on the U-shaped board while the ``Power'' player moves in the opposite direction.
+See Figures \ref{fig:backgammon-astronomical-track} and \ref{fig:backgammon-power-track} for each player's route.}
+\item{ A piece must move exactly the number of points as the value of the respective die used.\footnote{Exception: during your \emph{bearing off} phase---if there are no pieces further away---you may bear off a piece less than that die value away from the end.} }
+\item{ If the die values are different (e.g. 2 and 5) then you must---if possible---move a piece according to the value of one die and a piece (possibly the same piece again) the value of the other die. If the die values are the same (e.g. 2 and 2)---called a \emph{double}---then the player has to make four moves (1--4 pieces) of the same value (e.g. 2, 2, 2, and 2). }
+\item{ If possible one must use all the die rolls, if not possible to use all of them then use as many as possible---one must prefer the higher di(c)e roll(s) if able to use either.  It could be that you may not use any at all in which case your turn is over without any action.}
+\item{ You may not move onto a \emph{point} that has two or more opponent pieces. }
+\item{ You may move onto a \emph{point} with your own pieces. }
+\item{ You may move onto a \emph{point} that has exactly one opponent piece in which case it is \emph{hit} placed onto the \emph{bar} area of the board. }
+\item{ If you have any pieces on the \emph{bar} area of the board one must \emph{enter} them at the end of your route before one can move any other pieces. }
+\end{enumerate}
+
+%% begin.rcode astronomical-track, fig.width=27.5, fig.height=8.2, out.width="1\\linewidth", out.height=paste0(8.2/27.5, "\\linewidth"), fig.cap="Direction ``Astronomical'' player's route"
+df <- df_backgammon()
+df <- df[which(df$piece_side == "tile_face"), ]
+x_offset <- 1.0
+y_offset <- 0.9
+df$x <- df$x + x_offset
+df$y <- df$y + y_offset
+pmap_piece(df, cfg=cfg, default.units="in")
+gp <- gpar(fontsize=58)
+grid.text("Bar", x=13 + x_offset, y=3 + y_offset, default.units="in", rot=90, gp=gp)
+grid.text("Astronomical's Home Board", x = 20 + x_offset, y = 6.9 + y_offset, default.units="in", gp=gp)
+grid.text("Astronomical's Outer Board", x = 6 + x_offset, y = 6.9 + y_offset, default.units="in", gp=gp)
+grid.text("Powers's Home Board", x = 20 + x_offset, y = 0.30, default.units="in", gp=gp)
+grid.text("Powers's Outer Board", x = 6 + x_offset, y = 0.30, default.units="in", gp=gp)
+gp <- gpar(lwd = 32, col = cfg$annotation_color, fill = cfg$annotation_color)
+arrow_ <- arrow(angle=45, length=unit(0.75, "in"), type = "closed")
+grid.segments(x0 = x_offset + 1, 
+              y0 = y_offset + 5,
+              x1 = x_offset + 25, 
+              y1 = y_offset + 5,
+              arrow = arrow_,
+              default.units="in", gp=gp)
+grid.curve(x1 = x_offset + 1, x2 = 0.25,
+           y1 = y_offset + 5, y2 = y_offset + 3,
+           curvature = 1, default.units="in", gp=gp)
+grid.curve(x1 = x_offset + 1, x2 = 0.25,
+           y1 = y_offset + 1, y2 = y_offset + 3,
+           curvature = -1, default.units="in", gp=gp)
+grid.segments(x0 = x_offset + 1, 
+              y0 = y_offset + 1,
+              x1 = x_offset + 25, 
+              y1 = y_offset + 1,
+              default.units="in", gp=gp)
+%% end.rcode
+
+%% begin.rcode power-track, fig.width=27.5, fig.height=8.2, out.width="1\\linewidth", out.height=paste0(8.2/27.5, "\\linewidth"), fig.cap="Direction ``Power'' player's route"
+df <- df_backgammon()
+df <- df[which(df$piece_side == "tile_face"), ]
+x_offset <- 1.0
+y_offset <- 0.9
+df$x <- df$x + x_offset
+df$y <- df$y + y_offset
+pmap_piece(df, cfg=cfg, default.units="in")
+gp <- gpar(fontsize=58)
+grid.text("Bar", x=13 + x_offset, y=3 + y_offset, default.units="in", rot=90, gp=gp)
+grid.text("Astronomical's Home Board", x = 20 + x_offset, y = 6.9 + y_offset, default.units="in", gp=gp)
+grid.text("Astronomical's Outer Board", x = 6 + x_offset, y = 6.9 + y_offset, default.units="in", gp=gp)
+grid.text("Powers's Home Board", x = 20 + x_offset, y = 0.30, default.units="in", gp=gp)
+grid.text("Powers's Outer Board", x = 6 + x_offset, y = 0.30, default.units="in", gp=gp)
+gp <- gpar(lwd = 32, col = cfg$annotation_color, fill = cfg$annotation_color)
+grid.segments(x0 = x_offset + 25, 
+              y0 = y_offset + 5,
+              x1 = x_offset + 1, 
+              y1 = y_offset + 5,
+              default.units="in", gp=gp)
+grid.curve(x1 = x_offset + 1, x2 = 0.25,
+           y1 = y_offset + 5, y2 = y_offset + 3,
+           curvature = 1, default.units="in", gp=gp)
+grid.curve(x1 = x_offset + 1, x2 = 0.25,
+           y1 = y_offset + 1, y2 = y_offset + 3,
+           curvature = -1, default.units="in", gp=gp)
+arrow_ <- arrow(angle=45, length=unit(0.75, "in"), type = "closed")
+grid.segments(x0 = x_offset + 1, 
+              y0 = y_offset + 1,
+              x1 = x_offset + 25, 
+              y1 = y_offset + 1,
+              arrow = arrow_,
+              default.units="in", gp=gp)
+%% end.rcode
+
+\subsection{Bearing off}
+
+A player may begin \emph{bearing off} pieces from the board on their moves after all (remaining) pieces have been moved to their ``home board'' (See Figures \ref{fig:backgammon-astronomical-track} and \ref{fig:backgammon-power-track}.\begin{enumerate}
+\item{If you roll a die number that matches the \emph{point}'s distance from the end you must remove that piece from the board.}
+\item{If you roll a die number that is less than the farthest \emph{point} with their pieces still on it you must move a piece forward (if possible).  If you do not have a farther \emph{point} with pieces on it then you must remove a piece farthest from the end.}
+\item{If during the process of \emph{bearing off} one (or more) of your pieces is \emph{hit} and sent to the \emph{bar} you must \emph{enter} it and move it to your ``home board'' before you may \emph{bear off} any more pieces.}
+\end{enumerate}
+
+\subsection{Doubling cube (optional but recommended)}
+
+When playing for stakes a player may offer to double the stakes at any time.  If their opponent agrees double the stakes else the opponent forfeits and must pay the (pre-doubled) stakes.  The same player can't offer to double the stakes twice in a row; otherwise no limit.  If you don't have a traditional backgammon ``doubling cube'' (or an extra die) then the two die tokens will also have to represent the doubling cube. In such case the token dice should be initially placed with nulls facing. Whenever someone changes the stakes change the die face of the player who has the power to double next to the number of times the stakes has been doubled so far (e.g. an ace face means stakes have been doubled once) and the other player's die face to  nulls. In such a fashion it is possible to tell from the two token dice how much the stakes have been doubled and who has the power to next double the stakes.  If at the end of a game a player has not borne off any pieces they are \emph{gammoned} and must pay twice the stakes.  If they have not borne off any pieces and still has a piece on the \emph{bar} or their opponents ``home board'' they are \emph{backgammoned} and must pay thrice the stakes.

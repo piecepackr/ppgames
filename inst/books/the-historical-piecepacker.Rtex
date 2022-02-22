@@ -20,7 +20,7 @@ cat(str_glue("\\graphicspath{{{dir}/}}", dir = system.file("images", package = "
 \begin{minipage}[b]{0.9\textwidth}
 \footnotesize\raggedright
 \setlength{\parskip}{0.5\baselineskip}
-Copyright \copyright 2016--2020 Trevor L. Davis\par
+Copyright \copyright 2022 Trevor L. Davis\par
 Some Rights Reserved.\par
 This collective work is released under a \href{https://creativecommons.org/licenses/by-sa/4.0/}{Creative Commons Attribution-ShareAlike 4.0 International License}.
 \end{minipage}
@@ -71,6 +71,7 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \chapter{Other Traditional Board Games}
 
 \include{american-checkers-chapter}
+\include{backgammon-chapter}
 \include{four-field-kono-chapter}
 \include{tablut-chapter}
 
@@ -109,8 +110,5 @@ Five & King & King & General \\
 \include{chaturaji-chapter}
 \include{four-seasons-chess-chapter}
 \include{ultima-chess-chapter}
-
-\chapter{Other Traditional Games}
-\include{backgammon-chapter}
 
 \end{document}
