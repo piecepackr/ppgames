@@ -1,3 +1,13 @@
+ppgames 0.8.0
+=============
+
+New features
+------------
+
+* New starting board generators for specific games:
+
+  - ``df_ludo()``
+
 ppgames 0.7.0
 =============
 

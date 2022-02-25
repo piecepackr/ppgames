@@ -122,6 +122,10 @@ test_that("game diagrams work as expected", {
         game <- read_ppn(textConnection(text))[[1]]
         plot_move(game, new_device=FALSE)
     })
+    expect_doppelganger("ludo", function() {
+        df <- df_ludo()
+        pmap_piece(df, default.units = "in", envir = ee)
+    })
     expect_doppelganger("shogi", function() {
         df <- df_shogi()
         pmap_piece(df, default.units = "in", envir = ee)

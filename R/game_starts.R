@@ -71,6 +71,8 @@
 #'                   See \url{https://www.ludism.org/ppwiki/LeyLines}.}
 #'  \item{Lines of Action}{An abstract designed by Claude Soucie.
 #'                         See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
+#'  \item{Ludo}{Racing game based off Pachisi.
+#'              See \url{https://en.wikipedia.org/wiki/Ludo_(board_game)}.}
 #'  \item{Mathrix}{A solitaire by Clark Rodeffer.
 #'                 See \url{https://www.ludism.org/ppwiki/Mathrix}}
 #'  \item{Nine Men's Morris}{Traditional board game.

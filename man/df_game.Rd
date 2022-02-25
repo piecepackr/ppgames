@@ -62,6 +62,7 @@
 \alias{df_grasshopper}
 \alias{df_jul_gono}
 \alias{df_lines_of_action}
+\alias{df_ludo}
 \alias{df_nine_mens_morris}
 \alias{df_turkish_draughts}
 \alias{df_twelve_mens_morris}
@@ -187,6 +188,8 @@ df_jul_gono()
 
 df_lines_of_action()
 
+df_ludo()
+
 df_nine_mens_morris(has_matchsticks = FALSE)
 
 df_turkish_draughts()
@@ -295,6 +298,8 @@ See \url{https://www.ludism.org/ppwiki/Landlocked}.}
 See \url{https://www.ludism.org/ppwiki/LeyLines}.}
 \item{Lines of Action}{An abstract designed by Claude Soucie.
 See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
+\item{Ludo}{Racing game based off Pachisi.
+See \url{https://en.wikipedia.org/wiki/Ludo_(board_game)}.}
 \item{Mathrix}{A solitaire by Clark Rodeffer.
 See \url{https://www.ludism.org/ppwiki/Mathrix}}
 \item{Nine Men's Morris}{Traditional board game.
