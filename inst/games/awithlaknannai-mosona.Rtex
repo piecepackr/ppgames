@@ -1,0 +1,144 @@
+%% begin.rcode opts, echo=FALSE
+set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
+%% end.rcode
+
+\subsection{Description}
+
+A two-player abstract historically played by the Zuni.
+
+\subsection{Objective}
+
+Capture all your opponent's pieces to win.\footnote{ If no more captures can be made by either player then whoever captured more pieces wins (if the same number of pieces were captured then it is a draw).}
+
+\subsection{Setup}
+
+Each player takes all twelve of the coin backs from two suits e.g. ``astronomical'' \rinline{paste0(pieces$cS, pieces$cM)} versus ``power'' suits \rinline{paste0(pieces$cC, pieces$cA)}.
+Use 8 tiles and all 24 coins to set up the board as in Figure \ref{fig:awithlaknannai-mosona-starting-diagram}.
+
+\subsection{Rules}
+%% begin.rcode starting-diagram, fig.width=25.2, fig.height=5.2, out.width="\\linewidth", out.height="0.2\\linewidth", fig.cap="Awithlaknannai Mosona setup"
+pmap_piece(df_awithlaknannai_mosona(), cfg=cfg, default.units="in")
+%% end.rcode
+
+\subsection{The Order of Play}
+
+Each player rolls a die to see who goes first.  Players then alternate turns moving a piece possible capturing opponent piece(s).
+
+\subsection{The Moves}
+
+%% begin.rcode network, fig.width=25.2, fig.height=5.2, out.width="\\linewidth", out.height="0.2\\linewidth", fig.cap="Awithlaknannai Mosona network"
+df <- df_awithlaknannai_mosona()
+df <- df[which(df$piece_side == "tile_face"), ]
+pmap_piece(df, cfg=cfg, default.units="in")
+
+gp <- gpar(col = NA, fill = cfg$annotation_color)
+
+grid.circle(x = rep(df$x, each = 4) + rep(c(-sqrt(2), 0, sqrt(2), 0), 8),
+            y = rep(df$y, each = 4) + rep(c(0, sqrt(2), 0, -sqrt(2)), 8),
+            r = 0.32, default.units = "in", gp = gp)
+gp <- gpar(lex=18, col = cfg$annotation_color)
+grid.segments(x0 = min(df$x) + c(-sqrt(2), 0, 0), 
+              y0 = df$y[1] + c(0, sqrt(2), -sqrt(2)),
+              x1 = max(df$x) + c(sqrt(2), 0, 0), 
+              y1 = df$y[1] + c(0, sqrt(2), -sqrt(2)),
+              default.units="in", gp=gp)
+
+grid.segments(x0 = df$x[1:7], 
+              y0 = df$y[1] - sqrt(2),
+              x1 = df$x[2:8],
+              y1 = df$y[1] + sqrt(2),
+              default.units="in", gp=gp)
+
+grid.segments(x0 = df$x[1:7], 
+              y0 = df$y[1] + sqrt(2),
+              x1 = df$x[2:8],
+              y1 = df$y[1] - sqrt(2),
+              default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[1], x2 = df$x[1] - sqrt(2),
+           y1 = df$y[1] - sqrt(2), y2 = df$y[1],
+           curvature = -0.5, default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[1] - sqrt(2), x2 = df$x[1],
+           y1 = df$y[1], y2 = df$y[1] + sqrt(2),
+           curvature = -0.5, default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[8], x2 = df$x[8] + sqrt(2),
+           y1 = df$y[1] - sqrt(2), y2 = df$y[1],
+           curvature = 0.5, default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[8] + sqrt(2), x2 = df$x[8],
+           y1 = df$y[1], y2 = df$y[1] + sqrt(2),
+           curvature = 0.5, default.units="in", gp=gp)
+
+%% end.rcode
+
+\begin{itemize}
+
+\item See Figure \ref{fig:awithlaknannai-mosona-network} for the game network.\footnote{Some versions of Awithlaknannai Mosona---based on a illustration in H.J.R. Murrays's \emph{A History of Board-games Other Than Chess}, p. 71---has a slightly different board.  However that illustration seems to be a mistake that differs from both its corresponding text and the illustration from Murray's source: Stewart Culin's \emph{Games of the North American Indians}, p. 801.}  Nodes are the corners of the tiles.
+
+\item The non-capturing \emph{simple move} is a sideways or diagonal move to an empty, adjacent node.
+
+\item A capturing \emph{jump} move is is a sideways or diagonal move jumping over an enemy-occupied adjacent node to an empty node past it on the same line---note the curved line of the far left and right of the board.  
+Multiple jumps in a turn are possible, if after a jump a piece is in a position to make another jump (possibly in another direction) then they can (and in fact must) do so until they are no longer in a position to do so.
+
+\item If possible a player must choose to do a jump instead of a simple move.  After making a jump a piece must continue to jump until it can no longer do so.  If multiple pieces can make a jump and/or a piece may jump in multiple directions then the player may choose which piece and which jumps to make---they need not maximize the number of possible jumps (but any jumping piece must continue to make jumps until it can no longer do so).
+
+\end{itemize}
+
+\subsection{Rule Variants}
+\begin{itemize}
+\item Jumps as described earlier in the rules are now optional but if a player fails to do (previously mandatory) jump in their turn then the piece that would have jumped is removed by the opponent before their move.\footnote{Even if that piece jumped over one or more pieces it can still be ``huffed'' off the board if that piece could have made additional jumps that turn.  If there are multiple pieces that could have jumped that turn then the opponent gets to choose which one to huff off the board.}  This is called ``huffing''.
+\item For two subsequent games (each player moving first in one) use a pre-determined 3 move opening.
+
+\item Use instead the (mistaken) network from H.J.R. Murray's \emph{A History of Board-games Other Than Chess}, p. 71.  See Figure \ref{fig:awithlaknannai-mosona-variant-network}:
+
+%% begin.rcode variant-network, fig.width=25.2, fig.height=5.2, out.width="\\linewidth", out.height="0.2\\linewidth", fig.cap="Variant Awithlaknannai Mosona network"
+df <- df_awithlaknannai_mosona()
+df <- df[which(df$piece_side == "tile_face"), ]
+pmap_piece(df, cfg=cfg, default.units="in")
+
+gp <- gpar(col = NA, fill = cfg$annotation_color)
+
+grid.circle(x = rep(df$x, each = 4) + rep(c(-sqrt(2), 0, sqrt(2), 0), 8),
+            y = rep(df$y, each = 4) + rep(c(0, sqrt(2), 0, -sqrt(2)), 8),
+            r = 0.32, default.units = "in", gp = gp)
+gp <- gpar(lex=18, col = cfg$annotation_color)
+grid.segments(x0 = min(df$x) + -sqrt(2), 
+              y0 = df$y[1],
+              x1 = max(df$x) + sqrt(2), 
+              y1 = df$y[1],
+              default.units="in", gp=gp)
+
+grid.segments(x0 = df$x[1:7], 
+              y0 = df$y[1] - sqrt(2),
+              x1 = df$x[2:8],
+              y1 = df$y[1] + sqrt(2),
+              default.units="in", gp=gp)
+
+grid.segments(x0 = df$x[1:7], 
+              y0 = df$y[1] + sqrt(2),
+              x1 = df$x[2:8],
+              y1 = df$y[1] - sqrt(2),
+              default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[1], x2 = df$x[1] - sqrt(2),
+           y1 = df$y[1] - sqrt(2), y2 = df$y[1],
+           curvature = -0.0, default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[1] - sqrt(2), x2 = df$x[1],
+           y1 = df$y[1], y2 = df$y[1] + sqrt(2),
+           curvature = -0.0, default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[8], x2 = df$x[8] + sqrt(2),
+           y1 = df$y[1] - sqrt(2), y2 = df$y[1],
+           curvature = 0.0, default.units="in", gp=gp)
+
+grid.curve(x1 = df$x[8] + sqrt(2), x2 = df$x[8],
+           y1 = df$y[1], y2 = df$y[1] + sqrt(2),
+           curvature = 0.0, default.units="in", gp=gp)
+
+%% end.rcode
+\end{itemize}

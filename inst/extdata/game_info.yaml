@@ -2,6 +2,18 @@
 # license "CC-BY-SA-4.0"
 # equipment "one standard piecepack"
 # title inferred from list key
+# original board games
+pass_the_food:
+    title: "Pass the Food"
+    players: [1, 2, 3, 4]
+    length: 20
+    equipment: "one standard piecepack"
+    designer: "Trevor L. Davis"
+    version: "0.3"
+    version_date: "2021-01-15"
+    copyright: "\\copyright~2021 Trevor L. Davis. Some Rights Reserved."
+    ppwiki: "PassTheFood"
+# historical board game adaptions
 alice_chess:
     players: 2
     length: [30, 180]
@@ -45,9 +57,9 @@ awithlaknannai_mosona:
     players: 2
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Trevor L. Davis"
-    copyright: "\\copyright~2020 Trevor L. Davis. Some Rights Reserved."
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
     version: "1.0"
-    version_data: "2020-11-21"
+    version_date: "2022-02-28"
     boardgamegeek: 13766
     cyningstan: "113"
     wikipedia: "Awithlaknannai_Mosona"
@@ -146,25 +158,6 @@ nine_mens_morris:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
         - "David Pritchard, \\emph{Brain Games} (1982), 128--131"
     copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
-pass_the_food:
-    title: "Pass the Food"
-    players: [1, 2, 3, 4]
-    length: 20
-    equipment: "one standard piecepack"
-    designer: "Trevor L. Davis"
-    version: "0.3"
-    version_date: "2021-01-15"
-    copyright: "\\copyright~2021 Trevor L. Davis. Some Rights Reserved."
-    ppwiki: "PassTheFood"
-quirky_qirkat:
-    title: "Qirky Qirkat"
-    players: 2
-    equipment: "one standard piecepack, one set of piecepack matchsticks"
-    designer: "Trevor L. Davis"
-    ppwiki: "QirkyQirkat"
-    copyright: "\\copyright~2020 Trevor L. Davis. Some Rights Reserved."
-    version: "0.1"
-    version_date: "2020-11-21"
 tablut:
     players: 2
     length: 45

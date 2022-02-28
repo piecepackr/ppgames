@@ -58,19 +58,20 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \chapter{Alquerque Games}
 
 \include{alquerque-chapter}
-% \include{awithlaknannai-chapter}
+\include{american-checkers-chapter}
+\include{awithlaknannai-mosona-chapter}
 
 \chapter{Chess Variants}
 
 \include{xiangqi-chapter}
 
 \chapter{Morris aka Merels Games}
+
 \include{nine-mens-morris-chapter}
 \include{twelve-mens-morris-chapter}
 
 \chapter{Other Traditional Board Games}
 
-\include{american-checkers-chapter}
 \include{backgammon-chapter}
 \include{four-field-kono-chapter}
 \include{tablut-chapter}
