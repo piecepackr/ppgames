@@ -1,11 +1,11 @@
 # URL parameters supported:
 #
 # ppn - Raw PPN text to use
-# system.file - Name of file accessible by sytem.file() to read PPN from,
+# system.file - Name of file accessible by `system.file()` to read PPN from;
 #               will try prepending "ppn/" and postpending ".ppn"
-# package - Name of package to feed to system.file() to be used with `system.file` parameter
-# op_scale - Numeric value greater than or equal to zero
-# op_angle - Numeric from 0 to 360
+# package - Name of package to feed to `system.file()` to be used with `system.file` parameter
+# op_scale - Numeric value greater than or equal to zero; "oblique projection" scale
+# op_angle - Numeric from 0 to 360; "oblique projection" angle
 # annotate - Either "none", "algebraic", or "cartesian"
 #
 library("ppgames")
@@ -36,10 +36,6 @@ server <- function(input, output, session) {
         showNotification("Neither 'animation' or 'gifski' packages installed.  GIF animation disabled.",
                          type = "warning")
 
-    if (!has_dejavu)
-        showNotification('"Dejavu Sans" font not detected.  Falling back to "sans" style.',
-                         type = "warning")
-
     if (!has_fansi)
         showNotification("'fansi' package not installed. 'cat_piece' 'color' option disabled.",
                          type = "warning")
@@ -52,6 +48,15 @@ server <- function(input, output, session) {
     if (!has_tradgames)
         showNotification("'tradgames' package not installed.  Some checker games disabled.",
                          type = "warning")
+
+    if (!has_tweenr)
+        showNotification("'tweenr' package not installed.  Animation transitions disabled.",
+                         type = "warning")
+
+    if (!has_dejavu)
+        showNotification('"Dejavu Sans" font not detected.  Falling back to "sans" style.',
+                         type = "warning")
+
 
     game <- gameServer("game")
     move <- moveServer("move", game)

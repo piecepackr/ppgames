@@ -4,6 +4,9 @@ has_fansi <- requireNamespace("fansi", quietly = TRUE)
 has_piecenikr <- requireNamespace("piecenikr", quietly = TRUE)
 has_rgl <- requireNamespace("rgl", quietly = TRUE)
 has_tradgames <- requireNamespace("tradgames", quietly = TRUE)
+has_tweenr <- requireNamespace("tweenr", quietly = TRUE)
+
+# suggested fonts
 has_dejavu <- piecepackr::has_font("Dejavu Sans")
 
 # parse PPN game
@@ -188,11 +191,19 @@ plaintextServer <- function(id, game, move) {
 gridUI <- function(id) {
     ns <- NS(id)
     if (has_animation) {
-        animation_ui <- tagList(hr(),
+        if (has_tweenr) {
+            animation_ui <- tagList(hr(),
                      fluidRow(column(3, actionButton(ns("animate"), "Create GIF!")),
                               column(3, numericInput(ns("n_transitions"), "n_transitions", 0, min = 0, step = 1)),
                               column(2, numericInput(ns("n_pauses"), "n_pauses", 1, min = 1, step = 1)),
                               column(3, numericInput(ns("fps"), "fps", 1.5, min = 0.5, step = 0.5))))
+        } else {
+            animation_ui <- tagList(hr(),
+                     fluidRow(column(3, actionButton(ns("animate"), "Create GIF!")),
+                              column(3, numericInput(ns("fps"), "fps", 1.5, min = 0.5, step = 0.5))),
+                              conditionalPanel('false', column(1, numericInput(ns("n_transitions"), "n_transitions", 0, min = 0, step = 1))),
+                              conditionalPanel('false', column(1, numericInput(ns("n_pauses"), "n_pauses", 1, min = 1, step = 1))))
+        }
     } else {
         animation_ui <- NULL
     }
