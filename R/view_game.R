@@ -16,7 +16,8 @@ view_game <- function(game, shiny = FALSE, ...,
         view_game_shiny(game)
     } else {
         piecepackr:::assert_suggested("argparse")
-        view_game_cmdline(game, ..., editor, reorient, annotate, fps)
+        view_game_cmdline(game, ..., editor = editor, reorient = reorient,
+                          annotate = annotate, fps = fps)
     }
 }
 

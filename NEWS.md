@@ -8,6 +8,11 @@ New features
 
   - ``df_ludo()``
 
+Bug fixes and minor improvements
+--------------------------------
+
+* Fixes bug when launching command-line version of `view_game()`
+
 ppgames 0.7.0
 =============
 
