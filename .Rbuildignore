@@ -16,3 +16,5 @@ tmp
 ^_pkgdown.yml$
 ^.travis.yml$
 ^\.github$
+^Dockerfile$
+^\.dockerignore$
