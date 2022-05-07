@@ -13,7 +13,7 @@ ppgames: Piecepack game diagrams and rules
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-``ppgames`` is an R_ package with functions that help generate piecepack_ game graphics, rulesets, and books as well as functions to parse "Portable Piecepack Notation" files and a Fuji-san solver.
+``ppgames`` is an R_ package with functions that help generate piecepack_ game graphics, rulesets, and books as well as functions to parse `Portable Piecepack Notation (PPN) files <https://trevorldavis.com/piecepackr/portable-piecepack-notation.html>`_ and a `Fuji-san <https://www.ludism.org/ppwiki/Fuji-san>`_ solver.  This package uses the piecepackr_ package.
 
 .. _piecepack: http://www.ludism.org/ppwiki/HomePage
 .. _piecepackr: https://github.com/piecepackr/piecepackr
@@ -44,12 +44,12 @@ If you want to make rulebooks you'll need ``xelatex`` and if you want to make ru
 License
 -------
 
-Unless otherwise specified everything in this repo is licensed under the `CC BY-SA 4.0 license <https://creativecommons.org/licenses/by-sa/4.0/>`_.
+Unless otherwise specified the rulesets and rulebooks in the `inst` directory are licensed under the `CC BY-SA 4.0 license <https://creativecommons.org/licenses/by-sa/4.0/>`_.  The code in the `R`, `inst/ppn`, `inst/shiny`, `man`, and `tests` data are dual-licensed under the `MIT license <https://opensource.org/licenses/MIT>`_.
 
 Rulebooks and Rulesets
 ----------------------
 
-This package provides some prototype configurable rulesets and one work-in-progress rulebook.  One can use ``save_ruleset`` and ``save_rulebook`` to generate them:
+This package provides some prototype configurable rulesets and one work-in-progress rulebook.  One can use `save_pamphlet() <https://trevorldavis.com/R/ppgames/dev/reference/save_ruleset.html>`_, `save_ruleset() <https://trevorldavis.com/R/ppgames/dev/reference/save_ruleset.html>`_, and `save_rulebook() <https://trevorldavis.com/R/ppgames/dev/reference/save_ruleset.html>`_ to generate them.  `This web page <https://trevorldavis.com/piecepackr/game-starting-arrangement-functions.html>`_ lists which piecepack games we support ruleset generation for.
 
 .. code:: r
 
@@ -68,7 +68,9 @@ This package provides some prototype configurable rulesets and one work-in-progr
 Starting Boards
 ---------------
 
-This package provides several starting boards in the data frame format accepted by ``piecepackr::pmap_piece`` and ``cat_piece`` that can also be used to setup games in the PPN format.  See the file ``NEWS.md`` for the complete list or look up the ``starting_boards`` man page in the package documentation.  It also contains some arbitrary rectangular board constructors that can be used to setup a variety of rectangular boards: ``df_rect_board_tiles`` as well as ``grid.board_rect_tiles`` and (to generate non-piecepack rectangular boards) ``grid.board_rect_cells`` and ``grid.board_rect_points``.
+This package provides several starting boards in the data frame format accepted by `piecepackr::pmap_piece() <https://trevorldavis.com/R/piecepackr/dev/reference/pmap_piece.html>`_ and `cat_piece() <https://trevorldavis.com/R/ppgames/dev/reference/cat_piece.html>`_ that can also be used to setup games in the `PPN format <https://trevorldavis.com/piecepackr/portable-piecepack-notation.html>`_:  
+
+See `the package documentation <https://trevorldavis.com/R/ppgames/dev/reference/df_game.html>`_ and the `this web page <https://trevorldavis.com/piecepackr/game-starting-arrangement-functions.html>`_ for more information and a full list of supported games.
 
 .. code:: r
 
@@ -89,7 +91,7 @@ This package provides several starting boards in the data frame format accepted 
 Plaintext Unicode Piecepack Diagrams
 ------------------------------------
 
-This package provides a prototype plaintext Unicode diagram generator.  One can use ``cat_piece`` to print out diagrams to the terminal using the same ``data.frame`` input accepted by ``piecepackr::pmap_piece`` or one can use ``cat_move`` to print out diagrams using the parsed PPN games provided by ``read_ppn``:
+This package provides a prototype plaintext Unicode diagram generator.  One can use `cat_piece() <https://trevorldavis.com/R/ppgames/dev/reference/cat_piece.html>`_ to print out diagrams to the terminal using the same ``data.frame()`` input accepted by `piecepackr::pmap_piece() <https://trevorldavis.com/R/piecepackr/dev/reference/pmap_piece.html>`_ or one can use `cat_move() <https://trevorldavis.com/R/ppgames/dev/reference/cat_piece.html>`_ to print out diagrams using the parsed PPN games provided by `read_ppn() <https://trevorldavis.com/R/ppgames/dev/reference/read_ppn.html>`_:
 
 .. code:: r
 
@@ -111,7 +113,7 @@ This package provides a prototype plaintext Unicode diagram generator.  One can 
 Portable Piecepack Notation
 ---------------------------
 
-This package provides a prototype `Portable Piecepack Notation <https://trevorldavis.com/piecepackr/portable-piecepack-notation.html>`_ parser.  One can use ``read_ppn`` to parse a PPN file and use ``animate_game``, ``plot_move``, and ``cat_move`` to visualize the moves in a parsed game:
+This package provides a prototype `Portable Piecepack Notation <https://trevorldavis.com/piecepackr/portable-piecepack-notation.html>`_ parser.  One can use `read_ppn() <https://trevorldavis.com/R/ppgames/dev/reference/read_ppn.html>`_ to parse a PPN file and use `animate_game() <https://trevorldavis.com/R/ppgames/dev/reference/animate_game.html>`_, `plot_move() <https://trevorldavis.com/R/ppgames/dev/reference/plot_move.html>`_, and `cat_move() <https://trevorldavis.com/R/ppgames/dev/reference/cat_piece.html>`_ to visualize the moves in a parsed game:
 
 .. code:: r
 
@@ -123,7 +125,7 @@ This package provides a prototype `Portable Piecepack Notation <https://trevorld
 Game Solvers
 ------------
 
-This package provides a Fuji-san solver ``solve_fujisan`` which can compute the shortest solution (if it exists) to a given Fuji-san puzzle and output the PPN text to record/visualize the solution.
+This package provides a `Fuji-san <https://www.ludism.org/ppwiki/Fuji-san>`_ solver `solve_fujisan() <https://trevorldavis.com/R/ppgames/dev/reference/game_solvers.html>`_ which can compute the shortest solution (if it exists) to a given Fuji-san puzzle and output the PPN text to record/visualize the solution.
 
 .. code:: r
 
