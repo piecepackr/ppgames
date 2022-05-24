@@ -1,7 +1,7 @@
 #' Animate a ppn game
 #'
 #' Animate a ppn game
-#' @param game A list containing a parsed ppn game (as parsed by \code{read_ppn})
+#' @param game A list containing a parsed ppn game (as parsed by [read_ppn()])
 #' @inheritParams piecepackr::animate_piece
 #' @seealso [piecepackr::animate_piece()]
 #' @return Nothing, as a side effect saves an animation of ppn game

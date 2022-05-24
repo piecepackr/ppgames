@@ -22,7 +22,7 @@ plot_move(
 )
 }
 \arguments{
-\item{game}{A list containing a parsed ppn game (as parsed by \code{read_ppn})}
+\item{game}{A list containing a parsed ppn game (as parsed by \code{\link[=read_ppn]{read_ppn()}})}
 
 \item{file}{Filename to save animation unless \code{NULL}
 in which case it uses the current graphics device.}
