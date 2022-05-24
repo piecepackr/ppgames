@@ -1,4 +1,3 @@
-context("test view game")
 test_that("view_game works as expected", {
     g <- list(metadata = NULL, movetext = character())
     g <- append_to_ppn(g, "1. S@b2")
@@ -21,9 +20,7 @@ test_that("view_game works as expected", {
     expect_equal(next_move(game, prev), "4.")
 
     skip_on_os("windows")
-    print_screen <- function(...) ppgames:::print_screen(..., color = FALSE)
-    verify_output("../text_diagrams/print_screen.txt",
-                  print_screen(game, move, clear = FALSE))
+    expect_snapshot(print_screen(game, move, clear = FALSE, color = FALSE))
 
     skip_if_not_installed("argparse")
     p <- get_parser()

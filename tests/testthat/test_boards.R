@@ -1,4 +1,3 @@
-context("test rectangular boards")
 test_that("rectangular boards works as expected", {
     add_coins <- function(df) {
         dfc <- tibble(piece_side = "coin_face", x=1:6, y = 1:6, angle = 0, suit = 1, rank = 1:6)
@@ -32,28 +31,51 @@ test_that("rectangular boards works as expected", {
 
     skip_on_os("windows")
 
-    df <- df_rect_board_tiles(nr = 8, nc = 8)
-    verify_output("../text_diagrams/8x8.txt", cpiece(df))
+    expect_snapshot({
+        # 8x8
+        df <- df_rect_board_tiles(nr = 8, nc = 8)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 10, nc = 10)
-    verify_output("../text_diagrams/10x10.txt", cpiece(df))
+    expect_snapshot({
+        # 10x10
+        df <- df_rect_board_tiles(nr = 10, nc = 10)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 8, nc = 4)
-    verify_output("../text_diagrams/4x8.txt", cpiece(df))
+    expect_snapshot({
+        # 4x8
+        df <- df_rect_board_tiles(nr = 8, nc = 4)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 6, nc = 2)
-    verify_output("../text_diagrams/2x6.txt", cpiece(df))
+    expect_snapshot({
+        # 2x6
+        df <- df_rect_board_tiles(nr = 6, nc = 2)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 5, nc = 3)
-    verify_output("../text_diagrams/3x5.txt", cpiece(df))
+    expect_snapshot({
+        # 3x5
+        df <- df_rect_board_tiles(nr = 5, nc = 3)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 5, nc = 7)
-    verify_output("../text_diagrams/7x5.txt", cpiece(df))
+    expect_snapshot({
+        # 7x5
+        df <- df_rect_board_tiles(nr = 5, nc = 7)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 5, nc = 6)
-    verify_output("../text_diagrams/6x5.txt", cpiece(df))
+    expect_snapshot({
+        # 6x5
+        df <- df_rect_board_tiles(nr = 5, nc = 6)
+        cpiece(df)
+    })
 
-    df <- df_rect_board_tiles(nr = 8, nc = 8, max_tiles = 12)
-    verify_output("../text_diagrams/8x8_12t.txt", cpiece(df))
-
+    expect_snapshot({
+        # 8x8_12t
+        df <- df_rect_board_tiles(nr = 8, nc = 8, max_tiles = 12)
+        cpiece(df)
+    })
 })

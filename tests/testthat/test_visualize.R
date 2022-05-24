@@ -1,5 +1,4 @@
 library("piecepackr")
-context("test visualize")
 ppn <- read_ppn(system.file("ppn/tic-tac-toe.ppn", package = "ppgames"))
 game <- ppn[[1]]
 

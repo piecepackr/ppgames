@@ -1,13 +1,14 @@
 library("dplyr")
-context("test ppn")
 cat_move <- function(df, ...) ppgames::cat_move(df, ..., color = FALSE)
 sf_read_ppn <- function(f) {
     read_ppn(system.file(paste0("ppn/", f, ".ppn"), package = "ppgames"))[[1]]
 }
 sf_verify <- function(game_var, ...) {
     game_name <- gsub("_", "-", as.character(substitute(game_var)))
-    verify_output(paste0("../text_diagrams/ppn-", game_name, ".txt"),
-                  cat_move(game_var, ...))
+    expect_snapshot({
+        cat(game_name, "\n")
+        cat_move(game_var, ...)
+    })
 }
 test_that("parsing ppn files works as expected", {
     skip_on_os("windows")
