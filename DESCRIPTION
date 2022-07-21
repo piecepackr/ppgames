@@ -32,7 +32,6 @@ Imports:
     yaml
 Suggests:
     argparse,
-    eventloop,
     fansi,
     gifski,
     igraph,
