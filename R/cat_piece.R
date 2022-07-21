@@ -135,7 +135,8 @@ get_style_combining <- function(style) {
                 playing_cards_expansion = french_suits_black,
                 dual_piecepacks_expansion = french_suits_white,
                 subpack = piecepack_suits,
-                dice = die_suits)
+                dice = die_suits,
+                dice_fudge = die_suits)
 
     list(coin = coin, die = die, pawn = pawn)
 }
@@ -159,6 +160,10 @@ get_style_rs <- function(style, big = FALSE) {
         else
             piecepack_ranks <- intToUtf8(utf8ToInt("\U000FCC50") + 0:11, multiple = TRUE)
     }
+    if (style == "unicode")
+        dice_fudge = c("\u2212", " ", "+", "+", " ", "\u2212")
+    else
+        dice_fudge = c("\uff0d", "\U000FCA00", "\uff0b", "\uff0b", "\U000FCA00", "\uff0d")
 
     rs <- list(piecepack = piecepack_ranks,
                playing_cards_expansion = piecepack_ranks,
@@ -169,6 +174,7 @@ get_style_rs <- function(style, big = FALSE) {
                chess1 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
                chess2 = c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a"),
                dice = dominoes_ranks[-1],
+               dice_fudge = dice_fudge,
                dominoes = dominoes_ranks,
                dominoes_black = dominoes_ranks,
                dominoes_blue = dominoes_ranks,
@@ -214,6 +220,7 @@ get_style_ss <- function(style, big = FALSE) {
                     chess1 = "",
                     chess2 = "",
                     dice = rep(" ", 6),
+                    dice_fudge =  rep(" ", 6),
                     dominoes = dominoes_ranks,
                     dominoes_black = dominoes_ranks,
                     dominoes_blue = dominoes_ranks,
@@ -236,6 +243,7 @@ get_style_fg <- function(style) {
                     checkers1 = checkers_colors,
                     checkers2 = checkers_colors,
                     dice = dice_colors,
+                    dice_fudge = dice_colors,
                     dominoes = rep("black", 7),
                     dominoes_black = rep(dice_colors[2], 7),
                     dominoes_blue = rep(dice_colors[4], 7),

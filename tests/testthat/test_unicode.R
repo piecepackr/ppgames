@@ -47,6 +47,15 @@ test_that("text diagrams", {
         cat_piece(df)
     })
 
+    # fudge dice
+    expect_snapshot({
+        df <- tibble(piece_side = "die_face", x=1:6, y=1, rank=1:6, suit=1:6, cfg="dice_fudge")
+        cat_piece(df)
+
+        df$angle <- 90
+        cat_piece(df)
+    })
+
     # icehouse
     expect_snapshot({
         dfb <- tibble(piece_side = "board_face", x=c(2.5,6.5), y=2, rank=4, cfg="checkers1")

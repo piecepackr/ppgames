@@ -10,13 +10,20 @@ r315 <- list()
 
 ### Spaces, Letters, Numbers
 ## Null
-r45[[" "]] <- " "
-r90[[" "]] <- " "
-r135[[" "]] <- " "
-r180[[" "]] <- " "
-r225[[" "]] <- " "
-r270[[" "]] <- " "
-r315[[" "]] <- " "
+ r45[[" "]]  <- " "
+ r90[[" "]]  <- " "
+r135[[" "]]  <- " "
+r180[[" "]]  <- " "
+r225[[" "]]  <- " "
+r270[[" "]]  <- " "
+r315[[" "]]  <- " "
+ r45[["  "]] <- "  " # Double space
+ r90[["  "]] <- "  "
+r135[["  "]] <- "  "
+r180[["  "]] <- "  "
+r225[["  "]] <- "  "
+r270[["  "]] <- "  "
+r315[["  "]] <- "  "
 r45[["\u3000"]] <- "\u3000" # Ideographic (Square) Space
 r90[["\u3000"]] <- "\u3000"
 r135[["\u3000"]] <- "\u3000"
@@ -609,6 +616,29 @@ pip9 <- "\u22ef\u20db\u20e8"
 r90[[pip9]] <- pip9
 r180[[pip9]] <- pip9
 r270[[pip9]] <- pip9
+
+## Fudge Dice
+plus <- "+"
+r90[[plus]] <- plus
+r180[[plus]] <- plus
+r270[[plus]] <- plus
+fullwidth_plus <- "\uff0b"
+r90[[fullwidth_plus]] <- fullwidth_plus
+r180[[fullwidth_plus]] <- fullwidth_plus
+r270[[fullwidth_plus]] <- fullwidth_plus
+
+hyphen_minus <- "-"
+r90[[hyphen_minus]] <- "|"
+r180[[hyphen_minus]] <- hyphen_minus
+r270[[hyphen_minus]] <- "|"
+fullwidth_hyphen_minus <- "\uff0d"
+r90[[fullwidth_hyphen_minus]] <- "\uff5c" # fullwidth vertical line
+r180[[fullwidth_hyphen_minus]] <- fullwidth_hyphen_minus
+r270[[fullwidth_hyphen_minus]] <- "\uff5c" # fullwidth vertical line
+minus <- "\u2212"
+r90[[minus]] <- "|"
+r180[[minus]] <- minus
+r270[[minus]] <- "|"
 
 ### Arrows
 # Simple Arrows

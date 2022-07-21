@@ -35,6 +35,26 @@
 ---
 
     Code
+      df <- tibble(piece_side = "die_face", x = 1:6, y = 1, rank = 1:6, suit = 1:6,
+      cfg = "dice_fudge")
+      cat_piece(df)
+    Output
+                    
+        −⃞  ⃞ +⃞ +⃞  ⃞ −⃞ 
+                    
+                    
+    Code
+      df$angle <- 90
+      cat_piece(df)
+    Output
+                    
+        |⃞  ⃞ +⃞ +⃞  ⃞ |⃞ 
+                    
+                    
+
+---
+
+    Code
       dfb <- tibble(piece_side = "board_face", x = c(2.5, 6.5), y = 2, rank = 4, cfg = "checkers1")
       dfpt <- tibble(piece_side = "pyramid_top", x = 1:8, y = 4, rank = rep(1:3,
       length.out = 8), suit = c(1:6, 1:2), angle = seq(0, by = 45, length.out = 8),

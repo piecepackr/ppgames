@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: ppgames
 Type: Package
 Title: Piecepack Games
-Version: 0.8.0-6
+Version: 0.8.0-7
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")))
@@ -32,6 +32,7 @@ Imports:
     yaml
 Suggests:
     argparse,
+    eventloop,
     fansi,
     gifski,
     igraph,
