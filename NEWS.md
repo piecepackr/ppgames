@@ -8,6 +8,10 @@ New features
 
   - ``df_ludo()``
 
+* ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
+
+    - "ludo"
+
 Bug fixes and minor improvements
 --------------------------------
 

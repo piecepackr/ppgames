@@ -140,6 +140,19 @@ four_seasons_chess:
     chessvariants: "historic.dir/4seiz.html"
     cyningstan: "348"
     copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+ludo:
+    players: [2, 3, 4]
+    length: 30
+    equipment: "one standard piecepack"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.0"
+    version_date: "2022-07-24"
+    ppwiki: "Ludo"
+    boardgamegeek: "2136"
+    wikipedia: "Ludo_(board_game)"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    external_links:
+        - "https://www.ymimports.com/pages/how-to-play-ludo"
 nine_mens_morris:
     title: "Nine Men's Morris"
     players: 2

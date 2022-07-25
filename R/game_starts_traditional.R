@@ -263,14 +263,15 @@ df_lines_of_action <- function() {
 #' @export
 df_ludo <- function() {
     df_tb <- tibble(piece_side = "tile_back",
-                    x = c(1.5, 4.5, 10.5, 13.5, rep(7.5, 4)),
-                    y = c(rep(7.5, 4), 1.5, 4.5, 10.5, 13.5),
+                    x = c(2, 5, 11, 14, rep(8, 4)),
+                    y = c(rep(8, 4), 2, 5, 11, 14),
                     suit = rep(1:4, each = 2),
                     rank = rep(5:6, 4),
                     angle = 0)
+    offset <- 0.50 + sqrt(2)
     df_tf <- tibble(piece_side = "tile_face",
-                    x = c(1.5, 8.5+sqrt(2), 13.5, 6.5-sqrt(2)),
-                    y = c(8.5+sqrt(2), 13.5, 6.5-sqrt(2), 1.5),
+                    x = c(2, 9+offset, 14, 7-offset),
+                    y = c(9+offset, 14, 7-offset, 2),
                     suit = 1:4, rank = 2,
                     angle = c(135, 45, -45, -135))
     df_c <- tibble(piece_side = "coin_back",
@@ -279,12 +280,12 @@ df_ludo <- function() {
                    suit = rep(1:4, each=4), rank = rep(1:4, 4),
                    angle = rep(df_tf$angle, each = 4) + 45)
     df_p <- tibble(piece_side = "pawn_face",
-                   x = c(-0.25, 7.5, 15.25, 7.5),
-                   y = c(7.5, 15.25, 7.5, -0.25),
+                   x = c(-0.25, 7.5, 15.25, 7.5) + 0.5,
+                   y = c(7.5, 15.25, 7.5, -0.25) + 0.5,
                    suit = 1:4, rank = NA, angle = c(-90, 180, 90, 0))
     df_d <- tibble(piece_side = "die_face",
-                   x = c(4.5, 10.5, 10.5, 4.5),
-                   y = c(10.5, 10.5, 4.5, 4.5),
+                   x = c(5, 11, 11, 5),
+                   y = c(11, 11, 5, 5),
                    suit = 1:4, rank = 2, angle = c(-90, 180, 90, 0))
     bind_rows(df_tb, df_tf, df_c, df_p, df_d)
 }

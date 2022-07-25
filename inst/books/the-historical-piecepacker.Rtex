@@ -70,9 +70,13 @@ This collective work is released under a \href{https://creativecommons.org/licen
 \include{nine-mens-morris-chapter}
 \include{twelve-mens-morris-chapter}
 
-\chapter{Other Traditional Board Games}
+\chapter{Racing Games}
 
 \include{backgammon-chapter}
+\include{ludo-chapter}
+
+\chapter{Other Traditional Board Games}
+
 \include{four-field-kono-chapter}
 \include{tablut-chapter}
 
