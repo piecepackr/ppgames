@@ -2,7 +2,7 @@ include_piece <- function(piece_side, suit, rank, cfg, angle = 0, height = "1\\b
     dir <- file.path(tempdir(), "ppgames_cache")
     if(!dir.exists(dir)) dir.create(dir)
 
-    file <- file.path(dir, sprintf("%s_%s_%s.pdf", piece_side, suit, rank))
+    file <- file.path(dir, sprintf("%s_%s_%s_%s.pdf", piece_side, suit, rank, angle))
     if(!file.exists(file)) {
         grDevices::cairo_pdf(file,
                              width = cfg$get_width(piece_side, suit, rank),
@@ -16,67 +16,86 @@ include_piece <- function(piece_side, suit, rank, cfg, angle = 0, height = "1\\b
 
 IncludePieces <- R6Class("include_pieces",
     public = list(
-        initialize = function(cfg) private$cfg <- cfg
+        initialize = function(cfg) {
+            private$cfg <- cfg
+        },
+        resize = function(height) {
+            pieces <- self$clone()
+            pieces$height <- height
+            return(pieces)
+        },
+        rotate = function(angle) {
+            pieces <- self$clone()
+            pieces$angle <- angle
+            return(pieces)
+        }
     ),
     active = list(
-        cS = function(value) include_piece("coin_back", 1, 1, private$cfg),
-        cM = function(value) include_piece("coin_back", 2, 1, private$cfg),
-        cC = function(value) include_piece("coin_back", 3, 1, private$cfg),
-        cA = function(value) include_piece("coin_back", 4, 1, private$cfg),
-        cn = function(value) include_piece("coin_face", 1, 1, private$cfg),
-        ca = function(value) include_piece("coin_face", 1, 2, private$cfg),
-        c2 = function(value) include_piece("coin_face", 1, 3, private$cfg),
-        c3 = function(value) include_piece("coin_face", 1, 4, private$cfg),
-        c4 = function(value) include_piece("coin_face", 1, 5, private$cfg),
-        c5 = function(value) include_piece("coin_face", 1, 6, private$cfg),
-        dSn = function(value) include_piece("die_face", 1, 1, private$cfg),
-        dSa = function(value) include_piece("die_face", 1, 2, private$cfg),
-        dS2 = function(value) include_piece("die_face", 1, 3, private$cfg),
-        dS3 = function(value) include_piece("die_face", 1, 4, private$cfg),
-        dS4 = function(value) include_piece("die_face", 1, 5, private$cfg),
-        dS5 = function(value) include_piece("die_face", 1, 6, private$cfg),
-        dMn = function(value) include_piece("die_face", 2, 1, private$cfg),
-        dMa = function(value) include_piece("die_face", 2, 2, private$cfg),
-        dM2 = function(value) include_piece("die_face", 2, 3, private$cfg),
-        dM3 = function(value) include_piece("die_face", 2, 4, private$cfg),
-        dM4 = function(value) include_piece("die_face", 2, 5, private$cfg),
-        dM5 = function(value) include_piece("die_face", 2, 6, private$cfg),
-        dCn = function(value) include_piece("die_face", 3, 1, private$cfg),
-        dCa = function(value) include_piece("die_face", 3, 2, private$cfg),
-        dC2 = function(value) include_piece("die_face", 3, 3, private$cfg),
-        dC3 = function(value) include_piece("die_face", 3, 4, private$cfg),
-        dC4 = function(value) include_piece("die_face", 3, 5, private$cfg),
-        dC5 = function(value) include_piece("die_face", 3, 6, private$cfg),
-        dAn = function(value) include_piece("die_face", 4, 1, private$cfg),
-        dAa = function(value) include_piece("die_face", 4, 2, private$cfg),
-        dA2 = function(value) include_piece("die_face", 4, 3, private$cfg),
-        dA3 = function(value) include_piece("die_face", 4, 4, private$cfg),
-        dA4 = function(value) include_piece("die_face", 4, 5, private$cfg),
-        dA5 = function(value) include_piece("die_face", 4, 6, private$cfg),
-        pS = function(value) include_piece("pawn_face", 1, 1, private$cfg),
-        pM = function(value) include_piece("pawn_face", 2, 1, private$cfg),
-        pC = function(value) include_piece("pawn_face", 3, 1, private$cfg),
-        pA = function(value) include_piece("pawn_face", 4, 1, private$cfg),
-        tMn = function(value) include_piece("tile_face", 2, 1, private$cfg),
-        tMa = function(value) include_piece("tile_face", 2, 2, private$cfg),
-        tM2 = function(value) include_piece("tile_face", 2, 3, private$cfg),
-        tM3 = function(value) include_piece("tile_face", 2, 4, private$cfg),
-        tM4 = function(value) include_piece("tile_face", 2, 5, private$cfg),
-        tM5 = function(value) include_piece("tile_face", 2, 6, private$cfg),
-        tCn = function(value) include_piece("tile_face", 3, 1, private$cfg),
-        tCa = function(value) include_piece("tile_face", 3, 2, private$cfg),
-        tC2 = function(value) include_piece("tile_face", 3, 3, private$cfg),
-        tC3 = function(value) include_piece("tile_face", 3, 4, private$cfg),
-        tC4 = function(value) include_piece("tile_face", 3, 5, private$cfg),
-        tC5 = function(value) include_piece("tile_face", 3, 6, private$cfg),
-        tAn = function(value) include_piece("tile_face", 4, 1, private$cfg),
-        tAa = function(value) include_piece("tile_face", 4, 2, private$cfg),
-        tA2 = function(value) include_piece("tile_face", 4, 3, private$cfg),
-        tA3 = function(value) include_piece("tile_face", 4, 4, private$cfg),
-        tA4 = function(value) include_piece("tile_face", 4, 5, private$cfg),
-        tA5 = function(value) include_piece("tile_face", 4, 6, private$cfg),
-        tb = function(value) include_piece("tile_back", 1, 1, private$cfg)
+        cS  = function(value) include_piece("coin_back", 1, 1, private$cfg, self$angle, self$height),
+        cM  = function(value) include_piece("coin_back", 2, 1, private$cfg, self$angle, self$height),
+        cC  = function(value) include_piece("coin_back", 3, 1, private$cfg, self$angle, self$height),
+        cA  = function(value) include_piece("coin_back", 4, 1, private$cfg, self$angle, self$height),
+        cn  = function(value) include_piece("coin_face", 1, 1, private$cfg, self$angle, self$height),
+        ca  = function(value) include_piece("coin_face", 1, 2, private$cfg, self$angle, self$height),
+        c2  = function(value) include_piece("coin_face", 1, 3, private$cfg, self$angle, self$height),
+        c3  = function(value) include_piece("coin_face", 1, 4, private$cfg, self$angle, self$height),
+        c4  = function(value) include_piece("coin_face", 1, 5, private$cfg, self$angle, self$height),
+        c5  = function(value) include_piece("coin_face", 1, 6, private$cfg, self$angle, self$height),
+        dSn = function(value) include_piece("die_face",  1, 1, private$cfg, self$angle, self$height),
+        dSa = function(value) include_piece("die_face",  1, 2, private$cfg, self$angle, self$height),
+        dS2 = function(value) include_piece("die_face",  1, 3, private$cfg, self$angle, self$height),
+        dS3 = function(value) include_piece("die_face",  1, 4, private$cfg, self$angle, self$height),
+        dS4 = function(value) include_piece("die_face",  1, 5, private$cfg, self$angle, self$height),
+        dS5 = function(value) include_piece("die_face",  1, 6, private$cfg, self$angle, self$height),
+        dMn = function(value) include_piece("die_face",  2, 1, private$cfg, self$angle, self$height),
+        dMa = function(value) include_piece("die_face",  2, 2, private$cfg, self$angle, self$height),
+        dM2 = function(value) include_piece("die_face",  2, 3, private$cfg, self$angle, self$height),
+        dM3 = function(value) include_piece("die_face",  2, 4, private$cfg, self$angle, self$height),
+        dM4 = function(value) include_piece("die_face",  2, 5, private$cfg, self$angle, self$height),
+        dM5 = function(value) include_piece("die_face",  2, 6, private$cfg, self$angle, self$height),
+        dCn = function(value) include_piece("die_face",  3, 1, private$cfg, self$angle, self$height),
+        dCa = function(value) include_piece("die_face",  3, 2, private$cfg, self$angle, self$height),
+        dC2 = function(value) include_piece("die_face",  3, 3, private$cfg, self$angle, self$height),
+        dC3 = function(value) include_piece("die_face",  3, 4, private$cfg, self$angle, self$height),
+        dC4 = function(value) include_piece("die_face",  3, 5, private$cfg, self$angle, self$height),
+        dC5 = function(value) include_piece("die_face",  3, 6, private$cfg, self$angle, self$height),
+        dAn = function(value) include_piece("die_face",  4, 1, private$cfg, self$angle, self$height),
+        dAa = function(value) include_piece("die_face",  4, 2, private$cfg, self$angle, self$height),
+        dA2 = function(value) include_piece("die_face",  4, 3, private$cfg, self$angle, self$height),
+        dA3 = function(value) include_piece("die_face",  4, 4, private$cfg, self$angle, self$height),
+        dA4 = function(value) include_piece("die_face",  4, 5, private$cfg, self$angle, self$height),
+        dA5 = function(value) include_piece("die_face",  4, 6, private$cfg, self$angle, self$height),
+        pS  = function(value) include_piece("pawn_face", 1, 1, private$cfg, self$angle, self$height),
+        pM  = function(value) include_piece("pawn_face", 2, 1, private$cfg, self$angle, self$height),
+        pC  = function(value) include_piece("pawn_face", 3, 1, private$cfg, self$angle, self$height),
+        pA  = function(value) include_piece("pawn_face", 4, 1, private$cfg, self$angle, self$height),
+        tMn = function(value) include_piece("tile_face", 2, 1, private$cfg, self$angle, self$height),
+        tMa = function(value) include_piece("tile_face", 2, 2, private$cfg, self$angle, self$height),
+        tM2 = function(value) include_piece("tile_face", 2, 3, private$cfg, self$angle, self$height),
+        tM3 = function(value) include_piece("tile_face", 2, 4, private$cfg, self$angle, self$height),
+        tM4 = function(value) include_piece("tile_face", 2, 5, private$cfg, self$angle, self$height),
+        tM5 = function(value) include_piece("tile_face", 2, 6, private$cfg, self$angle, self$height),
+        tCn = function(value) include_piece("tile_face", 3, 1, private$cfg, self$angle, self$height),
+        tCa = function(value) include_piece("tile_face", 3, 2, private$cfg, self$angle, self$height),
+        tC2 = function(value) include_piece("tile_face", 3, 3, private$cfg, self$angle, self$height),
+        tC3 = function(value) include_piece("tile_face", 3, 4, private$cfg, self$angle, self$height),
+        tC4 = function(value) include_piece("tile_face", 3, 5, private$cfg, self$angle, self$height),
+        tC5 = function(value) include_piece("tile_face", 3, 6, private$cfg, self$angle, self$height),
+        tAn = function(value) include_piece("tile_face", 4, 1, private$cfg, self$angle, self$height),
+        tAa = function(value) include_piece("tile_face", 4, 2, private$cfg, self$angle, self$height),
+        tA2 = function(value) include_piece("tile_face", 4, 3, private$cfg, self$angle, self$height),
+        tA3 = function(value) include_piece("tile_face", 4, 4, private$cfg, self$angle, self$height),
+        tA4 = function(value) include_piece("tile_face", 4, 5, private$cfg, self$angle, self$height),
+        tA5 = function(value) include_piece("tile_face", 4, 6, private$cfg, self$angle, self$height),
+        tb  = function(value) include_piece("tile_back", 1, 1, private$cfg, self$angle, self$height),
+        angle = function(x) {
+            if (missing(x)) return(private$angle_)
+            else private$angle_ <- x
+        },
+        height = function(x) {
+            if (missing(x)) return(private$height_)
+            else private$height_ <- x
+        }
     ),
-    private = list(cfg = NULL)
+    private = list(angle_ = 0, cfg = NULL, height_ = "1\\baselineskip"),
 )
-
