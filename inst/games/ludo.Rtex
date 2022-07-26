@@ -23,7 +23,7 @@ pmap_piece(df_ludo(), cfg=cfg, default.units="in")
 popViewport()
 %% end.rcode
 
-%% begin.rcode moon-route, fig.width=17.6, fig.height=17.6, out.width="0.9\\linewidth", out.height="0.9\\linewidth", fig.cap="The route of the Moons player from their \\emph{starting point} to their \\emph{home}.  The square nearest Moons' \\emph{staging tile} is Moons' \\emph{starting point}.  The triangle in the middle of the board is Moons' \\emph{home}, the five squares leading up to it is Moons' \\emph{home column}."
+%% begin.rcode moon-route, fig.width=17.6, fig.height=17.6, out.width="0.9\\linewidth", out.height="0.9\\linewidth", fig.cap="The Moons player's route from their \\emph{starting point} to their \\emph{home}.  The square nearest Moons' \\emph{staging tile} is Moons' \\emph{starting point}, the triangle in the middle is Moons' \\emph{home}, and the five squares leading up to it is Moons' \\emph{home column}."
 pushViewport(viewport(width=inch(15), height=inch(15)))
 pmap_piece(df_ludo(), cfg=cfg, default.units="in")
 gp <- gpar(lex=18, col = cfg$annotation_color)
@@ -68,17 +68,18 @@ Each player rolls a die to see who goes first.  After the first player moves the
 
 \subsection{Moves, Entering, Hitting, and Blocking}
 \begin{itemize}
+\item An ace die roll equals one and null equals six.
 \item Players enter their coins from their \emph{staging tile} onto their \emph{starting point} and move them clockwise around the track and then through their \emph{home column} to finally reach their \emph{home}.  See Figure \ref{fig:ludo-moon-route} for the Moons player's route.
 \item Per die roll a player may either enter a coin from their \emph{staging tile} into play at their \emph{starting point} or alternatively move an already ``in play" coin.  
-\item For a given die roll it may not be possible to make a legal move and in such case play will skip to the next die roll.\footnote{If they rolled a six that next die roll may be from the same player.}:
+\item For a given die roll it may not be possible to make a legal move and in such case play will skip to the next die roll.\footnote{If they rolled a null the same player may roll again.}:
 \begin{itemize}
-   \item Coins in the \emph{starting stage} cannot be entered if a six is not rolled or if the \emph{starting point} is ``blocked" by a stack of opponent coins.
+   \item Coins in the \emph{starting stage} cannot be entered if a null is not rolled or if the \emph{starting point} is ``blocked" by a stack of opponent coins.
    \item An ``in play" coin may be ``blocked" from making a move by a stack of opponent coins.
    \item One may roll too high to enter \emph{home}.
 \end{itemize}
 \item If a player has a legal move then they must make a legal move (of their choice).
-\item A player's coins all start the game on their \emph{staging tile}.  A coin in the \emph{staging tile} may not move until it has been \emph{entered} into play.  If a player rolls a six they may \emph{enter} a coin from their \emph{staging tile} into their \emph{starting point}.\footnote{Unless their \emph{starting point} is \emph{blocked} by two or more of an opponent's coins.}  This coin is now ``in play" and may move around the board.
-\item An ``in play" coin must move exactly the number of points as the die roll.  If that final point has a single opponent's coin then that coin is ``hit" and the opponent's coin is returned to the opponent's \emph{staging tile}.\footnote{This coin must be ``entered" again from their \emph{staging tile} to their \emph{starting point} after the opponent rolls a six.}  If that final point has one (or more) of that player's coins then they stack and form a ``block".  Opponent coins may not land on or pass a ``block".
+\item A player's coins start the game on their \emph{staging tile}.  A coin in the \emph{staging tile} may not move until it has been \emph{entered} into play.  If a player rolls a null they may \emph{enter} a coin from their \emph{staging tile} into their \emph{starting point}.\footnote{Unless their \emph{starting point} is \emph{blocked} by multiple coins.}  It is now ``in play" and may move around the track.
+\item An ``in play" coin must move exactly the number of points as the die roll.  If that final point has a single opponent's coin then that coin is ``hit" and the opponent's coin is returned to the opponent's \emph{staging tile}.\footnote{This coin must be ``entered" again from their \emph{staging tile} to their \emph{starting point} after the opponent rolls a null.}  If that final point has one (or more) of that player's coins then they stack and form a ``block".  Opponent coins may not land on or pass a ``block".
 \item One must roll exactly to move a coin to \emph{home}.
-\item Normally a player rolls their die once and (possibly) makes a move.  However if a player rolls a six then after they (possibly) make a move with the six they may roll the die a second time (and possibly make a second move).  If the second die roll is also a six then after they (possibly) make a move with the second six they roll the die a third time (and possibly make a third move).  However if this third die roll is a also six they do not get to make a third move (with the six) and their turn is over. 
+\item Normally a player rolls their die once and (possibly) makes a move.  However if a player rolls a null then after they (possibly) make a move with the null they may roll the die a second time (and possibly make a second move).  If the second die roll is also a null then after they (possibly) make a move with the second null they roll the die a third time (and possibly make a third move).  However if this third die roll is a also null they do not get to make a third move (with the null) and their turn is over. 
 \end{itemize}
