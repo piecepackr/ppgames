@@ -10,7 +10,11 @@ New features
 
 * ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
 
-    - "ludo"
+  - "ludo"
+
+* Improved rulesets for:
+
+  - "shogi"
 
 Bug fixes and minor improvements
 --------------------------------

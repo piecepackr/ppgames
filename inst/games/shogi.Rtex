@@ -1,0 +1,106 @@
+%% begin.rcode opts, echo=FALSE
+set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
+pieces270 <- pieces$rotate(270)
+piecesT <- pieces$resize("1.0em")
+piecesT270 <- pieces270$resize("1.0em")
+%% end.rcode
+
+\subsection{Description}
+
+\emph{Shogi} (aka \emph{Japanese Chess} or the \emph{Game of Generals}) is a popular chess variant notable for its ``drop rule" which allows captured pieces to be returned back onto the board by the capturing players and an intricate promotion scheme for its pieces.
+
+\subsection{Objective} 
+
+Win by \emph{checkmating} the opponent's \emph{king}.\footnote{Draws via repetition or impasse are rare in Shogi.}
+  When a piece threatens to capture the opponent's king on their next turn then that king is \emph{in check}.  If an opponent can't get out of check on their turn then they are in checkmate.
+
+\subsection{Setup}
+
+You'll need 16 tile backs to make a 9x9 square board (you'll be playing on the ``points'' where the lines intersect).\footnote{Some players may like to take an extra twenty tile faces to make a border around it so it is harder for the pieces to fall off the edge.  One may also take extra tiles and build two smaller boards off the side of the main board to serve as "piece stands" to hold captured pieces.} Each player should take one piecepack pawn as \emph{king}, one 3-valued coin as \emph{rook}, one 2-valued coin as \emph{bishop}, two 5-valued dice as \emph{golds}, two 5-valued coins as \emph{silvers}, two ace-valued coins as \emph{knights}, two 4-valued coins as \emph{lances}, and nine remaining coins flipped face down as \emph{pawns}.  Arrange the pieces as in Figure~\ref{fig:shogi-starting-diagram}.
+
+%% begin.rcode starting-diagram, fig.width=10, fig.height=11, out.width="0.91\\linewidth", out.height="1\\linewidth", fig.cap="Shogi starting diagram"
+pmap_piece(df_shogi(), cfg=cfg, default.units="in")
+# gp_text <- gpar(fontsize=32)
+# grid.text(letters[1:9], x=1:9, y=0.20, default.units="in", gp = gp_text)
+# grid.text(as.character(1:10), x=0.40, y=1:10, default.units="in", gp = gp_text, just="right")
+%% end.rcode
+
+\subsection{The Order of Play}
+
+One player flips five coins.  If more coins are face down than face up then that player gets to go first (else second).  Alternate who goes first in later games.
+
+\subsection{The Moves}
+
+Each turn a play either moves a piece on the board or else drops a previously captured piece onto the board:\begin{itemize}  
+\item Each piece's capturing move is the same as their non-capturing move.
+\item Every shogi piece being represented by a piecepack coin\footnote{Not the \emph{kings} or \emph{golds}.} can optionally\footnote{Promotion is usually voluntary but is mandatory when \emph{pawns} and \emph{lances} reach the last rank or \emph{knights} reach either of the last two ranks.} be ``promoted'' if it moves into or out of the last three ranks of the board. Show that a piece is promoted by orienting it 90 degrees to the right.
+\item A previously captured piece may be ``dropped'' on any empty square with the following restrictions:\begin{itemize}
+    \item A dropped piece cannot immediately capture or promote.
+    \item \emph{Pawns} and \emph{lances} cannot be dropped onto last rank and \emph{knights} cannot be dropped on the last two ranks.
+    \item \emph{Pawn} may not be dropped on a column where their player already has an unpromoted \emph{pawn}.
+    \item \emph{Pawn} may not be dropped where it would lead to an immediate checkmate.
+\end{itemize}
+\end{itemize}
+
+\subsection{The Pieces}
+
+Except for the \emph{kings} every other shogi piece can be captured and used by the other player and hence ownership of
+a (non-\emph{king}) piece is indicated by orientation.  Non-promoted pieces are oriented towards the opposite side of the board when placed on the board\footnote{The direction of the piecepack dice is the direction above the flat top of the ``5".} while promoted pieces are oriented 90 degrees to that player's right.  If each player sits towards their left corner of the board then each piece whether promoted or not will still be oriented in the general direction of their opponent.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+Piece & Name & Betza \\
+\hline
+\rinline{paste(piecesT$pC, piecesT$pA)} & King (K) & K \\
+\rinline{piecesT$c3} & Rook (R) & R  \\
+\rinline{piecesT270$c3} & Promoted Rook (+R) & FR  \\
+\rinline{piecesT$c2} & Bishop (B) & B  \\
+\rinline{piecesT270$c2} & Promoted Bishop (+B) & WB  \\
+\rinline{paste(piecesT$dS5, piecesT$dM5, piecesT$dC5, piecesT$dA5)} & Gold (G) & WfF  \\
+\rinline{piecesT$c5} & Silver (S) & FfW  \\
+\rinline{piecesT270$c5} & Promoted Silver (+S) & WfF  \\
+\rinline{piecesT$ca} & Knight (N) & ffN  \\
+\rinline{piecesT270$ca} & Promoted Knight (+N) & WfF  \\
+\rinline{piecesT$c4} & Lance (L) & fR  \\
+\rinline{piecesT270$c4} & Promoted Lance (+L) & WfF  \\
+\rinline{paste(piecesT$cS, piecesT$cM, piecesT$cC, piecesT$cA)} & Pawn (P) & fW  \\
+\rinline{paste(piecesT270$cS, piecesT270$cM, piecesT270$cC, piecesT270$cA)} & Promoted Pawn (+P) & WfF  \\
+\hline
+\end{tabular}
+\caption{Shogi pieces with Betza funny notation}
+\label{tab:shogi:pieces}
+\end{table}
+\begin{description}
+\item[King] \rinline{paste(pieces$pC, pieces$pA)}
+Moves like a FIDE chess king and a player loses if their king is checkmated by the opposing player.
+\item[Rook] \rinline{pieces$c3} 
+Moves just like a FIDE chess rook.
+\item[Promoted rook aka ``Dragon''] \rinline{pieces270$c3} 
+Moves like a FIDE chess rook OR a FIDE chess king.
+\item[Bishop] \rinline{pieces$c2} 
+Moves just like a FIDE chess bishop.
+\item[Promoted bishop aka ``Horse'']\rinline{pieces270$c2} 
+Moves like a FIDE chess bishop OR a FIDE chess king.
+\item[Gold aka ``Gold General'']\rinline{paste(pieces$dS5, pieces$dM5, pieces$dC5, pieces$dA5)} 
+Golds have a subset of a king's moves: they cannot move diagonally backwards.
+\item[Silver aka ``Silver general'']\rinline{pieces$c5} 
+Silvers have a subset of a king's moves: they cannot move orthogonally backwards or sideways.
+\item[Promoted silver]\rinline{pieces270$c5} 
+Moves like a gold.
+\item[Knight]\rinline{pieces$ca} 
+Shogi knights have a subset of a FIDE chess knight's moves: they can only make the forward ``narrow" jumps.
+\item[Promoted knight]\rinline{pieces270$ca} 
+Moves like a gold.
+\item[Lance]\rinline{pieces$c4} 
+The lance has a subset of a FIDE chess queen's moves: they can only move orthogonally forward.
+\item[Promoted lance]\rinline{pieces270$c4} 
+Moves like a gold.
+\item[Pawn]\rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} 
+Unlike a FIDE chess pawn the Shogi pawn both moves AND captures by moving orthogonally one step forward.
+\item[Promoted pawn aka ``Tokin'']\rinline{paste(pieces270$cS, pieces270$cM, pieces270$cC, pieces270$cA)} 
+Moves like a gold.
+\end{description}

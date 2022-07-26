@@ -171,6 +171,20 @@ nine_mens_morris:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
         - "David Pritchard, \\emph{Brain Games} (1982), 128--131"
     copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+shogi:
+    title: "Shogi (Japanese Chess)"
+    players: 2
+    length: [30, 120]
+    equipment: "two standard piecepacks"
+    designer: "Traditional, adapted by Trevor L. Davis"
+    version: "1.0"
+    version_date: "2022-07-25"
+    ppwiki: "Shogi"
+    boardgamegeek: "2065"
+    chessvariants: "shogi.html"
+    cyningstan: "155"
+    wikipedia: "Shogi"
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 tablut:
     players: 2
     length: 45
