@@ -1,16 +1,79 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
+piecesT <- pieces$resize("1.0em")
 %% end.rcode
 
 \subsection{Description}
 
 (International) chess is a classic board game playable with a single piecepack.
 
+\subsection{Objective}
+
+Win by \emph{checkmating} the opponent's \emph{king}:
+\begin{itemize}
+\item When a piece threatens to capture the opponent's king on their next turn then that king is in \emph{check}.  
+\item If an opponent can't get out of check on their turn then they are in \emph{checkmate}.
+\item  A player is \emph{stalemated} if they are not in check but cannot make a legal move---in such a case the game ends in a draw.\footnote{Tournament play includes other draws: ``threefold repetition'', ``fifty-move rule'', and ``dead position".}
+\end{itemize}
+
 \subsection{Setup}
 
-International chess is played on an 8-by-8 board made with the backs of 16 tiles.  Have each player sit across from each other and give each player all the pieces of two suits (i.e. ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits) and place them as in Figure \ref{fig:international-chess-starting-diagram} making sure that the two ``4'' coins used as pawns are placed in the left column so they can be easily found if necessary for queen promotion.
+International chess is played on an 8-by-8 board made with the backs of 16 tiles.  Have each player sit across from each other and give each player all the pieces of two suits\footnote{For example ``astronomical'' versus ``power'' suits or ``dark'' versus ``light'' suits.} and place them as in Figure \ref{fig:international-chess-starting-diagram} making sure that the two ``4'' coins used as pawns are placed in the left column so they can be easily found if necessary for queen promotion.
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="(International) chess starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_chess(), cfg=cfg, default.units="in")
 %% end.rcode
+
+\subsection{The Order of Play}
+
+The player \emph{without} the (black) Moons' pawn goes first.\footnote{In modern international chess tournaments \emph{White} moves first and then \emph{Black} moves second.}  Players take turns moving one of their pieces to another point possibly capturing an opponent's piece located at that point.
+
+\subsection{The Moves}
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+Piece & Name & Betza \\
+\hline
+\rinline{paste(piecesT$cS, piecesT$cM, piecesT$cC, piecesT$cA)} & Pawn (P) & \\
+\rinline{piecesT$ca} & Knight (N) & N  \\
+\rinline{paste(piecesT$pS, piecesT$pM, piecesT$pC, piecesT$pA)} & Bishop (B) & B = FF  \\
+\rinline{paste(piecesT$dS3, piecesT$dM3, piecesT$dC3, piecesT$dA3)} & Rook (R) & R = WW  \\
+\rinline{piecesT$c4} & Queen (Q) & Q = BR  \\
+\rinline{piecesT$c5} & King (K) & K = FW  \\
+\hline
+\end{tabular}
+\caption{Chess pieces with Betza funny notation}
+\label{tab:international-chess:pieces}
+\end{table}
+
+\begin{description}
+\item[Pawn]\rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} \begin{itemize}
+  \item Only the pawn has a different capturing and non-capturing move.
+  \item The pawn's non-capturing move is to move forward orthogonally one cell.  On a pawn's first move in the game the pawn may move forward orthogonally two cells.
+  \item The pawn's capturing move is to move forward diagonally one cell.  If an opponent's pawn moved two cells forward in the previous move and you could have captured it if it instead had moved one cell forward then you still capture it by moving diagonally one cell (where it would have gone)---this is called an \emph{en passant} capture.
+  \item When a pawn reaches the last rank it must \emph{promote} to a non-king, non-pawn piece.\footnote{Normally one chooses to promote to a queen.  Remember that you placed the ``4'' coins used as pawns in the left column so they could be easily found.}
+\end{itemize}
+\item[Knight]\rinline{pieces$ca} 
+\begin{itemize}
+    \item Only the knight may jump over other pieces during its move.
+    \item The knight moves diagonally one square (``jumping'' over any piece on this square) and then orthogonally one square (further away from its original position).\footnote{This description is equivalent to moving two cells horizontally and one cell vertically OR one cell horizontally and two cells vertically (jumping over any pieces).}
+\end{itemize}
+\item[Bishop]\rinline{paste(pieces$pS, pieces$pM, pieces$pC, pieces$pA)} The bishop moves diagonally in a straight line.
+\item[Rook]\rinline{paste(pieces$dS3, pieces$dM3, pieces$dC3, pieces$dA3)} The rooks moves orthogonally in a straight line.  The rook may also participate in a \emph{castling} move (see King section).
+\item[Queen]\rinline{pieces$c4} The queen moves in a straight line either orthogonally or diagonally.
+\item[King]\rinline{pieces$c5}\begin{itemize}
+    \item The king moves one square either orthogonally or diagonally.
+    \item The king may not end its turn in \emph{check} (inability to do so is a \emph{checkmate}).
+    \item May participate in a \emph{castling} move with one of the rooks:\begin{itemize}
+        \item Only move in chess where two pieces may move in same move.
+        \item Move the king two cells towards the rook, move the rook 2--3 cells just pass the king (on the square it just passed over).
+        \item Neither the rook nor the king may have previously moved.
+        \item The cells in between the rook and king must be empty.
+        \item The king can not start the move in \emph{check} nor cross a cell ``attacked'' by an opponent's piece (nor end the move in \emph{check}).
+    \end{itemize}
+\end{itemize}
+\end{description}

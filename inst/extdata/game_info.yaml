@@ -91,7 +91,7 @@ chaturaji:
     chessvariants: "historic.dir/chaturang4.html"
     cyningstan: "124"
     wikipedia: "Chaturaji"
-    copyright: "\\copyright~2016-2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 cribbage:
     players: 2
     length: [10, 180]
@@ -102,21 +102,21 @@ cribbage:
     ppwiki: "Cribbage"
     boardgamegeek: "2398"
     wikipedia: "Cribbage"
-    copyright: "\\copyright~2016-2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
 international_chess:
     title: "(International) Chess"
     players: 2
     length: [30, 180]
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Ron Hale-Evans, Mark A. Biggar, and Trevor L. Davis"
-    version: "2.0"
-    version_date: "2019-05-18"
+    version: "2.1"
+    version_date: "2022-07-25"
     ppwiki: "Chess"
     boardgamegeek: "171"
     chessvariants: "d.chess/chess.html"
     cyningstan: "398"
     wikipedia: "chess"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
 four_field_kono:
     players: 2
     length: 15

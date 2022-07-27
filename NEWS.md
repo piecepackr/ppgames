@@ -6,14 +6,15 @@ New features
 
 * New starting board generators for specific games:
 
-  - ``df_ludo()``
+  - ``df_ludo()`` (#119)
 
 * ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
 
-  - "ludo"
+  - "ludo" (#119)
 
 * Improved rulesets for:
 
+  - "international chess" (#126)
   - "shogi"
 
 Bug fixes and minor improvements
