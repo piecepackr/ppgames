@@ -63,27 +63,6 @@ This collective work is released under a \href{https://creativecommons.org/licen
 
 \chapter{Chess Variants}
 
-\include{xiangqi-chapter}
-
-\chapter{Morris aka Merels Games}
-
-\include{nine-mens-morris-chapter}
-\include{twelve-mens-morris-chapter}
-
-\chapter{Racing Games}
-
-\include{backgammon-chapter}
-\include{ludo-chapter}
-
-\chapter{Other Traditional Board Games}
-
-\include{four-field-kono-chapter}
-\include{tablut-chapter}
-
-\part{Game Hints}
-
-\chapter{Chess Variants}
-
 The large variety of boards that can be created with piecepack tiles and the large number of differentiable pieces makes a piecepack a good tool to play a wide variety of chess variants.  One can reduce the difficulty in remembering which piecepack piece corresponds to which chess (variant) piece if you mentally link the six piecepack ranks to the six FIDE chess ranks and if necessary you mentally link the six FIDE chess ranks to their counterparts in other chess variants.  See Table \ref{tab:chess-ranks} for the natural links between piecepack ranks and chess ranks.
 
 \begin{table}[ht!]
@@ -111,6 +90,27 @@ Five & King & King & General \\
 \end{table}
 
 \include{international-chess-chapter}
+\include{xiangqi-chapter}
+
+\chapter{Morris aka Merels Games}
+
+\include{nine-mens-morris-chapter}
+\include{twelve-mens-morris-chapter}
+
+\chapter{Racing Games}
+
+\include{backgammon-chapter}
+\include{ludo-chapter}
+
+\chapter{Other Traditional Board Games}
+
+\include{four-field-kono-chapter}
+\include{tablut-chapter}
+
+\part{Game Hints}
+
+\chapter{Chess Variants}
+
 \include{alice-chess-chapter}
 \include{chaturaji-chapter}
 \include{four-seasons-chess-chapter}
