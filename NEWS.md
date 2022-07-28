@@ -6,6 +6,7 @@ New features
 
 * New starting board generators for specific games:
 
+  - ``df_cribbage()`` is a new alias for ``df_cribbage_board()``
   - ``df_ludo()`` (#119)
 
 * ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
@@ -14,6 +15,7 @@ New features
 
 * Improved rulesets for:
 
+  - "cribbage" (#146)
   - "international chess" (#126)
   - "shogi"
 

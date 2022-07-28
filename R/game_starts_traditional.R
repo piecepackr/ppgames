@@ -194,6 +194,10 @@ df_cribbage_board <- function() {
 
 #' @rdname df_game
 #' @export
+df_cribbage <- df_cribbage_board
+
+#' @rdname df_game
+#' @export
 textGrob_cribbage_board <- function(suit_colors = rep("black", 4)) {
     gp1 <- gpar(col = c(suit_colors[1], suit_colors[2]), fontsize = 32)
     gp2 <- gpar(col = c(suit_colors[3], suit_colors[4]), fontsize = 32)

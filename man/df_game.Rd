@@ -56,6 +56,7 @@
 \alias{df_brandubh}
 \alias{df_breakthrough}
 \alias{df_cribbage_board}
+\alias{df_cribbage}
 \alias{textGrob_cribbage_board}
 \alias{df_crossings}
 \alias{df_four_field_kono}
@@ -175,6 +176,8 @@ df_brandubh()
 df_breakthrough()
 
 df_cribbage_board()
+
+df_cribbage()
 
 textGrob_cribbage_board(suit_colors = rep("black", 4))
 

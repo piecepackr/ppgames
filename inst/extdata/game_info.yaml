@@ -97,12 +97,16 @@ cribbage:
     length: [10, 180]
     equipment: "one standard piecepack, one deck of playing cards"
     designer: "Traditional (Sir John Suckling), adapted by Trevor L. Davis"
-    version: "2.0"
-    version_date: "2019-05-16"
+    version: "2.1"
+    version_date: "2022-07-28"
     ppwiki: "Cribbage"
     boardgamegeek: "2398"
     wikipedia: "Cribbage"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    external_links:
+        - "https://www.pagat.com/adders/crib6.html"
+    books:
+        - "Dan Barlow, \\emph{Cribbage for Experts} (2004)"
 international_chess:
     title: "(International) Chess"
     players: 2

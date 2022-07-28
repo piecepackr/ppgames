@@ -4,16 +4,63 @@ set_knitr_opts(game)
 
 \subsection{Description}
 
-Cribbage is a popular two-person card game that usually requires a special cribbage board to keep score. Below is a way to turn a piecepack into an effective cribbage board. 
+Cribbage is a popular two-person card game that traditionally uses a special ``cribbage board'' to keep score.  Traditionally a ``cribbage board'' was often used to keep score for other games such as dominoes and darts.  Below is a way to turn a piecepack into an effective cribbage board. 
 
-\subsection{Setup}
+\subsection{Making a cribbage board with a piecepack}
 
-Depending on the version of cribbage played a player usually wins if they score 61 points or 121 points (on a traditional cribbage board the latter effect is achieved by going twice around a 60 hole crib board). 
+Depending on the version of cribbage played a player usually wins if they score 61 points or 121 points (on a traditional cribbage board the latter effect is often achieved by going twice around a 60 hole crib board). 
 
-Give each player 12 tiles and arrange them in one vertical column in groups of two as in Figure \ref{fig:cribbage-starting-diagram}.  If you look at the ``points'' of this board and ignore the middle column of points then this gives you two columns each with 30 ``points'' arranged in groups of 5 as in a traditional cribbage board.  Each player can place up to 12 coins in the middle column as a reminder to not use it.  Give each player two pawns that they will use as ``pegs''. They will start off the board before entering the beginning of the board and a player wins when one peg goes off the end of the board. For a 121 point game the player must make a circuit of the board twice.  Use piecepack dice as counters to keep track of how many games each player has won.
+Give each player 12 tiles and arrange them in one vertical column in groups of two as in Figure \ref{fig:cribbage-starting-diagram}.  If you look at the ``points'' of this board and ignore the middle column of points then this gives you two columns each with 30 ``points'' arranged in groups of 5 as in a traditional cribbage board.  Each player can place up to 12 coins in the middle column as a reminder to not use it.  Give each player two pawns that they will use as ``pegs''. They will start off the board before entering the beginning of the board and a player wins when one peg goes off the end of the board. For a 121 point game the player must make a circuit of the board twice.  Use piecepack dice as counters to keep track of how many games each player has won (or trips around the circuit).
 
-%% begin.rcode starting-diagram, fig.width=9, fig.height=33, out.width="0.24545\\textheight", out.height="0.9\\textheight", fig.cap="Cribbage starting diagram"
+%% begin.rcode starting-diagram, fig.width=9, fig.height=33, out.width="0.1909075\\textheight", out.height="0.7\\textheight", fig.cap="Cribbage starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_cribbage_board(), cfg=cfg, default.units="in")
 grid.draw(textGrob_cribbage_board(cfg$get_suit_color()))
 %% end.rcode
+
+\subsection{Objective}
+
+Win by being the first to score at least 121 points (cumulatively over several deals) i.e. the player must twice circle the cribbage board.
+
+\subsection{The Order of Play}
+
+Each player ``cuts''\footnote{Takes a random card at least four cards from the top or bottom of the deck.} a card from a shuffled deck of playing cards.  The lower card player deals first.\footnote{If a tie then each player cuts a card again.}  Afterwards players alternate being dealers.  Each ``hand'' has a ``deal'', ``play'', and ``show'' phase.
+
+\subsection{Deal}
+
+\begin{enumerate}
+\item The dealer shuffles (and non-dealer cuts) and the dealer deals six cards to each player.
+\item Each player keeps four cards and places the other two cards into the dealer's ``crib''
+\item Non-dealer cuts remaining deck to reveal the ``start'' card which is placed on top of the deck.
+\item The dealer immediately scores two points if the start card is a jack.
+\end{enumerate}
+
+\subsection{Play}
+\begin{itemize}
+\item Starting with non-dealer each player alternates playing a card in front of them.\footnote{Don't mix these cards with the other player since these scores need to be scored in the ``Show'' stage.}
+\item When playing a card count out the sum of cards that have been played.\footnote{An ace equals 1 point and a jack, queen, or king equals 10.}
+\item If you can't play a card without the count going over 31 then don't play a card and say "Go"
+\item Once the count reaches 31 or no player can play a card then reset the count to zero and continue playing (if possible starting with the player who didn't play the last card).
+\item Once a player runs out of cards the other player keeps playing until they run out of cards.
+\item A player scores points during the ``Play'' round right after a scoring card is played:\begin{description}
+\item[Fifteen] Score 2 points if the count equals 15.
+\item[Pair] Completing a pair\footnote{Two cards of the same rank.} scores 2 points, three of a kind scores 6 points, four of a kind scores 12 points.\footnote{Because a three of a kind (\emph{pair royal}) is three different pairs while a four of a kind is six different pairs.}
+\item[Run] Completing a run of three or more cards scores as many cards as are in the run.  Cards in the run need not be in order.\footnote{But they must be the last played cards.}
+\item[Last card] Score 2 points for playing the last card if the count equals 31 else score 1 point.
+\end{description}
+\end{itemize}
+
+\subsection{Show}
+Each player retrieves the cards played in the ``Play'' phase and score them in the following order:\begin{enumerate}
+\item The non-dealer's hand
+\item The dealer's hand
+\item The dealer's crib
+\end{enumerate}
+The start card is used with the hand/crib to score the following combinations:
+\begin{description}
+\item[Fifteen] Each combinations of cards adding up to 15 points\footnote{An ace equals 1 point and a face card equals 10 points.} scores 2 points e.g. $Q\clubsuit$, $10\spadesuit$, $5\diamondsuit$, $5\heartsuit$ scores 8 points for four fifteens\footnote{Plus two points for the pair of fives.}: $Q\clubsuit5\diamondsuit$, $Q\clubsuit5\heartsuit$, $10\spadesuit5\diamondsuit$, and $10\spadesuit5\heartsuit$.
+\item[Pair] Two cards of the same rank scores 2 points, three cards of the same rank scores 6 points, and ``four of a kind'' scores 12 points.
+\item[Run] Three cards of consecutive rank score 3 points, a ``run of four" scores 4 points,\footnote{Even though a run of four contains two runs of three it only scores 4 points instead of 6 points.} and a ``run of five'' score 5 points.
+\item[Flush] 4 points are scored if all four cards in the hand are the same suit, if the (fifth) start card is also of that suit instead score 5 points.
+\item[One for his nob] Score one point if the hand contains a jack of the same suit as the start card.
+\end{description}

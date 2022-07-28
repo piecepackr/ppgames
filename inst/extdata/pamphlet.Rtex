@@ -31,9 +31,17 @@ game_data(game)
 
 \vspace{\fill} % empty line needed before \vspace 
 %% begin.rcode canonical-image, echo=FALSE, results='asis', error=FALSE
-height <- 1.0 * cwhf$height / cwhf$width
 file <- normalizePath(cwhf$file)
-cat(str_glue("\\includegraphics[width=1.0\\linewidth, height={round(height, 2)}\\linewidth]{{{file}}}"))
+if (cwhf$height / cwhf$width < 3) {
+    width <- 1.0
+    height <- width * cwhf$height / cwhf$width
+    unit <- "\\linewidth"
+} else {
+    height <- 0.6
+    width <- height * cwhf$width / cwhf$height
+    unit <- "\\paperheight"
+}
+cat(str_glue("{{\\centering\\includegraphics[width={round(width,2)}{unit}, height={round(height, 2)}{unit}]{{{file}}}\\par}}"))
 %% end.rcode
 
 \vspace{\fill} % empty line needed before \vspace 
