@@ -47,11 +47,6 @@ This collective work is released under a \href{https://creativecommons.org/licen
 
 %\mainmatter
 \pagenumbering{arabic}
-\part{Making Various Boards}
-
-\chapter{Making Traditional Board Game Accessories}
-
-\include{cribbage-chapter}
 
 \part{Game Rules}
 
@@ -90,6 +85,10 @@ Five & King & King & General \\
 \end{table}
 
 \include{international-chess-chapter}
+%\include{alice-chess-chapter}
+\include{chaturaji-chapter}
+%\include{four-seasons-chess-chapter}
+%\include{ultima-chess-chapter}
 \include{xiangqi-chapter}
 
 \chapter{Morris aka Merels Games}
@@ -107,13 +106,10 @@ Five & King & King & General \\
 \include{four-field-kono-chapter}
 \include{tablut-chapter}
 
-\part{Game Hints}
+\part{Appendix}
 
-\chapter{Chess Variants}
+\chapter{Making Traditional Board Game Accessories}
 
-\include{alice-chess-chapter}
-\include{chaturaji-chapter}
-\include{four-seasons-chess-chapter}
-\include{ultima-chess-chapter}
+\include{cribbage-chapter}
 
 \end{document}
