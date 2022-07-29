@@ -1,16 +1,70 @@
 %% begin.rcode opts, echo=FALSE
 set_knitr_opts(game)
+cfg <- gk$get_piecepacks(1)[[1]]
+pieces <- IncludePieces$new(cfg)
+piecesT <- pieces$resize("1.0em")
 %% end.rcode
 
 \subsection{Description}
 
-Chaturaji (aka Chaturanga for four players aka Choupat) is an old four-person chess variant. The diceless version is playable with a single standard piecepack, the version with dice either needs an additional two dice (preferably four-sided) or alternatively 2-4 extra game pieces (i.e. pawn saucers) to free up two piecepack dice from game piece duty. 
+Chaturaji (aka Chaturanga for four players aka Choupat) is an old four-person chess variant. The diceless version is playable with a single standard piecepack, the version with dice either needs an additional two dice (preferably four-sided) or alternatively 2-4 extra game pieces\footnote{For example piecepack ``pawn saucers''.} to free up two piecepack dice from game piece duty.  There are several rule variants for Chaturaji.  Below we'll give the rules for a modern simplified diceless Chaturaji variant. 
+
+\subsection{Objective}
+
+Capture both of the opposing team's kings.\footnote{Other variants have different objectives such as scoring the most points by capturing pieces or alternatively winning the most stakes by moving the king to other players' \emph{thrones}.}
 
 \subsection{Setup}
 
-Chaturaji is played on an 8-by-8 board made with the backs of 16 tiles. Each player needs 8 game pieces of the same suit: 1 king (piecepack pawn), 1 horse (ace-valued coin), 1 boat (2-valued coin), 1 rook (3-valued piecepack die or pawn saucer), and 4 pawns (remaining 4 coins face down).  Ownership of horses and boats are distinguished by orientation. Figure \ref{fig:chaturaji-starting-diagram} shows the recommended setup.
+Chaturaji is played on an 8-by-8 board made with the backs of 16 tiles. Each player needs 8 game pieces of the same suit: one piecepack pawn as \emph{king}, one ace-valued coin as \emph{horse}, one 2-valued coin as \emph{boat}, 1 3-valued die\footnote{If you want to play a variant with dice and need to free up piecepack dice could replace with piecepack ``pawn saucers'' (or extra game pieces).} as \emph{elephant}, and 4 remaining coins face down as \emph{pawns}.  Ownership of \emph{horses} and \emph{boats} are only distinguished by orientation.  There are two teams: each player will be on a team with the player whose pieces start across the board (diagonally) from them.  Figure \ref{fig:chaturaji-starting-diagram} shows the recommended setup.
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=9, out.width="1\\linewidth", out.height="1\\linewidth", fig.cap="Chaturaji starting diagram"
 cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_chaturaji(), cfg=cfg, default.units="in")
 %% end.rcode
+
+\subsection{The Order of Play}
+
+Each player rolls a die\footnote{You may need to temporarily borrow your \emph{elephant}.} to see who goes first.  Play then proceeds in clockwise order.  On their move each player moves one piece to another cell possibly capturing an opponent's piece located at that cell.\footnote{If a player has no legal move available to them their move is skipped.}
+
+\subsection{The Moves}
+
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+Piece & Name & Betza \\
+\hline
+\rinline{paste(piecesT$cS, piecesT$cM, piecesT$cC, piecesT$cA)} & Pawn & fcFfmW \\
+\rinline{piecesT$ca} & Horse & N  \\
+\rinline{piecesT$c2} & Boat & A  \\
+\rinline{paste(piecesT$dS3, piecesT$dM3, piecesT$dC3, piecesT$dA3)} & Elephant & R = WW  \\
+\rinline{paste(piecesT$pS, piecesT$pM, piecesT$pC, piecesT$pA)} & King  & K = FW  \\
+\hline
+\end{tabular}
+\caption{Chaturaji pieces with Betza notation}
+\label{tab:international-chess:pieces}
+\end{table}
+
+\begin{itemize}
+\item Except for the pawn, each piece's capturing move and non-capturing move is the same.
+\item You can't capture any piece on your team.
+\item Only the horse and boat may jump over other pieces during its move.
+\end{itemize}
+
+\begin{description}
+\item[Pawn]\rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} \begin{itemize}
+  \item Only the pawn has a different capturing and non-capturing move.
+  \item The pawn's non-capturing move is to move forward orthogonally one cell.
+  \item The pawn's capturing move is to move forward diagonally one cell.
+  \item When a pawn reaches the last rank and that player had previously lost a horse, boat, or elephant then it must \emph{promote} to one of those previously captured pieces.\footnote{In this variation no promotion to a king is allowed.}  If that player had not previously lost a horse, boat, or elephant then the pawns stays in that cell (unable to move)---however once that player's horse, boat, or elephant is captured the pawn immediately promotes to that piece.\footnote{Assuming the immobile pawn is not captured beforehand.}
+\end{itemize}
+\item[Horse]\rinline{pieces$ca} 
+    The horse moves diagonally one cell (``jumping'' over any piece on this cell) and then orthogonally one cell (further away from its original position).\footnote{This description is equivalent to moving two cells horizontally and one cell vertically OR one cell horizontally and two cells vertically (jumping over any pieces).}
+\item[Boat]\rinline{pieces$c5} The boat moves diagonally two cells (jumping over any piece).
+\item[Elephant]\rinline{paste(pieces$dS3, pieces$dM3, pieces$dC3, pieces$dA3)} The elephants moves orthogonally in a straight line.\footnote{This is in contrast with other historical chess variants where an ``elephant'' usually moves diagonally.}
+\item[King]\rinline{paste(pieces$pS, pieces$pM, pieces$pC, pieces$pA)}\begin{itemize}
+    \item The king moves one cell either orthogonally or diagonally.
+    \item A player can still move pieces after a king is taken.\footnote{This is different from some Chaturaji variants.  Also, unlike other variants there is no exchanging captured kings.}
+    \item A team loses if both players' kings get captured.\footnote{But unlike in (international) chess players need not move out of check or avoid placing their king into check.}
+\end{itemize}
+\end{description}

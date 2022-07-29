@@ -15,6 +15,7 @@ New features
 
 * Improved rulesets for:
 
+  - "chaturaji" (#128)
   - "cribbage" (#146)
   - "international chess" (#126)
   - "shogi"

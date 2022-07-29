@@ -29,7 +29,7 @@ pmap_piece(df_chess(), cfg=cfg, default.units="in")
 
 \subsection{The Order of Play}
 
-The player \emph{without} the (black) Moons' pawn goes first.\footnote{In modern international chess tournaments \emph{White} moves first and then \emph{Black} moves second.}  Players take turns moving one of their pieces to another point possibly capturing an opponent's piece located at that point.
+The player \emph{without} the (black) Moons' pawn goes first.\footnote{In modern international chess tournaments \emph{White} moves first and then \emph{Black} moves second.}  Players take turns moving one of their pieces to another cell possibly capturing an opponent's piece located at that cell.
 
 \subsection{The Moves}
 \begin{table}
