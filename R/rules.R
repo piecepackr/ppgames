@@ -81,7 +81,7 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
 
     knit_game(game, gk, quietly, size)
 
-    of <- system.file("extdata/ruleset.Rtex", package = "ppgames")
+    of <- system.file("templates/ruleset.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
     pdf <- xelatex(tex, quietly)
 
@@ -113,7 +113,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
 
     knit_game(game, gk, quietly, size, is_pamphlet = TRUE)
 
-    of <- system.file("extdata/pamphlet.Rtex", package = "ppgames")
+    of <- system.file("templates/pamphlet.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
     pdf <- xelatex(tex, quietly)
 
@@ -121,7 +121,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
     invisible(NULL)
 }
 
-game_info <- yaml::yaml.load_file(system.file("extdata", "game_info.yaml", package = "ppgames"))
+game_info <- yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
 
 knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter") {
     output <- paste0(game, "-chapter.tex")
@@ -132,7 +132,7 @@ knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter")
 
     knit_game(game, gk, quietly, size)
 
-    of <- system.file("extdata/chapter.Rtex", package = "ppgames")
+    of <- system.file("templates/chapter.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
 
     file.copy(tex, output, overwrite = TRUE)
@@ -140,7 +140,7 @@ knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter")
 }
 
 knit_game <- function(game, gk, quietly = TRUE, size = "letter", is_pamphlet = FALSE) {
-    game_files <- list.files(system.file("games", package = "ppgames"),
+    game_files <- list.files(system.file("rules", package = "ppgames"),
                              full.names = TRUE)
     of <- game_files[grep(game, game_files)]
     knit(of, quiet = quietly)
@@ -165,7 +165,7 @@ save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), 
     on.exit(setwd(wd))
     setwd(tempdir())
 
-    games <- list.files(system.file("games", package = "ppgames"), pattern = ".Rtex")
+    games <- list.files(system.file("rules", package = "ppgames"), pattern = ".Rtex")
     games <- gsub(".Rtex", "", games)
     for (game in games) {
         knit_chapter(game, gk, quietly, size)
