@@ -2,6 +2,8 @@
 cat(str_glue("\\documentclass[{size}paper, onecolumn]{{report}}\n")) # book
 %% end.rcode
 
+\usepackage{bigfoot}
+\usepackage{booktabs}
 \usepackage[colorlinks]{hyperref}
 \usepackage{fancyhdr}
 
@@ -39,6 +41,7 @@ This collective work is released under a \href{https://creativecommons.org/licen
 %\frontmatter
 \title{The Historical Piecepacker}
 \author{Trevor L. Davis}
+\date{}
 \maketitle
 \tableofcontents
 \listoffigures
@@ -62,23 +65,17 @@ The large variety of boards that can be created with piecepack tiles and the lar
 
 \begin{table}[ht!]
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
+\begin{tabular}{llll}
+\toprule
 Piecepack & (FIDE) Chess & Shatranj & Xiangqi \\
-\hline
-\hline
+\midrule
 Null & Pawn & Soldier & Soldier \\
-\hline
 Ace & Knight & Horse & Horse \\
-\hline
 Two & Bishop & Elephant & Elephant \\
-\hline
 Three & Rook & Chariot & Chariot \\
-\hline
 Four & Queen & Ferz & Advisor \\
-\hline
 Five & King & King & General \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{The natural links between piecepack ranks and chess ranks}\label{tab:chess-ranks}
 \end{center}

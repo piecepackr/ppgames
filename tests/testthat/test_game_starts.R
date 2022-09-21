@@ -1,11 +1,15 @@
-library("dplyr")
-library("piecepackr")
-library("vdiffr")
-cfg <- pp_cfg()
 cat_piece <- function(df, ..., color = FALSE) ppgames::cat_piece(df, ..., color = color)
 
 test_that("game diagrams work as expected", {
+    skip_if_not_installed("dplyr")
+    skip_if_not_installed("piecepackr")
+    skip_if_not_installed("vdiffr")
     skip_on_os("windows")
+
+    library("piecepackr")
+    library("vdiffr")
+
+    cfg <- pp_cfg()
 
     expect_snapshot(cat_piece(df_alice_chess()))
     expect_snapshot(cat_piece(df_alien_city(seed=42), reorient="symbols"))

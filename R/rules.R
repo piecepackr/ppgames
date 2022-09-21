@@ -1,9 +1,7 @@
-#' @importFrom knitr knit opts_chunk knit_hooks
 #' @import grid
 #' @import piecepackr
 #' @importFrom tibble tibble tribble
 #' @importFrom tools file_ext
-
 
 xelatex <- function(tex, quietly = TRUE) {
     stdout <- if (quietly) NULL else ""
@@ -13,12 +11,56 @@ xelatex <- function(tex, quietly = TRUE) {
     pdf
 }
 
+to_latex <- function(kf) {
+    stopifnot(Sys.which("pandoc") != "")
+    tex <- sub(paste0(file_ext(kf), "$"), "tex", kf)
+    system2("pandoc", args = c("-o", tex, kf))
+    tex
+}
+
+to_output <- function(lf, output, cmd_options = c("--standalone", "--self-contained")) {
+    stopifnot(Sys.which("pandoc") != "")
+    system2("pandoc", args = c(cmd_options,  "-o", output, lf))
+    output
+}
+
+#' Get names of piecepack games we can generate rulesets for.
+#'
+#' `names_rulesets()` returns the names of piecepack games we can generate rulesets for.
+#' @param book Book name or `NULL` (for all supported rules).
+#'             Currently only supports "the historical piecepacker".
+#' @seealso [save_ruleset()], [save_pamphlet()], and [save_pocketmod()].
+#' @export
+names_rulesets <- function(book = NULL) {
+    if (is.null(book)) {
+        names <- list.files(system.file("rules", package = "ppgames"))
+        names <- grep(".Rtex$", names, value=TRUE)
+        names <- gsub(".Rtex$", "", names)
+        names <- names[-grep("alice|seasons|ultima", names)]
+        names <- gsub("mens-morris", "men's-morris", names)
+        names <- gsub("-", " ", names)
+    } else {
+        book <- normalize_name(book, sep = "-")
+        stopifnot(book == "the-historical-piecepacker")
+        names <- c("alquerque",
+                   "american checkers",
+                   "awithlaknannai mosona",
+                   "backgammon",
+                   "chaturaji",
+                   "cribbage",
+                   "four field kono",
+                   "international chess",
+                   "ludo",
+                   "nine men's morris",
+                   "tablut",
+                   "twelve men's morris",
+                   "xiangqi")
+    }
+    names
+}
+
+
 # nolint start
-# to_tex <- function(kf) {
-#     tex <- sub(paste0(file_ext(kf), "$"), "tex", kf)
-#     system2("pandoc", args = c("-o", tex, kf))
-#     tex
-# }
 # to_pdf <- function(kf) {
 #     pdf <- sub(paste0(file_ext(kf), "$"), "pdf", kf)
 #     system2("pandoc", args = c("-o", pdf, "--pdf-engine=xelatex", kf))
@@ -26,7 +68,8 @@ xelatex <- function(tex, quietly = TRUE) {
 # }
 # nolint end
 
-set_knitr_opts <- function(name) {
+#' @importFrom knitr knit
+set_knitr_opts <- function(name, output_ext = "pdf", wd = getwd()) {
     # nolint start
     # hook_plot <- knit_hooks$get("plot")
     # knit_hooks$set(plot = function(x, options) {
@@ -34,103 +77,218 @@ set_knitr_opts <- function(name) {
     #   hook_plot(x, options)
     # })
     # nolint end
-    opts_chunk$set(dev = "cairo_pdf",
-                   echo = FALSE,
-                   fig.align = "center",
-                   fig.path = paste0(name, "-"),
-                   fig.pos = "ht!",
-                   fig.lp = paste0("fig:", name, "-"))
+    if (output_ext == "pdf")
+        dev <- "cairo_pdf"
+    else
+        dev <- "png"
+    knitr::opts_chunk$set(dev = dev,
+                          echo = FALSE,
+                          fig.align = "center",
+                          fig.path = paste0(name, "-"),
+                          fig.pos = "ht!",
+                          fig.lp = paste0("fig:", name, "-"))
+    invisible(NULL)
 }
 
-clean_game <- function(game) {
-    gsub("_", "-", to_varname(game))
-}
-
-#' Save ruleset and/or rulebook
+#' Save ruleset
 #'
-#' \code{save_ruleset} save ruleset of a game,
-#' \code{save_pamphlet} is a variant that saves the ruleset as a pamphlet.
-#' \code{save_rulebook} saves a rulebook.
+#' \code{save_ruleset} save ruleset of a game.
+#' \code{save_pamphlet} is a variant that saves the ruleset as a (tri-fold) pamphlet
+#' while \code{save_pocketmod} is a variant that saves the rulest as a \dQuote{pocketmod} booklet.
 #'
-#' @param game Game name
+#' @param game Game name to generate ruleset for.  See [names_rulesets()].
+#'             Will be normalized by [normalize_name()].
 #' @param gk A \code{game_kit} R6 object.
 #' @param output Path to the output file.
 #'        If \code{NULL} the function will guess a default.
 #' @param quietly Whether to hide document compilation output.
-#' @param size Paper size (either "letter", or "A4")
+#' @param size Paper size (either "letter", or "A4").
+#' @param ... Ignored
 #' @param duplex_edge String specifying the desired duplex printing edge.
 #'       If "short" match the second page along its short edge (second page flipped up, easier to preview on computer)
 #'       and if "long" match along its long edge (second page flipped upside down, usual printer default).
+#' @param game_info List with game info.  If `NULL` then we use
+#'                  `yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))`.
+#' @param game_files Character vector of (full path to) "Rtex" game rules.  If `NULL` then we use
+#'                  `list.files(system.file("rules", package = "ppgames"), full.names = TRUE)`.
+#' @param cmd_options Options passed to `pandoc` when using non-pdf output formats.
+#'                    If `NULL` we try to guess a good set of options.
 #' @rdname save_ruleset
+#' @seealso See <https://pocketmod.com/> for more information about \dQuote{pocketmod} booklets including folding instructions.
 #' @export
 save_ruleset <- function(game, gk = game_kit(), output = NULL,
-                         quietly = TRUE, size = "letter") {
+                         quietly = TRUE, size = "letter",
+                         ..., game_info = NULL, game_files = NULL,
+                         cmd_options = NULL) {
 
-    cache_dir <- file.path(tempdir(), "ppgames_cache")
-    if (dir.exists(cache_dir)) unlink(cache_dir)
+    cmd_options <- cmd_options %||% c("--standalone", "--self-contained", "--metadata=lang:en-US")
 
-    game <- clean_game(game)
+    game_info <- game_info %||%
+        yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
+    game_files <- game_files %||%
+        list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
+    game_files <- normalizePath(game_files)
+
+    game_hyphen <- normalize_name(game, sep = "-")
     size <- tolower(size)
-    if (is.null(output)) output <- paste0(game, ".pdf")
+    if (is.null(output)) output <- paste0(game_hyphen, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
+    output_ext <- file_ext(output)
 
-    wd <- getwd()
+    dir <- setup_tempdir(output)
+    wd <- setwd(dir)
     on.exit(setwd(wd))
-    setwd(tempdir())
+    # on.exit(unlink(dir, recursize = TRUE))
 
-    knit_game(game, gk, quietly, size)
+    knit_game(game_hyphen, gk, quietly, size,
+              game_files = game_files, output_ext = output_ext, wd = dir)
 
     of <- system.file("templates/ruleset.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
-    pdf <- xelatex(tex, quietly)
+    if (output_ext == "pdf") {
+        pdf <- xelatex(tex, quietly)
+        file.copy(pdf, output, overwrite = TRUE)
+    } else {
+        if (quietly)
+            cmd_options <- c(cmd_options, "--quiet")
+        else
+            cmd_options <- c(cmd_options, "--verbose")
+        to_output(tex, output, cmd_options)
+    }
+    invisible(NULL)
+}
 
-    file.copy(pdf, output, overwrite = TRUE)
+setup_tempdir <- function(output) {
+    dir <- file.path(tempdir(), basename(output))
+    unlink(dir, recursive = TRUE)
+    dir.create(dir)
+    dir
+}
+
+#' @param save_promo_fn A function with arguments `game`, `gk`, and `file`
+#'                        that saves a promo image for `game`.
+#'                        Defaults to [save_promo_image()].
+#' @rdname save_ruleset
+#' @export
+save_pamphlet <- function(game, gk = game_kit(), output = NULL,
+                          quietly = TRUE, size = "letter",
+                          duplex_edge = "short",
+                          ...,
+                          game_info = NULL,
+                          game_files = NULL,
+                          save_promo_fn = save_promo_image) {
+
+    game_info <- game_info %||%
+        yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
+    game_files <- game_files %||%
+        list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
+    game_files <- normalizePath(game_files)
+
+    game_hyphen <- normalize_name(game, sep = "-")
+    size <- tolower(size)
+    if (is.null(output)) output <- paste0(game_hyphen, ".pdf")
+    if (!exists(output)) file.create(output)
+    output <- normalizePath(output)
+    output_ext <- file_ext(output)
+
+    # create promo image
+    game_under <- normalize_name(game, sep = "_")
+    cfile <- file.path(tempdir(), paste0(game_under, "_promo.pdf"))
+    cwhf <- save_promo_fn(game_under, gk, cfile)
+
+    dir <- setup_tempdir(output)
+    wd <- setwd(dir)
+    on.exit(setwd(wd))
+    # on.exit(unlink(dir, recursize = TRUE))
+
+    knit_game(game_hyphen, gk, quietly, size,
+              is_pamphlet = TRUE, game_files = game_files, output_ext = "pdf", wd = dir)
+
+    of <- system.file("templates/pamphlet.Rtex", package = "ppgames")
+    tex <- knit(of, quiet = quietly)
+    if (output_ext == "pdf") {
+        pdf <- xelatex(tex, quietly)
+        file.copy(pdf, output, overwrite = TRUE)
+    } else {
+        abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
+    }
     invisible(NULL)
 }
 
 #' @rdname save_ruleset
 #' @export
-save_pamphlet <- function(game, gk = game_kit(), output = NULL,
-                          quietly = TRUE, size = "letter", duplex_edge = "short") {
+save_pocketmod <- function(game, gk = game_kit(), output = NULL,
+                          quietly = TRUE, size = "letter",
+                          duplex_edge = "short",
+                          ...,
+                          game_info = NULL,
+                          game_files = NULL,
+                          save_promo_fn = save_promo_image) {
 
-    cache_dir <- file.path(tempdir(), "ppgames_cache")
-    if (dir.exists(cache_dir)) unlink(cache_dir)
+    game_info <- game_info %||%
+        yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
+    game_files <- game_files %||%
+        list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
+    game_files <- normalizePath(game_files)
 
-    game <- clean_game(game)
+    game_hyphen <- normalize_name(game, sep = "-")
     size <- tolower(size)
-    if (is.null(output)) output <- paste0(game, ".pdf")
+    stopifnot(size %in% c("a4", "letter"))
+    if (is.null(output)) output <- paste0(game_hyphen, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
+    output_ext <- file_ext(output)
 
-    # create canonical image
-    cfile <- file.path(tempdir(), paste0(gsub("-", "_", game), "_canonical.pdf"))
-    cwhf <- plot_canonical_image(game, gk, cfile)
+    # create promo image
+    game_under <- normalize_name(game, sep = "_")
+    cfile <- file.path(tempdir(), paste0(game_under, "_promo.pdf"))
+    cwhf <- save_promo_fn(game_under, gk, cfile)
 
-    wd <- getwd()
+    dir <- setup_tempdir(output)
+    wd <- setwd(dir)
     on.exit(setwd(wd))
-    setwd(tempdir())
+    # on.exit(unlink(dir, recursize = TRUE))
 
-    knit_game(game, gk, quietly, size, is_pamphlet = TRUE)
+    knit_game(game_hyphen, gk, quietly, size,
+              is_pamphlet = TRUE, game_files = game_files,
+              game_info = game_info, output_ext = output_ext, wd = dir)
 
-    of <- system.file("templates/pamphlet.Rtex", package = "ppgames")
+    # We'll use three passes to generate "pocketmod" booklet
+    # See https://nilisnotnull.blogspot.com/2013/07/latex-pocketmod.html
+    of <- system.file("templates/pocketmod1.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
     pdf <- xelatex(tex, quietly)
 
-    file.copy(pdf, output, overwrite = TRUE)
+    of <- system.file("templates/pocketmod2.Rtex", package = "ppgames")
+    tex <- knit(of, quiet = quietly)
+    pdf <- xelatex(tex, quietly)
+
+    of <- system.file("templates/pocketmod3.Rtex", package = "ppgames")
+    tex <- knit(of, quiet = quietly)
+    pdf <- xelatex(tex, quietly)
+
+    if (output_ext == "pdf") {
+        file.copy(pdf, output, overwrite = TRUE)
+    } else {
+        abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
+    }
+
     invisible(NULL)
 }
 
-game_info <- yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
-
-knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter") {
+knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter",
+                         ..., game_info = NULL, game_files = NULL, output_ext = "pdf") {
+    # game should have been pre-cleaned by `normalize_name(game, sep = "-")`
     output <- paste0(game, "-chapter.tex")
 
-    wd <- getwd()
-    on.exit(setwd(wd))
-    setwd(tempdir())
+    game_files <- game_files %||%
+        list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
+    game_files <- normalizePath(game_files)
 
-    knit_game(game, gk, quietly, size)
+    knit_game(game, gk, quietly, size,
+              game_info = game_info, game_files = game_files, output_ext = output_ext,
+              wd = getwd())
 
     of <- system.file("templates/chapter.Rtex", package = "ppgames")
     tex <- knit(of, quiet = quietly)
@@ -139,43 +297,76 @@ knit_chapter <- function(game, gk = game_kit(), quietly = TRUE, size = "letter")
     invisible(NULL)
 }
 
-knit_game <- function(game, gk, quietly = TRUE, size = "letter", is_pamphlet = FALSE) {
-    game_files <- list.files(system.file("rules", package = "ppgames"),
-                             full.names = TRUE)
+knit_game <- function(game, gk, quietly = TRUE, size = "letter",
+                      ...,
+                      is_pamphlet = FALSE, game_info = NULL,
+                      game_files = NULL, output_ext = "pdf", wd = getwd()) {
+    # game should have been pre-cleaned by `normalize_name(game, sep = "-")`
+    stopifnot(any(grepl(game, game_files)))
     of <- game_files[grep(game, game_files)]
-    knit(of, quiet = quietly)
+    knitr::opts_knit$set(root.dir = wd)
+    on.exit(knitr::opts_knit$set(root.dir = NULL))
+    filename <- knit(of, quiet = quietly)
+    if (file_ext(filename) != "tex")
+        filename <- to_latex(filename)
+    invisible(filename)
 }
 
-#' @param book Book name
-#' @rdname save_ruleset
+#' Save rulebook
+#'
+#' \code{save_rulebook} saves a rulebook.
+#'
+#' @inheritParams save_ruleset
+#' @param book Book name.  Currently only supports "The Historical Piecepacker".
 #' @export
 save_rulebook <- function(book = "The Historical Piecepacker", gk = game_kit(), output = NULL,
-                          quietly = TRUE, size = "letter") {
+                          quietly = TRUE, size = "letter",
+                          cmd_options = NULL) {
 
-    cache_dir <- file.path(tempdir(), "ppgames_cache")
-    if (dir.exists(cache_dir)) unlink(cache_dir)
+    cmd_options <- cmd_options %||% c("--standalone", "--self-contained", "--metadata=lang:en-US",
+                                          "--table-of-contents", "--toc-depth=3")
+
+    game_info <- NULL # later make a function argument?
+    game_info <- game_info %||%
+        yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
+    game_files <- NULL # later make a function argument
+    game_files <- game_files %||%
+        list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
+    game_files <- normalizePath(game_files)
 
     size <- tolower(size)
-    book <- clean_game(book)
-    if (is.null(output)) output <- paste0(book, ".pdf")
+    book_hyphen <- normalize_name(book, sep = "-")
+    if (is.null(output)) output <- paste0(book_hyphen, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
+    output_ext <- file_ext(output)
 
-    wd <- getwd()
+    dir <- setup_tempdir(output)
+    wd <- setwd(dir)
     on.exit(setwd(wd))
-    setwd(tempdir())
+    # on.exit(unlink(dir, recursize = TRUE))
 
-    games <- list.files(system.file("rules", package = "ppgames"), pattern = ".Rtex")
-    games <- gsub(".Rtex", "", games)
-    for (game in games) {
-        knit_chapter(game, gk, quietly, size)
+    ## games <- list.files(system.file("rules", package = "ppgames"), pattern = ".Rtex")
+    ## games <- gsub(".Rtex", "", games)
+    games <- names_rulesets(book = book) %>% normalize_name(sep = "-")
+    for (game_hyphen in games) {
+        knit_chapter(game_hyphen, gk, quietly, size,
+                     game_info = game_info, output_ext = output_ext)
     }
 
-    of <- system.file(str_glue("books/{book}.Rtex"), package = "ppgames")
+    ## new argument book files?
+    of <- system.file(str_glue("books/{book_hyphen}.Rtex"), package = "ppgames")
     tex <- knit(of, quiet = quietly)
-    pdf <- xelatex(tex, quietly)
-
-    file.copy(pdf, output, overwrite = TRUE)
+    if (output_ext == "pdf") {
+        pdf <- xelatex(tex, quietly)
+        file.copy(pdf, output, overwrite = TRUE)
+    } else {
+        if (quietly)
+            cmd_options <- c(cmd_options, "--quiet")
+        else
+            cmd_options <- c(cmd_options, "--verbose")
+        to_output(tex, output, cmd_options)
+    }
     invisible(NULL)
 }
 
@@ -200,8 +391,8 @@ clean_n_players <- function(players) {
     Reduce(clean_fn, players, cleaned)$val
 }
 
-game_data <- function(game) {
-    info <- get_game_info(game)
+game_data <- function(game, game_info = NULL) {
+    info <- get_game_info(game, game_info)
     items <- list()
     items$Players <- clean_n_players(info$players)
     items$Length <- game_length(info$length)
@@ -214,8 +405,8 @@ game_data <- function(game) {
           collapse="\n"))
 }
 
-game_credits <- function(game) {
-    info <- get_game_info(game)
+game_credits <- function(game, game_info = NULL) {
+    info <- get_game_info(game, game_info)
     items <- list()
     if ("author" %in% names(info)) items$`Written by:` <- info$author
     items$`Game design:` <- info$designer
@@ -244,39 +435,41 @@ game_length <- function(gl) {
         paste(gl, "minutes")
 }
 
-get_game_info <- function(game) {
+get_game_info <- function(game, game_info = NULL) {
     if (is.null(game)) return(list())
     game <- gsub("-", "_", game)
+    game_info <- game_info %||%
+        yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))
     game_info[[game]]
 }
 
-title <- function(game) {
+title <- function(game, game_info = NULL) {
     if (is.null(game)) return(NULL)
-    info <- get_game_info(game)
+    info <- get_game_info(game, game_info)
     if (is.null(info$title)) {
         stringr::str_to_title(gsub("_|-", " ", game))
     } else {
         info$title
     }
 }
-author <- function(game) {
-    info <- get_game_info(game)
+author <- function(game, game_info = NULL) {
+    info <- get_game_info(game, game_info)
     if (is.null(info$author)) {
         "Trevor L. Davis"
     } else {
         info$author
     }
 }
-keywords <- function(game) {
-    info <- get_game_info(game)
+keywords <- function(game, game_info = NULL) {
+    info <- get_game_info(game, game_info)
     if (is.null(info$author)) {
         "piecepack,board games"
     } else {
         info$keywords
     }
 }
-subject <- function(game) {
-    info <- get_game_info(game)
+subject <- function(game, game_info = NULL) {
+    info <- get_game_info(game, game_info)
     if (is.null(info$subject)) {
         paste0("Learn how to play the board game ", title(game), ".")
     } else {
@@ -292,24 +485,25 @@ pdf_key <- function(name, value) {
     }
 }
 
-pdf_metadata <- function(game = NULL, ...,
+pdf_metadata <- function(game = NULL, game_info = NULL, ...,
                          pdftitle = NULL, pdfauthor = NULL,
                          pdfsubject = NULL, pdfkeywords = NULL) {
-    if (is.null(pdftitle)) pdftitle <- title(game)
-    if (is.null(pdfauthor)) pdfauthor <- author(game)
-    if (is.null(pdfsubject)) pdfsubject <- subject(game)
-    if (is.null(pdfkeywords)) pdfkeywords <- keywords(game)
+    if (is.null(pdftitle)) pdftitle <- title(game, game_info)
+    if (is.null(pdfauthor)) pdfauthor <- author(game, game_info)
+    if (is.null(pdfsubject)) pdfsubject <- subject(game, game_info)
+    if (is.null(pdfkeywords)) pdfkeywords <- keywords(game, game_info)
 cat(paste0("\\hypersetup{", pdf_key("pdftitle", pdftitle)),
     pdf_key("pdfauthor", pdfauthor),
     pdf_key("pdfcreator", paste0("ppgames (v", packageVersion("ppgames"), ")")),
     pdf_key("pdfsubject", pdfsubject),
     pdf_key("pdfkeywords", pdfkeywords),
+    pdf_key("pdflang", "en-US"),
     "}", sep = "\n")
 }
 
-external_links <- function(game, list_type = "itemize") {
+external_links <- function(game, list_type = "itemize", game_info = NULL) {
     links <- character(0)
-    info <- get_game_info(game)
+    info <- get_game_info(game, game_info)
     if (hasName(info, "ppwiki"))
         links <- c(links, paste0("http://www.ludism.org/ppwiki/", info$ppwiki))
     if (hasName(info, "boardgamegeek"))

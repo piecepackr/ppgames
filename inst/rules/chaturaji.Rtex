@@ -1,8 +1,7 @@
 %% begin.rcode opts, echo=FALSE
-set_knitr_opts(game)
+set_knitr_opts(game, output_ext, wd)
 cfg <- gk$get_piecepacks(1)[[1]]
-pieces <- IncludePieces$new(cfg)
-piecesT <- pieces$resize("1.0em")
+pieces <- IncludePieces$new(cfg, output_ext)
 %% end.rcode
 
 \subsection{Description}
@@ -30,16 +29,16 @@ Each player rolls a die\footnote{You may need to temporarily borrow your \emph{e
 
 \begin{table}
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
+\begin{tabular}{lll}
+\toprule
 Piece & Name & Betza \\
-\hline
-\rinline{paste(piecesT$cS, piecesT$cM, piecesT$cC, piecesT$cA)} & Pawn & fcFfmW \\
-\rinline{piecesT$ca} & Horse & N  \\
-\rinline{piecesT$c2} & Boat & A  \\
-\rinline{paste(piecesT$dS3, piecesT$dM3, piecesT$dC3, piecesT$dA3)} & Elephant & R = WW  \\
-\rinline{paste(piecesT$pS, piecesT$pM, piecesT$pC, piecesT$pA)} & King  & K = FW  \\
-\hline
+\midrule
+\rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} & Pawn & fcFfmW \\
+\rinline{pieces$ca} & Horse & N  \\
+\rinline{pieces$c2} & Boat & A  \\
+\rinline{paste(pieces$dS3, pieces$dM3, pieces$dC3, pieces$dA3)} & Elephant & R = WW  \\
+\rinline{paste(pieces$pS, pieces$pM, pieces$pC, pieces$pA)} & King  & K = FW  \\
+\bottomrule
 \end{tabular}
 \caption{Chaturaji pieces with Betza notation}
 \label{tab:international-chess:pieces}

@@ -1,0 +1,11 @@
+%% begin.rcode documentclass, echo=FALSE, results='asis'
+cat(str_glue("\\documentclass[10pt,{size}paper]{{article}}"))
+%% end.rcode
+\usepackage[final]{pdfpages}
+\usepackage[colorlinks]{hyperref}
+%% begin.rcode metadata, echo=FALSE, results='asis'
+pdf_metadata(game, game_info)
+%% end.rcode
+\begin{document}
+\includepdf[pages={2,3,4,5,1,8,7,6},frame=true,nup=2x4,landscape]{pocketmod2.pdf}
+\end{document}

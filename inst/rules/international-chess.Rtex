@@ -1,8 +1,7 @@
 %% begin.rcode opts, echo=FALSE
-set_knitr_opts(game)
+set_knitr_opts(game, output_ext, wd)
 cfg <- gk$get_piecepacks(1)[[1]]
-pieces <- IncludePieces$new(cfg)
-piecesT <- pieces$resize("1.0em")
+pieces <- IncludePieces$new(cfg, output_ext)
 %% end.rcode
 
 \subsection{Description}
@@ -33,18 +32,19 @@ The player \emph{without} the (black) Moons' pawn goes first.\footnote{In modern
 
 \subsection{The Moves}
 \begin{table}
+% \renewcommand*{\arraystretch}{1.2}
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
+\begin{tabular}{lll}
+\toprule
 Piece & Name & Betza \\
-\hline
-\rinline{paste(piecesT$cS, piecesT$cM, piecesT$cC, piecesT$cA)} & Pawn (P) & \\
-\rinline{piecesT$ca} & Knight (N) & N  \\
-\rinline{paste(piecesT$pS, piecesT$pM, piecesT$pC, piecesT$pA)} & Bishop (B) & B = FF  \\
-\rinline{paste(piecesT$dS3, piecesT$dM3, piecesT$dC3, piecesT$dA3)} & Rook (R) & R = WW  \\
-\rinline{piecesT$c4} & Queen (Q) & Q = BR  \\
-\rinline{piecesT$c5} & King (K) & K = FW  \\
-\hline
+\midrule
+\rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} & Pawn (P) & \\
+\rinline{pieces$ca} & Knight (N) & N  \\
+\rinline{paste(pieces$pS, pieces$pM, pieces$pC, pieces$pA)} & Bishop (B) & B = FF  \\
+\rinline{paste(pieces$dS3, pieces$dM3, pieces$dC3, pieces$dA3)} & Rook (R) & R = WW  \\
+\rinline{pieces$c4} & Queen (Q) & Q = BR  \\
+\rinline{pieces$c5} & King (K) & K = FW  \\
+\bottomrule
 \end{tabular}
 \caption{Chess pieces with Betza funny notation}
 \label{tab:international-chess:pieces}

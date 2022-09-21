@@ -1,18 +1,15 @@
 %% begin.rcode include, echo=FALSE, results='asis'
-cat(str_glue("\\section{{{title(game)}}}"))
-game_data(game)
+cat(str_glue("\\section{{{title(game, game_info)}}}"))
+game_data(game, game_info)
 cat(str_glue("\\input{{{game}}}"))
 %% end.rcode
 
 \subsection{Additional Resources}
 %% begin.rcode external-links, echo=FALSE, results='asis'
-external_links(game)
+external_links(game, game_info)
 %% end.rcode
 
 \subsection{Credits}
 %% begin.rcode credits, echo=FALSE, results='asis'
-game_credits(game)
+game_credits(game, game_info)
 %% end.rcode
-
-
-

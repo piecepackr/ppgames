@@ -32,7 +32,7 @@
 #'              If "Game Bit Mono" use glyphs in Private Use Area of "Game Bit Mono" font.
 #' @return String of text diagram (returned invisibly).
 #' @importFrom rlang %||% abort
-#' @seealso See <https://trevorld/game-bit-font> for more information about the \dQuote{Game Bit} family of fonts.
+#' @seealso See <https://github.com/trevorld/game-bit-font> for more information about the \dQuote{Game Bit} family of fonts.
 #' @export
 cat_piece <- function(df, color = NULL, reorient = "none", annotate = FALSE, ...,
                       file = "", annotation_scale = NULL, style = c("Unicode", "Game Bit Mono", "Game Bit Duo")) {

@@ -1,5 +1,6 @@
 %% begin.rcode opts, echo=FALSE
-set_knitr_opts(game)
+set_knitr_opts(game, output_ext, wd)
+cfg <- gk$get_piecepacks(1)[[1]]
 if (is_pamphlet) {
     knitr::opts_chunk$set(out.width = "0.54\\linewidth", out.height = "0.81\\linewidth",
                           out.extra = "trim = {0 3cm 0 0 }")
@@ -23,7 +24,6 @@ Setup the tiles as in Figure \ref{fig:pass-the-food-starting-diagram} with the n
 
 %% begin.rcode starting-diagram, fig.width=9, fig.height=13.5, fig.cap="Starting arrangement of tiles"
 pushViewport(viewport(width=inch(8), height=inch(12)))
-cfg <- gk$get_piecepacks(1)[[1]]
 pmap_piece(df_pass_the_food(), cfg=cfg, default.units="in")
 upViewport()
 %% end.rcode
@@ -35,7 +35,7 @@ Recognizing that it is easier if you lean forward before tossing, you could requ
 % \includegraphics[height=1cm]{forward_bend.png}
 % \includegraphics[height=\baselineskip]{forward_bend.png}
 %% begin.rcode forward_bend, echo=FALSE, results='asis'
-cat(str_glue("\\includegraphics[height=\\baselineskip]{{{image}}}", 
+cat(str_glue("\\includegraphics[height=1.0em]{{{image}}}", 
              image = system.file("images/forward_bend.png", package = "ppgames")))
 %% end.rcode
 }.
@@ -44,17 +44,17 @@ cat(str_glue("\\includegraphics[height=\\baselineskip]{{{image}}}",
 
 \begin{table}
 \centering
-\begin{tabular}{|l|c|c|c|c|}
-\hline
+\begin{tabular}{lcccc}
+\toprule
 Rank & 0 & 1 & 2 & 3+ \\
-\hline
+\midrule
 Ace (secret sauce) & 0 & 10 & 16 & 0 \\
 Five (fats) & 0 & 5 & 10 & 0 \\
 Four (proteins) & 0 & 5 & 9 & 0 \\
 Three (starches) & 0 & 5 & 8 & 0 \\
 Two (veggies) & 0 & 5 & 7 & 0 \\
 Null (garnish) & 0 & 1 & 0 & 0 \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Points scored given how many coins landed on tiles of a particular rank}
 \label{tab:ptf:rank}
@@ -62,15 +62,15 @@ Null (garnish) & 0 & 1 & 0 & 0 \\
 % \end{table}
 % \begin{table}
 % \centering
-\begin{tabular}{|l|c|c|c|c|}
-\hline
+\begin{tabular}{lcccc}
+\toprule
 Suit & 0 & 1 & 2 & 3+ \\
-\hline
+\midrule
 Suns (spicy) & 0 & 3 & 5 & 0 \\
 Moons (salty) & 0 & 2 & 3 & 0 \\
 Crowns (sweet) & 0 & 2 & 3 & 0 \\
 Arms (sour) & 0 & 3 & 5 & 0 \\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Points scored given how many coins landed on tiles of a particular suit}
 \label{tab:ptf:suit}

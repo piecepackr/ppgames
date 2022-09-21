@@ -1,7 +1,9 @@
+*.epub
 *.gif
+*.html
 *.pdf
-*.swp
 *.png
+*.swp
 
 codecov.yml
 README.html

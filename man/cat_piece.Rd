@@ -72,5 +72,5 @@ a plaintext diagram for a move within a game.  \code{cat_game()}
 renders an animation of a game in the terminal.
 }
 \seealso{
-See \url{https://trevorld/game-bit-font} for more information about the \dQuote{Game Bit} family of fonts.
+See \url{https://github.com/trevorld/game-bit-font} for more information about the \dQuote{Game Bit} family of fonts.
 }

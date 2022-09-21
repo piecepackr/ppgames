@@ -1,9 +1,22 @@
 %% begin.rcode documentclass, echo=FALSE, results='asis'
-tumble <- switch(duplex_edge, short = "notumble", "tumble")
-cat(str_glue("\\documentclass[{tumble},{size}paper]{{leaflet}}"))
+scale <- 1.2
+if (size == "a4") {
+  pmwidth <- scale * 297 / 25.4 / 4
+  pmheight <- scale * 210 / 25.4 / 2
+} else if (size == "letter") { # letter
+  pmwidth <- scale * 11 / 4
+  pmheight <- scale * 8.5 / 2
+} else {
+    stop(str_glue('Size must be either "a4" or "letter" instead of "{size}"'))
+}
+margin <- scale * 0.25
+bottom <- scale * 0.1
+footskip <- scale * 0.0
+cat(str_glue("\\documentclass[10pt,{size}paper]{{article}}"))
+cat(str_glue("\\usepackage[paperwidth={pmwidth}in,paperheight={pmheight}in,left={margin}in,right={margin}in,top={margin}in,bottom={bottom}in,includefoot,footskip={footskip}in]{{geometry}}"))
 %% end.rcode
 
-% \usepackage{bigfoot}
+\usepackage{bigfoot}
 \usepackage{booktabs}
 \usepackage[colorlinks]{hyperref}
 % \usepackage{fancyhdr}
@@ -34,8 +47,8 @@ game_data(game, game_info)
 \vspace{\fill} % empty line needed before \vspace 
 %% begin.rcode promo-image, echo=FALSE, results='asis', error=FALSE
 file <- normalizePath(cwhf$file)
-if (cwhf$height / cwhf$width < 3) {
-    width <- 1.0
+if (cwhf$height / cwhf$width < 2) {
+    width <- 0.8
     height <- width * cwhf$height / cwhf$width
     unit <- "\\linewidth"
 } else {
@@ -57,6 +70,9 @@ cat(str_glue("\\input{{{game}}}"))
 \ifnumcomp{\value{page}}{<}{3}{\newpage\mbox{}}{}
 \ifnumcomp{\value{page}}{<}{4}{\newpage\mbox{}}{}
 \ifnumcomp{\value{page}}{<}{5}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{6}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{7}{\newpage\mbox{}}{}
+\ifnumcomp{\value{page}}{<}{8}{\newpage\mbox{}}{}
 
 \subsection{Additional Resources}
 %% begin.rcode external-links, echo=FALSE, results='asis'

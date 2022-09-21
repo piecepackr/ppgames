@@ -32,7 +32,7 @@ To install the ``ppgames`` R package use the following commands in R_:
    remotes::install_github("piecepackr/piecepackr")
    remotes::install_github("piecepackr/ppgames")
 
-If you want to make rulebooks you'll need ``xelatex`` and if you want to make rulesets you'll need a recent version of ``pandoc``.  The following instructions should work on Ubuntu:
+If you want to make rulebooks and rulesets you'll need ``xelatex`` and depending on the input/output targets also a recent version of ``pandoc``.  The following instructions should work on Ubuntu:
 
 .. code:: bash
 

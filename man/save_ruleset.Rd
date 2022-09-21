@@ -3,15 +3,19 @@
 \name{save_ruleset}
 \alias{save_ruleset}
 \alias{save_pamphlet}
-\alias{save_rulebook}
-\title{Save ruleset and/or rulebook}
+\alias{save_pocketmod}
+\title{Save ruleset}
 \usage{
 save_ruleset(
   game,
   gk = game_kit(),
   output = NULL,
   quietly = TRUE,
-  size = "letter"
+  size = "letter",
+  ...,
+  game_info = NULL,
+  game_files = NULL,
+  cmd_options = NULL
 )
 
 save_pamphlet(
@@ -20,19 +24,29 @@ save_pamphlet(
   output = NULL,
   quietly = TRUE,
   size = "letter",
-  duplex_edge = "short"
+  duplex_edge = "short",
+  ...,
+  game_info = NULL,
+  game_files = NULL,
+  save_promo_fn = save_promo_image
 )
 
-save_rulebook(
-  book = "The Historical Piecepacker",
+save_pocketmod(
+  game,
   gk = game_kit(),
   output = NULL,
   quietly = TRUE,
-  size = "letter"
+  size = "letter",
+  duplex_edge = "short",
+  ...,
+  game_info = NULL,
+  game_files = NULL,
+  save_promo_fn = save_promo_image
 )
 }
 \arguments{
-\item{game}{Game name}
+\item{game}{Game name to generate ruleset for.  See \code{\link[=names_rulesets]{names_rulesets()}}.
+Will be normalized by \code{\link[=normalize_name]{normalize_name()}}.}
 
 \item{gk}{A \code{game_kit} R6 object.}
 
@@ -41,16 +55,32 @@ If \code{NULL} the function will guess a default.}
 
 \item{quietly}{Whether to hide document compilation output.}
 
-\item{size}{Paper size (either "letter", or "A4")}
+\item{size}{Paper size (either "letter", or "A4").}
+
+\item{...}{Ignored}
+
+\item{game_info}{List with game info.  If \code{NULL} then we use
+\code{yaml::yaml.load_file(system.file("extdata/game_info.yaml", package = "ppgames"))}.}
+
+\item{game_files}{Character vector of (full path to) "Rtex" game rules.  If \code{NULL} then we use
+\code{list.files(system.file("rules", package = "ppgames"), full.names = TRUE)}.}
+
+\item{cmd_options}{Options passed to \code{pandoc} when using non-pdf output formats.
+If \code{NULL} we try to guess a good set of options.}
 
 \item{duplex_edge}{String specifying the desired duplex printing edge.
 If "short" match the second page along its short edge (second page flipped up, easier to preview on computer)
 and if "long" match along its long edge (second page flipped upside down, usual printer default).}
 
-\item{book}{Book name}
+\item{save_promo_fn}{A function with arguments \code{game}, \code{gk}, and \code{file}
+that saves a promo image for \code{game}.
+Defaults to \code{\link[=save_promo_image]{save_promo_image()}}.}
 }
 \description{
-\code{save_ruleset} save ruleset of a game,
-\code{save_pamphlet} is a variant that saves the ruleset as a pamphlet.
-\code{save_rulebook} saves a rulebook.
+\code{save_ruleset} save ruleset of a game.
+\code{save_pamphlet} is a variant that saves the ruleset as a (tri-fold) pamphlet
+while \code{save_pocketmod} is a variant that saves the rulest as a \dQuote{pocketmod} booklet.
+}
+\seealso{
+See \url{https://pocketmod.com/} for more information about \dQuote{pocketmod} booklets including folding instructions.
 }

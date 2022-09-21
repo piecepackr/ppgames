@@ -1,5 +1,5 @@
 %% begin.rcode opts, echo=FALSE
-set_knitr_opts(game)
+set_knitr_opts(game, output_ext, wd)
 %% end.rcode
 
 \subsection{Description}

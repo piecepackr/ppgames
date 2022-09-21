@@ -1,4 +1,4 @@
-library("dplyr")
+library("dplyr", warn.conflicts = FALSE)
 cat_move <- function(df, ...) ppgames::cat_move(df, ..., color = FALSE)
 sf_read_ppn <- function(f) {
     read_ppn(system.file(paste0("ppn/", f, ".ppn"), package = "ppgames"))[[1]]

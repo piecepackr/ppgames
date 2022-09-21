@@ -19,7 +19,11 @@ reference:
       desc: "Functions to generate rulesets and rulebooks"
       contents:
         - save_ruleset
+        - save_rulebook
         - game_kit
+        - names_rulesets
+        - normalize_name
+        - save_promo_image
     - title: "Game solvers"
       desc: "Functions that solve games"
       contents:

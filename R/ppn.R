@@ -125,12 +125,12 @@ parse_movetext <- function(movetext, metadata) {
             parser_name <- parser
             .l <- list()
         } else if (is.list(parser)) {
-            names(parser) <- to_varname(names(parser))
+            names(parser) <- normalize_name(names(parser))
             i_name <- which("name" %in% names(parser))
             parser_name <- parser[["name"]]
             .l <- parser[-i_name]
         }
-        fn <- ppn_get(paste0("parser_", to_varname(parser_name)))
+        fn <- ppn_get(paste0("parser_", normalize_name(parser_name)))
         .l$movetext <- movetext
         .l$metadata <- metadata
         do.call(fn, .l)
@@ -172,7 +172,7 @@ get_starting_df_from_field <- function(field) {
         if (is.character(field)) {
             df <- get_starting_df_from_name(field)
         } else if (is.list(field)) {
-            names(field) <- to_varname(names(field))
+            names(field) <- normalize_name(names(field))
             i_name <- match("name", names(field))
             i_system <- match("system", names(field), nomatch = 0)
             .l <- field[-c(i_name, i_system)]
@@ -190,14 +190,9 @@ get_starting_df_from_field <- function(field) {
     return(df)
 }
 
-to_varname <- function(string) {
-    string <- gsub('"|\'|-', "", string) # e.g. The "In" Crowd -> the_in_crowd
-    snakecase::to_snake_case(string)
-}
-
 get_ppn_package <- function(system) {
     if (is.null(system)) return(NULL)
-    switch(to_varname(system),
+    switch(normalize_name(system),
            checkers = "tradgames",
            chess = "tradgames",
            icehouse = "piecenikr",
@@ -210,10 +205,10 @@ get_ppn_package <- function(system) {
 }
 
 get_starting_df_from_name <- function(game_name, .l = list(), system = NULL) {
-    if (!is.null(system) && to_varname(system) == "stackpack")
+    if (!is.null(system) && normalize_name(system) == "stackpack")
         .l$has_subpack <- TRUE
     package <- get_ppn_package(system)
-    fn_name <- paste0("df_", to_varname(game_name))
+    fn_name <- paste0("df_", normalize_name(game_name))
     fn <- ppn_get(fn_name, package)
     df <- do.call(fn, .l)
     df <- initialize_df(df)

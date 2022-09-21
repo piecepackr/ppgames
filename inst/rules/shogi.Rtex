@@ -1,10 +1,8 @@
 %% begin.rcode opts, echo=FALSE
-set_knitr_opts(game)
+set_knitr_opts(game, output_ext, wd)
 cfg <- gk$get_piecepacks(1)[[1]]
-pieces <- IncludePieces$new(cfg)
+pieces <- IncludePieces$new(cfg, output_ext)
 pieces270 <- pieces$rotate(270)
-piecesT <- pieces$resize("1.0em")
-piecesT270 <- pieces270$resize("1.0em")
 %% end.rcode
 
 \subsection{Description}
@@ -51,25 +49,25 @@ a (non-\emph{king}) piece is indicated by orientation.  Non-promoted pieces are 
 
 \begin{table}
 \centering
-\begin{tabular}{|l|c|c|c|}
-\hline
+\begin{tabular}{lll}
+\toprule
 Piece & Name & Betza \\
-\hline
-\rinline{paste(piecesT$pC, piecesT$pA)} & King (K) & K \\
-\rinline{piecesT$c3} & Rook (R) & R  \\
-\rinline{piecesT270$c3} & Promoted Rook (+R) & FR  \\
-\rinline{piecesT$c2} & Bishop (B) & B  \\
-\rinline{piecesT270$c2} & Promoted Bishop (+B) & WB  \\
-\rinline{paste(piecesT$dS5, piecesT$dM5, piecesT$dC5, piecesT$dA5)} & Gold (G) & WfF  \\
-\rinline{piecesT$c5} & Silver (S) & FfW  \\
-\rinline{piecesT270$c5} & Promoted Silver (+S) & WfF  \\
-\rinline{piecesT$ca} & Knight (N) & ffN  \\
-\rinline{piecesT270$ca} & Promoted Knight (+N) & WfF  \\
-\rinline{piecesT$c4} & Lance (L) & fR  \\
-\rinline{piecesT270$c4} & Promoted Lance (+L) & WfF  \\
-\rinline{paste(piecesT$cS, piecesT$cM, piecesT$cC, piecesT$cA)} & Pawn (P) & fW  \\
-\rinline{paste(piecesT270$cS, piecesT270$cM, piecesT270$cC, piecesT270$cA)} & Promoted Pawn (+P) & WfF  \\
-\hline
+\midrule
+\rinline{paste(pieces$pC, pieces$pA)} & King (K) & K \\
+\rinline{pieces$c3} & Rook (R) & R  \\
+\rinline{pieces270$c3} & Promoted Rook (+R) & FR  \\
+\rinline{pieces$c2} & Bishop (B) & B  \\
+\rinline{pieces270$c2} & Promoted Bishop (+B) & WB  \\
+\rinline{paste(pieces$dS5, pieces$dM5, pieces$dC5, pieces$dA5)} & Gold (G) & WfF  \\
+\rinline{pieces$c5} & Silver (S) & FfW  \\
+\rinline{pieces270$c5} & Promoted Silver (+S) & WfF  \\
+\rinline{pieces$ca} & Knight (N) & ffN  \\
+\rinline{pieces270$ca} & Promoted Knight (+N) & WfF  \\
+\rinline{pieces$c4} & Lance (L) & fR  \\
+\rinline{pieces270$c4} & Promoted Lance (+L) & WfF  \\
+\rinline{paste(pieces$cS, pieces$cM, pieces$cC, pieces$cA)} & Pawn (P) & fW  \\
+\rinline{paste(pieces270$cS, pieces270$cM, pieces270$cC, pieces270$cA)} & Promoted Pawn (+P) & WfF  \\
+\bottomrule
 \end{tabular}
 \caption{Shogi pieces with Betza funny notation}
 \label{tab:shogi:pieces}

@@ -1,15 +1,35 @@
-ppgames 0.8.0
-=============
+ppgames 0.8.0 (development)
+===========================
 
 New features
 ------------
+
+* New function `save_pocketmod()` which is an alternative to ``save_ruleset()``
+  that saves the ruleset as a ["pocketmod" booklet](https://pocketmod.com) (#110).
+
+* New function `names_rulesets()` lists the games we can generate rulesets for (#144).
+
+* `save_ruleset()` / `save_rulebook()` can now export to non-pdf formats using `pandoc` (#76).
+  We can customize `pandoc` output using the new `cmd_options` argument, by default
+  we try to pick reasonable defaults based on the file extension and whether its a book or ruleset.
+  Quality varies for the various output formats but `html`, `epub`, and `docx` export looked "okay".
+
+* `save_ruleset()` / `save_pamphlet()` / `save_pocketmod()` support new arguments `game_info`, `game_files`,
+  and `save_promo_fn` (#115).
+  This allows users to generate rulesets using files not located within the `{ppgames}` package.
+
+* We now export `normalize_name()` which normalizes game names into a standard format
+  for use in R/LaTeX variable names and for use in filenames.
+
+* We now export `save_promo_image()` which saves promo images for games.
+  Default argument for the `save_promo_fn` argument in `save_pamphlet()` / `save_pocketmod()`.
 
 * New starting board generators for specific games:
 
   - ``df_cribbage()`` is a new alias for ``df_cribbage_board()``
   - ``df_ludo()`` (#119)
 
-* ``save_ruleset()`` / ``save_pamphlet()`` now supports ruleset generation for:
+* ``save_ruleset()`` / ``save_pamphlet()`` / ``save_pocketmod()`` now supports ruleset generation for:
 
   - "ludo" (#119)
 

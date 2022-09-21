@@ -1,7 +1,7 @@
 %% begin.rcode opts, echo=FALSE
-set_knitr_opts(game)
+set_knitr_opts(game, output_ext, wd)
 cfg <- gk$get_piecepacks(1)[[1]]
-pieces <- IncludePieces$new(cfg)
+pieces <- IncludePieces$new(cfg, output_ext)
 %% end.rcode
 
 \subsection{Description}

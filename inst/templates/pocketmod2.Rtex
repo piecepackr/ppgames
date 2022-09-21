@@ -1,0 +1,29 @@
+%% begin.rcode documentclass, echo=FALSE, results='asis'
+scale <- 1.2
+if (size == "a4") {
+  pmwidth <- scale * 297 / 25.4 / 4
+  pmheight <- scale * 210 / 25.4 / 2
+} else if (size == "letter") { # letter
+  pmwidth <- scale * 11 / 4
+  pmheight <- scale * 8.5 / 2
+} else {
+    stop(str_glue('Size must be either "a4" or "letter" instead of "{size}"'))
+}
+margin <- scale * 0.25
+bottom <- scale * 0.1
+footskip <- scale * 0.0
+cat(str_glue("\\documentclass[10pt,{size}paper]{{article}}"))
+cat(str_glue("\\usepackage[paperwidth={pmwidth}in,paperheight={pmheight}in,left={margin}in,right={margin}in,top={margin}in,bottom={bottom}in,includefoot,footskip={footskip}in]{{geometry}}"))
+%% end.rcode
+
+\usepackage[final]{pdfpages}
+\begin{document}
+\includepdf[pages=1,angle=180]{pocketmod1.pdf}
+\includepdf[pages=2]{pocketmod1.pdf}
+\includepdf[pages=3]{pocketmod1.pdf}
+\includepdf[pages=4]{pocketmod1.pdf}
+\includepdf[pages=5]{pocketmod1.pdf}
+\includepdf[pages=6,angle=180]{pocketmod1.pdf}
+\includepdf[pages=7,angle=180]{pocketmod1.pdf}
+\includepdf[pages=8,angle=180]{pocketmod1.pdf}
+\end{document}
