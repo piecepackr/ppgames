@@ -129,9 +129,9 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
         list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
     game_files <- normalizePath(game_files)
 
-    game_hyphen <- normalize_name(game, sep = "-")
+    game <- normalize_name(game, sep = "-")
     size <- tolower(size)
-    if (is.null(output)) output <- paste0(game_hyphen, ".pdf")
+    if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
     output_ext <- file_ext(output)
@@ -141,7 +141,7 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
     on.exit(setwd(wd))
     # on.exit(unlink(dir, recursize = TRUE))
 
-    knit_game(game_hyphen, gk, quietly, size,
+    knit_game(game, gk, quietly, size,
               game_files = game_files, output_ext = output_ext, wd = dir)
 
     of <- system.file("templates/ruleset.Rtex", package = "ppgames")
@@ -185,15 +185,15 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
         list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
     game_files <- normalizePath(game_files)
 
-    game_hyphen <- normalize_name(game, sep = "-")
+    game_under <- normalize_name(game, sep = "_")
+    game <- normalize_name(game, sep = "-")
     size <- tolower(size)
-    if (is.null(output)) output <- paste0(game_hyphen, ".pdf")
+    if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
     output_ext <- file_ext(output)
 
     # create promo image
-    game_under <- normalize_name(game, sep = "_")
     cfile <- file.path(tempdir(), paste0(game_under, "_promo.pdf"))
     cwhf <- save_promo_fn(game_under, gk, cfile)
 
@@ -202,7 +202,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
     on.exit(setwd(wd))
     # on.exit(unlink(dir, recursize = TRUE))
 
-    knit_game(game_hyphen, gk, quietly, size,
+    knit_game(game, gk, quietly, size,
               is_pamphlet = TRUE, game_files = game_files, output_ext = "pdf", wd = dir)
 
     of <- system.file("templates/pamphlet.Rtex", package = "ppgames")
@@ -232,16 +232,16 @@ save_pocketmod <- function(game, gk = game_kit(), output = NULL,
         list.files(system.file("rules", package = "ppgames"), full.names = TRUE)
     game_files <- normalizePath(game_files)
 
-    game_hyphen <- normalize_name(game, sep = "-")
+    game_under <- normalize_name(game, sep = "_")
+    game <- normalize_name(game, sep = "-")
     size <- tolower(size)
     stopifnot(size %in% c("a4", "letter"))
-    if (is.null(output)) output <- paste0(game_hyphen, ".pdf")
+    if (is.null(output)) output <- paste0(game, ".pdf")
     if (!exists(output)) file.create(output)
     output <- normalizePath(output)
     output_ext <- file_ext(output)
 
     # create promo image
-    game_under <- normalize_name(game, sep = "_")
     cfile <- file.path(tempdir(), paste0(game_under, "_promo.pdf"))
     cwhf <- save_promo_fn(game_under, gk, cfile)
 
@@ -250,7 +250,7 @@ save_pocketmod <- function(game, gk = game_kit(), output = NULL,
     on.exit(setwd(wd))
     # on.exit(unlink(dir, recursize = TRUE))
 
-    knit_game(game_hyphen, gk, quietly, size,
+    knit_game(game, gk, quietly, size,
               is_pamphlet = TRUE, game_files = game_files,
               game_info = game_info, output_ext = output_ext, wd = dir)
 
