@@ -44,7 +44,9 @@ Bug fixes and minor improvements
 --------------------------------
 
 * ``cat_piece()`` now has very basic support for fudge/fate dice (#139)
-* Fixes bug when launching command-line version of `view_game()`
+* ``game_kit()`` now defaults to using the "piecepack" configuration from
+  ``piecepackr::game_systems()`` instead of using ``pp_cfg()``.
+* Fixes bug when launching command-line version of `view_game()`.
 
 ppgames 0.7.0
 =============

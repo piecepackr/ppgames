@@ -34,8 +34,24 @@ GameKit <- R6Class("game_kit",
 #'
 #' \code{game_kit} creates a game kit R6 object.
 #'
-#' @param cfgs A named list of \code{pp_cfg} configuration list R6 objects.
+#' @param cfgs A named list of [piecepackr::pp_cfg()] configuration list objects.
+#'             If `NULL` (default) we will use the "piecepack" configuration from
+#'             [piecepackr::game_systems()].
+#' @examples
+#'   cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
+#'   gk <- game_kit(list(cfg = cfg))
+#'   output <- tempfile(fileext = ".pdf")
+#'   save_pamphlet("tablut", gk = gk, output = output)
+#'   # xopen::xopen(output)
+#'   # browseURL(output)
 #' @export
-game_kit <- function(cfgs = list(cfg = pp_cfg())) {
+game_kit <- function(cfgs = NULL) {
+    if (is.null(cfgs)) {
+        if (piecepackr::has_font("Dejavu Sans"))
+            cfg <- game_systems("dejavu")$piecepack
+        else
+            cfg <- game_systems("sans")$piecepack
+        cfgs <- list(cfg = cfg)
+    }
     GameKit$new(cfgs)
 }
