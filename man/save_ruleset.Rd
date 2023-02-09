@@ -81,6 +81,16 @@ Defaults to \code{\link[=save_promo_image]{save_promo_image()}}.}
 \code{save_pamphlet} is a variant that saves the ruleset as a (tri-fold) pamphlet
 while \code{save_pocketmod} is a variant that saves the rulest as a \dQuote{pocketmod} booklet.
 }
+\examples{
+  cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
+  gk <- game_kit(list(cfg = cfg))
+  if (Sys.which("xelatex") != "") {
+    output <- tempfile(fileext = ".pdf")
+    save_pamphlet("tablut", gk = gk, output = output)
+    # xopen::xopen(output)
+    # browseURL(output)
+  }
+}
 \seealso{
 See \url{https://pocketmod.com/} for more information about \dQuote{pocketmod} booklets including folding instructions.
 }

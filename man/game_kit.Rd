@@ -17,8 +17,10 @@ If \code{NULL} (default) we will use the "piecepack" configuration from
 \examples{
   cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
   gk <- game_kit(list(cfg = cfg))
-  output <- tempfile(fileext = ".pdf")
-  save_pamphlet("tablut", gk = gk, output = output)
-  # xopen::xopen(output)
-  # browseURL(output)
+  if (Sys.which("xelatex") != "") {
+    output <- tempfile(fileext = ".pdf")
+    save_pamphlet("tablut", gk = gk, output = output)
+    # xopen::xopen(output)
+    # browseURL(output)
+  }
 }

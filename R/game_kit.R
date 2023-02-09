@@ -40,10 +40,12 @@ GameKit <- R6Class("game_kit",
 #' @examples
 #'   cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
 #'   gk <- game_kit(list(cfg = cfg))
-#'   output <- tempfile(fileext = ".pdf")
-#'   save_pamphlet("tablut", gk = gk, output = output)
-#'   # xopen::xopen(output)
-#'   # browseURL(output)
+#'   if (Sys.which("xelatex") != "") {
+#'     output <- tempfile(fileext = ".pdf")
+#'     save_pamphlet("tablut", gk = gk, output = output)
+#'     # xopen::xopen(output)
+#'     # browseURL(output)
+#'   }
 #' @export
 game_kit <- function(cfgs = NULL) {
     if (is.null(cfgs)) {

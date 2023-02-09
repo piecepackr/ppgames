@@ -79,6 +79,15 @@ set_knitr_opts <- function(name, output_ext = "pdf", wd = getwd()) {
 #'                    If `NULL` we try to guess a good set of options.
 #' @rdname save_ruleset
 #' @seealso See <https://pocketmod.com/> for more information about \dQuote{pocketmod} booklets including folding instructions.
+#' @examples
+#'   cfg <- piecepackr::game_systems()$dual_piecepacks_expansion
+#'   gk <- game_kit(list(cfg = cfg))
+#'   if (Sys.which("xelatex") != "") {
+#'     output <- tempfile(fileext = ".pdf")
+#'     save_pamphlet("tablut", gk = gk, output = output)
+#'     # xopen::xopen(output)
+#'     # browseURL(output)
+#'   }
 #' @export
 save_ruleset <- function(game, gk = game_kit(), output = NULL,
                          quietly = TRUE, size = "letter",
@@ -406,10 +415,17 @@ embed_xmp <- function(file, game, game_info = NULL) {
     x$title <- title(game, game_info)
 
     if (requireNamespace("xmpdf", quietly = TRUE)) {
-        xmpdf::set_xmp(x, file)
+        if (xmpdf::supports_set_xmp()) {
+            xmpdf::set_xmp(x, file)
+        } else {
+            msg <- c(x = "Unable to embed pdf XMP metadata",
+                     xmpdf::enable_feature_message("set_xmp"),
+                     i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+            rlang::inform(msg, class = "piecepackr_embed_metadata")
+        }
     } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
-        msg <- c(x = "Unable to embed pdf XMP metadata",
-                 xmpdf::enable_feature_message("set_xmp"),
+        msg <- c(x = "Need the {xmpdf} package to embed pdf metadata",
+                 i = '`remotes::install_github("trevorld/r-xmpdf")`',
                  i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
         rlang::inform(msg, class = "piecepackr_embed_metadata")
     }

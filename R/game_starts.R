@@ -487,11 +487,11 @@ df_piecepackman <- function(seed = NULL, variant = 1) {
                    abort(paste("Can't handle Piecepackman variant ", variant), class = "board_setup"))
     p_xy <- filter(df_p, !grepl("matchstick", .data$piece_side)) %>%
             mutate(x_y = paste(.data$x, .data$y, sep = "_")) %>%
-            select(.data$x_y)
+            select("x_y")
     x_y_omit <- c(p_xy$x_y, "1_5", "1_6", "10_5", "10_6")
     df_x_y <- expand.grid(x = 1:10, y = 1:10, stringsAsFactors = FALSE) %>%
             mutate(x_y = paste(.data$x, .data$y, sep = "_")) %>%
-            select(.data$x_y)
+            select("x_y")
     x_y <- setdiff(df_x_y$x_y, x_y_omit)
     x_y_nulls <- str_split(sample(x_y, 24), "_", simplify = TRUE)
     df_n <- tibble(piece_side = "matchstick_face",
