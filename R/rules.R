@@ -112,6 +112,7 @@ save_ruleset <- function(game, gk = game_kit(), output = NULL,
     tex <- knit(of, quiet = quietly)
     if (output_ext == "pdf") {
         pdf <- xelatex(tex, quietly)
+        embed_xmp(pdf, game, game_info)
         file.copy(pdf, output, overwrite = TRUE)
     } else {
         if (quietly)
@@ -173,6 +174,7 @@ save_pamphlet <- function(game, gk = game_kit(), output = NULL,
     tex <- knit(of, quiet = quietly)
     if (output_ext == "pdf") {
         pdf <- xelatex(tex, quietly)
+        embed_xmp(pdf, game, game_info)
         file.copy(pdf, output, overwrite = TRUE)
     } else {
         abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
@@ -233,6 +235,7 @@ save_pocketmod <- function(game, gk = game_kit(), output = NULL,
     pdf <- xelatex(tex, quietly)
 
     if (output_ext == "pdf") {
+        embed_xmp(pdf, game, game_info)
         file.copy(pdf, output, overwrite = TRUE)
     } else {
         abort(str_glue('Can\'t handle "{output_ext}" output yet.'))
@@ -392,6 +395,26 @@ game_credits <- function(game, game_info = NULL) {
     cat(license, "\n")
 }
 
+embed_xmp <- function(file, game, game_info = NULL) {
+    info <- get_game_info(game, game_info)
+    x <- xmpdf::xmp()
+    x$creator <- author(game, game_info)
+    x$description <- subject(game, game_info)
+    x$rights <- info$copyright
+    x$spdx_id <- info$license %||% "CC-BY-SA-4.0"
+    x$subject <- strsplit(keywords(game, game_info), ", ")[[1]]
+    x$title <- title(game, game_info)
+
+    if (requireNamespace("xmpdf", quietly = TRUE)) {
+        xmpdf::set_xmp(x, file)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf XMP metadata",
+                 xmpdf::enable_feature_message("set_xmp"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        rlang::inform(msg, class = "piecepackr_embed_metadata")
+    }
+}
+
 game_length <- function(gl) {
     if (length(gl) == 2)
         str_glue("{gl[1]}--{gl[2]} minutes")
@@ -426,8 +449,8 @@ author <- function(game, game_info = NULL) {
 }
 keywords <- function(game, game_info = NULL) {
     info <- get_game_info(game, game_info)
-    if (is.null(info$author)) {
-        "piecepack,board games"
+    if (is.null(info$keywords)) {
+        "piecepack, board games"
     } else {
         info$keywords
     }

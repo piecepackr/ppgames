@@ -11,7 +11,7 @@ pass_the_food:
     designer: "Trevor L. Davis"
     version: "0.3"
     version_date: "2021-01-15"
-    copyright: "\\copyright~2021 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2021 Trevor L. Davis. Some Rights Reserved."
     ppwiki: "PassTheFood"
 # historical board game adaptions
 alice_chess:
@@ -24,13 +24,13 @@ alice_chess:
     boardgamegeek: "134603"
     chessvariants: "other.dir/alice.html"
     wikipedia: "Alice_Chess"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2019 Trevor L. Davis. Some Rights Reserved."
 alquerque:
     players: 2
     length: [10, 20]
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Jessica Eccles and Trevor L. Davis"
-    copyright: "\\copyright~2020 Trevor L. Davis. Some Rights Reserved."
+    copyright: "2020 Trevor L. Davis. Some Rights Reserved."
     version: "1.0"
     version_date: "2020-11-24"
     ppwiki: "Alquerque"
@@ -43,7 +43,7 @@ american_checkers:
     length: 30
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Mark A. Biggar and Trevor L. Davis"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2019 Trevor L. Davis. Some Rights Reserved."
     version: "1.2.2"
     version_date: "2021-01-04"
     ppwiki: "Checkers"
@@ -57,7 +57,7 @@ awithlaknannai_mosona:
     players: 2
     equipment: "one standard piecepack"
     designer: "Traditional, adapted by Trevor L. Davis"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
     version: "1.0"
     version_date: "2022-02-28"
     boardgamegeek: 13766
@@ -70,7 +70,7 @@ backgammon:
     designer: "Traditional, adapted by Trevor L. Davis"
     version: "1.2"
     version_date: "2022-02-21"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
     ppwiki: "Backgammon"
     boardgamegeek: "2397"
     cyningstan: "400"
@@ -91,7 +91,7 @@ chaturaji:
     chessvariants: "historic.dir/chaturang4.html"
     cyningstan: "124"
     wikipedia: "Chaturaji"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
     books:
         - "R. Wayne Schmittberger, \\emph{New Rules for Classic Games} (1992), 99--103"
 cribbage:
@@ -104,7 +104,7 @@ cribbage:
     ppwiki: "Cribbage"
     boardgamegeek: "2398"
     wikipedia: "Cribbage"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
     external_links:
         - "https://www.pagat.com/adders/crib6.html"
     books:
@@ -122,7 +122,7 @@ international_chess:
     chessvariants: "d.chess/chess.html"
     cyningstan: "398"
     wikipedia: "chess"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
 four_field_kono:
     players: 2
     length: 15
@@ -134,7 +134,7 @@ four_field_kono:
     boardgamegeek: "20560"
     cyningstan: "205"
     wikipedia: "Four_Field_Kono"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2019 Trevor L. Davis. Some Rights Reserved."
 four_seasons_chess:
     players: 4
     length: [10, 180]
@@ -145,7 +145,7 @@ four_seasons_chess:
     boardgamegeek: "104556"
     chessvariants: "historic.dir/4seiz.html"
     cyningstan: "348"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2019 Trevor L. Davis. Some Rights Reserved."
 ludo:
     players: [2, 3, 4]
     length: 30
@@ -156,7 +156,7 @@ ludo:
     ppwiki: "Ludo"
     boardgamegeek: "2136"
     wikipedia: "Ludo_(board_game)"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
     external_links:
         - "https://www.ymimports.com/pages/how-to-play-ludo"
 nine_mens_morris:
@@ -176,7 +176,7 @@ nine_mens_morris:
     books:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
         - "David Pritchard, \\emph{Brain Games} (1982), 128--131"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
 shogi:
     title: "Shogi (Japanese Chess)"
     players: 2
@@ -190,7 +190,7 @@ shogi:
     chessvariants: "shogi.html"
     cyningstan: "155"
     wikipedia: "Shogi"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
 tablut:
     players: 2
     length: 45
@@ -206,7 +206,7 @@ tablut:
         - "http://tafl.cyningstan.com/page/1331/imperial-contest"
     books:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 165--188"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
 twelve_mens_morris:
     title: "Twelve Men's Morris"
     players: 2
@@ -221,7 +221,7 @@ twelve_mens_morris:
     wikipedia: "Morabaraba"
     external_links:
         - "http://esportscommentator.blogspot.com/2015/04/generally-accepted-rules-for-game-of_4.html"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
 ultima:
     title: "Ultima (Baroque Chess)"
     players: 2
@@ -233,7 +233,7 @@ ultima:
     boardgamegeek: "25343"
     chessvariants: "other.dir/ultima.html"
     wikipedia: "Baroque_chess"
-    copyright: "\\copyright~2019 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2019 Trevor L. Davis. Some Rights Reserved."
 xiangqi:
     title: "Xiangqi (Chinese Chess)"
     players: 2
@@ -247,4 +247,4 @@ xiangqi:
     chessvariants: "xiangqi.html"
     cyningstan: "75"
     wikipedia: "Xiangqi"
-    copyright: "\\copyright~2022 Trevor L. Davis. Some Rights Reserved."
+    copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."

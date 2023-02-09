@@ -18,6 +18,10 @@ New features
   and `save_promo_fn` (#115).
   This allows users to generate rulesets using files not located within the `{ppgames}` package.
 
+* `save_ruleset()` / `save_pamphlet()` / `save_pocketmod()` can now embed XMP metadata including 
+  Creative Commons license info into pdf output (#71).
+  Requires suggested package `{xmpdf}` and the command-line tool `exiftool`.
+
 * We now export `normalize_name()` which normalizes game names into a standard format
   for use in R/LaTeX variable names and for use in filenames.
 

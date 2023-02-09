@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: ppgames
 Type: Package
 Title: Piecepack Games
-Version: 0.8.0-17
+Version: 0.8.0-18
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
              comment = c(ORCID = "0000-0001-6341-4639")))
@@ -40,8 +40,10 @@ Suggests:
     rgl,
     shiny,
     testthat,
-    vdiffr
-SystemRequirements: pandoc, xelatex
+    vdiffr,
+    xmpdf (>= 0.1.0-32)
+Remotes: xmpdf=trevorld/r-xmpdf
+SystemRequirements: exiftool, pandoc, xelatex
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Config/testthat/edition: 3
