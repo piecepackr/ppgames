@@ -14,7 +14,7 @@
 #' @inheritParams save_ruleset
 #' @param file Filename for the image.  If `NULL` we'll generate
 #'             a pdf image with an appropriate name given `game`.
-#'
+#' @param ... Passed to [piecepackr::render_piece()].
 #' @return A list with the width, height, and filename of the promo image.
 #'         As a side effect we save an image to disk.
 #' @examples
@@ -23,7 +23,7 @@
 #' print(whf)
 #' unlink(whf$file)
 #' @export
-save_promo_image <- function(game, gk = game_kit(), file = NULL) {
+save_promo_image <- function(game, gk = game_kit(), file = NULL, ...) {
     game_name <- normalize_name(game)
     if (is.null(file)) file <- paste0(game_name, "_promo.pdf")
     cfg <- gk$get_piecepacks(1)[[1]]
@@ -31,40 +31,33 @@ save_promo_image <- function(game, gk = game_kit(), file = NULL) {
     switch(game_name,
            nine_mens_morris = {
                df <- promo_morris_df()
-               wh <- render_piece(df, file = file, annotate = FALSE,
-                                  envir = envir,
-                                  op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, ...,
+                                  envir = envir, op_scale = 0.5, trans = op_transform)
            },
            pass_the_food = {
                df <- promo_pass_the_food_df()
-               wh <- render_piece(df, file = file, annotate = FALSE,
-                                  envir = envir,
-                                  op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, ...,
+                                  envir = envir, op_scale = 0.5, trans = op_transform)
            },
            speedy_towers = {
                df <- promo_speedy_towers_df()
-               wh <- render_piece(df, file = file, annotate = FALSE,
-                                  envir = envir,
-                                  op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, ...,
+                                  envir = envir, op_scale = 0.5, trans = op_transform)
            },
            tablut = {
                df <- df_tablut(cfg$get_width("die_face"))
-               wh <- render_piece(df, file = file, annotate = FALSE,
-                                  envir = envir,
-                                  op_scale = 0.5, trans = op_transform)
-
+               wh <- render_piece(df, file = file, ...,
+                                  envir = envir, op_scale = 0.5, trans = op_transform)
            },
            twelve_mens_morris = {
                df <- promo_morris_df()
-               wh <- render_piece(df, file = file, annotate = FALSE,
-                                  envir = envir,
-                                  op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, ...,
+                                  envir = envir, op_scale = 0.5, trans = op_transform)
            },
            {
                df <- get_starting_df_from_name(game_name)
-               wh <- render_piece(df, file = file, annotate = FALSE,
-                                  envir = envir,
-                                  op_scale = 0.5, trans = op_transform)
+               wh <- render_piece(df, file = file, ...,
+                                  envir = envir, op_scale = 0.5, trans = op_transform)
            })
     invisible(c(wh, list(file = file)))
 }

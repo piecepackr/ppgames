@@ -4,7 +4,7 @@
 \alias{save_promo_image}
 \title{Save promo image of game}
 \usage{
-save_promo_image(game, gk = game_kit(), file = NULL)
+save_promo_image(game, gk = game_kit(), file = NULL, ...)
 }
 \arguments{
 \item{game}{Game name.  Will be normalized by \code{\link[=normalize_name]{normalize_name()}}.}
@@ -13,6 +13,8 @@ save_promo_image(game, gk = game_kit(), file = NULL)
 
 \item{file}{Filename for the image.  If \code{NULL} we'll generate
 a pdf image with an appropriate name given \code{game}.}
+
+\item{...}{Passed to \code{\link[piecepackr:render_piece]{piecepackr::render_piece()}}.}
 }
 \value{
 A list with the width, height, and filename of the promo image.
