@@ -9,8 +9,6 @@ test_that("game diagrams work as expected", {
     library("piecepackr")
     library("vdiffr")
 
-    cfg <- pp_cfg()
-
     expect_snapshot(cat_piece(df_alice_chess()))
     expect_snapshot(cat_piece(df_alien_city(seed=42), reorient="symbols"))
     expect_snapshot({
@@ -80,11 +78,15 @@ test_that("game diagrams work as expected", {
     })
     expect_snapshot(cat_piece(df_salta()))
     expect_snapshot(cat_piece(df_san_andreas()))
+    expect_snapshot(cat_piece(df_shogi(), reorient="all"))
     expect_snapshot(cat_piece(df_skyscrapers(seed=23)))
     expect_snapshot(cat_piece(df_slides_of_action()))
+    expect_snapshot(cat_piece(df_speedy_towers(seed=42), reorient = "all"))
     expect_snapshot(cat_piece(df_the_in_crowd()))
     expect_snapshot(cat_piece(df_the_magic_bag(seed=27)))
     expect_snapshot(cat_piece(df_tablut(), reorient="all"))
+    expect_equal(nrow(df_tablut(0.75)), 42L)
+    expect_equal(nrow(df_tablut(0.50)), 45L)
     expect_snapshot({
         df <- df_tower_of_babel(seed=42)
         tiles <- generate_sra(df, "^tile", "sr")
@@ -115,7 +117,9 @@ test_that("game diagrams work as expected", {
 
     # graphic checks
     skip_on_ci()
-    ee <- list(piecepack = cfg)
+    skip_if_not_installed("piecepackr", minimum_version = "1.13.3")
+    skip_if_not(piecepackr::has_font("Dejavu Sans"))
+    ee <- game_systems("dejavu")
     expect_doppelganger("awithlaknannai_mosona", function() {
         df <- df_awithlaknannai_mosona(TRUE)
         pmap_piece(df, default.units = "in", envir = ee)
@@ -128,13 +132,5 @@ test_that("game diagrams work as expected", {
     expect_doppelganger("ludo", function() {
         df <- df_ludo()
         pmap_piece(df, default.units = "in", envir = ee)
-    })
-    expect_doppelganger("shogi", function() {
-        df <- df_shogi()
-        pmap_piece(df, default.units = "in", envir = ee)
-    })
-    expect_doppelganger("tablut", function() {
-        df <- df_tablut(cfg$get_width("die_face"))
-        pmap_piece(df, cfg = cfg, default.units = "in")
     })
 })

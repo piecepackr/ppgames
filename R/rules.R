@@ -386,7 +386,7 @@ game_credits <- function(game, game_info = NULL) {
     items <- list()
     if ("author" %in% names(info)) items$`Written by:` <- info$author
     items$`Game design:` <- info$designer
-    license <- info$license %||% "CC-BY-SA-4.0"
+    license <- info$license %||% info$licence %||% "CC-BY-SA-4.0"
     stopifnot(license %in% piecepackr::spdx_license_list$id)
     license_name <- piecepackr::spdx_license_list[license, "name"]
     license_url <- piecepackr::spdx_license_list[license, "url_alt"]

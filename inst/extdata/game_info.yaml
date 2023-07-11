@@ -2,18 +2,6 @@
 # license "CC-BY-SA-4.0"
 # equipment "one standard piecepack"
 # title inferred from list key
-# original board games
-pass_the_food:
-    title: "Pass the Food"
-    players: [1, 2, 3, 4]
-    length: 20
-    equipment: "one standard piecepack"
-    designer: "Trevor L. Davis"
-    version: "0.3"
-    version_date: "2021-01-15"
-    copyright: "© 2021 Trevor L. Davis. Some Rights Reserved."
-    ppwiki: "PassTheFood"
-# historical board game adaptions
 alice_chess:
     players: 2
     length: [30, 180]
@@ -177,6 +165,16 @@ nine_mens_morris:
         - "Damian Gareth Walker, \\emph{A Book of Historic Board Games} (2014), 95--110"
         - "David Pritchard, \\emph{Brain Games} (1982), 128--131"
     copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
+pass_the_food:
+    title: "Pass the Food"
+    players: [1, 2, 3, 4]
+    length: 20
+    equipment: "one standard piecepack"
+    designer: "Trevor L. Davis"
+    version: "0.3"
+    version_date: "2021-01-15"
+    copyright: "© 2021 Trevor L. Davis. Some Rights Reserved."
+    ppwiki: "PassTheFood"
 shogi:
     title: "Shogi (Japanese Chess)"
     players: 2
@@ -191,6 +189,17 @@ shogi:
     cyningstan: "155"
     wikipedia: "Shogi"
     copyright: "© 2022 Trevor L. Davis. Some Rights Reserved."
+speedy_towers:
+    title: "Speedy Towers"
+    players: [2, 3, 4, 5, 6]
+    length: 5
+    equipment: "one piecepack per two players"
+    designer: "Jessica Eccles"
+    version: "0.7-tld"
+    version_date: "2023-07-11"
+    license: "CC0-1.0"
+    copyright: "Created in 2018 by Jessica Eccles and lightly edited and illustrated in 2023 by Trevor L. Davis. No Rights Reserved."
+    ppwiki: "SpeedyTowers"
 tablut:
     players: 2
     length: 45

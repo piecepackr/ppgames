@@ -1,0 +1,47 @@
+%% begin.rcode opts, echo=FALSE
+set.seed(12)
+set_knitr_opts(game, output_ext, wd)
+%% end.rcode
+
+\subsection{Description}
+
+\emph{Speedy Towers} is a real-time tower building game for the piecepack.
+
+\subsection{Objective}
+
+\begin{itemize}
+\item The person who empties their pile first and sets their pawn on top of the highest tower without knocking it over wins. 
+\item In the case of a tie the speediest players share the win or play again.
+\item If nobody can place any more pieces the person with the fewest pieces wins.
+\end{itemize}
+
+\subsection{Setup}
+
+You need the piecepack tiles, coins and pawns. Shuffle the tiles face down and place 1 fewer than the number of players (but at least 2) in the middle of the table. These will form the foundations of the towers. Divide the rest evenly among the players.\footnote{Note unless there are exactly two players it is not possible to divide the tiles exactly evenly.  One can push the extra tile(s) (and coins if there are five players) aside or give them to the winner of the last game.}  Shuffle the coins and divide them among the players likewise. Give each player one pawn.
+
+%% begin.rcode starting-diagram, fig.width=26, fig.height=15, out.width="1\\linewidth", out.height="0.5769231\\linewidth", fig.cap="Possible Speedy Towers setup for a game with two players"
+cfg <- gk$get_piecepacks(1)[[1]]
+pmap_piece(df_speedy_towers(), cfg=cfg, default.units="in")
+%% end.rcode
+
+\subsection{Play}
+
+The fastest player (or whoever won the last game) turns over the foundation tiles in the middle of the table. As soon as the last foundation tile has been turned over players may turn over one of their tiles and start placing their pieces one at a time onto one of the foundations in the middle under the following rules:
+
+\begin{itemize}
+\item Players may only have one face up tile at a time.  If the tile they have cannot be placed they may turn it face down and turn over a different tile.
+\item Coins may be flipped to either side at any time.\footnote{If you sort your coins by suit you can tell what suit your coin is by the location you placed them (and/or alternatively directional mark orientation) without needing to flip them over heads up.  It may be helpful to recall that the ``official'' ordering of piecpack suits is Suns, Moons, Crowns, and Arms.}
+\item Players race to empty their piles following the following placement rules:
+\begin{itemize}
+\item A piece may be placed onto any piece of a lower value (Ace is worth 6) or of the same suit.
+\item Nulls are both higher and lower than all other pieces. A Null can be placed on anything, and anything can be placed on a Null.
+\item Coins only show a suit or a value therefore the hidden property is considered to be the same as the tile underneath. They may be stacked on tiles or other coins.
+\item The pawn must be played as the last piece and must be placed on the highest tower. 
+\item Players may not touch the towers except with the new piece they are placing.
+\end{itemize}
+\item If a player(s) knocks over a tower while placing a piece they take a fallen piece and push the rest aside out of the game. Anything touching the playing surface except for the foundation is considered to be fallen.
+\end{itemize}
+
+\subsection{Variant}
+
+Divide the pieces unevenly so that speedier players get more and everyone has a chance to win. 

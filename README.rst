@@ -5,8 +5,8 @@ ppgames: Piecepack game diagrams and rules
     :alt: R-CMD-check
     :target: https://github.com/piecepackr/ppgames/actions
 
-.. image:: https://img.shields.io/codecov/c/github/piecepackr/ppgames/master.svg
-    :target: https://codecov.io/github/piecepackr/ppgames?branch=master
+.. image:: https://codecov.io/github/piecepackr/ppgames/branch/master/graph/badge.svg
+    :target: https://app.codecov.io/github/piecepackr/ppgames?branch=master
     :alt: Coverage Status
 
 .. image:: http://www.repostatus.org/badges/latest/wip.svg

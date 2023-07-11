@@ -104,6 +104,8 @@
 #'                     See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
 #'  \item{Slides of Action}{An abstract connection game by Clark Rodeffer.
 #'                          See \url{https://www.ludism.org/ppwiki/SlidesOfAction}.}
+#'  \item{Speedy Towers}{A real-time tower building game by Jessica Eccles.
+#'                       See \url{https://ludism.org/ppwiki/SpeedyTowers}.}
 #'  \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
 #'                See \url{https://www.ludism.org/ppwiki/Tablut}.}
 #'  \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
@@ -138,8 +140,9 @@
 #' @param pawns String of pawns layout
 #' @param die_width Width of dice
 #' @param max_tiles Maximum number of (piecepack) tiles available to build boards
+#' @param n_players Number of players
 #' @param suit_colors Character vector of the suit colors
-#' @param variant Number of variant.
+#' @param variant Number of variant
 #' @rdname df_game
 #' @name df_game
 NULL
@@ -668,6 +671,16 @@ should_resample_relativity <- function(coins) {
 
 #' @rdname df_game
 #' @export
+df_san_andreas <- function() {
+    x <- 0.5+c(rep(c(1,3,5), 3), 2,4,6, 3,5,7, 4,6,8, 5,7,9, 7,9)
+    y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)
+    tibble(piece_side="tile_back", x=x, y=y,
+           suit = rep(1:4, each=6, length.out=23),
+           rank = rep(1:6, 4, length.out=23))
+}
+
+#' @rdname df_game
+#' @export
 df_skyscrapers <- function(seed = NULL, tiles = NULL) {
     df_tiles <- df_donut_tiles(seed = seed, tiles = tiles, x0 = 1.5, y0 = 1.5)
     df_pawn <- filter(df_tiles, .data$rank == 1)
@@ -687,6 +700,45 @@ df_slides_of_action <- function() {
     bind_rows(df_tiles, df_coins)
 }
 
+# 2 players = 24 tiles, 24 coins => 2 towers, 11 tiles each, 12 coins each
+# 3 players = 48 tiles, 48 coins => 2 towers, 15 tiles each + 1 extra tile, 16 coins each
+# 4 players = 48 tiles, 48 coins => 3 towers, 11 tiles each + 1 extra tile, 12 coins each
+# 5 players = 72 tiles, 72 coins => 4 towers, 13 tiles each + 3 extra tiles, 16 coins each + 2 coins
+# 6 players = 72 tiles, 72 coins => 5 towers, 11 tiles each + 1 extra tile, 12 coins each
+
+#' @rdname df_game
+#' @export
+df_speedy_towers <- function(n_players = 2, seed = NULL) {
+    if (!is.null(seed)) withr::local_seed(seed)
+    stopifnot(n_players >= 2, n_players <= 6)
+    if (n_players == 2) {
+        df_tiles <- tibble(piece_side = "tile_back",
+                           suit = rep(1:4, 6),
+                           rank = rep(1:6, each = 4))[sample.int(24L), ]
+        df_tiles$x <- c(seq.int(2, by = 2, length.out = 11),
+                        16, 10,
+                        seq.int(24, by = -2, length.out = 11))
+        df_tiles$y <- c(rep_len(4, 11), 8, 8, rep_len(12, 11))
+        df_tiles$angle <- c(rep_len(0, 12), rep_len(180, 12))
+        df_coins <- tibble(piece_side = "coin_back",
+                           suit = rep(1:4, 6),
+                           rank = rep(1:6, each = 4))[sample.int(24L), ]
+        df_coins <- df_coins[c(order(df_coins$suit[1:12]),
+                               12 + order(df_coins$suit[13:24])), ]
+        df_coins$x <- c(seq(2, by = 2, length.out = 12),
+                        seq(24, by = -2, length.out = 12))
+        df_coins$y <- c(rep(2, 12), rep(14, 12))
+        df_coins$angle <- c(rep_len(0, 12), rep_len(180, 12))
+        df_pawns <- tibble(piece_side = "pawn_face",
+                           suit = c(3, 1), rank = NA_integer_,
+                           x = c(24, 2), y = c(4, 12),
+                           angle = c(0, 180))
+        bind_rows(df_tiles, df_coins, df_pawns)
+    } else {
+        stop("We haven't been programmed for this case yet")
+    }
+}
+
 #' @rdname df_game
 #' @export
 df_the_in_crowd <- function() {
@@ -695,16 +747,6 @@ df_the_in_crowd <- function() {
     df_t3 <- tibble(piece_side="tile_back", x=3.5, y=3.5,
                     angle = 0, suit = 2, rank = 3)
     bind_rows(df_t1, df_t2, df_t3)
-}
-
-#' @rdname df_game
-#' @export
-df_san_andreas <- function() {
-    x <- 0.5+c(rep(c(1,3,5), 3), 2,4,6, 3,5,7, 4,6,8, 5,7,9, 7,9)
-    y <- 0.5+c(rep(c(15,13,11,9,7,5,3), each=3), 1, 1)
-    tibble(piece_side="tile_back", x=x, y=y,
-           suit = rep(1:4, each=6, length.out=23),
-           rank = rep(1:6, 4, length.out=23))
 }
 
 #' @rdname df_game

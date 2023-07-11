@@ -32,10 +32,12 @@ New features
 
   - ``df_cribbage()`` is a new alias for ``df_cribbage_board()``
   - ``df_ludo()`` (#119)
+  - ``df_speedy_towers()`` (currently supports two players only)
 
 * ``save_ruleset()`` / ``save_pamphlet()`` / ``save_pocketmod()`` now supports ruleset generation for:
 
   - "ludo" (#119)
+  - "speedy towers"
 
 * Improved rulesets for:
 

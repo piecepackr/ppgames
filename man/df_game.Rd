@@ -29,10 +29,11 @@
 \alias{df_plans_of_action}
 \alias{df_quatri}
 \alias{df_relativity}
+\alias{df_san_andreas}
 \alias{df_skyscrapers}
 \alias{df_slides_of_action}
+\alias{df_speedy_towers}
 \alias{df_the_in_crowd}
-\alias{df_san_andreas}
 \alias{df_the_magic_bag}
 \alias{df_tower_of_babel}
 \alias{df_triactor}
@@ -123,13 +124,15 @@ df_quatri()
 
 df_relativity(seed = NULL, coins = NULL)
 
+df_san_andreas()
+
 df_skyscrapers(seed = NULL, tiles = NULL)
 
 df_slides_of_action()
 
-df_the_in_crowd()
+df_speedy_towers(n_players = 2, seed = NULL)
 
-df_san_andreas()
+df_the_in_crowd()
 
 df_the_magic_bag(seed = NULL)
 
@@ -214,7 +217,9 @@ df_tablut(die_width = 0.63)
 
 \item{pawns}{String of pawns layout}
 
-\item{variant}{Number of variant.}
+\item{variant}{Number of variant}
+
+\item{n_players}{Number of players}
 
 \item{cfg2}{A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)}
 
@@ -334,6 +339,8 @@ See \url{https://www.ludism.org/ppwiki/Shogi}.}
 See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
 \item{Slides of Action}{An abstract connection game by Clark Rodeffer.
 See \url{https://www.ludism.org/ppwiki/SlidesOfAction}.}
+\item{Speedy Towers}{A real-time tower building game by Jessica Eccles.
+See \url{https://ludism.org/ppwiki/SpeedyTowers}.}
 \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
 See \url{https://www.ludism.org/ppwiki/Tablut}.}
 \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
