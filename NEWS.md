@@ -1,5 +1,5 @@
-ppgames 0.8.0 (development)
-===========================
+ppgames 0.8.1
+=============
 
 New features
 ------------
