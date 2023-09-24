@@ -30,9 +30,28 @@ New features
 
 * New starting board generators for specific games:
 
+  - ``df_black_pawn_trucking()``
+  - ``df_brain_burn()``
+  - ``df_burbuja()``
+  - ``df_cardinals_guards()``
+  - ``df_change_change()``
+  - ``df_chariots()``
+  - ``df_climbing_man()``
   - ``df_cribbage()`` is a new alias for ``df_cribbage_board()``
+  - ``df_crocodile_hop()``
+  - ``df_galaxy_express()``
+  - ``df_lab_rats()``
   - ``df_ludo()`` (#119)
+  - ``df_minishogi()``
+  - ``df_one_man_thrag()``
+  - ``df_piecepack_halma()`` is a new alias for ``df_chinese_checkers()``
+  - ``df_sarcophagus()``
+  - ``df_shopping_mall()``
   - ``df_speedy_towers()`` (currently supports two players only)
+  - ``df_steppin_stones()``
+  - ``df_the_penguin_game()``
+  - ``df_tracers()``
+  - ``df_tula()`` now supports argument ``variant`` and Tim Schutz's variants 1-4
 
 * ``save_ruleset()`` / ``save_pamphlet()`` / ``save_pocketmod()`` now supports ruleset generation for:
 
@@ -55,6 +74,9 @@ Bug fixes and minor improvements
 * Fixes bug when launching command-line version of `view_game()`.
 * `save_promo_image()` now has an `...` argument that lets you pass arguments
   to `piecepackr::render_piece()`.
+* Fixes bugs in the following game starting functions:
+
+  + Hole in `df_easy_slider()` is now in bottom right instead of center
 
 ppgames 0.7.0
 =============

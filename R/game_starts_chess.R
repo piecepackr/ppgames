@@ -121,6 +121,23 @@ df_international_chess <- function(has_subpack = FALSE) {
 #' @export
 df_chess <- df_international_chess
 
+#' @rdname df_game
+#' @export
+df_minishogi <- function() {
+    df_tiles <- df_rect_board_tiles(5, 5)
+    df_faces <- tibble(piece_side = "coin_face",
+                       x = c(1, 1, 4, 5, 5, 5, 2, 1),
+                       y = c(2, 1, 1, 1, 4, 5, 5, 5),
+                       rank = c(1, 6, 3, 4, 1, 6, 3, 4),
+                       suit = rep(1:2, each = 4),
+                       angle = rep(c(0, 180), each = 4))
+    df_backs <- tibble(piece_side = "coin_back",
+                       x = c(2, 3, 4, 3), y = c(1, 1, 5, 5),
+                       rank = c(4, 4, 5, 5), suit = c(1, 2, 1, 2),
+                       angle = c(0, 0, 180, 180))
+    bind_rows(df_tiles, df_faces, df_backs)
+}
+
 
 #' @rdname df_game
 #' @export

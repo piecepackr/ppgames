@@ -4,10 +4,19 @@
 \name{df_game}
 \alias{df_game}
 \alias{df_alien_city}
+\alias{df_black_pawn_trucking}
+\alias{df_brain_burn}
+\alias{df_burbuja}
+\alias{df_cardinals_guards}
 \alias{df_cell_management}
+\alias{df_change_change}
+\alias{df_chariots}
 \alias{df_chinese_checkers}
+\alias{df_piecepack_halma}
 \alias{df_mini_halma}
 \alias{df_coin_collectors}
+\alias{df_climbing_man}
+\alias{df_crocodile_hop}
 \alias{df_desfases}
 \alias{df_easy_slider}
 \alias{df_evade}
@@ -15,13 +24,16 @@
 \alias{df_four_blind_mice}
 \alias{df_froggy_bottom}
 \alias{df_fujisan}
+\alias{df_galaxy_express}
 \alias{df_iceberg}
 \alias{df_ice_floe}
 \alias{df_japan}
+\alias{df_lab_rats}
 \alias{df_landlocked}
 \alias{df_ley_lines}
 \alias{df_mathrix}
 \alias{df_piecepackman}
+\alias{df_one_man_thrag}
 \alias{df_pass_the_food}
 \alias{df_piecepack_klondike}
 \alias{df_piece_gaps}
@@ -30,12 +42,17 @@
 \alias{df_quatri}
 \alias{df_relativity}
 \alias{df_san_andreas}
+\alias{df_sarcophagus}
+\alias{df_shopping_mall}
 \alias{df_skyscrapers}
 \alias{df_slides_of_action}
 \alias{df_speedy_towers}
+\alias{df_steppin_stones}
 \alias{df_the_in_crowd}
 \alias{df_the_magic_bag}
+\alias{df_the_penguin_game}
 \alias{df_tower_of_babel}
+\alias{df_tracers}
 \alias{df_triactor}
 \alias{df_tula}
 \alias{df_wormholes}
@@ -44,6 +61,7 @@
 \alias{df_four_seasons_chess}
 \alias{df_international_chess}
 \alias{df_chess}
+\alias{df_minishogi}
 \alias{df_shogi}
 \alias{df_ultima}
 \alias{df_baroque_chess}
@@ -74,13 +92,31 @@
 \usage{
 df_alien_city(seed = NULL, tiles = NULL)
 
+df_black_pawn_trucking(seed = NULL)
+
+df_brain_burn(seed = NULL)
+
+df_burbuja(seed = NULL, tiles = NULL)
+
+df_cardinals_guards(seed = NULL, tiles = NULL)
+
 df_cell_management(seed = NULL)
 
+df_change_change(seed = NULL, coins = NULL)
+
+df_chariots()
+
 df_chinese_checkers()
+
+df_piecepack_halma()
 
 df_mini_halma()
 
 df_coin_collectors(seed = NULL, tiles = NULL, coins = NULL, dice = NULL)
+
+df_climbing_man(seed = NULL, variant = c("Basic", "Free"))
+
+df_crocodile_hop(seed = NULL)
 
 df_desfases(seed = NULL, tiles = NULL, dice = NULL)
 
@@ -96,11 +132,15 @@ df_froggy_bottom()
 
 df_fujisan(seed = NULL, coins = NULL, dice = NULL)
 
+df_galaxy_express(seed = NULL)
+
 df_iceberg(seed = NULL, tiles = NULL)
 
 df_ice_floe()
 
 df_japan(seed = NULL)
+
+df_lab_rats(seed = NULL)
 
 df_landlocked(seed = NULL)
 
@@ -108,7 +148,9 @@ df_ley_lines()
 
 df_mathrix(seed = NULL, coins = NULL)
 
-df_piecepackman(seed = NULL, variant = 1)
+df_piecepackman(seed = NULL, variant = "Roundabout")
+
+df_one_man_thrag(seed = NULL)
 
 df_pass_the_food()
 
@@ -126,21 +168,35 @@ df_relativity(seed = NULL, coins = NULL)
 
 df_san_andreas()
 
+df_sarcophagus(seed = NULL)
+
+df_shopping_mall(seed = NULL, cfg2 = "go")
+
 df_skyscrapers(seed = NULL, tiles = NULL)
 
 df_slides_of_action()
 
 df_speedy_towers(n_players = 2, seed = NULL)
 
+df_steppin_stones(seed = NULL)
+
 df_the_in_crowd()
 
 df_the_magic_bag(seed = NULL)
 
+df_the_penguin_game(seed = NULL)
+
 df_tower_of_babel(seed = NULL, tiles = NULL)
+
+df_tracers()
 
 df_triactor(seed = NULL, cfg2 = "playing_cards_expansion")
 
-df_tula(seed = NULL, tiles = NULL)
+df_tula(
+  seed = NULL,
+  tiles = NULL,
+  variant = c("Original", "Variant 1", "Variant 2", "Variant 3", "Variant 4")
+)
 
 df_wormholes()
 
@@ -153,6 +209,8 @@ df_four_seasons_chess(has_subpack = FALSE)
 df_international_chess(has_subpack = FALSE)
 
 df_chess(has_subpack = FALSE)
+
+df_minishogi()
 
 df_shogi(has_subpack = FALSE, cfg2 = "piecepack")
 
@@ -215,13 +273,13 @@ df_tablut(die_width = 0.63)
 
 \item{dice}{String of dice layout}
 
+\item{variant}{Name of variant}
+
 \item{pawns}{String of pawns layout}
 
-\item{variant}{Number of variant}
+\item{cfg2}{A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)}
 
 \item{n_players}{Number of players}
-
-\item{cfg2}{A string of a piecepack expansion (or perhaps \code{"piecepack"} for a second piecepack)}
 
 \item{has_subpack}{Has a piecepack subpack}
 
@@ -248,13 +306,25 @@ and icehouse pieces.  See \url{https://www.ludism.org/ppwiki/AlienCity}.}
 \item{Awithlaknannai Mosona}{Traditional Zuni Alquerque variant.
 See \url{https://en.wikipedia.org/wiki/Awithlaknannai_Mosona}.}
 \item{Backgammon}{One of the oldest board games.  See \url{https://www.ludism.org/ppwiki/Backgammon}.}
+\item{Black Pawn Trucking}{A solitaire by Philip Lerche.
+See \url{https://www.ludism.org/ppwiki/BlackPawnTrucking}.}
+\item{Brain Burn}{A solitaire by Mark A. Biggar.
+See \url{https://www.ludism.org/ppwiki/BrainBurn}.}
 \item{Brandubh}{AKA Brandub, a two-player abstract of the hnefatafl family played by the Irish.
 See \url{http://www.cyningstan.com/game/125/brandub} for more information.}
 \item{Breakthrough}{Two-player abstract invented by Dan Troyka in 2000
 that won the 2001 8x8 Game Design Competition.
 See \url{https://en.wikipedia.org/wiki/Breakthrough_(board_game)}.}
+\item{Burbuja}{Solitaire by Antonio Recuenco Muñoz.
+See \url{https://www.ludism.org/ppwiki/Burbuja}.}
+\item{Cardinal's Guards}{A solitaire by Michael Schoessow and Stephen Schoessow.
+See \url{https://ludism.org/ppwiki/CardinalsGuards}.}
 \item{Cell Management}{Solitaire game for the piecepack by Mark Goadrich.
 See \url{https://www.ludism.org/ppwiki/CellManagement}.}
+\item{Change Change}{Solitaire by Sid Sackson adapted by Ron Hale-Evans.
+See \url{https://www.ludism.org/ppwiki/ChangeChange}.}
+\item{Chariots}{Multiplayer racing game by Mark A. Biggar.
+See \url{https://www.ludism.org/ppwiki/Chariots}.}
 \item{Chaturaji}{An old 4-player chess variant.
 See \url{https://www.ludism.org/ppwiki/Chaturaji}.}
 \item{(American) Checkers}{A traditional board game also known as \dQuote{(English) Draughts}.
@@ -262,13 +332,15 @@ First adapted to the piecepack by Mark A. Biggar.
 See \url{https://www.ludism.org/ppwiki/Checkers}.}
 \item{(International) Chess}{Very popular board game first adapted to the piecepack by Ron Hale-Evans.
 See \url{https://www.ludism.org/ppwiki/Chess}.}
-\item{Chinese Checkers}{A port of Chinese Checkers by Mark A. Biggar.
+\item{Piecepack Halma aka Chinese Checkers}{A port of Halma by Mark A. Biggar.
 See \url{https://www.ludism.org/ppwiki/ChineseCheckers}.}
 \item{Coin Collectors}{A solitaire by Don Kirkby.
 See \url{https://www.ludism.org/ppwiki/CoinCollectors}.}
 \item{Cribbage}{Traditional card game traditionally uses a special board to keep score
 but one can use a piecepack as a cribbage board instead.
 See \url{https://www.ludism.org/ppwiki/Cribbage}.}
+\item{Climbing Man}{A solitaire by Jorge Arroyo.  See \url{https://www.ludism.org/ppwiki/ClimbingMan}.}
+\item{Crocodile Hop}{A solitaire by Tim Schutz.  See \url{https://www.ludism.org/ppwiki/CrocodileHop}.}
 \item{Crossings}{An abstract invented by Robert Abbot.
 See \url{https://en.wikipedia.org/wiki/Crossings_(game)}}
 \item{Desfases}{Game by Antonio Recuenco Muñoz.
@@ -290,6 +362,8 @@ See \url{https://www.chessvariants.com/historic.dir/4seiz.html}.}
 See \url{https://www.ludism.org/ppwiki/FroggyBottom}.}
 \item{Fujisan}{Popular solitaire game for the piecepack by James \dQuote{Kyle} Droscha.
 See \url{https://www.ludism.org/ppwiki/Fuji-san}.}
+\item{Galaxy Express}{Solitaire by Matt Worden about delivering shipments between planets in the distant future.
+See \url{https://www.ludism.org/ppwiki/GalaxyExpress}.}
 \item{Grasshopper}{Two-player Halma variant playable on a draughts board.
 See \url{http://www.cyningstan.com/game/71/grasshopper}.}
 \item{Iceberg}{Game by Ken Leyhe.
@@ -300,6 +374,8 @@ See \url{https://www.ludism.org/ppwiki/IceFloe}.}
 See \url{https://www.ludism.org/ppwiki/Japan}.}
 \item{Jul-Gonu}{Traditional 2-player Korean abstract adapted to piecepack by Michael Schoessow.
 See \url{https://www.ludism.org/ppwiki/JulGonu}.}
+\item{Lab Rats}{Piecepack solitaire by Mark A. Biggar.
+See \url{https://www.ludism.org/ppwiki/LabRats}.}
 \item{Landlocked}{Piecepack game by Eric Witt.
 See \url{https://www.ludism.org/ppwiki/Landlocked}.}
 \item{Ley Lines}{Piecepack game by James \dQuote{Kyle} Droscha.
@@ -310,8 +386,12 @@ See \url{https://en.wikipedia.org/wiki/Lines_of_Action}.}
 See \url{https://en.wikipedia.org/wiki/Ludo_(board_game)}.}
 \item{Mathrix}{A solitaire by Clark Rodeffer.
 See \url{https://www.ludism.org/ppwiki/Mathrix}}
+\item{Minishogi}{A smaller version of Japanese chess invented (or perhaps rediscovered) by
+by Shigeo Kusumoto in 1970.}
 \item{Nine Men's Morris}{Traditional board game.
 See \url{https://en.wikipedia.org/wiki/Nine_men\%27s_morris}.}
+\item{One Man Thrag}{A solitaire by Jim Doherty.
+See \url{https://www.ludism.org/ppwiki/OneManThrag}}
 \item{Pass the Food}{A dexterity game by Trevor L Davis.
 See \url{https://www.ludism.org/ppwiki/PassTheFood}}
 \item{Piece Gaps}{A solitaire by Chris Brooks inspired by the Gaps card game.
@@ -333,22 +413,32 @@ See \url{https://www.ludism.org/ppwiki/Relativity}.}
 See \url{https://en.wikipedia.org/wiki/Salta_(game)}.}
 \item{San Andreas}{Piecepack game about the big earthquake that will hit California.
 See \url{https://www.ludism.org/ppwiki/SanAndreas}.}
+\item{Sarcophagus}{A multiplayer piecepack game by Phillip Lerche.
+See \url{https://www.ludism.org/ppwiki/Sarcophagus}.}
 \item{Shogi}{AKA \dQuote{Japanese chess} is a major chess variant.
 See \url{https://www.ludism.org/ppwiki/Shogi}.}
+\item{Shopping Mall}{A multiplayer game by Michael Schoessow and Stephen Schoessow.
+See \url{https://www.ludism.org/ppwiki/ShoppingMall}.}
 \item{Skyscrapers}{A solitaire by Michael Schoessow.
 See \url{https://www.ludism.org/ppwiki/Skyscrapers}.}
 \item{Slides of Action}{An abstract connection game by Clark Rodeffer.
 See \url{https://www.ludism.org/ppwiki/SlidesOfAction}.}
 \item{Speedy Towers}{A real-time tower building game by Jessica Eccles.
 See \url{https://ludism.org/ppwiki/SpeedyTowers}.}
+\item{Steppin' Stones}{A solitaire by Ken Maher.
+See \url{https://ludism.org/ppwiki/Steppin'_Stones}.}
 \item{Tablut}{Traditional two-player abstract played by the Sámi people until at least the 1700s.
 See \url{https://www.ludism.org/ppwiki/Tablut}.}
 \item{The \dQuote{In} Crowd}{Piecepack game by Jeb Havens and Ian Schreiber.
 See \url{https://www.ludism.org/ppwiki/TheInCrowd}.}
 \item{The Magic Bag}{Piecepack game by Rob LeGood.
 See \url{https://www.ludism.org/ppwiki/The_Magic_Bag}.}
+\item{The Penguin Game}{A piecepack game by Jonathan C. Dietrich.
+See \url{https://www.ludism.org/ppwiki/PenguinGame}}
 \item{Tower of Babel}{Solitaire piecepack game by Mark A. Biggar.
 See \url{https://www.ludism.org/ppwiki/TowerOfBabel}.}
+\item{Tracers}{A two-player abstract by Marty Hale-Evans.
+See \url{https://www.ludism.org/ppwiki/Tracers}.}
 \item{Triactor}{Piecepack game by Jonathan Dietrich, Julie Taylor, and Ken MacKeigan.
 See \url{https://www.ludism.org/ppwiki/Triactor}.}
 \item{Tula}{Solitaire piecepack game by James \dQuote{Kyle} Droscha.
