@@ -1,6 +1,28 @@
 ppgames 0.8.2
 =============
 
+`ppgames` is **superseded** in favor of the newer
+[ppcli](https://github.com/piecepackr/ppcli),
+[ppdf](https://github.com/piecepackr/ppdf),
+[ppgamer](https://github.com/piecepackr/ppgamer),
+[ppn](https://github.com/piecepackr/ppn), and
+[pprules](https://github.com/piecepackr/pprules) spinoff packages:
+
+-   These can all be installed with `piecepackr::install_ppverse()`
+-   See \<<https://piecepackr.r-universe.dev/builds>\> for more info on
+    the various \"ppverse\" packages
+-   Use `ppcli::cat_piece()` for `cat_piece()`
+-   Use similar functions from
+    [ppdf](https://github.com/piecepackr/ppdf) for the various `df_*()`
+    game setup functions
+-   Use `ppgamer::solve_fujisan()` for `solve_fujisan()`
+-   Use [ppn](https://github.com/piecepackr/ppn) for various `*_game()`,
+    `*_ppn()`, and `*_move()` PPN parsing and game visualization
+    functions
+-   Use [pprules](https://github.com/piecepackr/pprules) for various
+    `save_*()` [piecepack](http://www.ludism.org/ppwiki/HomePage)
+    ruleset generators
+
 Bug fixes and minor improvements
 --------------------------------
 
