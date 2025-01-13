@@ -5,7 +5,7 @@ development:
 template:
   bootstrap: 5
 reference:
-    - title: "Portable Piecpack Notation parsers and utilities"
+    - title: "Portable Piecepack Notation parsers and utilities"
       desc: "Functions to parse and visualize games written in PPN format"
       contents:
         - read_ppn
