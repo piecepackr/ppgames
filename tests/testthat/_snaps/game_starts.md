@@ -935,7 +935,8 @@
 
     Code
       cat_piece(df_lab_rats(seed = 42))
-    Warning <simpleWarning>
+    Condition
+      Warning in `style$rotate()`:
       Can't rotate ☾ 90 degrees
     Output
                   ┌─┰─┐            
@@ -1543,19 +1544,32 @@
 
     Code
       cat_piece(df_shopping_mall(seed = 42))
-    Warning <simpleWarning>
+    Condition
+      Warning in `style$rotate()`:
       Can't rotate a 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate ☾ 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate ⸸ 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 2 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate ⸸ 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate a 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate 4 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate ☾ 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 4 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 5 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate ⸸ 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 2 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate a 90 degrees
     Output
                                             
@@ -1681,19 +1695,32 @@
 
     Code
       cat_piece(df_steppin_stones(seed = 42))
-    Warning <simpleWarning>
+    Condition
+      Warning in `style$rotate()`:
       Can't rotate ☾ 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate a 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate ⸸ 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate a 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate n 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 2 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 4 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 5 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate 2 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate 4 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate 5 270 degrees
+      Warning in `style$rotate()`:
       Can't rotate ☾ 90 degrees
+      Warning in `style$rotate()`:
       Can't rotate ⸸ 270 degrees
     Output
        ┌───┬─┰─┬─┰─┬───┐

@@ -1,3 +1,13 @@
+ppgames 0.8.2
+=============
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `read_ppn()` now uses `affiner::as_coord2d()` instead of
+  `piecepackr:::Point2D()$new()` which was an internal function that was
+  removed in the most recent version of `{piecepackr}`.
+
 ppgames 0.8.1
 =============
 
